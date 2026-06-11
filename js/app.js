@@ -2723,24 +2723,35 @@
         <p style="color: var(--text-muted); font-size: 0.83rem; margin-bottom: 16px;">
           Queste missioni predefinite sono state nascoste. Possono essere ripristinate ai valori originali in qualsiasi momento.
         </p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;">
-          ${hidden.map(m => `
-            <div style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(212,175,55,0.25); border-radius: 10px; padding: 14px;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-                <div>
-                  <strong style="font-size:0.9rem;">${m.title}</strong>
-                  <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${m.category} · ${m.area}</div>
-                </div>
-                <span style="font-size:0.72rem; background:rgba(212,175,55,0.1); color:var(--gold); border:1px solid rgba(212,175,55,0.3); border-radius:4px; padding:1px 6px; white-space:nowrap;">🔒 ${m.id}</span>
-              </div>
-              <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
-                ${m.questions ? m.questions.length : 0} domande · XP +${m.rewards ? m.rewards.xp : '?'} · Dracme +${m.rewards ? m.rewards.dracme : '?'}
-              </div>
-              <button class="btn" style="width:100%; padding:6px; font-size:0.8rem;" onclick="EroiApp.restoreMission('${m.id}')">
-                <i class="fa-solid fa-rotate-left"></i> Ripristina
-              </button>
-            </div>
-          `).join('')}
+        <div class="table-responsive">
+          <table class="game-table" style="border-top: 1px dashed rgba(212,175,55,0.25);">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Titolo</th>
+                <th>Categoria</th>
+                <th>Area Mappa</th>
+                <th>Premi</th>
+                <th>Azione</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${hidden.map(m => `
+                <tr>
+                  <td><strong>${m.id}</strong> <span style="font-size:0.68rem; background:rgba(212,175,55,0.1); color:var(--gold); border:1px solid rgba(212,175,55,0.3); border-radius:4px; padding:1px 5px; margin-left:4px;">🔒 preset</span></td>
+                  <td>${m.title}</td>
+                  <td>${m.category}</td>
+                  <td>${m.area || ''}</td>
+                  <td>XP: +${m.rewards ? m.rewards.xp : '?'} | Dracme: +${m.rewards ? m.rewards.dracme : '?'}</td>
+                  <td>
+                    <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="EroiApp.restoreMission('${m.id}')">
+                      <i class="fa-solid fa-rotate-left"></i> Ripristina
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </div>
       `;
     },
@@ -2908,18 +2919,31 @@
           <span style="background:rgba(212,175,55,0.15);color:var(--gold);font-size:0.78rem;padding:2px 10px;border-radius:20px;margin-left:8px;font-family:var(--font-body);">${hidden.length}</span>
         </h3>
         <p style="color:var(--text-muted);font-size:0.83rem;margin-bottom:16px;">Aiutanti predefiniti nascosti — ripristinabili in qualsiasi momento.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
-          ${hidden.map(h => `
-            <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:14px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                <strong>${h.name}</strong>
-                <span style="font-size:0.72rem;color:var(--gold);background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:1px 6px;">${h.category}</span>
-              </div>
-              <button class="btn" style="width:100%;padding:6px;font-size:0.8rem;" onclick="EroiApp.restoreHelper('${h.id}')">
-                <i class="fa-solid fa-rotate-left"></i> Ripristina
-              </button>
-            </div>
-          `).join('')}
+        <div class="table-responsive">
+          <table class="game-table" style="border-top: 1px dashed rgba(212,175,55,0.25);">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Azione</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${hidden.map(h => `
+                <tr>
+                  <td><strong>${h.id}</strong> <span style="font-size:0.68rem; background:rgba(212,175,55,0.1); color:var(--gold); border:1px solid rgba(212,175,55,0.3); border-radius:4px; padding:1px 5px; margin-left:4px;">🔒 preset</span></td>
+                  <td>${h.name}</td>
+                  <td>${h.category}</td>
+                  <td>
+                    <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="EroiApp.restoreHelper('${h.id}')">
+                      <i class="fa-solid fa-rotate-left"></i> Ripristina
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </div>
       `;
     },
@@ -2990,22 +3014,35 @@
           <span style="background:rgba(212,175,55,0.15);color:var(--gold);font-size:0.78rem;padding:2px 10px;border-radius:20px;margin-left:8px;font-family:var(--font-body);">${hidden.length}</span>
         </h3>
         <p style="color:var(--text-muted);font-size:0.83rem;margin-bottom:16px;">Artefatti predefiniti nascosti — ripristinabili in qualsiasi momento.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
-          ${hidden.map(a => `
-            <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:14px;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
-                <div>
-                  <span style="font-size:1.4rem;margin-right:8px;">${a.image}</span>
-                  <strong>${a.name}</strong>
-                  <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">${a.rarity} · ${a.bonus}</div>
-                </div>
-                <span style="font-size:0.72rem;color:var(--gold);background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:1px 6px;white-space:nowrap;">🔒 ${a.id}</span>
-              </div>
-              <button class="btn" style="width:100%;padding:6px;font-size:0.8rem;" onclick="EroiApp.restoreArtifact('${a.id}')">
-                <i class="fa-solid fa-rotate-left"></i> Ripristina
-              </button>
-            </div>
-          `).join('')}
+        <div class="table-responsive">
+          <table class="game-table" style="border-top: 1px dashed rgba(212,175,55,0.25);">
+            <thead>
+              <tr>
+                <th>Icona</th>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Rarità</th>
+                <th>Effetti</th>
+                <th>Azione</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${hidden.map(a => `
+                <tr>
+                  <td style="font-size:1.4rem;">${a.image}</td>
+                  <td><strong>${a.id}</strong> <span style="font-size:0.68rem; background:rgba(212,175,55,0.1); color:var(--gold); border:1px solid rgba(212,175,55,0.3); border-radius:4px; padding:1px 5px; margin-left:4px;">🔒 preset</span></td>
+                  <td>${a.name}</td>
+                  <td>${a.rarity}</td>
+                  <td>${a.bonus}</td>
+                  <td>
+                    <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="EroiApp.restoreArtifact('${a.id}')">
+                      <i class="fa-solid fa-rotate-left"></i> Ripristina
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </div>
       `;
     },
@@ -3090,22 +3127,33 @@
           <span style="background:rgba(212,175,55,0.15);color:var(--gold);font-size:0.78rem;padding:2px 10px;border-radius:20px;margin-left:8px;font-family:var(--font-body);">${hidden.length}</span>
         </h3>
         <p style="color:var(--text-muted);font-size:0.83rem;margin-bottom:16px;">Schede predefinite nascoste — ripristinabili in qualsiasi momento.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
-          ${hidden.map(g => `
-            <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:14px;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-                <div>
-                  <strong style="font-size:0.9rem;">${g.title}</strong>
-                  <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">${g.category}</div>
-                </div>
-                <span style="font-size:0.72rem;color:var(--gold);background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:1px 6px;white-space:nowrap;">🔒 ${g.id}</span>
-              </div>
-              <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px;line-height:1.4;">${g.summary}</div>
-              <button class="btn" style="width:100%;padding:6px;font-size:0.8rem;" onclick="EroiApp.restoreGuide('${g.id}')">
-                <i class="fa-solid fa-rotate-left"></i> Ripristina
-              </button>
-            </div>
-          `).join('')}
+        <div class="table-responsive">
+          <table class="game-table" style="border-top: 1px dashed rgba(212,175,55,0.25);">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Titolo</th>
+                <th>Categoria</th>
+                <th>Riassunto</th>
+                <th>Azione</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${hidden.map(g => `
+                <tr>
+                  <td><strong>${g.id}</strong> <span style="font-size:0.68rem; background:rgba(212,175,55,0.1); color:var(--gold); border:1px solid rgba(212,175,55,0.3); border-radius:4px; padding:1px 5px; margin-left:4px;">🔒 preset</span></td>
+                  <td>${g.title}</td>
+                  <td>${g.category}</td>
+                  <td style="font-size:0.82rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.summary}</td>
+                  <td>
+                    <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="EroiApp.restoreGuide('${g.id}')">
+                      <i class="fa-solid fa-rotate-left"></i> Ripristina
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </div>
       `;
     },
