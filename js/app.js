@@ -2811,41 +2811,117 @@
       Object.values(helpers).forEach(h => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${h.name}</strong></td>
+          <td>
+            <strong>${h.name}</strong>
+            <span title="Aiutante predefinito" style="margin-left:6px; font-size:0.68rem; background:rgba(212,175,55,0.15); color:var(--gold); border:1px solid rgba(212,175,55,0.4); border-radius:4px; padding:1px 5px;">🔒 preset</span>
+          </td>
           <td>${h.category}</td>
           <td><input type="text" id="helper-pass-${h.id}" class="form-control" style="padding:4px; font-size:0.8rem;" value="${h.bonusPassive || ''}"></td>
           <td><input type="text" id="helper-power-${h.id}" class="form-control" style="padding:4px; font-size:0.8rem;" value="${h.potereSpeciale || ''}"></td>
           <td><input type="text" id="helper-imm-${h.id}" class="form-control" style="padding:4px; font-size:0.8rem;" value="${h.immunita || ''}"></td>
           <td>
-            <button class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.saveHelperConfig('${h.id}')">
-              Salva
-            </button>
+            <div style="display:flex; gap:4px;">
+              <button class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.saveHelperConfig('${h.id}')">Salva</button>
+              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.hideHelper('${h.id}')" title="Nascondi aiutante (ripristinabile)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
           </td>
         `;
         hTbody.appendChild(tr);
       });
+
+      this.renderHelperTrash();
 
       // 2. Artifacts
       const artifacts = window.EroiDB.getArtifacts();
       const aTbody = document.querySelector('#teacher-artifacts-table tbody');
       aTbody.innerHTML = '';
 
+      if (Object.keys(artifacts).length === 0) {
+        aTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);"><i>Nessun artefatto disponibile.</i></td></tr>`;
+      }
+
       Object.values(artifacts).forEach(a => {
+        const isPreset = window.EroiDB.isPresetArtifact(a.id);
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="font-size:1.3rem;">${a.image}</td>
-          <td><strong>${a.id}</strong></td>
+          <td>
+            <strong>${a.id}</strong>
+            ${isPreset ? `<span title="Artefatto predefinito" style="margin-left:6px; font-size:0.68rem; background:rgba(212,175,55,0.15); color:var(--gold); border:1px solid rgba(212,175,55,0.4); border-radius:4px; padding:1px 5px;">🔒 preset</span>` : ''}
+          </td>
           <td>${a.name}</td>
           <td>${a.rarity}</td>
           <td>${a.bonus}</td>
           <td>
-            <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteArtifact('${a.id}')">
-              <i class="fa-solid fa-trash"></i>
-            </button>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteArtifact('${a.id}')" title="${isPreset ? 'Nascondi artefatto (ripristinabile)' : 'Elimina definitivamente'}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
           </td>
         `;
         aTbody.appendChild(tr);
       });
+
+      this.renderArtifactTrash();
+    },
+
+    hideHelper: function(helperId) {
+      const helpers = window.EroiDB.getHelpers();
+      const h = helpers[helperId];
+      const name = h ? h.name : helperId;
+      if (confirm(`Nascondere l'aiutante "${name}"?\nPotrà essere ripristinato in qualsiasi momento.`)) {
+        window.EroiDB.hideHelper(helperId);
+        const teacher = window.EroiAuth.getCurrentUser();
+        window.EroiDB.logActivity(teacher.email, `Nascosto l'aiutante ${name}`);
+        this.showToast('Aiutante nascosto. Puoi ripristinarlo dal cestino.', 'success');
+        this.renderTeacherHelpersAndArtifacts();
+      }
+    },
+
+    restoreHelper: function(helperId) {
+      window.EroiDB.restoreHelper(helperId);
+      const teacher = window.EroiAuth.getCurrentUser();
+      window.EroiDB.logActivity(teacher.email, `Ripristinato l'aiutante ${helperId}`);
+      this.showToast('Aiutante ripristinato ai valori originali.', 'success');
+      this.renderTeacherHelpersAndArtifacts();
+    },
+
+    renderHelperTrash: function() {
+      const hidden = Object.values(window.EroiDB.getHiddenHelpers());
+      let panel = document.getElementById('helpers-trash-panel');
+      if (hidden.length === 0) { if (panel) panel.style.display = 'none'; return; }
+      if (!panel) {
+        panel = document.createElement('div');
+        panel.id = 'helpers-trash-panel';
+        panel.className = 'glass-panel';
+        panel.style.marginTop = '20px';
+        const ref = document.querySelector('#teacher-helpers-table').closest('.glass-panel');
+        if (ref) ref.after(panel); else return;
+      }
+      panel.style.display = 'block';
+      panel.innerHTML = `
+        <h3 class="panel-title" style="color:var(--text-muted);">
+          <i class="fa-solid fa-trash-can-arrow-up" style="color:var(--gold);"></i> Aiutanti Nascosti
+          <span style="background:rgba(212,175,55,0.15);color:var(--gold);font-size:0.78rem;padding:2px 10px;border-radius:20px;margin-left:8px;font-family:var(--font-body);">${hidden.length}</span>
+        </h3>
+        <p style="color:var(--text-muted);font-size:0.83rem;margin-bottom:16px;">Aiutanti predefiniti nascosti — ripristinabili in qualsiasi momento.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+          ${hidden.map(h => `
+            <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <strong>${h.name}</strong>
+                <span style="font-size:0.72rem;color:var(--gold);background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:1px 6px;">${h.category}</span>
+              </div>
+              <button class="btn" style="width:100%;padding:6px;font-size:0.8rem;" onclick="EroiApp.restoreHelper('${h.id}')">
+                <i class="fa-solid fa-rotate-left"></i> Ripristina
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
     },
 
     saveHelperConfig: function(helperId) {
@@ -2868,13 +2944,70 @@
     },
 
     deleteArtifact: function(artId) {
-      if (confirm(`Cancellare definitivamente l'artefatto ${artId}? Verrà disattivato e rimosso anche dagli studenti.`)) {
-        const teacher = window.EroiAuth.getCurrentUser();
-        window.EroiDB.deleteArtifact(artId);
-        window.EroiDB.logActivity(teacher.email, `Eliminato l'artefatto ${artId}`);
-        this.showToast("Artefatto eliminato.", "success");
-        this.renderTeacherHelpersAndArtifacts();
+      const isPreset = window.EroiDB.isPresetArtifact(artId);
+      const teacher = window.EroiAuth.getCurrentUser();
+      if (isPreset) {
+        if (confirm(`Nascondere l'artefatto preset "${artId}"?\nSarà rimosso dalla lista ma potrai ripristinarlo in qualsiasi momento.`)) {
+          window.EroiDB.hideArtifact(artId);
+          window.EroiDB.logActivity(teacher.email, `Nascosto l'artefatto preset ${artId}`);
+          this.showToast('Artefatto nascosto. Puoi ripristinarlo dal cestino.', 'success');
+          this.renderTeacherHelpersAndArtifacts();
+        }
+      } else {
+        if (confirm(`Eliminare definitivamente l'artefatto "${artId}"? Verrà rimosso anche dagli studenti.`)) {
+          window.EroiDB.deleteArtifact(artId);
+          window.EroiDB.logActivity(teacher.email, `Eliminato definitivamente l'artefatto ${artId}`);
+          this.showToast('Artefatto eliminato.', 'success');
+          this.renderTeacherHelpersAndArtifacts();
+        }
       }
+    },
+
+    restoreArtifact: function(artId) {
+      window.EroiDB.restoreArtifact(artId);
+      const teacher = window.EroiAuth.getCurrentUser();
+      window.EroiDB.logActivity(teacher.email, `Ripristinato l'artefatto preset ${artId}`);
+      this.showToast('Artefatto ripristinato ai valori originali.', 'success');
+      this.renderTeacherHelpersAndArtifacts();
+    },
+
+    renderArtifactTrash: function() {
+      const hidden = Object.values(window.EroiDB.getHiddenArtifacts());
+      let panel = document.getElementById('artifacts-trash-panel');
+      if (hidden.length === 0) { if (panel) panel.style.display = 'none'; return; }
+      if (!panel) {
+        panel = document.createElement('div');
+        panel.id = 'artifacts-trash-panel';
+        panel.className = 'glass-panel';
+        panel.style.marginTop = '20px';
+        const ref = document.querySelector('#teacher-artifacts-table').closest('.glass-panel');
+        if (ref) ref.after(panel); else return;
+      }
+      panel.style.display = 'block';
+      panel.innerHTML = `
+        <h3 class="panel-title" style="color:var(--text-muted);">
+          <i class="fa-solid fa-trash-can-arrow-up" style="color:var(--gold);"></i> Artefatti Nascosti
+          <span style="background:rgba(212,175,55,0.15);color:var(--gold);font-size:0.78rem;padding:2px 10px;border-radius:20px;margin-left:8px;font-family:var(--font-body);">${hidden.length}</span>
+        </h3>
+        <p style="color:var(--text-muted);font-size:0.83rem;margin-bottom:16px;">Artefatti predefiniti nascosti — ripristinabili in qualsiasi momento.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
+          ${hidden.map(a => `
+            <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+                <div>
+                  <span style="font-size:1.4rem;margin-right:8px;">${a.image}</span>
+                  <strong>${a.name}</strong>
+                  <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">${a.rarity} · ${a.bonus}</div>
+                </div>
+                <span style="font-size:0.72rem;color:var(--gold);background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:1px 6px;white-space:nowrap;">🔒 ${a.id}</span>
+              </div>
+              <button class="btn" style="width:100%;padding:6px;font-size:0.8rem;" onclick="EroiApp.restoreArtifact('${a.id}')">
+                <i class="fa-solid fa-rotate-left"></i> Ripristina
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
     },
 
     // --- TEACHER STUDY GUIDES ---
@@ -2883,32 +3016,100 @@
       const tbody = document.querySelector('#teacher-guides-table tbody');
       tbody.innerHTML = '';
 
+      if (guides.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);"><i>Nessuna scheda disponibile.</i></td></tr>`;
+      }
+
       guides.forEach(g => {
+        const isPreset = window.EroiDB.isPresetStudyGuide(g.id);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${g.id}</strong></td>
+          <td>
+            <strong>${g.id}</strong>
+            ${isPreset ? `<span title="Scheda predefinita" style="margin-left:6px;font-size:0.68rem;background:rgba(212,175,55,0.15);color:var(--gold);border:1px solid rgba(212,175,55,0.4);border-radius:4px;padding:1px 5px;">🔒 preset</span>` : ''}
+          </td>
           <td>${g.title}</td>
           <td>${g.category}</td>
-          <td>${g.summary}</td>
+          <td style="font-size:0.82rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.summary}</td>
           <td>
-            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteGuide('${g.id}')">
+            <button class="btn btn-danger" style="padding:4px 8px;font-size:0.75rem;" onclick="EroiApp.deleteGuide('${g.id}')" title="${isPreset ? 'Nascondi scheda (ripristinabile)' : 'Elimina definitivamente'}">
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>
         `;
         tbody.appendChild(tr);
       });
+
+      this.renderGuideTrash();
     },
 
     deleteGuide: function(guideId) {
-      if (confirm(`Eliminare la scheda didattica ${guideId}?`)) {
-        const teacher = window.EroiAuth.getCurrentUser();
-        window.EroiDB.deleteStudyGuide(guideId);
-        window.EroiDB.logActivity(teacher.email, `Eliminata scheda studio: ${guideId}`);
-        this.showToast("Scheda studio rimossa.", "success");
-        this.renderTeacherGuides();
+      const isPreset = window.EroiDB.isPresetStudyGuide(guideId);
+      const teacher = window.EroiAuth.getCurrentUser();
+      if (isPreset) {
+        if (confirm(`Nascondere la scheda didattica preset "${guideId}"?\nPotrà essere ripristinata in qualsiasi momento.`)) {
+          window.EroiDB.hideStudyGuide(guideId);
+          window.EroiDB.logActivity(teacher.email, `Nascosta la scheda studio preset: ${guideId}`);
+          this.showToast('Scheda nascosta. Puoi ripristinarla dal cestino.', 'success');
+          this.renderTeacherGuides();
+        }
+      } else {
+        if (confirm(`Eliminare definitivamente la scheda "${guideId}"? Questa azione non è reversibile.`)) {
+          window.EroiDB.deleteStudyGuide(guideId);
+          window.EroiDB.logActivity(teacher.email, `Eliminata definitivamente scheda studio: ${guideId}`);
+          this.showToast('Scheda studio rimossa.', 'success');
+          this.renderTeacherGuides();
+        }
       }
     },
+
+    restoreGuide: function(guideId) {
+      window.EroiDB.restoreStudyGuide(guideId);
+      const teacher = window.EroiAuth.getCurrentUser();
+      window.EroiDB.logActivity(teacher.email, `Ripristinata scheda studio preset: ${guideId}`);
+      this.showToast('Scheda ripristinata ai valori originali.', 'success');
+      this.renderTeacherGuides();
+    },
+
+    renderGuideTrash: function() {
+      const hidden = window.EroiDB.getHiddenStudyGuides();
+      let panel = document.getElementById('guides-trash-panel');
+      if (hidden.length === 0) { if (panel) panel.style.display = 'none'; return; }
+      if (!panel) {
+        panel = document.createElement('div');
+        panel.id = 'guides-trash-panel';
+        panel.className = 'glass-panel';
+        panel.style.marginTop = '20px';
+        const ref = document.querySelector('#teacher-guides-table').closest('.glass-panel');
+        if (ref) ref.after(panel); else return;
+      }
+      panel.style.display = 'block';
+      panel.innerHTML = `
+        <h3 class="panel-title" style="color:var(--text-muted);">
+          <i class="fa-solid fa-trash-can-arrow-up" style="color:var(--gold);"></i> Schede Didattiche Nascoste
+          <span style="background:rgba(212,175,55,0.15);color:var(--gold);font-size:0.78rem;padding:2px 10px;border-radius:20px;margin-left:8px;font-family:var(--font-body);">${hidden.length}</span>
+        </h3>
+        <p style="color:var(--text-muted);font-size:0.83rem;margin-bottom:16px;">Schede predefinite nascoste — ripristinabili in qualsiasi momento.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
+          ${hidden.map(g => `
+            <div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(212,175,55,0.25);border-radius:10px;padding:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                <div>
+                  <strong style="font-size:0.9rem;">${g.title}</strong>
+                  <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">${g.category}</div>
+                </div>
+                <span style="font-size:0.72rem;color:var(--gold);background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:1px 6px;white-space:nowrap;">🔒 ${g.id}</span>
+              </div>
+              <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px;line-height:1.4;">${g.summary}</div>
+              <button class="btn" style="width:100%;padding:6px;font-size:0.8rem;" onclick="EroiApp.restoreGuide('${g.id}')">
+                <i class="fa-solid fa-rotate-left"></i> Ripristina
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    },
+
 
     // --- TEACHER LOGS ---
     renderTeacherLogs: function() {

@@ -237,33 +237,82 @@
 
     // --- AIUTANTI ---
     getHelpers: function() {
-      return dbState.helpers;
+      const all = dbState.helpers;
+      const result = {};
+      Object.keys(all).forEach(k => { if (!all[k].hidden) result[k] = all[k]; });
+      return result;
+    },
+
+    getHiddenHelpers: function() {
+      const all = dbState.helpers;
+      const result = {};
+      Object.keys(all).forEach(k => { if (all[k].hidden) result[k] = all[k]; });
+      return result;
+    },
+
+    isPresetHelper: function(helperId) {
+      return !!(window.EroiMockData && window.EroiMockData.helpers && window.EroiMockData.helpers[helperId]);
     },
 
     saveHelper: function(helperId, helperData) {
       if (dbState.helpers[helperId]) {
-        dbState.helpers[helperId] = { ...dbState.helpers[helperId], ...helperData };
+        dbState.helpers[helperId] = { ...dbState.helpers[helperId], ...helperData, hidden: false };
+        this.save();
+      }
+    },
+
+    hideHelper: function(helperId) {
+      if (dbState.helpers[helperId]) {
+        dbState.helpers[helperId].hidden = true;
+        this.save();
+      }
+    },
+
+    restoreHelper: function(helperId) {
+      const original = window.EroiMockData && window.EroiMockData.helpers
+        ? window.EroiMockData.helpers[helperId]
+        : null;
+      if (dbState.helpers[helperId]) {
+        if (original) {
+          dbState.helpers[helperId] = { ...JSON.parse(JSON.stringify(original)), hidden: false };
+        } else {
+          dbState.helpers[helperId].hidden = false;
+        }
         this.save();
       }
     },
 
     // --- ARTEFATTI ---
     getArtifacts: function() {
-      return dbState.artifacts;
+      const all = dbState.artifacts;
+      const result = {};
+      Object.keys(all).forEach(k => { if (!all[k].hidden) result[k] = all[k]; });
+      return result;
+    },
+
+    getHiddenArtifacts: function() {
+      const all = dbState.artifacts;
+      const result = {};
+      Object.keys(all).forEach(k => { if (all[k].hidden) result[k] = all[k]; });
+      return result;
+    },
+
+    isPresetArtifact: function(artifactId) {
+      return !!(window.EroiMockData && window.EroiMockData.artifacts && window.EroiMockData.artifacts[artifactId]);
     },
 
     saveArtifact: function(artifactId, artifactData) {
       if (dbState.artifacts[artifactId]) {
-        dbState.artifacts[artifactId] = { ...dbState.artifacts[artifactId], ...artifactData };
+        dbState.artifacts[artifactId] = { ...dbState.artifacts[artifactId], ...artifactData, hidden: false };
       } else {
-        dbState.artifacts[artifactId] = { id: artifactId, ...artifactData };
+        dbState.artifacts[artifactId] = { id: artifactId, ...artifactData, hidden: false };
       }
       this.save();
     },
 
-    deleteArtifact: function(artifactId) {
+    hideArtifact: function(artifactId) {
       if (dbState.artifacts[artifactId]) {
-        delete dbState.artifacts[artifactId];
+        dbState.artifacts[artifactId].hidden = true;
         // Rimuove dagli studenti che lo avevano equipaggiato
         Object.keys(dbState.students_profile).forEach(email => {
           const profile = dbState.students_profile[email];
@@ -271,6 +320,33 @@
             profile.activeArtifacts = profile.activeArtifacts.filter(id => id !== artifactId);
           }
         });
+        this.save();
+      }
+    },
+
+    deleteArtifact: function(artifactId) {
+      if (dbState.artifacts[artifactId]) {
+        delete dbState.artifacts[artifactId];
+        Object.keys(dbState.students_profile).forEach(email => {
+          const profile = dbState.students_profile[email];
+          if (profile.activeArtifacts) {
+            profile.activeArtifacts = profile.activeArtifacts.filter(id => id !== artifactId);
+          }
+        });
+        this.save();
+      }
+    },
+
+    restoreArtifact: function(artifactId) {
+      const original = window.EroiMockData && window.EroiMockData.artifacts
+        ? window.EroiMockData.artifacts[artifactId]
+        : null;
+      if (dbState.artifacts[artifactId]) {
+        if (original) {
+          dbState.artifacts[artifactId] = { ...JSON.parse(JSON.stringify(original)), hidden: false };
+        } else {
+          dbState.artifacts[artifactId].hidden = false;
+        }
         this.save();
       }
     },
@@ -311,21 +387,51 @@
 
     // --- AREA STUDIO / GUIDE DIDATTICHE ---
     getStudyGuides: function() {
-      return dbState.study_guides;
+      return dbState.study_guides.filter(g => !g.hidden);
+    },
+
+    getHiddenStudyGuides: function() {
+      return dbState.study_guides.filter(g => g.hidden);
+    },
+
+    isPresetStudyGuide: function(guideId) {
+      return !!(window.EroiMockData && window.EroiMockData.study_guides &&
+        window.EroiMockData.study_guides.find(g => g.id === guideId));
     },
 
     saveStudyGuide: function(guideId, guideData) {
       const index = dbState.study_guides.findIndex(g => g.id === guideId);
       if (index !== -1) {
-        dbState.study_guides[index] = { ...dbState.study_guides[index], ...guideData };
+        dbState.study_guides[index] = { ...dbState.study_guides[index], ...guideData, hidden: false };
       } else {
-        dbState.study_guides.push({ id: guideId, ...guideData });
+        dbState.study_guides.push({ id: guideId, ...guideData, hidden: false });
       }
       this.save();
     },
 
+    hideStudyGuide: function(guideId) {
+      const index = dbState.study_guides.findIndex(g => g.id === guideId);
+      if (index !== -1) {
+        dbState.study_guides[index].hidden = true;
+        this.save();
+      }
+    },
+
     deleteStudyGuide: function(guideId) {
       dbState.study_guides = dbState.study_guides.filter(g => g.id !== guideId);
+      this.save();
+    },
+
+    restoreStudyGuide: function(guideId) {
+      const original = window.EroiMockData && window.EroiMockData.study_guides
+        ? window.EroiMockData.study_guides.find(g => g.id === guideId)
+        : null;
+      const index = dbState.study_guides.findIndex(g => g.id === guideId);
+      if (index !== -1 && original) {
+        dbState.study_guides[index] = { ...JSON.parse(JSON.stringify(original)), hidden: false };
+      } else if (index !== -1) {
+        dbState.study_guides[index].hidden = false;
+      }
       this.save();
     },
 
