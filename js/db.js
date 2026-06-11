@@ -177,23 +177,61 @@
     },
 
     // --- MISSIONI ---
+    getPresetMissionIds: function() {
+      if (!window.EroiMockData || !window.EroiMockData.missions) return [];
+      return window.EroiMockData.missions.map(m => m.id);
+    },
+
+    isPresetMission: function(missionId) {
+      return this.getPresetMissionIds().includes(missionId);
+    },
+
     getMissions: function() {
-      return dbState.missions;
+      // Restituisce solo le missioni non nascoste
+      return dbState.missions.filter(m => !m.hidden);
+    },
+
+    getHiddenMissions: function() {
+      // Restituisce le missioni nasconate (solo le preset)
+      return dbState.missions.filter(m => m.hidden);
     },
 
     saveMission: function(missionId, missionData) {
-      // Cerca se esiste già
       const index = dbState.missions.findIndex(m => m.id === missionId);
       if (index !== -1) {
-        dbState.missions[index] = { ...dbState.missions[index], ...missionData };
+        dbState.missions[index] = { ...dbState.missions[index], ...missionData, hidden: false };
       } else {
-        dbState.missions.push({ id: missionId, ...missionData });
+        dbState.missions.push({ id: missionId, ...missionData, hidden: false });
       }
       this.save();
     },
 
+    hideMission: function(missionId) {
+      // Nasconde una missione preset (non la elimina)
+      const index = dbState.missions.findIndex(m => m.id === missionId);
+      if (index !== -1) {
+        dbState.missions[index].hidden = true;
+        this.save();
+      }
+    },
+
     deleteMission: function(missionId) {
+      // Elimina definitivamente (solo per missioni custom)
       dbState.missions = dbState.missions.filter(m => m.id !== missionId);
+      this.save();
+    },
+
+    restoreMission: function(missionId) {
+      // Ripristina una preset dal mockData originale
+      const original = window.EroiMockData && window.EroiMockData.missions
+        ? window.EroiMockData.missions.find(m => m.id === missionId)
+        : null;
+      const index = dbState.missions.findIndex(m => m.id === missionId);
+      if (index !== -1 && original) {
+        dbState.missions[index] = { ...JSON.parse(JSON.stringify(original)), hidden: false };
+      } else if (index !== -1) {
+        dbState.missions[index].hidden = false;
+      }
       this.save();
     },
 

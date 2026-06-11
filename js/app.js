@@ -701,6 +701,10 @@
       // Crea Missione
       document.getElementById('form-create-mission').addEventListener('submit', function(e) {
         e.preventDefault();
+        // Se il bottone è in modalità edit, non fare nulla (gestisce saveEditedMission via onclick)
+        const btn = document.getElementById('btn-save-mission');
+        if (btn && btn.getAttribute('data-edit-id')) return;
+
         const id = document.getElementById('new-mission-id').value.trim();
         const title = document.getElementById('new-mission-title').value;
         const category = document.getElementById('new-mission-category').value;
@@ -2517,34 +2521,228 @@
       const tbody = document.querySelector('#teacher-missions-table tbody');
       tbody.innerHTML = '';
 
+      if (missions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted);"><i>Nessuna missione disponibile.</i></td></tr>`;
+      }
+
       missions.forEach(m => {
+        const isPreset = window.EroiDB.isPresetMission(m.id);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${m.id}</strong></td>
+          <td>
+            <strong>${m.id}</strong>
+            ${isPreset ? `<span title="Missione predefinita" style="margin-left:6px; font-size:0.7rem; background:rgba(212,175,55,0.15); color:var(--gold); border:1px solid rgba(212,175,55,0.4); border-radius:4px; padding:1px 6px;">🔒 preset</span>` : ''}
+          </td>
           <td>${m.title}</td>
           <td>${m.category}</td>
           <td>${m.area}</td>
           <td>XP: +${m.rewards.xp} | Dracme: +${m.rewards.dracme}</td>
           <td>${m.questions.length} domande</td>
           <td>
-            <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteMission('${m.id}')">
-              <i class="fa-solid fa-trash"></i>
-            </button>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openEditMissionModal('${m.id}')" title="Modifica missione">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.deleteMission('${m.id}')" title="${isPreset ? 'Nascondi missione (ripristinabile)' : 'Elimina definitivamente'}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
       });
+
+      // Renderizza il cestino delle preset nascoste
+      this.renderMissionTrash();
+    },
+
+    openEditMissionModal: function(missionId) {
+      const missions = [...window.EroiDB.getMissions(), ...window.EroiDB.getHiddenMissions()];
+      const m = missions.find(m => m.id === missionId);
+      if (!m) return;
+
+      const isPreset = window.EroiDB.isPresetMission(missionId);
+
+      // Popola il form di creazione riutilizzandolo in modalità edit
+      document.getElementById('new-mission-id').value = m.id;
+      document.getElementById('new-mission-id').readOnly = isPreset;
+      document.getElementById('new-mission-id').style.opacity = isPreset ? '0.5' : '1';
+      document.getElementById('new-mission-title').value = m.title || '';
+      document.getElementById('new-mission-category').value = m.category || 'Mitologia';
+      document.getElementById('new-mission-area').value = m.area || 'Olimpo';
+      document.getElementById('new-mission-xp').value = m.rewards ? m.rewards.xp : 50;
+      document.getElementById('new-mission-dracme').value = m.rewards ? m.rewards.dracme : 30;
+      document.getElementById('new-mission-desc').value = m.desc || '';
+      // Prima domanda (se esiste)
+      if (m.questions && m.questions.length > 0) {
+        const q = m.questions[0];
+        document.getElementById('new-mission-q').value = q.q || '';
+        document.getElementById('new-mission-opt0').value = q.a[0] || '';
+        document.getElementById('new-mission-opt1').value = q.a[1] || '';
+        document.getElementById('new-mission-opt2').value = q.a[2] || '';
+        document.getElementById('new-mission-opt3').value = q.a[3] || '';
+      }
+
+      // Cambia il bottone e titolo in modalità edit
+      const btn = document.getElementById('btn-save-mission');
+      btn.textContent = '💾 Salva Modifiche';
+      btn.setAttribute('data-edit-id', missionId);
+      btn.onclick = function(e) {
+        e.preventDefault();
+        EroiApp.saveEditedMission(missionId);
+      };
+
+      // Segnala con un banner visivo che siamo in edit mode
+      let banner = document.getElementById('mission-edit-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'mission-edit-banner';
+        banner.style.cssText = 'background: rgba(212,175,55,0.12); border: 1px solid var(--gold); border-radius:8px; padding:10px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem;';
+        document.getElementById('form-create-mission').before(banner);
+      }
+      banner.innerHTML = `
+        <span>✏️ <strong>Modifica in corso:</strong> <em>${m.title}</em>${isPreset ? ' <span style="color:var(--gold);">(preset — l\'ID non è modificabile)</span>' : ''}</span>
+        <button class="btn btn-secondary" style="padding:4px 12px; font-size:0.78rem;" onclick="EroiApp.resetMissionForm()">✕ Annulla</button>
+      `;
+
+      // Scrolla al form
+      document.getElementById('form-create-mission').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    },
+
+    saveEditedMission: function(missionId) {
+      const id = document.getElementById('new-mission-id').value.trim();
+      const title = document.getElementById('new-mission-title').value.trim();
+      const category = document.getElementById('new-mission-category').value;
+      const area = document.getElementById('new-mission-area').value;
+      const xp = parseInt(document.getElementById('new-mission-xp').value) || 50;
+      const dracme = parseInt(document.getElementById('new-mission-dracme').value) || 30;
+      const desc = document.getElementById('new-mission-desc').value.trim();
+      const q = document.getElementById('new-mission-q').value.trim();
+      const opts = [
+        document.getElementById('new-mission-opt0').value.trim(),
+        document.getElementById('new-mission-opt1').value.trim(),
+        document.getElementById('new-mission-opt2').value.trim(),
+        document.getElementById('new-mission-opt3').value.trim(),
+      ];
+
+      if (!title || !desc) {
+        this.showToast('Titolo e descrizione sono obbligatori.', 'error');
+        return;
+      }
+
+      // Leggi le domande esistenti per non perderle
+      const missions = [...window.EroiDB.getMissions(), ...window.EroiDB.getHiddenMissions()];
+      const existing = missions.find(m => m.id === missionId);
+      let questions = existing ? [...existing.questions] : [];
+      // Aggiorna la prima domanda
+      if (q && opts[0]) {
+        const firstQ = { q, a: opts, correct: 0 };
+        if (questions.length > 0) questions[0] = firstQ;
+        else questions.push(firstQ);
+      }
+
+      window.EroiDB.saveMission(missionId, { title, category, area, desc, rewards: { xp, dracme }, questions });
+      const teacher = window.EroiAuth.getCurrentUser();
+      window.EroiDB.logActivity(teacher.email, `Modificata la missione "${title}" (${missionId})`);
+      this.showToast(`Missione "${title}" aggiornata con successo!`, 'success');
+      this.resetMissionForm();
+      this.renderTeacherMissions();
+    },
+
+    resetMissionForm: function() {
+      const form = document.getElementById('form-create-mission');
+      form.reset();
+      document.getElementById('new-mission-id').readOnly = false;
+      document.getElementById('new-mission-id').style.opacity = '1';
+      const btn = document.getElementById('btn-save-mission');
+      btn.textContent = 'Crea e Pubblica Missione';
+      btn.removeAttribute('data-edit-id');
+      // Ripristina l'onclick originale
+      btn.onclick = null;
+      const banner = document.getElementById('mission-edit-banner');
+      if (banner) banner.remove();
     },
 
     deleteMission: function(missionId) {
-      if (confirm(`Eliminare la missione didattica ${missionId}?`)) {
-        const teacher = window.EroiAuth.getCurrentUser();
-        window.EroiDB.deleteMission(missionId);
-        window.EroiDB.logActivity(teacher.email, `Eliminata la missione ${missionId}`);
-        this.showToast("Missione rimossa.", "success");
-        this.renderTeacherMissions();
-        this.renderTeacherStats();
+      const isPreset = window.EroiDB.isPresetMission(missionId);
+      const teacher = window.EroiAuth.getCurrentUser();
+
+      if (isPreset) {
+        if (confirm(`Nascondere la missione preset "${missionId}"?\n\nSarà rimossa dalla lista ma potrai ripristinarla in qualsiasi momento dal pannello "Missioni Nascoste".`)) {
+          window.EroiDB.hideMission(missionId);
+          window.EroiDB.logActivity(teacher.email, `Nascosta la missione preset ${missionId}`);
+          this.showToast('Missione nascosta. Puoi ripristinarla dal cestino.', 'success');
+          this.renderTeacherMissions();
+        }
+      } else {
+        if (confirm(`Eliminare definitivamente la missione "${missionId}"? Questa azione non è reversibile.`)) {
+          window.EroiDB.deleteMission(missionId);
+          window.EroiDB.logActivity(teacher.email, `Eliminata definitivamente la missione ${missionId}`);
+          this.showToast('Missione eliminata.', 'success');
+          this.renderTeacherMissions();
+          this.renderTeacherStats();
+        }
       }
+    },
+
+    restoreMission: function(missionId) {
+      window.EroiDB.restoreMission(missionId);
+      const teacher = window.EroiAuth.getCurrentUser();
+      window.EroiDB.logActivity(teacher.email, `Ripristinata la missione preset ${missionId}`);
+      this.showToast('Missione ripristinata ai valori originali.', 'success');
+      this.renderTeacherMissions();
+    },
+
+    renderMissionTrash: function() {
+      const hidden = window.EroiDB.getHiddenMissions();
+      let panel = document.getElementById('missions-trash-panel');
+
+      if (hidden.length === 0) {
+        if (panel) panel.style.display = 'none';
+        return;
+      }
+
+      if (!panel) {
+        // Crea il pannello se non esiste ancora
+        panel = document.createElement('div');
+        panel.id = 'missions-trash-panel';
+        panel.className = 'glass-panel';
+        panel.style.marginTop = '20px';
+        const missionsGlassPanel = document.querySelector('#teacher-missions-table').closest('.glass-panel');
+        if (missionsGlassPanel) missionsGlassPanel.after(panel);
+        else return;
+      }
+
+      panel.style.display = 'block';
+      panel.innerHTML = `
+        <h3 class="panel-title" style="color: var(--text-muted);">
+          <i class="fa-solid fa-trash-can-arrow-up" style="color: var(--gold);"></i>
+          Missioni Nascoste
+          <span style="background: rgba(212,175,55,0.15); color: var(--gold); font-size:0.78rem; padding:2px 10px; border-radius:20px; margin-left:8px; font-family: var(--font-body);">${hidden.length}</span>
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.83rem; margin-bottom: 16px;">
+          Queste missioni predefinite sono state nascoste. Possono essere ripristinate ai valori originali in qualsiasi momento.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;">
+          ${hidden.map(m => `
+            <div style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(212,175,55,0.25); border-radius: 10px; padding: 14px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                <div>
+                  <strong style="font-size:0.9rem;">${m.title}</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${m.category} · ${m.area}</div>
+                </div>
+                <span style="font-size:0.72rem; background:rgba(212,175,55,0.1); color:var(--gold); border:1px solid rgba(212,175,55,0.3); border-radius:4px; padding:1px 6px; white-space:nowrap;">🔒 ${m.id}</span>
+              </div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
+                ${m.questions ? m.questions.length : 0} domande · XP +${m.rewards ? m.rewards.xp : '?'} · Dracme +${m.rewards ? m.rewards.dracme : '?'}
+              </div>
+              <button class="btn" style="width:100%; padding:6px; font-size:0.8rem;" onclick="EroiApp.restoreMission('${m.id}')">
+                <i class="fa-solid fa-rotate-left"></i> Ripristina
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
     },
 
     // --- TEACHER SHOP CONTROL ---
