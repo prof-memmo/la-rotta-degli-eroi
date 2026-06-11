@@ -709,6 +709,7 @@
         const title = document.getElementById('new-mission-title').value;
         const category = document.getElementById('new-mission-category').value;
         const area = document.getElementById('new-mission-area').value;
+        const gameType = document.getElementById('new-mission-gametype').value;
         const xp = Number(document.getElementById('new-mission-xp').value);
         const dracme = Number(document.getElementById('new-mission-dracme').value);
         const desc = document.getElementById('new-mission-desc').value;
@@ -726,6 +727,7 @@
           title: title,
           desc: desc,
           area: area,
+          gameType: gameType,
           rewards: { xp: xp, dracme: dracme },
           questions: [
             { q: qText, a: [opt0, opt1, opt2, opt3], correct: 0 }
@@ -740,6 +742,7 @@
         document.getElementById('new-mission-id').value = '';
         document.getElementById('new-mission-title').value = '';
         document.getElementById('new-mission-desc').value = '';
+        self.resetMissionForm();
         self.renderTeacherMissions();
       });
 
@@ -1403,7 +1406,17 @@
                 <div style="display: flex; flex-direction: column; gap: 6px; min-width: 130px;">
                   ${isPlayable
                     ? `<button class="btn" style="padding: 9px 16px; font-size: 0.85rem;" onclick="EroiApp.startQuiz('${m.id}')">
-                         <i class="fa-solid fa-play"></i> Svolgi Quiz
+                         <i class="fa-solid ${
+                           m.gameType === 'puzzle' ? 'fa-puzzle-piece' :
+                           m.gameType === 'cloze' ? 'fa-pen-to-square' :
+                           m.gameType === 'cantami_o_diva' ? 'fa-microphone' :
+                           'fa-play'
+                         }"></i> ${
+                           m.gameType === 'puzzle' ? 'Risolvi Puzzle' :
+                           m.gameType === 'cloze' ? 'Completa Cloze' :
+                           m.gameType === 'cantami_o_diva' ? 'Cantami o Diva' :
+                           'Svolgi Quiz'
+                         }
                        </button>`
                     : `<button class="btn" disabled style="background: rgba(255,255,255,0.05); color: var(--text-muted); padding: 9px 16px; font-size: 0.85rem;">
                          <i class="fa-solid fa-lock"></i> Bloccata
@@ -1451,32 +1464,346 @@
       const hintQty = hints ? hints.quantity : 0;
       document.getElementById('hint-qty-label').textContent = hintQty;
 
+      const gameType = m.gameType || 'quiz';
+      const hintBtn = document.getElementById('btn-use-hint');
+      if (hintBtn) {
+        hintBtn.style.display = gameType === 'quiz' ? 'block' : 'none';
+      }
+
+      const submitBtn = document.getElementById('btn-submit-quiz-answers');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.onclick = () => {
+          EroiApp.submitQuiz(user.email, missionId);
+        };
+      }
+
       const listContainer = document.getElementById('quiz-questions-list');
-      listContainer.innerHTML = m.questions.map((q, qIndex) => `
-        <div class="quiz-question-box" data-correct="${q.correct}">
-          <p class="quiz-question-text">${qIndex + 1}. ${q.q}</p>
-          <div class="quiz-options">
-            ${q.a.map((opt, optIndex) => `
-              <div class="quiz-option" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${optIndex})">
-                <span class="quiz-radio"></span>
-                <span>${opt}</span>
-              </div>
-            `).join('')}
+
+      if (gameType === 'quiz') {
+        listContainer.innerHTML = m.questions.map((q, qIndex) => `
+          <div class="quiz-question-box" data-correct="${q.correct}">
+            <p class="quiz-question-text">${qIndex + 1}. ${q.q}</p>
+            <div class="quiz-options">
+              ${q.a.map((opt, optIndex) => `
+                <div class="quiz-option" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${optIndex})">
+                  <span class="quiz-radio"></span>
+                  <span>${opt}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('');
+
+        // Aggancia trigger al bottone "Indizio"
+        if (hintBtn) {
+          hintBtn.onclick = () => {
+            EroiApp.useHintInQuiz(user.email, m);
+          };
+        }
+      } else if (gameType === 'puzzle') {
+        const firstQ = m.questions && m.questions[0] ? m.questions[0].q : "Frase da ordinare";
+        const words = firstQ.trim().split(/\s+/);
+        const shuffled = [...words].sort(() => Math.random() - 0.5);
+        window.currentMissionGameState = {
+          solution: firstQ,
+          shuffled: shuffled,
+          selected: [],
+          remaining: [...shuffled],
+          verified: false
+        };
+        this.renderMissionPuzzle();
+      } else if (gameType === 'cloze') {
+        const firstQ = m.questions && m.questions[0] ? m.questions[0].q : "Testo ___ da completare.";
+        const blanks = m.questions && m.questions[0] ? m.questions[0].a : ["mancante"];
+        window.currentMissionGameState = {
+          text: firstQ,
+          blanks: blanks.filter(Boolean),
+          answers: [],
+          verified: false
+        };
+        this.renderMissionCloze();
+      } else if (gameType === 'cantami_o_diva') {
+        const firstQ = m.questions && m.questions[0] ? m.questions[0].q : "Spiega il concetto.";
+        window.currentMissionGameState = {
+          prompt: firstQ,
+          recorded: false,
+          timerInterval: null
+        };
+        this.renderMissionCantamiODiva(missionId);
+      }
+    },
+
+    renderMissionPuzzle: function() {
+      const s = window.currentMissionGameState;
+      const listContainer = document.getElementById('quiz-questions-list');
+      const isCorrect = s.selected.join(' ') === s.solution;
+
+      const selHtml = s.selected.length
+        ? s.selected.map((w, i) => `<span style="display:inline-block; background:rgba(37,99,235,0.25); border:1px solid #2563eb; border-radius:6px; padding:6px 12px; margin:4px; font-weight:bold; cursor:pointer; color:var(--text-light);" onclick="EroiApp.puzzleRemove(${i})">${w}</span>`).join('')
+        : '<span style="color:var(--text-muted); font-style:italic;">Clicca le parole in basso nel giusto ordine per ricostruire la frase...</span>';
+
+      const remHtml = s.remaining.map((w, i) =>
+        `<button class="btn btn-secondary" style="margin:4px; font-weight:bold; font-size:0.85rem;" onclick="EroiApp.puzzleAdd(${i})">${w}</button>`
+      ).join('');
+
+      listContainer.innerHTML = `
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; padding: 18px; margin-bottom: 20px;">
+          <h4 style="color: var(--gold); font-family: var(--font-heading); margin-bottom: 12px;">🧩 Puzzle: Ricostruisci la frase</h4>
+          <div style="min-height:60px; border:1.5px dashed rgba(212,175,55,0.3); border-radius:8px; padding:12px; margin-bottom:16px; background:rgba(0,0,0,0.3); display:flex; flex-wrap:wrap; align-items:center;">
+            ${selHtml}
+          </div>
+          <div style="margin-bottom:8px; font-size:0.85rem; color:var(--text-muted); font-weight:600;">Parole disponibili:</div>
+          <div style="min-height:50px; display:flex; flex-wrap:wrap;">
+            ${remHtml}
+          </div>
+          <div style="margin-top:16px; display:flex; gap:10px;">
+            <button class="btn btn-secondary" style="padding:6px 12px; font-size:0.8rem;" onclick="EroiApp.puzzleReset()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
           </div>
         </div>
-      `).join('');
+        <div id="puzzle-eval-result"></div>
+      `;
 
-      // Aggancia trigger al bottone "Concludi"
+      const res = document.getElementById('puzzle-eval-result');
+      if (isCorrect) {
+        res.innerHTML = `<div style="background:rgba(22,163,74,0.15); border:1px solid #16a34a; border-radius:8px; padding:12px; text-align:center; color:#16a34a; font-weight:bold; margin-bottom:15px;">
+          🎉 Ottimo lavoro! La frase è corretta. Clicca su "Concludi Impresa" in basso per incassare i premi.
+        </div>`;
+      } else if (s.remaining.length === 0) {
+        res.innerHTML = `<div style="background:rgba(239,68,68,0.1); border:1px solid #ef4444; border-radius:8px; padding:12px; text-align:center; color:#ef4444; font-weight:bold; margin-bottom:15px;">
+          ❌ La frase inserita non è corretta. Premi "Reset" per riprovare.
+        </div>`;
+      } else {
+        res.innerHTML = '';
+      }
+
       const submitBtn = document.getElementById('btn-submit-quiz-answers');
-      submitBtn.onclick = () => {
-        EroiApp.submitQuiz(user.email, missionId);
-      };
+      if (submitBtn) {
+        submitBtn.disabled = !isCorrect;
+        submitBtn.style.opacity = isCorrect ? '1' : '0.5';
+      }
+    },
 
-      // Aggancia trigger al bottone "Indizio"
-      const hintBtn = document.getElementById('btn-use-hint');
-      hintBtn.onclick = () => {
-        EroiApp.useHintInQuiz(user.email, m);
-      };
+    puzzleAdd: function(i) {
+      const s = window.currentMissionGameState;
+      const w = s.remaining[i];
+      s.selected.push(w);
+      s.remaining.splice(i, 1);
+      EroiApp.renderMissionPuzzle();
+    },
+
+    puzzleRemove: function(i) {
+      const s = window.currentMissionGameState;
+      const w = s.selected[i];
+      s.remaining.push(w);
+      s.selected.splice(i, 1);
+      EroiApp.renderMissionPuzzle();
+    },
+
+    puzzleReset: function() {
+      const s = window.currentMissionGameState;
+      s.selected = [];
+      s.remaining = [...s.shuffled];
+      EroiApp.renderMissionPuzzle();
+    },
+
+    renderMissionCloze: function() {
+      const s = window.currentMissionGameState;
+      const listContainer = document.getElementById('quiz-questions-list');
+
+      let idx = 0;
+      const renderedText = s.text.replace(/___/g, () => {
+        const i = idx++;
+        return `<input type="text" class="cloze-input" data-idx="${i}" value="${s.answers[i] || ''}"
+          style="width:130px; background:rgba(37,99,235,0.15); border:1.5px solid rgba(37,99,235,0.4); border-radius:6px; padding:4px 8px; color:var(--text-light); font-weight:bold; text-align:center; font-size:0.9rem;"
+          oninput="EroiApp.clozeUpdate(${i}, this.value)" placeholder="...">`;
+      });
+
+      listContainer.innerHTML = `
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; padding: 18px; margin-bottom: 20px;">
+          <h4 style="color: var(--gold); font-family: var(--font-heading); margin-bottom: 12px;">📝 Cloze: Completa il testo inserendo le parole mancanti</h4>
+          <div style="background: rgba(0,0,0,0.3); border:1px solid rgba(212,175,55,0.15); border-radius:8px; padding:16px; font-size:1.05rem; line-height:2.4; color:var(--text-light); font-weight:500;">
+            ${renderedText}
+          </div>
+          <div style="margin-top:16px; display:flex; gap:10px;">
+            <button class="btn btn-secondary" style="padding:6px 12px; font-size:0.8rem;" onclick="EroiApp.clozeVerify()"><i class="fa-solid fa-check"></i> Verifica</button>
+          </div>
+        </div>
+        <div id="cloze-eval-result"></div>
+      `;
+
+      const submitBtn = document.getElementById('btn-submit-quiz-answers');
+      if (submitBtn) {
+        submitBtn.disabled = !window.currentMissionGameState.verified;
+        submitBtn.style.opacity = window.currentMissionGameState.verified ? '1' : '0.5';
+      }
+    },
+
+    clozeUpdate: function(i, val) {
+      window.currentMissionGameState.answers[i] = val.trim();
+    },
+
+    clozeVerify: function() {
+      const s = window.currentMissionGameState;
+      let correctCount = 0;
+      const inputs = document.querySelectorAll('.cloze-input');
+      
+      inputs.forEach(inp => {
+        const i = parseInt(inp.getAttribute('data-idx'));
+        const val = inp.value.trim();
+        s.answers[i] = val;
+        const expected = s.blanks[i];
+        const isOk = expected && val.toLowerCase() === expected.toLowerCase();
+        
+        inp.style.borderColor = isOk ? '#16a34a' : '#ef4444';
+        inp.style.background = isOk ? 'rgba(22,163,74,0.15)' : 'rgba(239,68,68,0.1)';
+        
+        if (isOk) correctCount++;
+      });
+
+      const isAllCorrect = correctCount === s.blanks.length;
+      s.verified = isAllCorrect;
+
+      const res = document.getElementById('cloze-eval-result');
+      if (isAllCorrect) {
+        res.innerHTML = `<div style="background:rgba(22,163,74,0.15); border:1px solid #16a34a; border-radius:8px; padding:12px; text-align:center; color:#16a34a; font-weight:bold; margin-bottom:15px;">
+          🎉 Ottimo lavoro! Tutte le parole inserite sono corrette. Clicca su "Concludi Impresa" in basso per incassare i premi.
+        </div>`;
+      } else {
+        res.innerHTML = `<div style="background:rgba(239,68,68,0.1); border:1px solid #ef4444; border-radius:8px; padding:12px; text-align:center; color:#ef4444; font-weight:bold; margin-bottom:15px;">
+          ❌ Alcune risposte non sono corrette (${correctCount}/${s.blanks.length}). Controlla i campi in rosso e riprova.
+        </div>`;
+      }
+
+      const submitBtn = document.getElementById('btn-submit-quiz-answers');
+      if (submitBtn) {
+        submitBtn.disabled = !isAllCorrect;
+        submitBtn.style.opacity = isAllCorrect ? '1' : '0.5';
+      }
+    },
+
+    renderMissionCantamiODiva: function(missionId) {
+      const listContainer = document.getElementById('quiz-questions-list');
+      const promptText = window.currentMissionGameState.prompt;
+
+      listContainer.innerHTML = `
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; padding: 18px; margin-bottom: 20px;">
+          <h4 style="color: var(--gold); font-family: var(--font-heading); margin-bottom: 12px; display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-microphone-lines" style="color:var(--gold);"></i> Cantami o Diva: Spiegazione Orale
+          </h4>
+          <div style="background: rgba(120,53,15,0.1); border:1px solid rgba(212,175,55,0.25); border-radius:8px; padding:16px; margin-bottom:20px;">
+            <strong style="color:var(--gold); font-size:0.9rem; display:block; margin-bottom:6px;">TRACCIA DA SPIEGARE:</strong>
+            <span style="font-size:1.05rem; color:var(--text-light); line-height:1.5; font-style:italic;">"${promptText}"</span>
+          </div>
+          
+          <div style="background: rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.05); border-radius:8px; padding:20px; text-align:center; min-height:150px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <div id="diva-timer-display" style="font-size:3rem; font-weight:bold; color:var(--gold); font-family:monospace; line-height:1; display:none; margin-bottom:10px;">10.0s</div>
+            <div id="diva-mic-icon" style="font-size:2.5rem; color:var(--text-muted); margin-bottom:15px;">
+              <i class="fa-solid fa-microphone"></i>
+            </div>
+            <p id="diva-instructions" style="color:var(--text-muted); font-size:0.88rem; max-width:400px; margin-bottom:15px;">
+              Premi il tasto in basso per avviare la registrazione. Avrai esattamente 10 secondi per formulare la tua spiegazione ad alta voce.
+            </p>
+            <div id="diva-visualizer" style="display:none; width:80%; height:30px; margin-bottom:15px; align-items:center; justify-content:center; gap:3px;">
+              <span class="vis-bar"></span><span class="vis-bar"></span><span class="vis-bar"></span><span class="vis-bar"></span>
+              <span class="vis-bar"></span><span class="vis-bar"></span><span class="vis-bar"></span><span class="vis-bar"></span>
+            </div>
+            <button id="btn-diva-start" class="btn" style="padding:10px 20px; font-size:0.9rem; font-weight:bold;" onclick="EroiApp.divaStartRecording('${missionId}')">
+              <i class="fa-solid fa-circle" style="color:#ef4444; margin-right:6px;"></i> Avvia Registrazione (10s)
+            </button>
+            <button id="btn-diva-stop" class="btn btn-danger" style="display:none; padding:10px 20px; font-size:0.9rem; font-weight:bold;" onclick="EroiApp.divaStopRecording()">
+              <i class="fa-solid fa-square" style="margin-right:6px;"></i> Termina Ora
+            </button>
+          </div>
+        </div>
+      `;
+
+      const submitBtn = document.getElementById('btn-submit-quiz-answers');
+      if (submitBtn) {
+        submitBtn.disabled = !window.currentMissionGameState.recorded;
+        submitBtn.style.opacity = window.currentMissionGameState.recorded ? '1' : '0.5';
+      }
+    },
+
+    divaStartRecording: function(missionId) {
+      const timerDisplay = document.getElementById('diva-timer-display');
+      const micIcon = document.getElementById('diva-mic-icon');
+      const instructions = document.getElementById('diva-instructions');
+      const vis = document.getElementById('diva-visualizer');
+      const btnStart = document.getElementById('btn-diva-start');
+      const btnStop = document.getElementById('btn-diva-stop');
+
+      if (!timerDisplay || !micIcon || !instructions || !vis || !btnStart || !btnStop) return;
+
+      EroiAudio.playClick();
+
+      btnStart.style.display = 'none';
+      btnStop.style.display = 'block';
+      timerDisplay.style.display = 'block';
+      vis.style.display = 'flex';
+      micIcon.style.color = '#ef4444';
+      micIcon.innerHTML = '<i class="fa-solid fa-microphone-lines animate-pulse" style="animation: pulse 1s infinite;"></i>';
+      instructions.innerHTML = '🔴 <strong>Registrazione attiva:</strong> spiega il concetto ad alta voce ora!';
+
+      window.currentMissionGameState.timeLeft = 10.0;
+      window.currentMissionGameState.timerInterval = setInterval(() => {
+        window.currentMissionGameState.timeLeft -= 0.1;
+        if (window.currentMissionGameState.timeLeft <= 0) {
+          window.currentMissionGameState.timeLeft = 0;
+          EroiApp.divaStopRecording();
+        }
+        timerDisplay.textContent = window.currentMissionGameState.timeLeft.toFixed(1) + 's';
+      }, 100);
+    },
+
+    divaStopRecording: function() {
+      clearInterval(window.currentMissionGameState.timerInterval);
+      const timerDisplay = document.getElementById('diva-timer-display');
+      const micIcon = document.getElementById('diva-mic-icon');
+      const instructions = document.getElementById('diva-instructions');
+      const vis = document.getElementById('diva-visualizer');
+      const btnStop = document.getElementById('btn-diva-stop');
+
+      if (!instructions || !btnStop) return;
+
+      btnStop.style.display = 'none';
+      if (timerDisplay) timerDisplay.style.display = 'none';
+      if (vis) vis.style.display = 'none';
+      
+      if (micIcon) {
+        micIcon.style.color = '#16a34a';
+        micIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      }
+
+      instructions.innerHTML = `
+        <div style="background:rgba(22,163,74,0.12); border:1px solid #16a34a; border-radius:8px; padding:12px; margin-top:10px; width:100%;">
+          <span style="color:#16a34a; font-weight:bold; display:block; margin-bottom:8px;">✅ Spiegazione Registrata Correttamente!</span>
+          <button class="btn btn-secondary" style="padding:5px 12px; font-size:0.8rem; display:inline-flex; align-items:center; gap:6px; margin:auto;" onclick="EroiApp.divaPlayAudio()">
+            <i class="fa-solid fa-play"></i> Ascolta la tua registrazione
+          </button>
+          <span id="diva-audio-playing-indicator" style="display:none; color:var(--gold); font-size:0.8rem; margin-left:10px;"><i class="fa-solid fa-volume-high"></i> Riproduzione...</span>
+        </div>
+      `;
+
+      window.currentMissionGameState.recorded = true;
+
+      // Enable submit button
+      const submitBtn = document.getElementById('btn-submit-quiz-answers');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+      }
+    },
+
+    divaPlayAudio: function() {
+      const indicator = document.getElementById('diva-audio-playing-indicator');
+      if (indicator) {
+        indicator.style.display = 'inline-block';
+        setTimeout(() => {
+          indicator.style.display = 'none';
+        }, 2000);
+      }
     },
 
     selectQuizOption: function(element, qIndex, optIndex) {
@@ -1498,7 +1825,6 @@
         document.getElementById('hint-qty-label').textContent = hints ? hints.quantity : 0;
 
         // Rivela un suggerimento: ad esempio evidenzia una risposta sbagliata
-        // Troviamo la prima domanda non ancora risposta o a caso
         const questionsBoxes = document.querySelectorAll('.quiz-question-box');
         let hintGiven = false;
         
@@ -1507,7 +1833,6 @@
           const correct = Number(box.getAttribute('data-correct'));
           const options = box.querySelectorAll('.quiz-option');
           
-          // Trova un'opzione errata non evidenziata
           for (let o = 0; o < options.length; o++) {
             if (o !== correct && !options[o].style.opacity) {
               options[o].style.opacity = '0.4';
@@ -1527,6 +1852,29 @@
     },
 
     submitQuiz: function(email, missionId) {
+      const missions = window.EroiDB.getMissions();
+      const m = missions.find(x => x.id === missionId);
+      const gameType = m ? (m.gameType || 'quiz') : 'quiz';
+
+      if (gameType !== 'quiz') {
+        try {
+          const result = window.EroiGame.submitMission(email, missionId, [0]);
+          if (result.passed) {
+            if (result.levelUp) {
+              EroiAudio.playLevelUp();
+              this.showToast(`Congratulazioni! Sei salito al livello ${result.newLevel}!`, "level");
+            } else {
+              EroiAudio.playSuccess();
+            }
+            this.showToast(`Missione Superata! +${result.xpGained} XP e +${result.dracmeGained} Dracme.`, "success");
+            this.navigateTo('view-missions');
+          }
+        } catch (err) {
+          alert("Errore: " + err.message);
+        }
+        return;
+      }
+
       const qBoxes = document.querySelectorAll('.quiz-question-box');
       const answers = [];
       let allAnswered = true;
@@ -1556,20 +1904,17 @@
             EroiAudio.playSuccess();
           }
           this.showToast(`Missione Superata! +${result.xpGained} XP e +${result.dracmeGained} Dracme.`, "success");
-          // Ritorna all'elenco delle missioni
           this.navigateTo('view-missions');
         } else {
           EroiAudio.playFailure();
           this.showToast(`Sfida Fallita (${result.correctCount}/${result.totalCount} esatte). Riprova dopo aver studiato le guide!`, "danger");
           
-          // Controlliamo se lo studente ha l'oggetto "Secondo Tentativo" nell'inventario
           const inventory = window.EroiDB.getInventory(email);
           const secondChance = inventory.find(i => i.itemId === 'item_ritentativo');
           
           if (secondChance && secondChance.quantity > 0) {
             if (confirm("Hai fallito la missione, ma possiedi un 'Secondo Tentativo' nell'inventario. Vuoi consumarlo per riprovare subito senza penalità?")) {
               window.EroiGame.useConsumable(email, 'item_ritentativo');
-              // Mantieni il quiz aperto ma deseleziona tutto
               document.querySelectorAll('.quiz-option').forEach(opt => {
                 opt.classList.remove('selected');
                 opt.style.opacity = '1';
@@ -1580,7 +1925,6 @@
             }
           }
           
-          // Altrimenti torna indietro
           this.navigateTo('view-missions');
         }
       } catch (err) {
@@ -2570,6 +2914,7 @@
       document.getElementById('new-mission-title').value = m.title || '';
       document.getElementById('new-mission-category').value = m.category || 'Mitologia';
       document.getElementById('new-mission-area').value = m.area || 'Olimpo';
+      document.getElementById('new-mission-gametype').value = m.gameType || 'quiz';
       document.getElementById('new-mission-xp').value = m.rewards ? m.rewards.xp : 50;
       document.getElementById('new-mission-dracme').value = m.rewards ? m.rewards.dracme : 30;
       document.getElementById('new-mission-desc').value = m.desc || '';
@@ -2582,6 +2927,9 @@
         document.getElementById('new-mission-opt2').value = q.a[2] || '';
         document.getElementById('new-mission-opt3').value = q.a[3] || '';
       }
+
+      // Aggiorna l'editor in base al tipo di gioco
+      this.onGameTypeChange();
 
       // Cambia il bottone e titolo in modalità edit
       const btn = document.getElementById('btn-save-mission');
@@ -2614,6 +2962,7 @@
       const title = document.getElementById('new-mission-title').value.trim();
       const category = document.getElementById('new-mission-category').value;
       const area = document.getElementById('new-mission-area').value;
+      const gameType = document.getElementById('new-mission-gametype').value;
       const xp = parseInt(document.getElementById('new-mission-xp').value) || 50;
       const dracme = parseInt(document.getElementById('new-mission-dracme').value) || 30;
       const desc = document.getElementById('new-mission-desc').value.trim();
@@ -2641,7 +2990,7 @@
         else questions.push(firstQ);
       }
 
-      window.EroiDB.saveMission(missionId, { title, category, area, desc, rewards: { xp, dracme }, questions });
+      window.EroiDB.saveMission(missionId, { title, category, area, desc, rewards: { xp, dracme }, gameType, questions });
       const teacher = window.EroiAuth.getCurrentUser();
       window.EroiDB.logActivity(teacher.email, `Modificata la missione "${title}" (${missionId})`);
       this.showToast(`Missione "${title}" aggiornata con successo!`, 'success');
@@ -2654,6 +3003,8 @@
       form.reset();
       document.getElementById('new-mission-id').readOnly = false;
       document.getElementById('new-mission-id').style.opacity = '1';
+      document.getElementById('new-mission-gametype').value = 'quiz';
+      this.onGameTypeChange();
       const btn = document.getElementById('btn-save-mission');
       btn.textContent = 'Crea e Pubblica Missione';
       btn.removeAttribute('data-edit-id');
@@ -2661,6 +3012,65 @@
       btn.onclick = null;
       const banner = document.getElementById('mission-edit-banner');
       if (banner) banner.remove();
+    },
+
+    onGameTypeChange: function() {
+      const type = document.getElementById('new-mission-gametype').value;
+      const header = document.getElementById('new-mission-editor-header');
+      const label = document.getElementById('new-mission-q-label');
+      const qInput = document.getElementById('new-mission-q');
+      const optionsContainer = document.getElementById('new-mission-options-container');
+      const hint = document.getElementById('new-mission-editor-hint');
+
+      if (!header || !label || !qInput || !optionsContainer || !hint) return;
+
+      // Reset styles and display
+      optionsContainer.style.display = 'grid';
+      hint.style.display = 'none';
+
+      if (type === 'quiz') {
+        header.textContent = 'Domande/Quiz (Modificabile nel DB)';
+        label.textContent = 'Testo Domanda';
+        qInput.placeholder = 'Chi uccide Patroclo in battaglia?';
+        
+        optionsContainer.style.display = 'grid';
+        optionsContainer.querySelectorAll('.form-group').forEach((group, idx) => {
+          const lbl = group.querySelector('label');
+          const inp = group.querySelector('input');
+          lbl.textContent = idx === 0 ? 'Opzione 0 (Corretta)' : `Opzione ${idx}`;
+          inp.placeholder = `Opzione ${idx}`;
+        });
+      } else if (type === 'puzzle') {
+        header.textContent = 'Frase da Riordinare (Puzzle)';
+        label.textContent = 'Inserisci la frase completa';
+        qInput.placeholder = 'Cantami o Diva del pelide Achille l\'ira funesta';
+        
+        optionsContainer.style.display = 'none';
+        hint.style.display = 'block';
+        hint.textContent = '💡 Lo studente vedrà le parole di questa frase mescolate e dovrà selezionarle nel giusto ordine.';
+      } else if (type === 'cloze') {
+        header.textContent = 'Testo da Completare (Cloze)';
+        label.textContent = 'Inserisci il testo (usa ___ per indicare gli spazi da riempire)';
+        qInput.placeholder = 'Achille è l\'eroe dell\'___ e combatte contro ___.';
+        
+        optionsContainer.style.display = 'grid';
+        optionsContainer.querySelectorAll('.form-group').forEach((group, idx) => {
+          const lbl = group.querySelector('label');
+          const inp = group.querySelector('input');
+          lbl.textContent = `Parola per Spazio ${idx + 1}`;
+          inp.placeholder = `Parola ${idx + 1}`;
+        });
+        hint.style.display = 'block';
+        hint.textContent = '💡 Inserisci il testo con ___ nel campo sopra e scrivi le parole corrette in ordine nei campi qui sotto.';
+      } else if (type === 'cantami_o_diva') {
+        header.textContent = 'Argomento Spiegazione Orale (Cantami o Diva)';
+        label.textContent = 'Traccia/Argomento da spiegare';
+        qInput.placeholder = 'Spiega brevemente chi era Achille e le ragioni della sua ira.';
+        
+        optionsContainer.style.display = 'none';
+        hint.style.display = 'block';
+        hint.textContent = '💡 Gli studenti avranno 10 secondi per spiegare oralmente questo concetto dopo aver letto la traccia.';
+      }
     },
 
     deleteMission: function(missionId) {
