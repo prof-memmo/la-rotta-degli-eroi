@@ -377,8 +377,14 @@ window.finalizzaDocente = async function() {
             return;
         }
         
+        // Pausa musica di sottofondo se attiva
+        if (window.MusicPlayer && window.MusicPlayer.isPlaying) {
+            window.MusicPlayer.togglePlay();
+        }
+        
         overlay.style.display = 'flex';
         video.currentTime = 0;
+        video.muted = false; // Forza un-mute iniziale
         video.play().catch(e => {
             // Se autoplay fallisce chiudiamo
             window.EroiApp.skipIntroVideo();
@@ -390,11 +396,25 @@ window.finalizzaDocente = async function() {
         };
     },
 
+    toggleIntroVideoMute: function() {
+        const video = document.getElementById('intro-video');
+        const btn = document.getElementById('btn-toggle-video-mute');
+        if (video && btn) {
+            video.muted = !video.muted;
+            btn.innerHTML = video.muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+        }
+    },
+
     skipIntroVideo: function() {
         const overlay = document.getElementById('intro-video-overlay');
         const video = document.getElementById('intro-video');
         if (overlay) overlay.style.display = 'none';
         if (video) video.pause();
+        
+        // Riprendi musica di sottofondo se disattivata
+        if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
+            window.MusicPlayer.togglePlay();
+        }
         
         if (this._videoCompleteCallback) {
             const cb = this._videoCompleteCallback;
@@ -425,7 +445,7 @@ window.finalizzaDocente = async function() {
         
         // Listener handles view switch
         if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
-            window.MusicPlayer.togglePlay();
+            // Se siamo nel welcome, non facciamo partire la musica in automatico, la lasceremo gestire al login
         }
         
         // Genera i bottoni disabilitati per il login
@@ -1213,7 +1233,8 @@ window.finalizzaDocente = async function() {
       const user = Auth.getUser();
       if (user) {
         // Handle auto-play on session restoration
-        if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
+        const needsVideo = user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed');
+        if (window.MusicPlayer && !window.MusicPlayer.isPlaying && !needsVideo) {
             window.MusicPlayer.togglePlay();
         }
         
@@ -2619,8 +2640,10 @@ window.finalizzaDocente = async function() {
       } else if (content.startsWith("Biografia:")) {
         content = content.substring("Biografia:".length).trim();
       }
+      
+      content = content.toUpperCase();
 
-      // Evidenziazione parole chiave (mantenendo il case originale)
+      // Evidenziazione parole chiave
       if (g.category !== "L'inizio del viaggio") {
         const blueTerms = [
           "OMERO", "VIRGILIO", "TUROLDO", "CHRÉTIEN DE TROYES", "PROMETEO", "ERACLE", "ERCOLE", 

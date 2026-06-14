@@ -892,6 +892,7 @@ h3.panel-title {
 #view-map .section-title {
   margin-top: 0;
   margin-bottom: 8px;
+  border-bottom: none;
 }
 
 #view-map p {
