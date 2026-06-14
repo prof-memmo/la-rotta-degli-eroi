@@ -149,7 +149,7 @@
       
       // Protezione delle rotte in base al ruolo
       const publicViews = ['view-login'];
-      const studentViews = ['view-student-dashboard', 'view-map', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento'];
+      const studentViews = ['view-student-dashboard', 'view-map', 'view-diario', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento'];
       const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento'];
       const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento'];
 
@@ -347,6 +347,7 @@
       if (user.role === 'student' || user.role === 'amico') {
         links = [
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
           { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
@@ -965,6 +966,9 @@
         case 'view-map':
           this.renderInteractiveMap(user.email);
           break;
+        case 'view-diario':
+          this.renderDiario(user.email);
+          break;
         case 'view-missions':
           this.renderMissionsList(user.email);
           break;
@@ -1222,7 +1226,7 @@
       const settings = window.EroiDB.getSettings();
 
       // Sblocca i nodi grafici e i collegamenti in base alle aree sbloccate dallo studente
-      const areas = ["Accademia", "Biblioteca", "Archivio", "Olimpo", "Creta", "Troia", "Itaca", "Lazio", "Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
+      const areas = ["Accademia", "Miti di Fondazione", "Biblioteca", "Archivio", "Olimpo", "Creta", "Troia", "Itaca", "Lazio", "Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
       const secondTermAreas = ["Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
 
       areas.forEach(area => {
@@ -1252,7 +1256,8 @@
 
       // Disegna i percorsi dorati
       const paths = [
-        { from: "Accademia", to: "Biblioteca" },
+        { from: "Accademia", to: "Miti di Fondazione" },
+        { from: "Miti di Fondazione", to: "Biblioteca" },
         { from: "Biblioteca", to: "Archivio" },
         { from: "Archivio", to: "Olimpo" },
         { from: "Olimpo", to: "Creta" },
@@ -1270,8 +1275,8 @@
 
       paths.forEach(p => {
         // Path IDs use abbreviations for Brocelandia and Graal
-        const fromId = p.from.replace('Foresta di Brocelandia', 'Brocelandia').replace('Castello del Graal', 'Graal');
-        const toId = p.to.replace('Foresta di Brocelandia', 'Brocelandia').replace('Castello del Graal', 'Graal');
+        const fromId = p.from.replace('Foresta di Brocelandia', 'Brocelandia').replace('Castello del Graal', 'Graal').replace(/ /g, '-');
+        const toId = p.to.replace('Foresta di Brocelandia', 'Brocelandia').replace('Castello del Graal', 'Graal').replace(/ /g, '-');
         const pathEl = document.getElementById(`path-${fromId}-${toId}`) ||
                        document.getElementById(`path-${p.from}-${p.to}`);
         if (!pathEl) return;
@@ -1323,7 +1328,9 @@
         { name: "Eneide", term: 1, icon: "fa-scroll", color: "#10b981" },
         { name: "Ciclo Carolingio", term: 2, icon: "fa-chess-rook", color: "#ec4899" },
         { name: "Ciclo Bretone", term: 2, icon: "fa-wand-magic-sparkles", color: "#8b5cf6" },
-        { name: "Ciclo dei Nibelunghi", term: 2, icon: "fa-dragon", color: "#ea580c" }
+        { name: "Ciclo dei Nibelunghi", term: 2, icon: "fa-dragon", color: "#ea580c" },
+        { name: "La Rimediazione", term: 2, icon: "fa-film", color: "#f43f5e" },
+        { name: "I Videogiochi", term: 2, icon: "fa-gamepad", color: "#10b981" }
       ];
 
       function miniGameButtons(missionId) {
@@ -2201,8 +2208,9 @@
       
       const categories = [
         "L'inizio del viaggio",
-        "Le Opere",
+        "Luoghi e Miti di Fondazione",
         "Schede Autore",
+        "Le Opere",
         "Divinità",
         "Schede Personaggio (Mitologia)",
         "Schede Personaggio (Iliade)",
@@ -2211,7 +2219,9 @@
         "Schede Personaggio (Ciclo Carolingio)",
         "Schede Personaggio (Ciclo Bretone)",
         "Schede Personaggio (Ciclo dei Nibelunghi)",
-        "Schede Tematiche"
+        "Schede Tematiche",
+        "La Rimediazione",
+        "I Videogiochi"
       ];
       let html = '';
 
@@ -2269,6 +2279,7 @@
       if (imgEl) {
         imgEl.src = g.image ? g.image + '?v=' + Date.now() : "assets/images/pergamena_crest.png";
         imgEl.alt = g.title;
+        imgEl.style.filter = g.styleFilter || 'none';
       }
 
       const layoutEl = document.querySelector('.guide-game-portrait-layout');
@@ -2353,6 +2364,9 @@
         container.classList.add('detail-active');
       }
 
+      // Gestione Note al Testo (docente) e Appunti Personali (studente)
+      const user = window.EroiAuth.getCurrentUser();
+
       // Se lo schermo è ridotto (es. <= 1024px), scrolla fino alla scheda pergamena
       if (window.innerWidth <= 1024) {
         const target = document.getElementById('guide-parchment-sheet');
@@ -2361,6 +2375,7 @@
         }
       }
     },
+
 
     backToGuidesList: function() {
       const container = document.querySelector('.guides-container');
@@ -2391,6 +2406,10 @@
       });
       const tabEl = document.getElementById(`t-tab-${tab}`);
       if (tabEl) tabEl.classList.add('active');
+
+      if (tab === 'diario') {
+        this.renderTeacherDiaries();
+      }
     },
 
     selectStatsCategory: function(category) {
@@ -2553,6 +2572,7 @@
       this.renderTeacherGuides();
       this.renderTeacherLogs();
       this.renderTeacherTournaments();
+      this.renderTeacherDiaries();
       // Attiva pannello studenti per default (come Palestra di Riflessione)
       this.selectStatsCategory('students');
     },
@@ -4028,6 +4048,749 @@
           toast.remove();
         }
       }, 5000);
+    },
+
+    // --- DIARIO DI BORDO ---
+    getDiaryPrompts: function(area) {
+      const allPrompts = {
+        "Accademia": [
+          { label: "Impressioni ed Emozioni", prompt: "Descrivi le tue sensazioni nell'iniziare questo viaggio nell'Epica. Quale aspetto di questo mondo ti incuriosisce di più?" },
+          { label: "Analisi delle Tematiche", prompt: "Rifletti sulla differenza tra mito, leggenda ed epica. Perché pensi che i popoli antichi avessero bisogno di raccontare storie?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Spiega con parole tue cos'è l'Epica e quali sono le sue caratteristiche fondamentali." }
+        ],
+        "Miti di Fondazione": [
+          { label: "Impressioni ed Emozioni", prompt: "Quale dei miti di fondazione che hai studiato (Roma, Atene, Tebe...) ti ha colpito maggiormente e perché?" },
+          { label: "Analisi delle Tematiche", prompt: "Rifletti sull'importanza di avere un mito di fondazione per una città o un popolo. Che legame c'è tra identità e racconto?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Scegli un mito di fondazione e riassumi le tappe fondamentali della nascita della città (es. la vacca sacra per Tebe o la contesa per Atene)." }
+        ],
+        "Biblioteca": [
+          { label: "Impressioni ed Emozioni", prompt: "Pensa alla figura di Omero come cantore cieco. Quali emozioni ti suscita l'idea che poesie così grandiose siano nate dall'oralità?" },
+          { label: "Analisi delle Tematiche", prompt: "La figura del poeta (aedo o rapsodo) era considerata sacra e ispirata dagli dei. Perché il poeta ha questo ruolo così importante?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Illustra cos'è la Questione Omerica e quali sono le principali tesi a riguardo." }
+        ],
+        "Archivio": [
+          { label: "Impressioni ed Emozioni", prompt: "Tra l'Iliade, l'Odissea e l'Eneide, quale proemio o incipit ti sembra più avvincente e perché?" },
+          { label: "Analisi delle Tematiche", prompt: "Confronta il fine dei tre grandi poemi classici: l'ira nell'Iliade, il nostos nell'Odissea, la pietas e rifondazione nell'Eneide." },
+          { label: "Riformulazione o Argomentazione", prompt: "Scegli uno dei tre poemi ed elenca in modo sintetico la struttura in canti e il tema principale." }
+        ],
+        "Olimpo": [
+          { label: "Impressioni ed Emozioni", prompt: "Se potessi incontrare una divinità dell'Olimpo, chi sceglieresti? Descrivi come immagini questo incontro e cosa le chiederesti." },
+          { label: "Analisi delle Tematiche", prompt: "Gli dei greci sono antropomorfi, cioè hanno passioni e difetti umani. Come influenza questo la vita e il destino degli eroi?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Spiega le funzioni principali del pantheon greco e descrivi i simboli di due divinità a tua scelta." }
+        ],
+        "Creta": [
+          { label: "Impressioni ed Emozioni", prompt: "Mettiti nei panni di Teseo che entra nel labirinto per affrontare il Minotauro. Quali sono le tue paure ed emozioni?" },
+          { label: "Analisi delle Tematiche", prompt: "Il Labirinto è un simbolo universale. Che cosa rappresenta per te? Quali sono i 'minotauri' e i 'labirinti' della nostra vita quotidiana?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Riassumi il mito del filo di Arianna e spiega come Teseo riesce a sconfiggere il mostro e fuggire." }
+        ],
+        "Troia": [
+          { label: "Impressioni ed Emozioni", prompt: "Descrivi il tragico addio tra Ettore e Andromaca. Quali sentimenti provi di fronte al conflitto tra affetto familiare e dovere militare?" },
+          { label: "Analisi delle Tematiche", prompt: "L'amicizia tra Achille e Patroclo: scrivi cosa rappresenta per te l'amicizia vera e descrivi un tuo amico speciale o un gesto importante di fedeltà." },
+          { label: "Riformulazione o Argomentazione", prompt: "Riformula in breve la trama dell'Iliade, spiegando l'ira di Achille e la caduta di Ettore." }
+        ],
+        "Itaca": [
+          { label: "Impressioni ed Emozioni", prompt: "Mettiti nei panni di Ulisse che, dopo vent'anni di viaggio, rivede finalmente le coste rocciose della sua Itaca. Cosa prova?" },
+          { label: "Analisi delle Tematiche", prompt: "Il tema del 'nostos' (ritorno). Che cosa significa per te sentirti 'a casa'? Descrivi un luogo o uno stato d'animo che rappresenta il tuo porto sicuro." },
+          { label: "Riformulazione o Argomentazione", prompt: "Pensi che l'astuzia di Ulisse sia sempre una qualità positiva, o ci sono casi in cui l'inganno diventa scorretto? Argomenta la tua risposta." }
+        ],
+        "Lazio": [
+          { label: "Impressioni ed Emozioni", prompt: "Descrivi il tormento interiore di Enea costretto a lasciare Didone per seguire il Fato. Provi più simpatia per il dovere di Enea o il dolore di Didone?" },
+          { label: "Analisi delle Tematiche", prompt: "Il valore della 'pietas' virgiliana. Come si differenzia la pietas (dovere collettivo) dall'individualismo eroico di Achille?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Spiega in sintesi gli eventi che portano all'unione tra Troiani e Latini nel Lazio, ponendo fine alla guerra." }
+        ],
+        "Aquisgrana": [
+          { label: "Impressioni ed Emozioni", prompt: "Come immagini la vita alla corte di Carlo Magno tra cavalieri e paladini? Quale figura ti affascina di più?" },
+          { label: "Analisi delle Tematiche", prompt: "I paladini combattono per la fede e l'imperatore. Quali sono i valori della cavalleria medievale e come si differenziano da quelli degli eroi antichi?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Presenta in sintesi la figura dell'Imperatore Carlo Magno e il ruolo della sua corte nel ciclo carolingio." }
+        ],
+        "Roncisvalle": [
+          { label: "Impressioni ed Emozioni", prompt: "Mettiti nei panni di Orlando che rifiuta di suonare l'Olifante per orgoglio e onore. Condividi la sua scelta o la reputi un errore tragico?" },
+          { label: "Analisi delle Tematiche", prompt: "Il sacrificio eroico e il tradimento di Gano. Rifletti sul valore della lealtà verso i propri compagni d'arme." },
+          { label: "Riformulazione o Argomentazione", prompt: "Riassumi lo svolgimento della battaglia di Roncisvalle e il destino finale di Orlando e della spada Durendal." }
+        ],
+        "Camelot": [
+          { label: "Impressioni ed Emozioni", prompt: "Immagina di sederti alla Tavola Rotonda di Re Artù. Come ti fa sentire l'idea che tutti i presenti, dal re all'ultimo cavaliere, siano uguali?" },
+          { label: "Analisi delle Tematiche", prompt: "La Tavola Rotonda come ideale di giustizia e uguaglianza. Pensi che questa utopia sia realizzabile nella società di oggi?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Descrivi il mito della spada nella roccia e come Artù divenne re di Britannia." }
+        ],
+        "Foresta di Brocelandia": [
+          { label: "Impressioni ed Emozioni", prompt: "La foresta magica è luogo di incantesimi, fate e smarrimento. Ti spaventa o ti affascina l'ignoto e la magia?" },
+          { label: "Analisi delle Tematiche", prompt: "L'amore cortese tra Lancillotto e Ginevra. Quale conflitto si crea tra la passione personale e il dovere di lealtà verso il proprio re?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Descrivi il ruolo di Merlino e della fata Viviana negli incantesimi legati alla foresta di Brocelandia." }
+        ],
+        "Castello del Graal": [
+          { label: "Impressioni ed Emozioni", prompt: "Mettiti nei panni di Parsifal che vede passare il Graal ma esita a fare la domanda fondamentale. Quali emozioni provi di fronte al timore di sbagliare?" },
+          { label: "Analisi delle Tematiche", prompt: "La cerca (Quest) spirituale. Ognuno di noi ha il suo 'Graal' da cercare. Che cos'è per te la ricerca della felicità o della tua strada?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Spiega cos'è il Santo Graal e perché rappresenta la più elevata avventura dei cavalieri della Tavola Rotonda." }
+        ],
+        "Worms": [
+          { label: "Impressioni ed Emozioni", prompt: "Come giudichi l'inganno ordito da Sigfrido per aiutare Gunther a sposare Brunilde? Quali saranno secondo te le conseguenze dell'inganno?" },
+          { label: "Analisi delle Tematiche", prompt: "L'invidia, l'onore ferito e l'oro maledetto dei Nibelunghi. Rifletti su come il desiderio di ricchezza possa corrompere gli animi." },
+          { label: "Riformulazione o Argomentazione", prompt: "Riassumi le imprese di Sigfrido (l'uccisione di Fafnir, il sangue del drago, la conquista del tesoro)." }
+        ],
+        "Reno": [
+          { label: "Impressioni ed Emozioni", prompt: "Crimilde compie una vendetta sanguinosa e implacabile. Pensi che il suo dolore giustifichi una simile ferocia?" },
+          { label: "Analisi delle Tematiche", prompt: "La spirale d'odio e vendetta che porta alla rovina totale nel Canto dei Nibelunghi. Come si può interrompere una catena di risentimenti?" },
+          { label: "Riformulazione o Argomentazione", prompt: "Spiega come si conclude il Canto dei Nibelunghi e cosa accade al mitico oro nel fiume Reno." }
+        ]
+      };
+      return allPrompts[area] || [
+        { label: "Riflessione 1", prompt: "Scrivi le tue impressioni su questo luogo o capitolo sbloccato." },
+        { label: "Riflessione 2", prompt: "Quali sono i valori o le tematiche più importanti emersi?" },
+        { label: "Riflessione 3", prompt: "Riassumi o argomenta brevemente quanto hai appreso in questa lezione." }
+      ];
+    },
+
+    renderDiario: function(studentEmail) {
+      const profile = window.EroiDB.getStudentProfile(studentEmail);
+      const unlockedAreas = profile.unlockedAreas || [];
+      const diaries = window.EroiDB.getDiaries();
+
+      const nodeListContainer = document.getElementById('diario-nodes-list');
+      if (!nodeListContainer) return;
+
+      nodeListContainer.innerHTML = '';
+
+      const allAreas = [
+        "Accademia",
+        "Miti di Fondazione",
+        "Biblioteca",
+        "Archivio",
+        "Olimpo",
+        "Creta",
+        "Troia",
+        "Itaca",
+        "Lazio",
+        "Aquisgrana",
+        "Roncisvalle",
+        "Camelot",
+        "Foresta di Brocelandia",
+        "Castello del Graal",
+        "Worms",
+        "Reno"
+      ];
+
+      const areaTitles = {
+        "Accademia": "L'inizio del Viaggio",
+        "Miti di Fondazione": "Miti di Fondazione",
+        "Biblioteca": "Gli Autori",
+        "Archivio": "Le Opere",
+        "Olimpo": "Olimpo",
+        "Creta": "Creta",
+        "Troia": "Troia",
+        "Itaca": "Itaca",
+        "Lazio": "Lazio",
+        "Aquisgrana": "Aquisgrana",
+        "Roncisvalle": "Roncisvalle",
+        "Camelot": "Camelot",
+        "Foresta di Brocelandia": "Brocelandia",
+        "Castello del Graal": "Castello del Graal",
+        "Worms": "Worms",
+        "Reno": "Fiume Reno"
+      };
+
+      const settings = window.EroiDB.getSettings() || {};
+      const activeDiaries = settings.activeDiaries || ["Accademia"];
+
+      if (!window.activeDiarioArea) {
+        window.activeDiarioArea = "Accademia";
+      }
+
+      allAreas.forEach(area => {
+        const areaDiaries = diaries.filter(d => d.studentEmail === studentEmail && d.area === area && !d.isSelfEval);
+        const count = areaDiaries.length;
+        const isActive = activeDiaries.includes(area);
+        const isUnlockedOnMap = unlockedAreas.includes(area);
+        
+        let badgeColor = 'rgba(255,255,255,0.1)';
+        if (count === 3) badgeColor = 'rgba(16,185,129,0.2)';
+        else if (count > 0) badgeColor = 'rgba(245,158,11,0.2)';
+
+        const activeClass = (window.activeDiarioArea === area) ? 'active' : '';
+
+        const btn = document.createElement('button');
+        btn.className = `btn btn-secondary ${activeClass}`;
+        btn.style.width = '100%';
+        btn.style.textAlign = 'left';
+        btn.style.display = 'flex';
+        btn.style.justifyContent = 'space-between';
+        btn.style.alignItems = 'center';
+        btn.style.padding = '8px 12px';
+        btn.style.fontSize = '0.9rem';
+        btn.style.marginBottom = '6px';
+        btn.style.borderRadius = '6px';
+        btn.style.transition = 'all 0.2s';
+        btn.style.background = activeClass ? 'var(--gold-dark)' : 'rgba(255,255,255,0.03)';
+        btn.style.borderColor = activeClass ? 'var(--gold)' : 'rgba(212,175,55,0.15)';
+        btn.style.color = activeClass ? '#ffffff' : 'var(--text-color)';
+        if (!isActive || !isUnlockedOnMap) {
+          btn.style.opacity = '0.6';
+        }
+
+        btn.onclick = () => {
+          window.activeDiarioArea = area;
+          this.renderDiario(studentEmail);
+        };
+
+        const displayTitle = areaTitles[area] || area;
+        
+        let lockIcon = '';
+        if (!isUnlockedOnMap) {
+          lockIcon = '<i class="fa-solid fa-map-pin" style="font-size: 0.75rem; margin-left: 6px; color: #ef4444;" title="Bloccato sulla Mappa"></i>';
+        } else if (!isActive) {
+          lockIcon = '<i class="fa-solid fa-lock" style="font-size: 0.75rem; margin-left: 6px; color: var(--text-muted);" title="Non attivato dal docente"></i>';
+        }
+
+        btn.innerHTML = `
+          <div style="display: flex; align-items: center;">
+            <span>${displayTitle}</span>
+            ${lockIcon}
+          </div>
+          <span style="font-size: 0.75rem; background: ${badgeColor}; padding: 2px 6px; border-radius: 10px; font-weight: bold; border: 1px solid rgba(255,255,255,0.1);">
+            ${count}/3
+          </span>
+        `;
+        nodeListContainer.appendChild(btn);
+      });
+
+      const emptyState = document.getElementById('diario-empty-state');
+      const activeState = document.getElementById('diario-active-state');
+
+      emptyState.style.display = 'none';
+      activeState.style.display = 'block';
+
+      const area = window.activeDiarioArea;
+      const displayTitle = areaTitles[area] || area;
+      document.getElementById('diario-active-node-title').innerHTML = `
+        <i class="fa-solid fa-map-pin" style="color: var(--gold); margin-right: 8px;"></i> Riflessioni: ${displayTitle}
+      `;
+
+      const tasksContainer = document.getElementById('diario-tasks-container');
+      tasksContainer.innerHTML = '';
+
+      const isAreaActive = activeDiaries.includes(area);
+      const isUnlockedOnMap = unlockedAreas.includes(area);
+
+      if (!isUnlockedOnMap) {
+        const lockPanel = document.createElement('div');
+        lockPanel.className = 'glass-panel';
+        lockPanel.style.padding = '40px 20px';
+        lockPanel.style.textAlign = 'center';
+        lockPanel.style.marginTop = '20px';
+        lockPanel.style.border = '1px solid rgba(239,68,68,0.25)';
+        lockPanel.style.background = 'rgba(239,68,68,0.03)';
+        lockPanel.innerHTML = `
+          <div style="font-size: 3rem; color: #ef4444; margin-bottom: 20px;">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); color: #ef4444; font-size: 1.5rem; margin-bottom: 12px;">Diario Bloccato</h3>
+          <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); max-width: 500px; margin: 0 auto;">
+            Raggiungi questo luogo sulla mappa per sbloccare il relativo diario!
+          </p>
+        `;
+        tasksContainer.appendChild(lockPanel);
+        return;
+      }
+
+      if (!isAreaActive) {
+        const warningAlert = document.createElement('div');
+        warningAlert.className = 'alert alert-warning';
+        warningAlert.style.background = 'rgba(245, 158, 11, 0.15)';
+        warningAlert.style.border = '1px solid rgb(245, 158, 11)';
+        warningAlert.style.color = '#f59e0b';
+        warningAlert.style.padding = '12px 16px';
+        warningAlert.style.borderRadius = '8px';
+        warningAlert.style.marginBottom = '20px';
+        warningAlert.style.fontWeight = '500';
+        warningAlert.style.display = 'flex';
+        warningAlert.style.alignItems = 'center';
+        warningAlert.style.gap = '10px';
+        warningAlert.style.fontSize = '0.9rem';
+        warningAlert.innerHTML = `<i class="fa-solid fa-lock" style="font-size: 1.1rem;"></i> Questa sezione del diario non è stata ancora attivata dal docente. Puoi visualizzare i quesiti ma non puoi inviare riflessioni.`;
+        tasksContainer.appendChild(warningAlert);
+      }
+
+      const prompts = this.getDiaryPrompts(area);
+
+      prompts.forEach((p, index) => {
+        const diaryId = `diary_${studentEmail}_${area.replace(/\s+/g, '_')}_${index}`;
+        const existing = diaries.find(d => d.id === diaryId);
+        
+        const taskCard = document.createElement('div');
+        taskCard.className = 'glass-panel';
+        taskCard.style.padding = '15px';
+        taskCard.style.borderRadius = '8px';
+        taskCard.style.marginBottom = '0';
+        taskCard.style.border = '1px solid rgba(212,175,55,0.15)';
+        taskCard.style.background = 'rgba(0,0,0,0.2)';
+
+        let statusBadge = '';
+        let readOnly = false;
+        let gradeHTML = '';
+
+        if (existing) {
+          if (existing.grade !== undefined && existing.grade !== null) {
+            statusBadge = `<span class="badge badge-success" style="background: rgba(16,185,129,0.2); border: 1px solid rgb(16,185,129); color: #10b981; font-size: 0.75rem; padding: 3px 8px;"><i class="fa-solid fa-circle-check"></i> Valutato: ${existing.grade}/10</span>`;
+            readOnly = true;
+            gradeHTML = `
+              <div style="margin-top: 15px; padding: 12px; background: rgba(16,185,129,0.05); border-left: 3px solid rgb(16,185,129); border-radius: 4px;">
+                <div style="font-weight: bold; color: var(--gold); font-size: 0.9rem;">Valutazione Docente:</div>
+                <div style="font-size: 1.1rem; font-weight: bold; color: #10b981; margin: 4px 0;">Voto: ${existing.grade}/10</div>
+                <div style="font-style: italic; color: var(--text-muted); font-size: 0.85rem;">Feedback: "${existing.feedback || 'Nessun commento fornito.'}"</div>
+              </div>
+            `;
+          } else {
+            statusBadge = `<span class="badge badge-warning" style="background: rgba(245,158,11,0.2); border: 1px solid rgb(245,158,11); color: #f59e0b; font-size: 0.75rem; padding: 3px 8px;"><i class="fa-solid fa-spinner"></i> Inviato (In attesa)</span>`;
+            readOnly = true;
+          }
+        } else {
+          if (isAreaActive) {
+            statusBadge = `<span class="badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted); font-size: 0.75rem; padding: 3px 8px;"><i class="fa-regular fa-pen-to-square"></i> Da completare</span>`;
+          } else {
+            statusBadge = `<span class="badge" style="background: rgba(239,68,68,0.15); border: 1px solid rgb(239,68,68); color: #ef4444; font-size: 0.75rem; padding: 3px 8px;"><i class="fa-solid fa-lock"></i> Disattivato</span>`;
+            readOnly = true;
+          }
+        }
+
+        taskCard.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px;">
+            <h4 style="margin: 0; color: var(--gold); font-size: 0.95rem; font-family: var(--font-heading);">${index + 1}. ${p.label}</h4>
+            ${statusBadge}
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; font-style: italic;">
+            ${p.prompt}
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <textarea id="ta-${diaryId}" class="form-control" style="width: 100%; height: 100px; resize: none; font-size: 0.9rem; padding: 8px; line-height: 1.4;" placeholder="Scrivi qui la tua riflessione..." ${readOnly ? 'disabled' : ''}>${existing ? existing.text : ''}</textarea>
+            ${!readOnly ? `
+              <div style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" style="padding: 6px 15px; font-size: 0.8rem; border-radius: 4px;" onclick="EroiApp.submitDiaryEntry('${diaryId}', '${area}', ${index})">
+                  <i class="fa-solid fa-paper-plane"></i> Invia al Docente
+                </button>
+              </div>
+            ` : ''}
+          </div>
+          ${gradeHTML}
+        `;
+        tasksContainer.appendChild(taskCard);
+      });
+
+      // Form di autovalutazione
+      const selfValId = `selfval_${studentEmail}_${area.replace(/\s+/g, '_')}`;
+      const selfVal = diaries.find(d => d.id === selfValId);
+
+      const selfValCard = document.createElement('div');
+      selfValCard.className = 'glass-panel';
+      selfValCard.style.padding = '18px';
+      selfValCard.style.borderRadius = '8px';
+      selfValCard.style.marginTop = '25px';
+      selfValCard.style.border = '1px solid rgba(37,99,235,0.25)';
+      selfValCard.style.background = 'rgba(37,99,235,0.02)';
+
+      const characters = this.getCharactersForArea(area);
+      let selectOptions = '<option value="">-- Seleziona un personaggio --</option>';
+      characters.forEach(char => {
+        const isSel = selfVal && selfVal.favoriteCharacter === char.title ? 'selected' : '';
+        selectOptions += `<option value="${char.title}" ${isSel}>${char.title}</option>`;
+      });
+
+      const isReadOnly = !isAreaActive;
+
+      selfValCard.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(37,99,235,0.2); padding-bottom: 6px;">
+          <h4 style="margin: 0; color: var(--gold); font-size: 0.95rem; font-family: var(--font-heading);"><i class="fa-solid fa-face-smile"></i> Autovalutazione della Sezione</h4>
+          <span class="badge" style="background: ${selfVal ? 'rgba(16,185,129,0.2)' : 'rgba(37,99,235,0.15)'}; border: 1px solid ${selfVal ? 'rgb(16,185,129)' : 'rgb(37,99,235)'}; color: ${selfVal ? '#10b981' : '#3b82f6'}; font-size: 0.75rem; padding: 3px 8px;">
+            ${selfVal ? '<i class="fa-solid fa-circle-check"></i> Salvato' : '<i class="fa-regular fa-pen-to-square"></i> Da completare'}
+          </span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; font-style: italic;">
+          Quale personaggio ti è piaciuto di più in questa sezione e come stai affrontando lo studio?
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+            <label style="font-size: 0.8rem; color: var(--gold); display: block; margin-bottom: 4px;"><strong>Il personaggio che ti è piaciuto di più:</strong></label>
+            <select id="sel-char-${selfValId}" class="form-control" style="width: 100%; font-size: 0.9rem; padding: 6px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px;" ${isReadOnly ? 'disabled' : ''}>
+              ${selectOptions}
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--gold); display: block; margin-bottom: 4px;"><strong>Come stai affrontando lo studio di questa sezione?</strong></label>
+            <textarea id="ta-study-${selfValId}" class="form-control" style="width: 100%; height: 80px; resize: none; font-size: 0.9rem; padding: 8px; line-height: 1.4; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px;" placeholder="Descrivi brevemente il tuo metodo (es. riassunti, schemi, ripasso a gruppi)..." ${isReadOnly ? 'disabled' : ''}>${selfVal ? selfVal.studyMethod : ''}</textarea>
+          </div>
+          ${!isReadOnly ? `
+            <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+              <button class="btn btn-primary" style="padding: 6px 15px; font-size: 0.8rem; border-radius: 4px; background: #2563eb; border-color: #2563eb;" onclick="EroiApp.submitSelfEvaluation('${selfValId}', '${area}')">
+                <i class="fa-solid fa-floppy-disk"></i> Salva Autovalutazione
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      tasksContainer.appendChild(selfValCard);
+    },
+
+    submitDiaryEntry: function(diaryId, area, taskIndex) {
+      const ta = document.getElementById(`ta-${diaryId}`);
+      if (!ta) return;
+      
+      const text = ta.value.trim();
+      if (text.length < 10) {
+        alert("La riflessione deve essere lunga almeno 10 caratteri!");
+        return;
+      }
+
+      if (confirm("Sei sicuro di voler inviare la riflessione? Una volta inviata non potrai più modificarla finché il docente non l'avrà valutata.")) {
+        const studentEmail = window.EroiAuth.getCurrentUser().email;
+        const entry = {
+          id: diaryId,
+          studentEmail: studentEmail,
+          area: area,
+          taskIndex: taskIndex,
+          text: text,
+          submittedAt: new Date().toISOString(),
+          grade: null,
+          feedback: null,
+          gradedAt: null,
+          gradedBy: null
+        };
+        
+        window.EroiDB.saveDiaryEntry(entry);
+        const profile = window.EroiDB.getStudentProfile(studentEmail);
+        const profileName = profile ? `${profile.firstName} ${profile.lastName}` : studentEmail;
+        window.EroiDB.logActivity("student", `${profileName} ha inviato un compito del Diario per ${area}.`);
+        this.showToast("Riflessione inviata al docente!", "success");
+        this.renderDiario(studentEmail);
+      }
+    },
+
+    submitSelfEvaluation: function(selfValId, area) {
+      const select = document.getElementById(`sel-char-${selfValId}`);
+      const textarea = document.getElementById(`ta-study-${selfValId}`);
+      if (!select || !textarea) return;
+      
+      const charVal = select.value;
+      const textVal = textarea.value.trim();
+      
+      if (!charVal) {
+        alert("Per favore seleziona il personaggio che ti è piaciuto di più!");
+        return;
+      }
+      if (textVal.length < 10) {
+        alert("La descrizione di come stai studiando deve essere lunga almeno 10 caratteri!");
+        return;
+      }
+      
+      const studentEmail = window.EroiAuth.getCurrentUser().email;
+      const entry = {
+        id: selfValId,
+        studentEmail: studentEmail,
+        area: area,
+        isSelfEval: true,
+        favoriteCharacter: charVal,
+        studyMethod: textVal,
+        submittedAt: new Date().toISOString()
+      };
+      
+      window.EroiDB.saveDiaryEntry(entry);
+      this.showToast("Autovalutazione salvata con successo!", "success");
+      this.renderDiario(studentEmail);
+    },
+
+    getCharactersForArea: function(area) {
+      const guides = window.EroiDB.getStudyGuides() || [];
+      let categories = [];
+      
+      if (["Accademia", "Miti di Fondazione", "Olimpo"].includes(area)) {
+        categories = ["Schede Personaggio (Mitologia)"];
+      } else if (["Creta", "Troia"].includes(area)) {
+        categories = ["Schede Personaggio (Iliade)"];
+      } else if (area === "Itaca") {
+        categories = ["Schede Personaggio (Odissea)"];
+      } else if (area === "Lazio") {
+        categories = ["Schede Personaggio (Eneide)"];
+      } else if (["Aquisgrana", "Roncisvalle"].includes(area)) {
+        categories = ["Schede Personaggio (Ciclo Carolingio)"];
+      } else if (["Camelot", "Foresta di Brocelandia", "Castello del Graal"].includes(area)) {
+        categories = ["Schede Personaggio (Ciclo Bretone)"];
+      } else if (["Worms", "Reno"].includes(area)) {
+        categories = ["Schede Personaggio (Ciclo dei Nibelunghi)"];
+      }
+      
+      return guides.filter(g => categories.includes(g.category));
+    },
+
+    renderTeacherDiarioToggles: function() {
+      const togglesContainer = document.getElementById('teacher-diario-toggles');
+      if (!togglesContainer) return;
+
+      const settings = window.EroiDB.getSettings() || {};
+      const activeDiaries = settings.activeDiaries || ["Accademia"];
+
+      const allAreas = [
+        "Accademia",
+        "Miti di Fondazione",
+        "Biblioteca",
+        "Archivio",
+        "Olimpo",
+        "Creta",
+        "Troia",
+        "Itaca",
+        "Lazio",
+        "Aquisgrana",
+        "Roncisvalle",
+        "Camelot",
+        "Foresta di Brocelandia",
+        "Castello del Graal",
+        "Worms",
+        "Reno"
+      ];
+
+      const areaTitles = {
+        "Accademia": "L'inizio del Viaggio",
+        "Miti di Fondazione": "Miti di Fondazione",
+        "Biblioteca": "Gli Autori",
+        "Archivio": "Le Opere",
+        "Olimpo": "Olimpo",
+        "Creta": "Creta",
+        "Troia": "Troia",
+        "Itaca": "Itaca",
+        "Lazio": "Lazio",
+        "Aquisgrana": "Aquisgrana",
+        "Roncisvalle": "Roncisvalle",
+        "Camelot": "Camelot",
+        "Foresta di Brocelandia": "Brocelandia",
+        "Castello del Graal": "Castello del Graal",
+        "Worms": "Worms",
+        "Reno": "Fiume Reno"
+      };
+
+      togglesContainer.innerHTML = '';
+
+      allAreas.forEach(area => {
+        const isActive = activeDiaries.includes(area);
+        const displayTitle = areaTitles[area] || area;
+
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.justifyContent = 'space-between';
+        wrapper.style.padding = '8px 12px';
+        wrapper.style.background = 'rgba(255,255,255,0.02)';
+        wrapper.style.border = '1px solid rgba(212,175,55,0.15)';
+        wrapper.style.borderRadius = '6px';
+
+        wrapper.innerHTML = `
+          <span style="font-size: 0.85rem; font-weight: 500;">${displayTitle}</span>
+          <label class="switch-container" style="position: relative; display: inline-block; width: 44px; height: 22px;">
+            <input type="checkbox" ${isActive ? 'checked' : ''} style="opacity: 0; width: 0; height: 0;">
+            <span class="slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #374151; transition: .3s; border-radius: 22px;"></span>
+          </label>
+        `;
+
+        const input = wrapper.querySelector('input');
+        const slider = wrapper.querySelector('.slider');
+        
+        if (isActive) {
+          slider.style.backgroundColor = 'var(--gold)';
+        }
+
+        input.onchange = (e) => {
+          this.toggleDiaryArea(area);
+        };
+
+        togglesContainer.appendChild(wrapper);
+      });
+    },
+
+    toggleDiaryArea: function(area) {
+      const settings = window.EroiDB.getSettings() || {};
+      let activeDiaries = settings.activeDiaries || ["Accademia"];
+
+      if (activeDiaries.includes(area)) {
+        activeDiaries = activeDiaries.filter(a => a !== area);
+      } else {
+        activeDiaries.push(area);
+      }
+
+      window.EroiDB.saveSettings({ activeDiaries });
+      this.showToast(`Stato diario per ${area} aggiornato.`, "success");
+      this.renderTeacherDiarioToggles();
+    },
+
+    renderTeacherDiaries: function() {
+      this.renderTeacherDiarioToggles();
+      const diaries = window.EroiDB.getDiaries();
+      const students = window.EroiDB.getStudents();
+      const classes = window.EroiDB.getClasses();
+      
+      const listContainer = document.getElementById('teacher-diaries-list');
+      if (!listContainer) return;
+
+      const filterStatus = document.getElementById('teacher-diario-filter-status').value;
+      const filterClass = document.getElementById('teacher-diario-filter-class').value;
+
+      // Popola il selettore classi se vuoto
+      const classSelect = document.getElementById('teacher-diario-filter-class');
+      if (classSelect && classSelect.options.length <= 1) {
+        classSelect.innerHTML = '<option value="ALL">Tutte le Classi</option>';
+        classes.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.name;
+          classSelect.appendChild(opt);
+        });
+      }
+
+      listContainer.innerHTML = '';
+
+      // Filtra i diari
+      let filtered = diaries.filter(d => !d.isSelfEval);
+
+      if (filterStatus === 'pending') {
+        filtered = filtered.filter(d => d.grade === null || d.grade === undefined);
+      } else {
+        filtered = filtered.filter(d => d.grade !== null && d.grade !== undefined);
+      }
+
+      if (filterClass !== 'ALL') {
+        filtered = filtered.filter(d => {
+          const stud = students.find(s => s.email === d.studentEmail);
+          return stud && stud.classId === filterClass;
+        });
+      }
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = '<div style="color: var(--text-muted); font-style: italic; text-align: center; padding: 40px;">Nessun elaborato trovato per questi filtri.</div>';
+        return;
+      }
+
+      filtered.forEach(entry => {
+        const stud = students.find(s => s.email === entry.studentEmail);
+        const clsName = stud ? (classes.find(c => c.id === stud.classId)?.name || 'Senza Classe') : 'Studente sconosciuto';
+        const prompts = this.getDiaryPrompts(entry.area);
+        const promptInfo = prompts[entry.taskIndex] || { label: `Compito ${entry.taskIndex + 1}`, prompt: "" };
+
+        const card = document.createElement('div');
+        card.className = 'glass-panel';
+        card.style.padding = '18px';
+        card.style.borderRadius = '8px';
+        card.style.marginBottom = '15px';
+        card.style.border = '1px solid rgba(212,175,55,0.2)';
+        card.style.background = 'rgba(255,255,255,0.01)';
+
+        const formattedDate = new Date(entry.submittedAt).toLocaleString('it-IT');
+
+        let gradeSection = '';
+        if (entry.grade !== null && entry.grade !== undefined) {
+          gradeSection = `
+            <div style="margin-top: 15px; padding: 12px; background: rgba(16,185,129,0.04); border: 1px solid rgba(16,185,129,0.2); border-radius: 6px;">
+              <span style="font-weight: bold; color: #10b981; font-size: 1.05rem;"><i class="fa-solid fa-clipboard-check"></i> Valutato: Voto ${entry.grade}/10</span>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 0 0; font-style: italic;">Commento: "${entry.feedback || ''}"</p>
+              <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Valutato da ${entry.gradedBy} il ${new Date(entry.gradedAt).toLocaleString('it-IT')}</div>
+            </div>
+          `;
+        } else {
+          gradeSection = `
+            <div style="margin-top: 15px; padding: 15px; background: rgba(212,175,55,0.03); border: 1px dashed rgba(212,175,55,0.25); border-radius: 6px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="font-weight: bold; color: var(--gold); font-size: 0.85rem; text-transform: uppercase;">Valutazione elaborato</div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <div style="width: 100px;">
+                  <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Voto (1-10)</label>
+                  <input type="number" id="grade-${entry.id}" class="form-control" min="1" max="10" step="1" required style="padding: 4px 8px; height: 32px; font-size: 0.9rem;" value="8" />
+                </div>
+                <div style="flex: 1;">
+                  <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Feedback / Commento</label>
+                  <input type="text" id="feedback-${entry.id}" class="form-control" placeholder="Inserisci un commento per lo studente..." style="padding: 4px 8px; height: 32px; font-size: 0.9rem;" />
+                </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.8rem; border-radius: 4px;" onclick="EroiApp.submitTeacherEvaluation('${entry.id}')">
+                  <i class="fa-solid fa-check"></i> Conferma Valutazione
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
+        // Trova se c'è un'autovalutazione di questo studente per questa area
+        const selfValId = `selfval_${entry.studentEmail}_${entry.area.replace(/\s+/g, '_')}`;
+        const selfVal = diaries.find(d => d.id === selfValId);
+        let selfValHTML = '';
+        if (selfVal) {
+          selfValHTML = `
+            <div style="margin-top: 15px; padding: 12px; background: rgba(37,99,235,0.05); border-left: 3px solid rgb(37,99,235); border-radius: 6px; border: 1px solid rgba(37,99,235,0.15);">
+              <div style="font-weight: bold; color: var(--gold); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 6px;"><i class="fa-solid fa-face-smile"></i> Autovalutazione della Sezione</div>
+              <div style="font-size: 0.85rem; margin-bottom: 4px; color: var(--text-color);">❤️ <strong>Personaggio preferito</strong>: <span style="color: var(--gold); font-weight: bold;">${selfVal.favoriteCharacter || 'Non selezionato'}</span></div>
+              <div style="font-size: 0.85rem; color: var(--text-color); line-height: 1.4;">📝 <strong>Metodo di studio</strong>: "${selfVal.studyMethod || 'Nessuna descrizione'}"</div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 12px;">
+            <div>
+              <span style="font-weight: bold; color: var(--gold); font-size: 1rem;">${stud ? `${stud.lastName} ${stud.firstName}` : entry.studentEmail}</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 8px;">(${clsName})</span>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">${formattedDate}</span>
+          </div>
+          <div style="font-size: 0.8rem; background: rgba(0,0,0,0.15); padding: 8px 12px; border-radius: 4px; border-left: 3px solid var(--gold); margin-bottom: 10px;">
+            <div style="font-weight: bold; color: var(--gold);">${entry.area}</div>
+            <div style="color: var(--text-muted); font-style: italic;">Sezione: "${promptInfo.label}" (${promptInfo.prompt})</div>
+          </div>
+          <div style="font-size: 0.95rem; line-height: 1.5; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); white-space: pre-wrap; color: #f3f4f6;">${entry.text}</div>
+          ${selfValHTML}
+          ${gradeSection}
+        `;
+
+        listContainer.appendChild(card);
+      });
+    },
+
+    submitTeacherEvaluation: function(entryId) {
+      const gradeInput = document.getElementById(`grade-${entryId}`);
+      const feedbackInput = document.getElementById(`feedback-${entryId}`);
+      
+      if (!gradeInput) return;
+      
+      const grade = parseInt(gradeInput.value);
+      if (isNaN(grade) || grade < 1 || grade > 10) {
+        alert("Inserisci un voto numerico valido compreso tra 1 e 10!");
+        return;
+      }
+      
+      const feedback = feedbackInput ? feedbackInput.value.trim() : '';
+      const teacherUser = window.EroiAuth.getCurrentUser();
+
+      const diaries = window.EroiDB.getDiaries();
+      const existing = diaries.find(d => d.id === entryId);
+      if (!existing) return;
+
+      const isFirstEvaluation = (existing.grade === null || existing.grade === undefined);
+
+      if (confirm(`Vuoi salvare la valutazione? Voto: ${grade}/10${isFirstEvaluation ? '\nAll\'assegnazione del primo voto lo studente guadagnerà +30 XP e +15 Dracme!' : ''}`)) {
+        existing.grade = grade;
+        existing.feedback = feedback;
+        existing.gradedAt = new Date().toISOString();
+        existing.gradedBy = teacherUser.email;
+
+        // Salva nel database locale
+        window.EroiDB.saveDiaryEntry(existing);
+
+        // Se è la prima valutazione, assegna XP e Dracme al profilo dello studente
+        if (isFirstEvaluation) {
+          const studProfile = window.EroiDB.getStudentProfile(existing.studentEmail);
+          if (studProfile) {
+            window.EroiGame.addXP(existing.studentEmail, 30);
+            window.EroiGame.addDracme(existing.studentEmail, 15);
+            window.EroiDB.logActivity("system", `Assegnati +30 XP e +15 Dracme a ${studProfile.firstName} ${studProfile.lastName} per la prima valutazione del Diario (${existing.area}).`);
+          }
+        }
+
+        window.EroiDB.logActivity("teacher", `${teacherUser.email} ha valutato il compito del Diario per ${existing.studentEmail} (${existing.area}) con voto ${grade}.`);
+        this.showToast("Valutazione salvata con successo!", "success");
+        this.renderTeacherDiaries();
+      }
     }
   };
 

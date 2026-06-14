@@ -158,8 +158,8 @@ async function runTests() {
     window.EroiDB.saveStudentProfile(studentEmail, profile);
 
     // Eseguiamo sottomissione missione senza aiuti (mit_caos: xp=40, dracme=25)
-    // Domande di mit_caos corrette sono: risp0=0, risp1=1
-    let result = window.EroiGame.submitMission(studentEmail, "mit_caos", [0, 1]);
+    // Domande di mit_caos corrette sono: risp0=0, risp1=1 ... risp9=1
+    let result = window.EroiGame.submitMission(studentEmail, "mit_caos", [0, 1, 1, 2, 1, 1, 2, 1, 0, 1]);
     assert(result.passed === true, "La missione 'Il Caos Primordiale' è superata rispondendo correttamente");
     assert(result.xpGained === 40, "XP guadagnati base = 40");
     assert(result.dracmeGained === 25, "Dracme guadagnate base = 25");
@@ -170,7 +170,7 @@ async function runTests() {
     profile.activeHelper = "achille";
     window.EroiDB.saveStudentProfile(studentEmail, profile);
 
-    result = window.EroiGame.submitMission(studentEmail, "mit_caos", [0, 1]);
+    result = window.EroiGame.submitMission(studentEmail, "mit_caos", [0, 1, 1, 2, 1, 1, 2, 1, 0, 1]);
     assert(result.xpGained === 48, "XP guadagnati con Achille (+20%) = 48");
     assert(result.dracmeGained === 25, "Dracme guadagnate rimangono base = 25");
 
@@ -181,7 +181,7 @@ async function runTests() {
     profile.activeArtifacts = ["excalibur"];
     window.EroiDB.saveStudentProfile(studentEmail, profile);
 
-    result = window.EroiGame.submitMission(studentEmail, "mit_caos", [0, 1]);
+    result = window.EroiGame.submitMission(studentEmail, "mit_caos", [0, 1, 1, 2, 1, 1, 2, 1, 0, 1]);
     // XP: 40 * 1.15 = 46. Dracme: 25 * 1.20 = 30
     assert(result.xpGained === 46, "XP guadagnati con Excalibur (+15%) = 46");
     assert(result.dracmeGained === 30, "Dracme guadagnate con Ulisse (+20%) = 30");

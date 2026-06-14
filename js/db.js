@@ -17,14 +17,21 @@
             this.resetDatabase();
           }
           
-          // Migrazione automatica per nuove schede o immagini in study_guides
+          // Migrazione automatica per nuove schede, missioni, aiutanti, artefatti o allineamento contenuti
+          let updated = false;
+          
+          // 1. Migrazione per study_guides (aggiorna contenuti/immagini delle schede predefinite)
           if (dbState && dbState.study_guides && window.EroiMockData && window.EroiMockData.study_guides) {
-            let updated = false;
             window.EroiMockData.study_guides.forEach(mockG => {
               const dbG = dbState.study_guides.find(g => g.id === mockG.id);
               if (dbG) {
-                if (mockG.image && !dbG.image) {
+                if (dbG.content !== mockG.content || dbG.notes !== mockG.notes || dbG.image !== mockG.image || dbG.title !== mockG.title || dbG.summary !== mockG.summary || dbG.styleFilter !== mockG.styleFilter) {
+                  dbG.content = mockG.content;
+                  dbG.notes = mockG.notes;
                   dbG.image = mockG.image;
+                  dbG.title = mockG.title;
+                  dbG.summary = mockG.summary;
+                  dbG.styleFilter = mockG.styleFilter;
                   updated = true;
                 }
               } else {
@@ -32,10 +39,93 @@
                 updated = true;
               }
             });
-            if (updated) {
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(dbState));
-              console.log("Database migrato con successo: aggiornate schede di studio.");
-            }
+          }
+
+          // 2. Migrazione per missioni (aggiunge nuove missioni predefinite e aggiorna i quiz/domande)
+          if (dbState && dbState.missions && window.EroiMockData && window.EroiMockData.missions) {
+            window.EroiMockData.missions.forEach(mockM => {
+              const dbM = dbState.missions.find(m => m.id === mockM.id);
+              if (dbM) {
+                const dbQStr = JSON.stringify(dbM.questions);
+                const mockQStr = JSON.stringify(mockM.questions);
+                if (dbQStr !== mockQStr || dbM.title !== mockM.title || dbM.desc !== mockM.desc || dbM.unlockedBy !== mockM.unlockedBy || dbM.area !== mockM.area) {
+                  dbM.questions = JSON.parse(JSON.stringify(mockM.questions));
+                  dbM.title = mockM.title;
+                  dbM.desc = mockM.desc;
+                  dbM.rewards = JSON.parse(JSON.stringify(mockM.rewards));
+                  dbM.area = mockM.area;
+                  dbM.unlockedBy = mockM.unlockedBy;
+                  dbM.category = mockM.category;
+                  updated = true;
+                }
+              } else {
+                dbState.missions.push(JSON.parse(JSON.stringify(mockM)));
+                updated = true;
+              }
+            });
+          }
+
+          // 3. Migrazione per aiutanti (helpers)
+          if (dbState && dbState.helpers && window.EroiMockData && window.EroiMockData.helpers) {
+            Object.keys(window.EroiMockData.helpers).forEach(helperId => {
+              const mockH = window.EroiMockData.helpers[helperId];
+              if (!dbState.helpers[helperId]) {
+                dbState.helpers[helperId] = JSON.parse(JSON.stringify(mockH));
+                updated = true;
+              } else {
+                const dbH = dbState.helpers[helperId];
+                if (dbH.bonusPassive !== mockH.bonusPassive || dbH.potereSpeciale !== mockH.potereSpeciale || dbH.immunita !== mockH.immunita || dbH.name !== mockH.name || dbH.image !== mockH.image) {
+                  dbH.name = mockH.name;
+                  dbH.image = mockH.image;
+                  dbH.desc = mockH.desc;
+                  dbH.bonusPassive = mockH.bonusPassive;
+                  dbH.potereSpeciale = mockH.potereSpeciale;
+                  dbH.immunita = mockH.immunita;
+                  updated = true;
+                }
+              }
+            });
+          }
+
+          // 4. Migrazione per artefatti (artifacts)
+          if (dbState && dbState.artifacts && window.EroiMockData && window.EroiMockData.artifacts) {
+            Object.keys(window.EroiMockData.artifacts).forEach(artId => {
+              const mockA = window.EroiMockData.artifacts[artId];
+              if (!dbState.artifacts[artId]) {
+                dbState.artifacts[artId] = JSON.parse(JSON.stringify(mockA));
+                updated = true;
+              } else {
+                const dbA = dbState.artifacts[artId];
+                if (dbA.bonus !== mockA.bonus || dbA.desc !== mockA.desc || dbA.name !== mockA.name || dbA.image !== mockA.image) {
+                  dbA.name = mockA.name;
+                  dbA.desc = mockA.desc;
+                  dbA.bonus = mockA.bonus;
+                  dbA.image = mockA.image;
+                  updated = true;
+                }
+              }
+            });
+          }
+
+          // 5. Inizializzazione per diario di bordo
+          if (dbState && !dbState.diaries) {
+            dbState.diaries = [];
+            updated = true;
+          }
+
+          // 6. Migrazione per settings (assicura la presenza di tutte le chiavi predefinite come activeDiaries)
+          if (dbState && dbState.settings && window.EroiMockData && window.EroiMockData.settings) {
+            Object.keys(window.EroiMockData.settings).forEach(key => {
+              if (dbState.settings[key] === undefined) {
+                dbState.settings[key] = JSON.parse(JSON.stringify(window.EroiMockData.settings[key]));
+                updated = true;
+              }
+            });
+          }
+
+          if (updated) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dbState));
+            console.log("Database migrato con successo: aggiornate schede di studio, missioni, aiutanti e artefatti.");
           }
         } catch (e) {
           console.error("Errore nel caricamento del database locale, resetto ai dati di default.", e);
@@ -435,6 +525,23 @@
       this.save();
     },
 
+    getStudentGuideNotes: function(email, guideId) {
+      if (!dbState.student_guide_notes) {
+        dbState.student_guide_notes = {};
+      }
+      const key = `${email}_${guideId}`;
+      return dbState.student_guide_notes[key] || "";
+    },
+
+    saveStudentGuideNotes: function(email, guideId, text) {
+      if (!dbState.student_guide_notes) {
+        dbState.student_guide_notes = {};
+      }
+      const key = `${email}_${guideId}`;
+      dbState.student_guide_notes[key] = text;
+      this.save();
+    },
+
     // --- CITAZIONI E BRANI ---
     getCitations: function() {
       return dbState.citations || [];
@@ -502,6 +609,22 @@
       this.save();
     },
 
+    // --- DIARIO DI BORDO ---
+    getDiaries: function() {
+      return dbState.diaries || [];
+    },
+
+    saveDiaryEntry: function(entry) {
+      if (!dbState.diaries) dbState.diaries = [];
+      const index = dbState.diaries.findIndex(d => d.id === entry.id);
+      if (index !== -1) {
+        dbState.diaries[index] = { ...dbState.diaries[index], ...entry };
+      } else {
+        dbState.diaries.push(entry);
+      }
+      this.save();
+    },
+
     // --- BACKUP & EXPORT ---
     exportBackup: function() {
       return JSON.stringify(dbState, null, 2);
@@ -520,6 +643,7 @@
         }
 
         dbState = parsed;
+        if (!dbState.diaries) dbState.diaries = [];
         this.save();
         this.logActivity("admin", "Ripristino totale del database effettuato da backup esterno.");
         return true;

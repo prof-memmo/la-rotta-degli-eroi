@@ -34,6 +34,40 @@
       versi: [
         { title: "Definizione di Epica", lines: ["L'Epica è il genere letterario più antico,", "che narra in versi le grandi gesta degli eroi,", "cantate dagli aedi nelle corti dei re,", "trasmesse oralmente di generazione in generazione."], hint: "Definisci l'Epica partendo dalla sua natura antica." },
         { title: "Il Mito e la Leggenda", lines: ["Il Mito narra di dei e prodigi cosmici,", "la Leggenda di eroi in un passato storico.", "Entrambi si tramandano per via orale,", "ma solo il Mito è considerato sacro e vero."], hint: "Distingui prima il Mito, poi la Leggenda." }
+      ],
+      cantami_o_diva: [
+        "Spiega la differenza principale tra Mito e Leggenda.",
+        "Cos'è il genere letterario dell'Epica e cosa narra?"
+      ]
+    },
+
+    quiz_fondazione: {
+      topic: "Luoghi e Miti di Fondazione",
+      impiccato: [
+        { word: "TROIA", hint: "Città dell'Asia Minore, distrutta dopo 10 anni di assedio" },
+        { word: "ROMA", hint: "Città eterna fondata da Romolo, legata al mito di Enea" },
+        { word: "CARTAGINE", hint: "Città nordafricana fondata da Didone, amata da Enea" },
+        { word: "ITACA", hint: "Patria di Ulisse, isola montuosa dello Ionio" },
+        { word: "CAMELOT", hint: "Il leggendario castello di Re Artù e della Tavola Rotonda" },
+        { word: "AQUISGRANA", hint: "Sede del palazzo di Carlo Magno e della sua cappella" },
+        { word: "LAVINIO", hint: "Città fondata da Enea nel Lazio, in onore della sposa Lavinia" }
+      ],
+      puzzle: [
+        { words: ["I", "miti", "di", "fondazione", "spiegano", "le", "origini", "delle", "città"], solution: "I miti di fondazione spiegano le origini delle città", source: "Miti di Fondazione" },
+        { words: ["Enea", "è", "il", "mitico", "progenitore", "della", "stirpe", "romana"], solution: "Enea è il mitico progenitore della stirpe romana", source: "Il Lazio e Roma" }
+      ],
+      cloze: [
+        { text: "Enea fuggì da ___ in fiamme e, dopo lunghe peripezie, giunse nel ___ per fondare la città di ___.", blanks: ["Troia", "Lazio", "Lavinio"], source: "Il viaggio di Enea" },
+        { text: "La regina ___ fondò la città di ___ prima di innamorarsi e venire abbandonata da Enea.", blanks: ["Didone", "Cartagine"], source: "Didone e Cartagine" }
+      ],
+      versi: [
+        { title: "Le origini di Roma", lines: ["Dalle ceneri calde di Troia distrutta,", "Enea salpa profugo per volere del fato,", "giunge nel Lazio e sposa Lavinia,", "dando inizio alla stirpe che fonderà Roma."], hint: "La successione dal fuoco troiano alla fondazione romana." },
+        { title: "Camelot e la Tavola Rotonda", lines: ["A Camelot si radunano i nobili cavalieri,", "sotto il comando del leggendario re Artù,", "giurando fedeltà alla sacra corona,", "in cerca del Graal e della vera giustizia."], hint: "La vita ed i valori a Camelot." }
+      ],
+      cantami_o_diva: [
+        "Spiega l'importanza di Troia e Roma come miti di fondazione dell'Eneide.",
+        "Qual è il legame tra Didone, Cartagine ed Enea?",
+        "Descrivi Camelot e il suo significato nel ciclo bretone."
       ]
     },
 
@@ -61,6 +95,10 @@
       versi: [
         { title: "Chi era Omero?", lines: ["Omero, il cieco cantore dell'Asia Minore,", "compose in greco antico i poemi immortali.", "Ma esisteva davvero? La Questione Omerica", "ancora oggi divide gli studiosi del mondo."], hint: "Presenta Omero, poi accenna alla Questione Omerica." },
         { title: "Virgilio e Augusto", lines: ["Publio Virgilio Marone, sommo poeta di Roma,", "su commissione di Mecenate e volere di Augusto,", "scrisse l'Eneide per glorificare la stirpe romana", "e le divine origini della casata imperiale."], hint: "Chi commissionò l'Eneide e perché?" }
+      ],
+      cantami_o_diva: [
+        "Chi era Omero e cos'è la Questione Omerica?",
+        "Chi era Virgilio e perché scrisse l'Eneide?"
       ]
     },
 
@@ -89,6 +127,11 @@
         { title: "Proemio dell'Iliade", lines: ["Cantami, o Diva, del pelide Achille", "l'ira funesta che infiniti addusse", "lutti agli Achei, molte anzi tempo all'Orco", "generose travolse alme d'eroi."], hint: "Il proemio inizia con l'invocazione alla Musa. Il tema è l'ira di Achille." },
         { title: "Proemio dell'Odissea", lines: ["Dimmi, o Musa, dell'eroe multiforme,", "che tanto vagò, dopo che distrusse", "la rocca sacra di Troia:", "di molti uomini vide le città e conobbe i costumi."], hint: "Il proemio dell'Odissea enuncia il viaggio dell'eroe astuto." },
         { title: "Proemio dell'Eneide", lines: ["Canto le armi e l'uomo che per primo", "dalle coste di Troia, profugo per decreto del fato,", "giunse in Italia e al lido di Lavinio;", "molto fu sballottato per terra e per mare."], hint: "Il proemio dell'Eneide enuncia il destino di Enea: fondare Roma." }
+      ],
+      cantami_o_diva: [
+        "Qual è il tema principale dell'Iliade e chi ne è il protagonista?",
+        "Cos'è il 'nostos' nell'Odissea?",
+        "Qual è la missione di Enea nell'Eneide?"
       ]
     },
 
@@ -116,6 +159,10 @@
       versi: [
         { title: "Il Caos e le Origini", lines: ["Prima di tutto fu il Caos, vuoto e buio,", "poi Gea, la vasta Terra, fondamento di tutto,", "poi Urano, il Cielo stellato, la colmò d'amore,", "e da loro nacquero i Titani immortali."], hint: "Descrivere la cosmogonia: Caos, Gea, Urano, Titani." },
         { title: "Il Dono di Prometeo", lines: ["Prometeo, il titano dal cuore nobile,", "vide gli uomini al freddo e nell'ignoranza,", "salì sull'Olimpo e rubò il sacro fuoco,", "portandolo agli uomini come dono immortale."], hint: "Il titano sale, ruba il fuoco, lo dona." }
+      ],
+      cantami_o_diva: [
+        "Descrivi la nascita del cosmo a partire dal Caos primordiale.",
+        "Chi era Prometeo e quale dono fece agli uomini sfidando Zeus?"
       ]
     },
 
@@ -141,6 +188,10 @@
       ],
       versi: [
         { title: "I Dodici dell'Olimpo", lines: ["Zeus regna con la folgore sul monte sacro,", "Era, sposa e sorella, governa i matrimoni,", "Atena è saggezza, Apollo luce e poesia,", "Poseidone scuote il mare con il tridente."], hint: "Elenca le divinità principali e le loro funzioni." }
+      ],
+      cantami_o_diva: [
+        "Presenta le principali caratteristiche di Zeus e di sua sorella/sposa Era.",
+        "Parla di Atena, della sua nascita prodigiosa e di cosa rappresenta."
       ]
     },
 
@@ -168,6 +219,10 @@
       versi: [
         { title: "L'Ira di Achille", lines: ["Cantami, o Diva, del pelide Achille", "l'ira funesta che infiniti addusse", "lutti agli Achei, molte anzi tempo all'Orco", "generose travolse alme d'eroi."], hint: "Il proemio annuncia il tema: l'ira di Achille." },
         { title: "Addio di Ettore e Andromaca", lines: ["Ettore tende le braccia al figlio piccolo,", "ma il bimbo piange per il cimiero piumato.", "Sorridendo il padre toglie l'elmo lucente,", "e abbraccia il figlio prima di tornare alla guerra."], hint: "Una scena tenera prima del tragico addio definitivo." }
+      ],
+      cantami_o_diva: [
+        "Spiega perché si scatena l'ira di Achille contro Agamennone.",
+        "Racconta l'addio tra Ettore e Andromaca prima della battaglia."
       ]
     },
 
@@ -195,6 +250,10 @@
       versi: [
         { title: "Proemio dell'Odissea", lines: ["Dimmi, o Musa, dell'eroe multiforme,", "che tanto vagò, dopo che distrusse", "la rocca sacra di Troia:", "di molti uomini vide le città e conobbe i costumi."], hint: "Il proemio enuncia il viaggio del multiforme Ulisse." },
         { title: "Il Canto delle Sirene", lines: ["Avvicinatevi, glorioso Ulisse, fermati!", "Le Sirene cantano con voci di miele.", "Ulisse, legato all'albero, supplica i compagni,", "ma loro remano forti, tappi nelle orecchie."], hint: "Prima le Sirene invitano, poi la reazione di Ulisse." }
+      ],
+      cantami_o_diva: [
+        "Descrivi l'incontro tra Ulisse e il ciclope Polifemo.",
+        "Come fa Ulisse a salvarsi dal canto ammaliatore delle Sirene?"
       ]
     },
 
@@ -222,6 +281,129 @@
       versi: [
         { title: "Proemio dell'Eneide", lines: ["Canto le armi e l'uomo che per primo", "dalle coste di Troia, profugo per decreto del fato,", "giunse in Italia e al lido di Lavinio;", "molto fu sballottato per terra e per mare."], hint: "Il proemio: le armi, l'uomo, il destino, il viaggio." },
         { title: "La Fuga da Troia", lines: ["Troia brucia, le fiamme divorano i palazzi.", "Enea carica il padre Anchise sulle sue spalle,", "stringe la mano del piccolo Ascanio,", "e fugge nella notte verso un destino incerto."], hint: "Descrivi la partenza di Enea: Troia, Anchise, Ascanio, la fuga." }
+      ],
+      cantami_o_diva: [
+        "Parla dell'amore tragico tra Enea e la regina Didone a Cartagine.",
+        "Narra la fuga di Enea da Troia in fiamme col padre Anchise."
+      ]
+    },
+    car_orlando: {
+      topic: "Ciclo Carolingio: Carlo Magno e i Paladini",
+      impiccato: [
+        { word: "ORLANDO", hint: "Il più valoroso paladino di Carlo Magno" },
+        { word: "DURENDAL", hint: "La spada indistruttibile di Orlando" },
+        { word: "OLIFANTE", hint: "Il corno d'avorio suonato da Orlando a Roncisvalle" },
+        { word: "ANGELICA", hint: "La principessa del Catai di cui Orlando si innamora" }
+      ],
+      puzzle: [
+        { words: ["Orlando", "era", "il", "più", "valoroso", "dei", "paladini", "di", "Francia"], solution: "Orlando era il più valoroso dei paladini di Francia", source: "Orlando" }
+      ],
+      cloze: [
+        { text: "Orlando combatte a ___ contro i saraceni. Rifiuta di suonare l'___ fino alla fine.", blanks: ["Roncisvalle", "olifante"], source: "La Battaglia" }
+      ],
+      versi: [
+        { title: "Morte di Orlando", lines: ["Orlando sente che la morte è vicina,", "sul colle erboso si sdraia supino,", "sotto di sé mette la spada Durendal,", "rivolgendo il viso alla terra pagana."], hint: "La morte del paladino a Roncisvalle." }
+      ],
+      cantami_o_diva: [
+        "Chi sono i paladini di Carlo Magno e quali ideali cavallereschi difendono?",
+        "Racconta la battaglia di Roncisvalle e la morte eroica di Orlando."
+      ]
+    },
+    bre_artu: {
+      topic: "Ciclo Bretone: Re Artù e la Tavola Rotonda",
+      impiccato: [
+        { word: "CAMELOT", hint: "Il leggendario castello di Re Artù" },
+        { word: "EXCALIBUR", hint: "La leggendaria spada estratta dalla roccia" },
+        { word: "MERLINO", hint: "Il grande mago consigliere di Artù" },
+        { word: "GINEVRA", hint: "La regina sposa di Artù" },
+        { word: "LANCELLOTTO", hint: "Il più forte dei cavalieri della Tavola Rotonda" }
+      ],
+      puzzle: [
+        { words: ["I", "cavalieri", "della", "Tavola", "Rotonda", "erano", "tutti", "uguali"], solution: "I cavalieri della Tavola Rotonda erano tutti uguali", source: "Tavola Rotonda" }
+      ],
+      cloze: [
+        { text: "La spada magica di Artù si chiama ___. Fu consegnata dalla Dama del ___.", blanks: ["Excalibur", "Lago"], source: "Excalibur" }
+      ],
+      versi: [
+        { title: "La Cerca del Graal", lines: ["I cavalieri partono da Camelot,", "alla ricerca del calice di Cristo,", "ma solo il puro Galahad", "potrà contemplare il Sacro Graal."], hint: "La sacra cerca del Graal." }
+      ],
+      cantami_o_diva: [
+        "Narra la leggenda della Spada nella Roccia e dell'ascesa di Re Artù.",
+        "Cos'è la Tavola Rotonda e qual è il suo significato simbolico?",
+        "Spiega l'importanza spirituale della ricerca del Sacro Graal per i cavalieri."
+      ]
+    },
+    nib_sigfrido: {
+      topic: "Epica Germanica: Il Canto dei Nibelunghi",
+      impiccato: [
+        { word: "SIGFRIDO", hint: "L'eroe invulnerabile che uccise il drago" },
+        { word: "FAFNIR", hint: "Il drago custode del tesoro dei Nibelunghi" },
+        { word: "KRIEMHILD", hint: "La moglie di Sigfrido, nota in italiano come Crimilde" },
+        { word: "HAGEN", hint: "Il traditore che scoprì il punto debole di Sigfrido" }
+      ],
+      puzzle: [
+        { words: ["Sigfrido", "divenne", "invulnerabile", "bagnandosi", "nel", "sangue", "del", "drago"], solution: "Sigfrido divenne invulnerabile bagnandosi nel sangue del drago", source: "Sigfrido" }
+      ],
+      cloze: [
+        { text: "Una foglia di ___ si posò sulla schiena di Sigfrido, rendendo quel punto ___.", blanks: ["tiglio", "vulnerabile"], source: "Il Punto Debole" }
+      ],
+      versi: [
+        { title: "Il Tesoro nel Reno", lines: ["Il tesoro d'oro dei Nibelunghi,", "custodito per secoli dai nani,", "viene gettato nel fiume Reno,", "perduto per sempre nel gorgo profondo."], hint: "Il destino finale del tesoro." }
+      ],
+      cantami_o_diva: [
+        "Racconta le imprese di Sigfrido, lo scontro col drago Fafnir e il suo punto debole.",
+        "Spiega le cause della vendetta di Crimilde e la fine tragica dei Burgundi."
+      ]
+    },
+    quiz_rimediazione: {
+      topic: "Rimediazione (Film e Libri)",
+      impiccato: [
+        { word: "RIMEDIAZIONE", hint: "La presentazione di un medium in un altro medium" },
+        { word: "CINEMA", hint: "Il medium che adatta l'Iliade nel film Troy" },
+        { word: "MILLER", hint: "Madeline ___, autrice del romanzo Il Canto di Achille" },
+        { word: "PATROCLO", hint: "Narratore e protagonista intimo del Canto di Achille" },
+        { word: "TROY", hint: "Film kolossal che adatta l'Iliade escludendo gli dei" },
+        { word: "JACKSON", hint: "Percy ___, serie di romanzi e film sul mito greco oggi" }
+      ],
+      puzzle: [
+        { words: ["La", "rimediazione", "è", "la", "presentazione", "di", "un", "medium", "in", "un", "altro", "medium"], solution: "La rimediazione è la presentazione di un medium in un altro medium", source: "Definizione di Rimediazione" },
+        { words: ["Il", "Canto", "di", "Achille", "cambia", "il", "punto", "di", "vista", "dell'Iliade"], solution: "Il Canto di Achille cambia il punto di vista dell'Iliade", source: "Il Canto di Achille" }
+      ],
+      cloze: [
+        { text: "Per ___ si intende la presentazione di un medium in un altro ___. Ad esempio, un libro che diventa ___.", blanks: ["rimediazione", "medium", "film"], source: "La Rimediazione" }
+      ],
+      versi: [
+        { title: "La Rimediazione dell'Epica", lines: ["Gli eroi dell'antichità non muoiono mai,", "cambiano solo il medium con cui si presentano,", "dal canto dell'aedo allo schermo del cinema,", "dalle pagine dell'epica ai romanzi moderni."], hint: "Dalla persistenza degli eroi ai diversi media moderni." }
+      ],
+      cantami_o_diva: [
+        "Spiega cos'è la rimediazione e fai un esempio pratico legato all'epica.",
+        "In che modo il romanzo 'Il Canto di Achille' rimedia la figura di Achille rispetto all'Iliade?"
+      ]
+    },
+    quiz_videogiochi: {
+      topic: "I Videogiochi",
+      impiccato: [
+        { word: "VIDEOGIOCO", hint: "Dispositivo elettronico interattivo con schermo" },
+        { word: "MINECRAFT", hint: "Il videogioco più venduto della storia" },
+        { word: "INTERNET", hint: "La rete mondiale che ha fatto espandere il gaming negli anni 90" },
+        { word: "PLAYSTATION", hint: "Console Sony commercializzata dal 1994" },
+        { word: "JOYSTICK", hint: "Periferica che trasforma i movimenti del giocatore" },
+        { word: "AVATAR", hint: "L'identità virtuale o alter ego del giocatore" },
+        { word: "NINTENDO", hint: "Azienda giapponese ideatrice di Mario e della Wii" }
+      ],
+      puzzle: [
+        { words: ["Il", "videogioco", "è", "un", "medium", "che", "rimedia", "un", "messaggio"], solution: "Il videogioco è un medium che rimedia un messaggio", source: "Definizione Treccani" },
+        { words: ["Minecraft", "ha", "venduto", "oltre", "trecento", "milioni", "di", "copie"], solution: "Minecraft ha venduto oltre trecento milioni di copie", source: "Il più venduto" }
+      ],
+      cloze: [
+        { text: "I primi giochi elettronici sono apparsi negli anni ___. Negli anni ___ con l'avvento di Internet c'è stata una forte ___.", blanks: ["cinquanta", "novanta", "espansione"], source: "Storia dei Videogiochi" }
+      ],
+      versi: [
+        { title: "Il Mondo Virtuale", lines: ["Nel gioco di ruolo online crei il tuo avatar,", "ti immergi in mondi condivisi con altri,", "giochi insieme a persone di tutto il globo,", "creando legami nell'intelligenza collettiva."], hint: "Dall'avatar all'intelligenza collettiva." }
+      ],
+      cantami_o_diva: [
+        "Quali sono le principali tipologie o generi di videogiochi?",
+        "Spiega la differenza tra Realtà Aumentata (AR) e Realtà Virtuale (VR)."
       ]
     }
   };

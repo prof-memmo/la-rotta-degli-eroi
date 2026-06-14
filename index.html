@@ -7,7 +7,7 @@
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Stylesheet di Progetto -->
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=10">
   <style>
     .vis-bar {
       display: inline-block;
@@ -259,7 +259,7 @@
       <!-- 3. MAPPA INTERATTIVA VIEW -->
       <section id="view-map" class="view">
         <div class="glass-panel" style="text-align: center;">
-          <h2 class="section-title"><i class="fa-solid fa-map" style="color: var(--gold);"></i> Mappa del Viaggio Epico</h2>
+          <h2 class="section-title"><i class="fa-solid fa-map" style="color: var(--gold);"></i> mappa del viaggio</h2>
           <p style="color: var(--text-muted); margin-bottom: 20px;">
             Le aree si sbloccano risolvendo le missioni didattiche. Completa un capitolo per tracciare la via dorata verso il luogo successivo!
           </p>
@@ -268,113 +268,110 @@
             <!-- Mappa di sfondo disegnata in SVG stilizzato (essendo in locale non abbiamo file di immagine esterni) -->
             <svg viewBox="0 0 900 550" class="map-svg-overlay" id="map-svg-overlay" preserveAspectRatio="xMidYMid meet">
               
-              <!-- Sentieri iniziali: Accademia → Biblioteca → Archivio → Olimpo -->
-              <path id="path-Accademia-Biblioteca" d="M 100 430 L 200 330" class="map-path"></path>
-              <path id="path-Biblioteca-Archivio" d="M 200 330 L 100 210" class="map-path"></path>
-              <path id="path-Archivio-Olimpo" d="M 100 210 L 220 110" class="map-path"></path>
+              <!-- Sentieri iniziali: Accademia → Miti di Fondazione → Biblioteca → Archivio → Olimpo -->
+              <path id="path-Accademia-Miti-di-Fondazione" d="M 80 480 L 260 480" class="map-path"></path>
+              <path id="path-Miti-di-Fondazione-Biblioteca" d="M 260 480 L 380 400" class="map-path"></path>
+              <path id="path-Biblioteca-Archivio" d="M 380 400 L 240 310" class="map-path"></path>
+              <path id="path-Archivio-Olimpo" d="M 240 310 L 80 220" class="map-path"></path>
               <!-- Sentieri principali -->
-              <path id="path-Olimpo-Creta" d="M 220 110 L 350 220" class="map-path"></path>
-              <path id="path-Creta-Troia" d="M 350 220 L 480 140" class="map-path"></path>
-              <path id="path-Troia-Itaca" d="M 480 140 L 580 280" class="map-path"></path>
-              <path id="path-Itaca-Lazio" d="M 580 280 L 420 390" class="map-path"></path>
-              <path id="path-Lazio-Aquisgrana" d="M 420 390 L 260 480" class="map-path"></path>
-              <path id="path-Aquisgrana-Roncisvalle" d="M 260 480 L 500 470" class="map-path"></path>
-              <path id="path-Roncisvalle-Camelot" d="M 500 470 L 680 440" class="map-path"></path>
-              <path id="path-Camelot-Brocelandia" d="M 680 440 L 800 300" class="map-path"></path>
-              <path id="path-Brocelandia-Graal" d="M 800 300 L 760 120" class="map-path"></path>
-              <path id="path-Graal-Worms" d="M 760 120 L 610 80" class="map-path"></path>
-              <path id="path-Worms-Reno" d="M 610 80 L 350 65" class="map-path"></path>
+              <path id="path-Olimpo-Creta" d="M 80 220 L 80 80" class="map-path"></path>
+              <path id="path-Creta-Troia" d="M 80 80 L 240 80" class="map-path"></path>
+              <path id="path-Troia-Itaca" d="M 240 80 L 380 140" class="map-path"></path>
+              <path id="path-Itaca-Lazio" d="M 380 140 L 500 200" class="map-path"></path>
+              <path id="path-Lazio-Aquisgrana" d="M 500 200 L 380 290" class="map-path"></path>
+              <path id="path-Aquisgrana-Roncisvalle" d="M 380 290 L 620 400" class="map-path"></path>
+              <path id="path-Roncisvalle-Camelot" d="M 620 400 L 740 450" class="map-path"></path>
+              <path id="path-Camelot-Brocelandia" d="M 740 450 L 840 350" class="map-path"></path>
+              <path id="path-Brocelandia-Graal" d="M 840 350 L 660 220" class="map-path"></path>
+              <path id="path-Graal-Worms" d="M 660 220 L 740 80" class="map-path"></path>
+              <path id="path-Worms-Reno" d="M 740 80 L 580 80" class="map-path"></path>
 
               <!-- Mappa decorativa: Disegno pergamena stilizzata e confini in SVG -->
               <rect x="5" y="5" width="890" height="540" fill="none" stroke="var(--gold-dark)" stroke-width="3" rx="10"></rect>
               <path d="M 15 25 L 25 15 M 885 25 L 875 15 M 15 525 L 25 535 M 885 525 L 875 535" stroke="var(--gold)" stroke-width="2"></path>
-              
-              <!-- Bussola antica decorativa -->
-              <g transform="translate(800, 80)">
-                <circle r="40" fill="none" stroke="var(--gold-dark)" stroke-width="1" stroke-dasharray="2, 4"></circle>
-                <circle r="30" fill="none" stroke="var(--gold)" stroke-width="1.5"></circle>
-                <path d="M 0 -35 L 5 0 L 0 5 L -5 0 Z" fill="var(--gold)"></path>
-                <path d="M 0 35 L 5 0 L 0 -5 L -5 0 Z" fill="var(--gold-dark)"></path>
-                <text x="0" y="-42" fill="var(--gold)" font-size="10" font-weight="bold" text-anchor="middle">N</text>
-              </g>
 
               <!-- Disegno onde marine decorative per riempire la mappa -->
               <path d="M 100 280 Q 110 275 120 280 T 140 280 M 500 80 Q 510 75 520 80 T 540 80" stroke="rgba(212,175,55,0.15)" fill="none" stroke-width="1.5"></path>
               <path d="M 680 200 Q 690 195 700 200 T 720 200" stroke="rgba(212,175,55,0.15)" fill="none" stroke-width="1.5"></path>
 
               <!-- Nodi Introduttivi (sempre nel 1° quadrimestre) -->
-              <g class="map-node" id="node-Accademia" transform="translate(100, 430)">
+              <g class="map-node" id="node-Accademia" transform="translate(80, 480)">
                 <circle r="32"></circle>
                 <text y="52">L'inizio del Viaggio</text>
                 <text y="8" class="map-node-emoji">📚</text>
               </g>
-              <g class="map-node locked" id="node-Biblioteca" transform="translate(200, 330)">
+              <g class="map-node locked" id="node-Miti di Fondazione" transform="translate(260, 480)">
+                <circle r="32"></circle>
+                <text y="52">Miti di Fondazione</text>
+                <text y="8" class="map-node-emoji">🧭</text>
+              </g>
+              <g class="map-node locked" id="node-Biblioteca" transform="translate(380, 400)">
                 <circle r="32"></circle>
                 <text y="52">Gli Autori</text>
                 <text y="8" class="map-node-emoji">🏫</text>
               </g>
-              <g class="map-node locked" id="node-Archivio" transform="translate(100, 210)">
+              <g class="map-node locked" id="node-Archivio" transform="translate(240, 310)">
                 <circle r="32"></circle>
                 <text y="52">Le Opere</text>
                 <text y="8" class="map-node-emoji">📖</text>
               </g>
               <!-- Nodi Geografici principali -->
-              <g class="map-node locked" id="node-Olimpo" transform="translate(220, 110)">
+              <g class="map-node locked" id="node-Olimpo" transform="translate(80, 220)">
                 <circle r="32"></circle>
                 <text y="52">Olimpo</text>
                 <text y="8" class="map-node-emoji">🏛️</text>
               </g>
-              <g class="map-node locked" id="node-Creta" transform="translate(350, 220)">
+              <g class="map-node locked" id="node-Creta" transform="translate(80, 80)">
                 <circle r="32"></circle>
                 <text y="52">Creta</text>
                 <text y="8" class="map-node-emoji">🐂</text>
               </g>
-              <g class="map-node locked" id="node-Troia" transform="translate(480, 140)">
+              <g class="map-node locked" id="node-Troia" transform="translate(240, 80)">
                 <circle r="32"></circle>
                 <text y="52">Troia</text>
                 <text y="8" class="map-node-emoji">🐴</text>
               </g>
-              <g class="map-node locked" id="node-Itaca" transform="translate(580, 280)">
+              <g class="map-node locked" id="node-Itaca" transform="translate(380, 140)">
                 <circle r="32"></circle>
                 <text y="52">Itaca</text>
                 <text y="8" class="map-node-emoji">⛵</text>
               </g>
-              <g class="map-node locked" id="node-Lazio" transform="translate(420, 390)">
+              <g class="map-node locked" id="node-Lazio" transform="translate(500, 200)">
                 <circle r="32"></circle>
                 <text y="52">Lazio</text>
                 <text y="8" class="map-node-emoji">👑</text>
               </g>
-              <g class="map-node locked" id="node-Aquisgrana" transform="translate(260, 480)">
+              <g class="map-node locked" id="node-Aquisgrana" transform="translate(380, 290)">
                 <circle r="32"></circle>
                 <text y="52">Aquisgrana</text>
                 <text y="8" class="map-node-emoji">🏰</text>
               </g>
-              <g class="map-node locked" id="node-Roncisvalle" transform="translate(500, 470)">
+              <g class="map-node locked" id="node-Roncisvalle" transform="translate(620, 400)">
                 <circle r="32"></circle>
                 <text y="52">Roncisvalle</text>
                 <text y="8" class="map-node-emoji">🎺</text>
               </g>
-              <g class="map-node locked" id="node-Camelot" transform="translate(680, 440)">
+              <g class="map-node locked" id="node-Camelot" transform="translate(740, 450)">
                 <circle r="32"></circle>
                 <text y="52">Camelot</text>
                 <text y="8" class="map-node-emoji">⚔️</text>
               </g>
-              <g class="map-node locked" id="node-Foresta di Brocelandia" transform="translate(800, 300)">
+              <g class="map-node locked" id="node-Foresta di Brocelandia" transform="translate(840, 350)">
                 <circle r="32"></circle>
                 <text y="52">Brocelandia</text>
                 <text y="8" class="map-node-emoji">🌳</text>
               </g>
-              <g class="map-node locked" id="node-Castello del Graal" transform="translate(760, 120)">
+              <g class="map-node locked" id="node-Castello del Graal" transform="translate(660, 220)">
                 <circle r="32"></circle>
                 <text y="52">Castello del Graal</text>
                 <text y="8" class="map-node-emoji">🏆</text>
               </g>
-              <g class="map-node locked" id="node-Worms" transform="translate(610, 80)">
+              <g class="map-node locked" id="node-Worms" transform="translate(740, 80)">
                 <circle r="32"></circle>
                 <text y="52">Worms</text>
                 <text y="8" class="map-node-emoji">🛡️</text>
               </g>
-              <g class="map-node locked" id="node-Reno" transform="translate(350, 65)">
+              <g class="map-node locked" id="node-Reno" transform="translate(580, 80)">
                 <circle r="32"></circle>
                 <text y="-42">Fiume Reno</text>
                 <text y="8" class="map-node-emoji">🐉</text>
@@ -427,6 +424,48 @@
               </button>
             </div>
             <div id="minigame-content"><!-- Contenuto dinamico del mini-gioco --></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.5. DIARIO DI BORDO VIEW -->
+      <section id="view-diario" class="view">
+        <div class="glass-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold-dark); padding-bottom: 8px; margin-bottom: 20px;">
+            <h2 class="section-title" style="border: none; margin: 0; padding: 0;">
+              <i class="fa-solid fa-feather-pointed" style="color: var(--gold);"></i> Diario di Bordo
+            </h2>
+          </div>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">
+            In questa sezione puoi scrivere le tue riflessioni guidate sui nodi della mappa che hai sbloccato. Ogni riflessione completata verrà valutata dal docente e ti farà guadagnare XP e Dracme!
+          </p>
+
+          <div style="display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start;">
+            <!-- Lista dei nodi sbloccati -->
+            <div class="glass-panel" style="padding: 15px; border-radius: 8px; margin-bottom: 0;">
+              <h3 style="font-family: var(--font-heading); color: var(--gold); font-size: 1.1rem; margin-bottom: 12px; border-bottom: 1px solid rgba(212,175,55,0.15); padding-bottom: 6px;">
+                Nodi del Viaggio
+              </h3>
+              <div id="diario-nodes-list" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Popolato via JS -->
+              </div>
+            </div>
+
+            <!-- Dettaglio delle riflessioni -->
+            <div class="glass-panel" id="diario-reflection-panel" style="padding: 20px; border-radius: 8px; margin-bottom: 0; min-height: 400px;">
+              <div id="diario-empty-state" style="text-align: center; color: var(--text-muted); padding-top: 80px;">
+                <i class="fa-solid fa-feather" style="font-size: 3.5rem; color: rgba(212,175,55,0.15); margin-bottom: 15px; display: block;"></i>
+                Seleziona un nodo sbloccato a sinistra per iniziare o visualizzare le tue riflessioni.
+              </div>
+              <div id="diario-active-state" style="display: none;">
+                <h3 id="diario-active-node-title" style="font-family: var(--font-heading); color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(212,175,55,0.15); padding-bottom: 8px;">
+                  Riflessioni: Nome Nodo
+                </h3>
+                <div id="diario-tasks-container" style="display: flex; flex-direction: column; gap: 24px;">
+                  <!-- Popolato via JS (i 3 compitini) -->
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -539,6 +578,7 @@
                       Corpo del testo...
                     </div>
                   </div>
+
                 </div>
               </div>
             </article>
@@ -559,6 +599,7 @@
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('guide')">Guide Didattiche</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('registro')">Registro Attività</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('tornei')">Tornei Interni</button>
+            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('diario')">Valutazione Diari</button>
           </div>
 
           <!-- TAB PANORAMICA -->
@@ -801,6 +842,7 @@
                     <option value="puzzle">Puzzle (Riordina Frase)</option>
                     <option value="cloze">Cloze (Completa Testo)</option>
                     <option value="cantami_o_diva">Cantami o Diva (Spiegazione Orale 10s)</option>
+                    <option value="impiccato">Impiccato (Parola Segreta)</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -1022,6 +1064,7 @@
                 <div class="form-group">
                   <label for="guide-category">Tipologia Guida</label>
                   <select id="guide-category" class="form-control" required>
+                    <option value="Luoghi e Miti di Fondazione">Luoghi e Miti di Fondazione</option>
                     <option value="Schede Autore">Schede Autore</option>
                     <option value="Schede Personaggio (Mitologia)">Schede Personaggio (Mitologia)</option>
                     <option value="Schede Personaggio (Iliade)">Schede Personaggio (Iliade)</option>
@@ -1106,6 +1149,45 @@
                 <div id="tournaments-list-container" style="margin-top: 15px;">
                   <!-- Popolato via JS -->
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB DIARIO -->
+          <div id="t-tab-diario" class="tab-content">
+            <!-- Pannello Attivazione Nodi Diario -->
+            <div class="glass-panel" style="margin-bottom: 20px;">
+              <h3 class="panel-title" style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-toggle-on" style="color: var(--gold);"></i> Attivazione Nodi del Diario
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
+                Seleziona i nodi per i quali abilitare la scrittura del Diario di Bordo per gli studenti. I nodi disattivati resteranno visibili ma in sola lettura.
+              </p>
+              <div id="teacher-diario-toggles" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+                <!-- Popolato via JS -->
+              </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold-dark); padding-bottom: 8px; margin-bottom: 20px;">
+                <h3 class="panel-title" style="margin: 0; padding: 0;">
+                  <i class="fa-solid fa-graduation-cap" style="color: var(--gold);"></i> Valutazione del Diario di Bordo
+                </h3>
+                <!-- Filtri -->
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <select id="teacher-diario-filter-status" class="form-control" style="width: 180px; padding: 4px 8px; height: 32px;" onchange="EroiApp.renderTeacherDiaries()">
+                    <option value="pending">In attesa di voto</option>
+                    <option value="graded">Già valutati</option>
+                  </select>
+                  <select id="teacher-diario-filter-class" class="form-control" style="width: 140px; padding: 4px 8px; height: 32px;" onchange="EroiApp.renderTeacherDiaries()">
+                    <option value="ALL">Tutte le Classi</option>
+                    <!-- Popolato da JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div id="teacher-diaries-list" style="display: flex; flex-direction: column; gap: 15px; max-height: 600px; overflow-y: auto; padding-right: 5px;">
+                <!-- Popolato da JS -->
               </div>
             </div>
           </div>
@@ -1360,17 +1442,17 @@
 
   <!-- SCRIPT DI PROGETTO -->
   <!-- 1. Dati Iniziali -->
-  <script src="js/mockData.js?v=3"></script>
+  <script src="js/mockData.js?v=11"></script>
   <!-- 2. Database locale -->
-  <script src="js/db.js?v=3"></script>
+  <script src="js/db.js?v=9"></script>
   <!-- 3. Gestore Autenticazione -->
-  <script src="js/auth.js?v=3"></script>
+  <script src="js/auth.js?v=9"></script>
   <!-- 4. Bilanciamento e Gioco -->
-  <script src="js/game.js?v=3"></script>
+  <script src="js/game.js?v=9"></script>
   <!-- 5. Logica Applicativa e Interfaccia -->
-  <script src="js/app.js?v=3"></script>
+  <script src="js/app.js?v=6"></script>
   <!-- 6. Mini-giochi Interattivi -->
-  <script src="js/minigames.js?v=3"></script>
+  <script src="js/minigames.js?v=9"></script>
 
   <!-- Firebase future configuration placeholder (SI, commentato) -->
   <!--

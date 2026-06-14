@@ -370,7 +370,8 @@
 
       // Sblocco automatico dell'area successiva nel flusso lineare del viaggio
       const areaProgression = {
-        "Accademia": "Biblioteca",
+        "Accademia": "Miti di Fondazione",
+        "Miti di Fondazione": "Biblioteca",
         "Biblioteca": "Archivio",
         "Archivio": "Olimpo",
         "Olimpo": "Creta",
