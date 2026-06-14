@@ -7,7 +7,8 @@
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Stylesheet di Progetto -->
-  <link rel="stylesheet" href="css/style.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/components.css?v=7">
   <style>
     .vis-bar {
       display: inline-block;
@@ -25,9 +26,87 @@
     .vis-bar:nth-child(3n) { animation-delay: 0.3s; }
     .vis-bar:nth-child(4n) { animation-delay: 0.45s; }
   </style>
+  <script>
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      console.error("Error: " + msg + " in " + url + " at " + lineNo + ":" + columnNo);
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function(event) {
+      console.error("Promise Error: " + event.reason);
+    });
+  </script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
+  <!-- Login Overlay -->
+  <div id="login-overlay" class="login-overlay hidden">
+      <div class="login-card">
+          <div class="login-header">
+              <img src="assets/prof_memmo.png" alt="Logo" class="login-logo">
+              <h2>BENVENUTO NELLA ROTTA</h2>
+              <p>Accedi per iniziare il tuo viaggio epico.</p>
+          </div>
+          <div class="login-form">
+              <div class="legal-notice" style="margin-bottom: 1.5rem; text-align: left;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: #777; cursor: pointer; line-height: 1.2;">
+                          <input type="checkbox" id="login-check-age" style="margin-top: 2px;">
+                          <span>Ho almeno 16 anni o sono sotto la supervisione di un adulto</span>
+                      </label>
+                      <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: #777; cursor: pointer; line-height: 1.2;">
+                          <input type="checkbox" id="login-check-privacy" style="margin-top: 2px;">
+                          <span>Accetto la <a href="javascript:void(0)" onclick="showLegal('privacy')" style="color: var(--primary-color); font-weight: 600;">Privacy Policy</a> e i <a href="javascript:void(0)" onclick="showLegal('terms')" style="color: var(--primary-color); font-weight: 600;">Termini</a></span>
+                      </label>
+                  </div>
+              </div>
+
+              <!-- Autenticazione Centrale -->
+              <div id="login-primary-actions" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
+                  <button id="google-login-btn" class="btn" onclick="handleGoogleLogin()" style="width:100%; display:flex; align-items:center; justify-content:center; gap:1rem; background:white; border:2px solid #eee; color:#444; padding:1.2rem; border-radius:50px; font-weight:800; font-size: 1.1rem; cursor:pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s;">
+                      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24"> ACCEDI CON GOOGLE
+                  </button>
+                  
+                  <div style="margin: 0.5rem 0; display: flex; align-items: center; gap: 1rem; color: #ddd; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px;">
+                      <hr style="flex:1; border:0; border-top:1px solid #f0f0f0;"> OPPURE <hr style="flex:1; border:0; border-top:1px solid #f0f0f0;">
+                  </div>
+
+                  <div style="background: #fafafa; padding: 1.8rem; border-radius: 35px; border: 2px solid #f0f0f0;">
+                      <div id="registration-input-area" style="display:flex; flex-direction:column; gap:1rem;">
+                          
+                          <!-- Selezione Ruolo -->
+                          <div style="text-align: left; margin-bottom: 0.5rem;">
+                              <label style="font-weight: 800; color: #555; display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Scegli il tuo ruolo:</label>
+                              <select id="login-role-select" style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 2px solid #eee; font-size: 1rem; outline: none; background: white;">
+                                  <option value="studente">Studente</option>
+                                  <option value="docente">Docente</option>
+                                  <option value="forestiero">Forestiero (se non sei docente o studente)</option>
+                              </select>
+                          </div>
+
+                          <input type="email" id="login-email" placeholder="La tua email" style="padding:1rem 1.5rem; border:2px solid #eee; border-radius:50px; font-size:1.1rem; outline:none; width: 100%;">
+                          <input type="password" id="login-password" placeholder="Password" style="padding:1rem 1.5rem; border:2px solid #eee; border-radius:50px; font-size:1.1rem; outline:none; width: 100%;">
+                          <button class="btn btn-primary" onclick="handleEmailLogin()" style="width: 100%; padding: 1.2rem; font-weight: 900; border-radius: 50px; font-size: 1.1rem; margin-top: 0.5rem;">ACCEDI ORA ➜</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Legal Modals -->
+  <div id="legal-modal" class="legal-modal hidden">
+      <div class="legal-modal-content">
+          <span class="close-legal" onclick="hideLegal()">&times;</span>
+          <div id="legal-text-container"></div>
+          <div style="text-align:center; padding: 1.5rem 0 0;">
+              <button onclick="confirmLegal()" style="padding: 0.8rem 2.5rem; border-radius: 50px; background: var(--primary-color); color: white; border: none; font-weight: 800; font-size: 1rem; cursor: pointer;">✅ Ho capito</button>
+          </div>
+      </div>
+  </div>
   <!-- Toast Container per Feedback Micro-Animazioni -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -103,74 +182,9 @@
     <main class="main-content" id="main-layout" style="width: 100%;">
       
       <!-- 1. LOGIN & PASSWORD RECOVERY VIEW -->
-      <section id="view-login" class="view active">
-        <div class="login-wrapper">
-          <div class="glass-panel login-card">
-            <div class="login-header">
-              <h2>La Rotta degli Eroi</h2>
-              <p>Accedi alla tua epopea</p>
-            </div>
-            
-            <!-- Form Accedi -->
-            <form id="form-login-submit" onsubmit="return false;">
-              <div class="form-group">
-                <label for="login-email">Indirizzo Email</label>
-                <input type="email" id="login-email" class="form-control" placeholder="es: studente@scuola.it" required autocomplete="email">
-              </div>
-              <div class="form-group">
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" class="form-control" placeholder="Inserisci password" required autocomplete="current-password">
-              </div>
-              <button type="submit" class="btn" style="width: 100%; margin-top: 10px;" id="btn-submit-login">
-                <i class="fa-solid fa-scroll"></i> Entra in Avventura
-              </button>
-              
-              <div id="login-toggle-container" style="text-align: center; margin-top: 15px;">
-                <span id="link-show-register" style="color: var(--gold); cursor: pointer; text-decoration: underline; font-size: 0.85rem;">Non hai un account? Registrati come Forestiero</span>
-              </div>
-            </form>
+      
 
-            <!-- Form Registrati (nascosto di default) -->
-            <form id="form-register-submit" onsubmit="return false;" style="display: none;">
-              <div class="form-group">
-                <label for="register-name">Nome e Cognome</label>
-                <input type="text" id="register-name" class="form-control" placeholder="es: Ettore Priamo" required>
-              </div>
-              <div class="form-group">
-                <label for="register-email">Indirizzo Email</label>
-                <input type="email" id="register-email" class="form-control" placeholder="es: forestiero@email.it" required autocomplete="email">
-              </div>
-              <div class="form-group">
-                <label for="register-password">Password</label>
-                <input type="password" id="register-password" class="form-control" placeholder="Crea una password" required autocomplete="new-password">
-              </div>
-              <div class="form-group">
-                <label for="register-avatar">Classe Avatar</label>
-                <select id="register-avatar" class="form-control" required>
-                  <option value="Custode della Sapienza">Custode della Sapienza</option>
-                  <option value="Guerriero">Guerriero</option>
-                  <option value="Navigatore">Navigatore</option>
-                  <option value="Cantastorie">Cantastorie</option>
-                  <option value="Esploratore">Esploratore</option>
-                </select>
-              </div>
-              <button type="submit" class="btn" style="width: 100%; margin-top: 15px;" id="btn-submit-register">
-                <i class="fa-solid fa-user-plus"></i> Registrati ed Entra
-              </button>
-              <div style="text-align: center; margin-top: 15px;">
-                <span id="link-show-login" style="color: var(--gold); cursor: pointer; text-decoration: underline; font-size: 0.85rem;">Hai già un account? Accedi</span>
-              </div>
-            </form>
-            
-            <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); text-align: center;">
-              Hai dimenticato le credenziali? 
-              <span id="link-recover-password" style="color: var(--gold); cursor: pointer; text-decoration: underline;">Recupera Password</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 2. STUDENT DASHBOARD VIEW -->
+<!-- 2. STUDENT DASHBOARD VIEW -->
       <section id="view-student-dashboard" class="view">
         <div class="glass-panel">
           <div class="student-header">
@@ -930,7 +944,7 @@
                   <select id="new-item-type" class="form-control" required>
                     <option value="consumable">Consumabile (Monouso)</option>
                     <option value="permanent">Permanente (Equipaggiamento/Titolo)</option>
-                  </g>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="new-item-stock">Stock Disponibile</label>
@@ -1440,19 +1454,30 @@
     </div>
   </div>
 
+  <!-- INTRO VIDEO OVERLAY -->
+  <div id="intro-video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 999999; flex-direction: column; align-items: center; justify-content: center;">
+      <video id="intro-video" style="max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: contain;" playsinline>
+          <source src="assets/la_rotta_degli_dei_video.mp4" type="video/mp4">
+          Il tuo browser non supporta il tag video.
+      </video>
+      <button id="btn-skip-video" style="position: absolute; bottom: 30px; right: 30px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: var(--font-heading); z-index: 9999999;" onclick="window.EroiApp.skipIntroVideo()">SALTA VIDEO <i class="fa-solid fa-forward-step"></i></button>
+  </div>
+
   <!-- SCRIPT DI PROGETTO -->
   <!-- 1. Dati Iniziali -->
-  <script src="js/mockData.js?v=11"></script>
+  <script src="js/mockData.js?v=12"></script>
   <!-- 2. Database locale -->
-  <script src="js/db.js?v=9"></script>
+  <script src="js/db.js?v=10"></script>
+  <!-- 2.5 Inizializzazione Firebase -->
+  <script src="js/firebase-init.js?v=2"></script>
   <!-- 3. Gestore Autenticazione -->
-  <script src="js/auth.js?v=9"></script>
+  <script src="js/auth.js?v=10"></script>
   <!-- 4. Bilanciamento e Gioco -->
-  <script src="js/game.js?v=9"></script>
+  <script src="js/game.js?v=10"></script>
   <!-- 5. Logica Applicativa e Interfaccia -->
-  <script src="js/app.js?v=6"></script>
+  <script src="js/app.js?v=7"></script>
   <!-- 6. Mini-giochi Interattivi -->
-  <script src="js/minigames.js?v=9"></script>
+  <script src="js/minigames.js?v=10"></script>
 
   <!-- Firebase future configuration placeholder (SI, commentato) -->
   <!--

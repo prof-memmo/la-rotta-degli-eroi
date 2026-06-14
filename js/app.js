@@ -1,4 +1,140 @@
 // Eroi in Viaggio - Main Application Controller
+
+// UI Helpers per il Login
+window.showLoginOverlay = function(redirectRoute = null) {
+    const overlay = document.getElementById('login-overlay');
+    if (overlay) overlay.classList.remove('hidden');
+};
+
+window.hideLoginOverlay = function() {
+    const overlay = document.getElementById('login-overlay');
+    if (overlay) overlay.classList.add('hidden');
+};
+
+const LEGAL_TEXTS = {
+    privacy: `
+        <h2>🔒 Privacy Policy</h2>
+        <h3>1. Titolare del trattamento</h3>
+        <p>Il titolare del trattamento è Guglielmo Piersanti, contattabile all’indirizzo email: prof.memmo@gmail.com</p>
+        <h3>2. Finalità del sito</h3>
+        <p>“Palestra di Riflessione” è un’applicazione web didattica, utilizzata a scopo educativo e ludico e senza fini di lucro per l'apprendimento della lingua italiana.</p>
+        <h3>3. Dati raccolti</h3>
+        <p>Il sito può raccogliere i seguenti dati: nome utente (scelto dall'utente); informazioni di utilizzo relative agli esercizi (punteggi, attività completate, progressi); messaggi inviati tramite il modulo di contatto (nome, email, messaggio); dati tecnici minimi per il funzionamento (es. tipo di dispositivo tramite browser).</p>
+        <h3>4. Finalità del trattamento</h3>
+        <p>I dati vengono trattati esclusivamente per consentire l’accesso alle funzionalità della Palestra, gestire l’esperienza didattica personalizzata (come il salvataggio dei progressi e del vocabolario), rispondere alle richieste inviate tramite il modulo di contatto e migliorare il servizio didattico. Non vengono utilizzati per scopi commerciali o pubblicitari.</p>
+        <h3>5. Base giuridica</h3>
+        <p>Il trattamento dei dati si basa sul consenso fornito dall’utente al momento del primo accesso e sull'utilizzo delle funzionalità didattiche del sito.</p>
+        <h3>6. Conservazione dei dati</h3>
+        <p>I dati sono salvati localmente sul browser dell'utente (LocalStorage) e, se implementato, su database sicuri. Non vengono venduti né ceduti a terzi. Sono mantenuti solo per il tempo necessario al funzionamento didattico o fino alla richiesta di cancellazione da parte dell'utente.</p>
+        <h3>8. Diritti dell’utente</h3>
+        <p>L'utente può richiedere in qualsiasi momento l'accesso ai propri dati o la loro cancellazione (che può avvenire anche tramite il proprio profilo utente cancellando i dati locali). Per assistenza, è possibile contattare il titolare all’indirizzo email sopra indicato.</p>
+        <h3>9. Cookie</h3>
+        <p>Il sito non utilizza cookie di profilazione a scopo pubblicitario. Utilizza esclusivamente elementi tecnici necessari per il salvataggio dei progressi di studio.</p>
+        <h3>9. Utenti minori</h3>
+        <p>Il sito è destinato a un uso didattico scolastico. Per l'utilizzo da parte di minori, è responsabilità di un genitore o di un docente assicurare la supervisione necessaria. I tutori possono richiedere la cancellazione dei dati in qualsiasi momento.</p>
+        <h3>10. Modifiche alla Policy</h3>
+        <p>Questa informativa può essere aggiornata per riflettere nuove funzionalità didattiche. Le modifiche rilevanti verranno segnalate agli utenti.</p>
+        <h3>11. Riferimenti normativi</h3>
+        <p>Questa informativa è redatta in conformità ai principi del GDPR.</p>
+    `,
+    terms: `
+        <h2>📜 Termini e Condizioni</h2>
+        <p>Ultimo aggiornamento: 02/05/26</p>
+        <h3>1. Titolare del sito</h3>
+        <p>Il presente sito web "Palestra di Riflessione" è gestito da: Guglielmo Piersanti. Email di contatto: prof.memmo@gmail.com</p>
+        <h3>2. Accettazione dei termini</h3>
+        <p>L’accesso alla Palestra implica l’accettazione dei presenti Termini e Condizioni. Se non si accettano tali condizioni, si invita a non utilizzare il sito.</p>
+        <h3>3. Descrizione del servizio</h3>
+        <p>Il sito offre esercizi interattivi di grammatica, lettura, lessico e produzione per la scuola secondaria di primo grado. Gli utenti possono: svolgere esercizi, monitorare i propri progressi e contattare il gestore per supporto o collaborazione.</p>
+        <h3>4. Utilizzo del sito</h3>
+        <p>L’utente si impegna a utilizzare il sito in modo corretto, evitando comportamenti che possano danneggiare la piattaforma o gli altri utenti. È vietato l'invio di messaggi offensivi o spam tramite il modulo di contatto.</p>
+        <h3>5. Modulo di contatto</h3>
+        <p>L’utente è responsabile dei dati inviati tramite il modulo. Il titolare si riserva il diritto di non rispondere a messaggi non pertinenti o inappropriati.</p>
+        <h3>6. Proprietà intellettuale</h3>
+        <p>I testi e i materiali didattici originali contenuti nel sito sono di proprietà del titolare, salvo dove diversamente indicato (es. fonti letterarie citate). È vietata la riproduzione per scopi commerciali senza autorizzazione.</p>
+        <h3>7. Limitazione di responsabilità</h3>
+        <p>Il sito è fornito a scopo didattico gratuito. Il titolare non è responsabile per eventuali problemi tecnici temporanei o per l'uso improprio delle informazioni contenute. L'obiettivo è fornire uno strumento di supporto all'apprendimento il più accurato possibile.</p>
+        <h3>8. Link esterni</h3>
+        <p>Eventuali link a siti esterni sono forniti per approfondimento didattico; il titolare non è responsabile del contenuto di tali siti.</p>
+        <h3>9. Modifiche</h3>
+        <p>Il titolare può modificare i presenti Termini in base all'evoluzione del progetto didattico.</p>
+        <h3>10. Legge applicabile</h3>
+        <p>I presenti Termini sono regolati dalla normativa italiana.</p>
+    `
+};
+
+
+let _currentLegalType = null;
+let _hasConfirmedPrivacy = false;
+let _hasConfirmedTerms = false;
+
+window.showLegal = function(type) {
+    const modal = document.getElementById('legal-modal');
+    const container = document.getElementById('legal-text-container');
+    if (modal && container) {
+        _currentLegalType = type;
+        container.innerHTML = LEGAL_TEXTS[type] || 'Contenuto non disponibile.';
+        modal.classList.remove('hidden');
+    }
+};
+
+window.hideLegal = function() {
+    const modal = document.getElementById('legal-modal');
+    if (modal) modal.classList.add('hidden');
+};
+
+window.confirmLegal = function() {
+    if (_currentLegalType === 'privacy') _hasConfirmedPrivacy = true;
+    if (_currentLegalType === 'terms') _hasConfirmedTerms = true;
+
+    // Se entrambi confermati, spunta automaticamente la checkbox privacy
+    if (_hasConfirmedPrivacy && _hasConfirmedTerms) {
+        const checkPrivacy = document.getElementById('check-privacy');
+        if (checkPrivacy) checkPrivacy.checked = true;
+    }
+
+    hideLegal();
+};
+
+window.handleEmailLogin = async function() {
+    const checkAge = document.getElementById('login-check-age')?.checked;
+    const checkPrivacy = document.getElementById('login-check-privacy')?.checked;
+    
+    if (!checkAge || !checkPrivacy) {
+        alert("Devi confermare l'età e accettare Privacy Policy e Termini per continuare.");
+        return;
+    }
+
+    const email = (document.getElementById('login-email')?.value || '').trim();
+    const password = (document.getElementById('login-password')?.value || '').trim();
+
+    if (!email || !password) {
+        alert("Inserisci email e password per continuare.");
+        return;
+    }
+
+    const role = document.getElementById('login-role-select')?.value || 'studente';
+    localStorage.setItem('pending_role', role);
+
+    await Auth.loginWithEmail('', email, password);
+};
+
+window.handleGoogleLogin = function() {
+    const checkAge = document.getElementById('login-check-age')?.checked;
+    const checkPrivacy = document.getElementById('login-check-privacy')?.checked;
+    
+    if (!checkAge || !checkPrivacy) {
+        alert("Devi confermare l'età e accettare Privacy Policy e Termini per continuare.");
+        return;
+    }
+
+    const role = document.getElementById('login-role-select')?.value || 'studente';
+    localStorage.setItem('pending_role', role);
+
+    Auth.loginWithGoogle();
+};
+
+
 (function() {
   let currentShopFilter = 'all';
   let activeTeacherTab = 'panoramica';
@@ -143,9 +279,46 @@
       });
     },
 
+    // --- GESTIONE VIDEO ---
+    playIntroVideo: function(onComplete) {
+        const overlay = document.getElementById('intro-video-overlay');
+        const video = document.getElementById('intro-video');
+        if (!overlay || !video) {
+            if (onComplete) onComplete();
+            return;
+        }
+        
+        overlay.style.display = 'flex';
+        video.currentTime = 0;
+        video.play().catch(e => {
+            // Se autoplay fallisce chiudiamo
+            window.EroiApp.skipIntroVideo();
+        });
+        
+        this._videoCompleteCallback = onComplete;
+        video.onended = () => {
+            this.skipIntroVideo();
+        };
+    },
+
+    skipIntroVideo: function() {
+        const overlay = document.getElementById('intro-video-overlay');
+        const video = document.getElementById('intro-video');
+        if (overlay) overlay.style.display = 'none';
+        if (video) video.pause();
+        
+        if (this._videoCompleteCallback) {
+            const cb = this._videoCompleteCallback;
+            this._videoCompleteCallback = null;
+            cb();
+        }
+    },
+
     // --- NAVIGATION & ROUTING ---
     navigateTo: function(viewId) {
-      const user = window.EroiAuth.getCurrentUser();
+      // Use the new Auth object
+      const isLogged = typeof Auth !== 'undefined' && Auth.isLoggedIn ? Auth.isLoggedIn() : false;
+      const user = isLogged ? Auth.getUser() : null;
       
       // Protezione delle rotte in base al ruolo
       const publicViews = ['view-login'];
@@ -153,28 +326,33 @@
       const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento'];
       const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento'];
 
-      if (!user) {
+      if (!isLogged || !user) {
         // Forza login se non autenticato
-        this.switchActiveView('view-login');
+        showLoginOverlay();
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none';
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
+        // Non usiamo più view-login ma nascondiamo le viste
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         return;
       }
 
-      // Se autenticato, blocca l'accesso alla login
-      if (viewId === 'view-login') {
-        if (user.role === 'student' || user.role === 'amico') viewId = 'view-student-dashboard';
-        else if (user.role === 'teacher') viewId = 'view-teacher-dashboard';
+      // Se autenticato, nascondi l'overlay
+      hideLoginOverlay();
+
+      // Se autenticato e chiede login, reindirizza
+      if (viewId === 'view-login' || !viewId) {
+        if (user.role === 'studente' || user.role === 'forestiero') viewId = 'view-student-dashboard';
+        else if (user.role === 'docente') viewId = 'view-teacher-dashboard';
         else if (user.role === 'admin') viewId = 'view-admin-dashboard';
       }
 
       // Controllo permessi ruoli
-      if ((user.role === 'student' || user.role === 'amico') && !studentViews.includes(viewId)) {
+      if ((user.role === 'studente' || user.role === 'forestiero') && !studentViews.includes(viewId)) {
         this.showToast("Accesso negato.", "danger");
         viewId = 'view-student-dashboard';
-      } else if (user.role === 'teacher' && !teacherViews.includes(viewId) && viewId !== 'view-student-dashboard') {
+      } else if (user.role === 'docente' && !teacherViews.includes(viewId) && viewId !== 'view-student-dashboard') {
         // I docenti non possono accedere alla dashboard amministrativa globale o alle viste di gioco studente
         if (adminViews.includes(viewId) && viewId !== 'view-teacher-dashboard' && viewId !== 'view-guides' && viewId !== 'view-regolamento') {
           this.showToast("Accesso negato: Sezione riservata all'Amministratore.", "danger");
@@ -202,7 +380,7 @@
     },
 
     updateNavigationUI: function(viewId) {
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       if (!user) return;
 
       // Hiddiamo sempre la sidebar e mostriamo l'header e la navigazione bottom
@@ -234,7 +412,7 @@
         let levelText = '';
         let dropdownHtml = '';
         
-        if (user.role === 'student' || user.role === 'amico') {
+        if (user.role === 'studente' || user.role === 'forestiero') {
           const profile = window.EroiDB.getStudentProfile(user.email);
           if (profile) {
             const u = window.EroiDB.getUser(user.email);
@@ -311,7 +489,7 @@
           userInfoClick.addEventListener('click', (e) => {
             e.stopPropagation();
             let dashboardView = 'view-student-dashboard';
-            if (user.role === 'teacher') dashboardView = 'view-teacher-dashboard';
+            if (user.role === 'docente') dashboardView = 'view-teacher-dashboard';
             else if (user.role === 'admin') dashboardView = 'view-admin-dashboard';
             this.navigateTo(dashboardView);
           });
@@ -331,7 +509,7 @@
           logoutBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (confirm("Sei sicuro di voler uscire dal gioco?")) {
-              window.EroiAuth.logout();
+              Auth.logout();
               this.showToast("Disconnessione effettuata.", "success");
               this.checkSession();
             }
@@ -344,7 +522,7 @@
 
       let links = [];
 
-      if (user.role === 'student' || user.role === 'amico') {
+      if (user.role === 'studente' || user.role === 'forestiero') {
         links = [
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
@@ -353,7 +531,7 @@
           { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
         ];
-      } else if (user.role === 'teacher') {
+      } else if (user.role === 'docente') {
         links = [
           { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
@@ -411,10 +589,10 @@
       const headerLogo = document.getElementById('header-logo-container');
       if (headerLogo) {
         headerLogo.addEventListener('click', function() {
-          const user = window.EroiAuth.getCurrentUser();
+          const user = Auth.getUser();
           if (user) {
-            if (user.role === 'student' || user.role === 'amico') self.navigateTo('view-student-dashboard');
-            else if (user.role === 'teacher') self.navigateTo('view-teacher-dashboard');
+            if (user.role === 'studente' || user.role === 'forestiero') self.navigateTo('view-student-dashboard');
+            else if (user.role === 'docente') self.navigateTo('view-teacher-dashboard');
             else if (user.role === 'admin') self.navigateTo('view-admin-dashboard');
           }
         });
@@ -536,7 +714,7 @@
       // Pulsante Logout
       document.getElementById('btn-logout').addEventListener('click', function() {
         if (confirm("Sei sicuro di voler uscire dal gioco?")) {
-          window.EroiAuth.logout();
+          Auth.logout();
           self.showToast("Disconnessione effettuata.", "success");
           self.checkSession();
         }
@@ -596,7 +774,7 @@
             unlockedAreas: ["Olimpo"]
           });
 
-          const teacher = window.EroiAuth.getCurrentUser();
+          const teacher = Auth.getUser();
           window.EroiDB.logActivity(teacher.email, `Iscritto lo studente: ${name} (Email: ${email}) nella classe ${classId}. Password temporanea: ${defaultPassword}`);
           self.showToast("Studente iscritto con successo!", "success");
           
@@ -617,7 +795,7 @@
         const school = document.getElementById('new-class-school').value.trim();
         const city = document.getElementById('new-class-city').value.trim();
         
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         
         if (window.EroiDB.getClasses()[id]) {
           alert("Una classe con questo codice ID esiste già.");
@@ -687,7 +865,7 @@
             createdAt: new Date().toISOString()
           };
 
-          const user = window.EroiAuth.getCurrentUser();
+          const user = Auth.getUser();
           window.EroiDB.saveTournament(tournamentId, tournamentData);
           window.EroiDB.logActivity(user.email, `Creato torneo interno: ${name} con classi: ${classIds.join(', ')}`);
           self.showToast("Torneo creato con successo!", "success");
@@ -735,7 +913,7 @@
           ]
         };
 
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.saveMission(id, missionObj);
         window.EroiDB.logActivity(teacher.email, `Creata/Modificata missione ${id}: ${title}`);
         self.showToast("Missione salvata!", "success");
@@ -769,7 +947,7 @@
           active: true
         };
 
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.saveShopItem(id, itemObj);
         window.EroiDB.logActivity(teacher.email, `Salvato oggetto shop: ${name} (Prezzo: ${price} Dracme)`);
         self.showToast("Prodotto salvato nello shop!", "success");
@@ -799,7 +977,7 @@
           desc: desc
         };
 
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.saveArtifact(id, artObj);
         window.EroiDB.logActivity(teacher.email, `Creato/Modificato artefatto leggendario/speciale: ${name}`);
         self.showToast("Artefatto salvato con successo!", "success");
@@ -827,7 +1005,7 @@
           content: content
         };
 
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.saveStudyGuide(id, guideObj);
         window.EroiDB.logActivity(teacher.email, `Pubblicata guida di studio: ${title}`);
         self.showToast("Guida didattica pubblicata!", "success");
@@ -926,7 +1104,7 @@
 
       // Gestione ridimensionamento per ridisegnare la barra navigazione
       window.addEventListener('resize', function() {
-        const user = window.EroiAuth.getCurrentUser();
+        const user = Auth.getUser();
         if (user) {
           self.updateNavigationUI(self.getCurrentViewId());
         }
@@ -939,15 +1117,15 @@
     },
 
     checkSession: function() {
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       if (user) {
         document.getElementById('user-display-name').textContent = user.name;
-        document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : (user.role === 'teacher' ? 'Docente' : (user.role === 'amico' ? 'Forestiero' : 'Studente'));
+        document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : (user.role === 'docente' ? 'Docente' : (user.role === 'forestiero' ? 'Forestiero' : 'Studente'));
         
         // Reindirizza alla dashboard corretta se eravamo fermi alla login
         if (this.getCurrentViewId() === 'view-login') {
-          if (user.role === 'student' || user.role === 'amico') this.navigateTo('view-student-dashboard');
-          else if (user.role === 'teacher') this.navigateTo('view-teacher-dashboard');
+          if (user.role === 'studente' || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
+          else if (user.role === 'docente') this.navigateTo('view-teacher-dashboard');
           else if (user.role === 'admin') this.navigateTo('view-admin-dashboard');
         } else {
           this.navigateTo(this.getCurrentViewId());
@@ -1299,7 +1477,7 @@
 
     clearMissionsFilter: function() {
       currentMissionsFilterArea = null;
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       if (user) {
         this.renderMissionsList(user.email);
       }
@@ -1452,7 +1630,7 @@
     },
 
     startQuiz: function(missionId) {
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       const missions = window.EroiDB.getMissions();
       const m = missions.find(x => x.id === missionId);
       if (!m) return;
@@ -2007,7 +2185,7 @@
           btn.classList.add('active');
         }
       });
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       this.renderShop(user.email);
     },
 
@@ -2365,7 +2543,7 @@
       }
 
       // Gestione Note al Testo (docente) e Appunti Personali (studente)
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
 
       // Se lo schermo è ridotto (es. <= 1024px), scrolla fino alla scheda pergamena
       if (window.innerWidth <= 1024) {
@@ -2628,7 +2806,7 @@
       const studentClassSelect = document.getElementById('new-student-class');
       const filterClassSelect = document.getElementById('filter-class-teacher');
 
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       const filtered = Object.values(classes).filter(c => {
         if (user.role === 'admin') return true;
         return c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
@@ -2649,7 +2827,7 @@
       const tbody = document.querySelector('#teacher-classes-table tbody');
       tbody.innerHTML = '';
 
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       const filtered = Object.values(classes).filter(c => {
         if (user.role === 'admin') return true;
         return c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
@@ -2708,7 +2886,7 @@
       
       tbody.innerHTML = '';
 
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       const classes = window.EroiDB.getClasses();
       const myClassIds = Object.values(classes)
         .filter(c => user.role === 'admin' || c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email)))
@@ -2795,7 +2973,7 @@
       const dracme = Number(document.getElementById('award-dracme-qty').value);
       const artId = document.getElementById('award-artifact-select').value;
       
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
 
       if (xp !== 0) {
         window.EroiGame.addXP(email, xp);
@@ -2853,7 +3031,7 @@
       const email = document.getElementById('sposta-studente-email').value;
       const targetClass = document.getElementById('sposta-studente-select').value;
       
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       
       // Salva
       const user = window.EroiDB.getUser(email);
@@ -2870,7 +3048,7 @@
 
     deleteStudent: function(email, name) {
       if (confirm(`Sei sicuro di voler cancellare definitivamente lo studente ${name}? Tutti i suoi XP, Dracme e inventario verranno distrutti.`)) {
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.deleteUser(email);
         window.EroiDB.logActivity(teacher.email, `Eliminato definitivamente lo studente ${name} (${email})`);
         this.showToast("Studente rimosso.", "success");
@@ -3011,7 +3189,7 @@
       }
 
       window.EroiDB.saveMission(missionId, { title, category, area, desc, rewards: { xp, dracme }, gameType, questions });
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       window.EroiDB.logActivity(teacher.email, `Modificata la missione "${title}" (${missionId})`);
       this.showToast(`Missione "${title}" aggiornata con successo!`, 'success');
       this.resetMissionForm();
@@ -3095,7 +3273,7 @@
 
     deleteMission: function(missionId) {
       const isPreset = window.EroiDB.isPresetMission(missionId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
 
       if (isPreset) {
         if (confirm(`Nascondere la missione preset "${missionId}"?\n\nSarà rimossa dalla lista ma potrai ripristinarla in qualsiasi momento dal pannello "Missioni Nascoste".`)) {
@@ -3117,7 +3295,7 @@
 
     restoreMission: function(missionId) {
       window.EroiDB.restoreMission(missionId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       window.EroiDB.logActivity(teacher.email, `Ripristinata la missione preset ${missionId}`);
       this.showToast('Missione ripristinata ai valori originali.', 'success');
       this.renderTeacherMissions();
@@ -3225,7 +3403,7 @@
       const item = items.find(i => i.id === itemId);
       if (item) {
         item.active = !currentActive;
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.saveShopItem(itemId, item);
         window.EroiDB.logActivity(teacher.email, `${item.active ? 'Attivato' : 'Disattivato'} l'oggetto shop: ${item.name}`);
         this.renderTeacherShop();
@@ -3234,7 +3412,7 @@
 
     deleteShopItem: function(itemId) {
       if (confirm(`Rimuovere l'articolo ${itemId} dallo shop?`)) {
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.deleteShopItem(itemId);
         window.EroiDB.logActivity(teacher.email, `Rimosso l'articolo shop: ${itemId}`);
         this.showToast("Articolo rimosso dallo Shop.", "success");
@@ -3315,7 +3493,7 @@
       const name = h ? h.name : helperId;
       if (confirm(`Nascondere l'aiutante "${name}"?\nPotrà essere ripristinato in qualsiasi momento.`)) {
         window.EroiDB.hideHelper(helperId);
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.logActivity(teacher.email, `Nascosto l'aiutante ${name}`);
         this.showToast('Aiutante nascosto. Puoi ripristinarlo dal cestino.', 'success');
         this.renderTeacherHelpersAndArtifacts();
@@ -3324,7 +3502,7 @@
 
     restoreHelper: function(helperId) {
       window.EroiDB.restoreHelper(helperId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       window.EroiDB.logActivity(teacher.email, `Ripristinato l'aiutante ${helperId}`);
       this.showToast('Aiutante ripristinato ai valori originali.', 'success');
       this.renderTeacherHelpersAndArtifacts();
@@ -3390,7 +3568,7 @@
         h.potereSpeciale = power;
         h.immunita = imm;
         
-        const teacher = window.EroiAuth.getCurrentUser();
+        const teacher = Auth.getUser();
         window.EroiDB.saveHelper(helperId, h);
         window.EroiDB.logActivity(teacher.email, `Personalizzato l'aiutante ${h.name}`);
         this.showToast(`Aiutante ${h.name} configurato!`, "success");
@@ -3399,7 +3577,7 @@
 
     deleteArtifact: function(artId) {
       const isPreset = window.EroiDB.isPresetArtifact(artId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       if (isPreset) {
         if (confirm(`Nascondere l'artefatto preset "${artId}"?\nSarà rimosso dalla lista ma potrai ripristinarlo in qualsiasi momento.`)) {
           window.EroiDB.hideArtifact(artId);
@@ -3419,7 +3597,7 @@
 
     restoreArtifact: function(artId) {
       window.EroiDB.restoreArtifact(artId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       window.EroiDB.logActivity(teacher.email, `Ripristinato l'artefatto preset ${artId}`);
       this.showToast('Artefatto ripristinato ai valori originali.', 'success');
       this.renderTeacherHelpersAndArtifacts();
@@ -3512,7 +3690,7 @@
 
     deleteGuide: function(guideId) {
       const isPreset = window.EroiDB.isPresetStudyGuide(guideId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       if (isPreset) {
         if (confirm(`Nascondere la scheda didattica preset "${guideId}"?\nPotrà essere ripristinata in qualsiasi momento.`)) {
           window.EroiDB.hideStudyGuide(guideId);
@@ -3532,7 +3710,7 @@
 
     restoreGuide: function(guideId) {
       window.EroiDB.restoreStudyGuide(guideId);
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       window.EroiDB.logActivity(teacher.email, `Ripristinata scheda studio preset: ${guideId}`);
       this.showToast('Scheda ripristinata ai valori originali.', 'success');
       this.renderTeacherGuides();
@@ -3622,7 +3800,7 @@
         return;
       }
 
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       if (!user) return;
 
       const dbUser = window.EroiDB.getUser(user.email);
@@ -3647,7 +3825,7 @@
         return;
       }
 
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       if (!user) return;
 
       const dbUser = window.EroiDB.getUser(user.email);
@@ -3675,7 +3853,7 @@
         return;
       }
 
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       if (!teacher) return;
 
       if (targetClass.teacher === teacher.email) {
@@ -3699,7 +3877,7 @@
         return;
       }
 
-      const teacher = window.EroiAuth.getCurrentUser();
+      const teacher = Auth.getUser();
       if (!teacher) return;
 
       window.EroiDB.leaveClassAsCollaborator(classId, teacher.email);
@@ -3719,7 +3897,7 @@
       }
 
       window.EroiDB.deleteTournament(id);
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       window.EroiDB.logActivity(user.email, `Eliminato il torneo interno ${id}.`);
       this.showToast("Torneo eliminato con successo.", "success");
 
@@ -3727,7 +3905,7 @@
     },
 
     renderTeacherTournaments: function() {
-      const user = window.EroiAuth.getCurrentUser();
+      const user = Auth.getUser();
       if (!user) return;
 
       const classes = window.EroiDB.getClasses();
@@ -3906,7 +4084,7 @@
       `).join('');
 
       // Mostra sezione docenti solo a docenti e amministratori
-      if (user.role === 'teacher' || user.role === 'admin') {
+      if (user.role === 'docente' || user.role === 'admin') {
         teachSection.style.display = 'block';
         teachBox.innerHTML = rules.docente.map(r => `
           <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02); border-left:3px solid var(--gold); border-radius:4px;">
@@ -4440,7 +4618,7 @@
       }
 
       if (confirm("Sei sicuro di voler inviare la riflessione? Una volta inviata non potrai più modificarla finché il docente non l'avrà valutata.")) {
-        const studentEmail = window.EroiAuth.getCurrentUser().email;
+        const studentEmail = Auth.getUser().email;
         const entry = {
           id: diaryId,
           studentEmail: studentEmail,
@@ -4480,7 +4658,7 @@
         return;
       }
       
-      const studentEmail = window.EroiAuth.getCurrentUser().email;
+      const studentEmail = Auth.getUser().email;
       const entry = {
         id: selfValId,
         studentEmail: studentEmail,
@@ -4760,7 +4938,7 @@
       }
       
       const feedback = feedbackInput ? feedbackInput.value.trim() : '';
-      const teacherUser = window.EroiAuth.getCurrentUser();
+      const teacherUser = Auth.getUser();
 
       const diaries = window.EroiDB.getDiaries();
       const existing = diaries.find(d => d.id === entryId);
@@ -4795,7 +4973,16 @@
   };
 
   // Inizializza l'applicazione al caricamento del DOM
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
+    if (window.Auth && typeof window.Auth.whenReady === 'function') {
+        await window.Auth.whenReady();
+    }
+    
+    // Ricarica la vista quando l'autenticazione cambia (es. login effettuato)
+    window.addEventListener('authChange', () => {
+        window.EroiApp.checkSession();
+    });
+
     window.EroiApp.init();
   });
 })();
