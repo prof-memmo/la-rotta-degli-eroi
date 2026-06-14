@@ -377,9 +377,17 @@ window.finalizzaDocente = async function() {
             return;
         }
         
-        // Pausa musica di sottofondo se attiva
-        if (window.MusicPlayer && window.MusicPlayer.isPlaying) {
-            window.MusicPlayer.togglePlay();
+        window.introVideoActive = true;
+
+        // Pausa musica di sottofondo se attiva o in fase di caricamento
+        if (window.MusicPlayer) {
+            if (window.MusicPlayer.audioElement) {
+                window.MusicPlayer.audioElement.pause();
+            }
+            window.MusicPlayer.isPlaying = false;
+            if (typeof window.MusicPlayer.updateUI === 'function') {
+                window.MusicPlayer.updateUI();
+            }
         }
         
         overlay.style.display = 'flex';
@@ -406,6 +414,7 @@ window.finalizzaDocente = async function() {
     },
 
     skipIntroVideo: function() {
+        window.introVideoActive = false;
         const overlay = document.getElementById('intro-video-overlay');
         const video = document.getElementById('intro-video');
         if (overlay) overlay.style.display = 'none';
@@ -599,6 +608,10 @@ window.finalizzaDocente = async function() {
         dropdownHtml += `
           <div class="dropdown-divider"></div>
           
+          <div id="dropdown-timer-container" style="display: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center;">
+              <div style="font-size: 0.65rem; color: #ccc; font-weight: bold; margin-bottom: 5px;"><i class="fa-regular fa-clock"></i> TEMPO SESSIONE</div>
+              <div id="dropdown-session-timer" style="font-family: monospace; font-size: 1.2rem; color: var(--gold); font-weight: bold;">--:--</div>
+          </div>
           <div style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                   <span style="font-size: 0.65rem; color: #ccc; font-weight: bold;"><i class="fa-solid fa-music"></i> SOTTOFONDO</span>
@@ -2656,15 +2669,22 @@ window.finalizzaDocente = async function() {
           "ANGELICA", "BRADAMANTE", "RUGGIERO", "MORDRED", "ZEUS", "GIOVE", "ERA", "GIUNONE", "ATENA",
           "MINERVA", "POSEIDONE", "NETTUNO", "APOLLO", "ARTEMIDE", "DIANA", "ARES", "MARTE", "AFRODITE",
           "VENERE", "ERMES", "MERCURIO", "EFESTO", "VULCANO", "ADE", "PLUTONE", "DEMETRA", "CERERE",
-          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO"
+          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO", "RE", "EROE", "DIO", "DEA", "NINFA",
+          "CAVALIERE", "PALADINO", "MAGO", "FATA", "GUERRIERO", "POETA", "CANTORE"
         ];
         const greenTerms = [
           "ILIADE", "ODISSEA", "ENEIDE", "TAVOLA ROTONDA", "SACRO GRAAL", "DURENDAL", "OLIFANTE", "EXCALIBUR", "FIORENTINO",
-          "BUCOLICHE", "GEORGICHE", "CHANSON DE ROLAND"
+          "BUCOLICHE", "GEORGICHE", "CHANSON DE ROLAND", "POEMA", "EPICA", "MITO", "LEGGENDA", "RACCONTO", "OPERA",
+          "FORESTA", "MARE", "OCEANO", "VIAGGIO", "ISOLA", "NATURA", "ALBERO"
         ];
         const orangeTerms = [
           "TROIA", "ROMA", "CARTAGINE", "ITACA", "CAMELOT", "AQUISGRANA", "RONCISVALLE", "VOLGARE", "LETTERATURA", "LAZIO", "CATAI",
-          "LABIRINTO", "PROCI", "ACHEI", "TROIANI"
+          "LABIRINTO", "PROCI", "ACHEI", "TROIANI", "ATENE", "SPARTA", "MICENE", "OLIMPO", "TARTARO", "CAMPI ELISI",
+          "CAVALLO DI TROIA", "REGNO", "IMPERO", "CITTÀ", "MONDO", "TERRA"
+        ];
+        const redTerms = [
+          "GUERRA", "BATTAGLIA", "SANGUE", "MORTE", "VENDETTA", "IRA", "DISTRUZIONE", "NEMICO", "FUOCO", "SPADA", "LANCIA", 
+          "ARMI", "COMBATTIMENTO", "DUELLO", "TRADIMENTO", "INGANNO", "SACRIFICIO", "MOSTRO", "SFIDA", "PERICOLO"
         ];
 
         blueTerms.forEach(term => {
@@ -2678,6 +2698,10 @@ window.finalizzaDocente = async function() {
         orangeTerms.forEach(term => {
           const regex = new RegExp(`\\b${term}\\b`, 'gi');
           content = content.replace(regex, match => `<span style="color: var(--gold); font-weight: bold;">${match}</span>`);
+        });
+        redTerms.forEach(term => {
+          const regex = new RegExp(`\\b${term}\\b`, 'gi');
+          content = content.replace(regex, match => `<span style="color: #dc2626; font-weight: bold;">${match}</span>`);
         });
         content = content.replace(/ARTÙ/g, `<span style="color: #2563eb; font-weight: bold;">ARTÙ</span>`);
       }
@@ -4525,21 +4549,17 @@ window.finalizzaDocente = async function() {
         window.activeDiarioArea = "Accademia";
       }
 
-      const legendHtml = `
-        <div style="font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-          <strong style="color: var(--gold);">LEGENDA:</strong>
-          <span><i class="fa-solid fa-circle" style="color: #22c55e; font-size: 0.6rem; margin-right: 4px;"></i>Completata</span>
-          <span><i class="fa-solid fa-lock" style="color: #ef4444; margin-right: 4px;"></i>Bloccata sulla Mappa</span>
-          <span><i class="fa-solid fa-lock" style="color: var(--text-muted); margin-right: 4px;"></i>Non Attivata dal Docente</span>
-        </div>
-      `;
-      nodeListContainer.innerHTML = legendHtml;
+      // Legenda rimossa
+      nodeListContainer.innerHTML = '';
+
+      const secondTermAreas = ["Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
 
       allAreas.forEach(area => {
         const areaDiaries = diaries.filter(d => d.studentEmail === studentEmail && d.area === area && !d.isSelfEval);
         const count = areaDiaries.length;
-        const isActive = activeDiaries.includes(area);
-        const isUnlockedOnMap = unlockedAreas.includes(area);
+        const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
+        const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area)) && !isSecondTermLocked;
+
         
         let badgeColor = 'rgba(255,255,255,0.1)';
         if (count === 3) badgeColor = 'rgba(16,185,129,0.2)';
@@ -4562,8 +4582,9 @@ window.finalizzaDocente = async function() {
         btn.style.background = activeClass ? 'var(--gold-dark)' : 'rgba(255,255,255,0.03)';
         btn.style.borderColor = activeClass ? 'var(--gold)' : 'rgba(212,175,55,0.15)';
         btn.style.color = activeClass ? '#ffffff' : 'var(--text-color)';
-        if (!isActive || !isUnlockedOnMap) {
-          btn.style.opacity = '0.6';
+        if (!isUnlockedOnMap) {
+          btn.style.opacity = '0.5';
+          btn.style.pointerEvents = 'none'; // Bloccata se non esplorabile
         }
 
         btn.onclick = () => {
@@ -4575,15 +4596,13 @@ window.finalizzaDocente = async function() {
         
         let lockIcon = '';
         if (!isUnlockedOnMap) {
-          lockIcon = '<i class="fa-solid fa-lock" style="font-size: 0.75rem; margin-left: 6px; color: #ef4444;" title="Bloccato sulla Mappa"></i>';
-        } else if (!isActive) {
-          lockIcon = '<i class="fa-solid fa-lock" style="font-size: 0.75rem; margin-left: 6px; color: var(--text-muted);" title="Non attivato dal docente"></i>';
+          lockIcon = '<i class="fa-solid fa-lock" style="font-size: 0.75rem; margin-left: 6px; color: #ef4444;" title="Bloccato"></i>';
         } else if (count >= 3) {
           lockIcon = '<i class="fa-solid fa-circle" style="font-size: 0.5rem; margin-left: 6px; color: #22c55e;" title="Completato"></i>';
         }
 
         btn.innerHTML = `
-          <div style="display: flex; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px;">
             <span>${displayTitle}</span>
             ${lockIcon}
           </div>
@@ -4609,8 +4628,8 @@ window.finalizzaDocente = async function() {
       const tasksContainer = document.getElementById('diario-tasks-container');
       tasksContainer.innerHTML = '';
 
-      const isAreaActive = activeDiaries.includes(area);
-      const isUnlockedOnMap = unlockedAreas.includes(area);
+      const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
+      const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area)) && !isSecondTermLocked;
 
       if (!isUnlockedOnMap) {
         const lockPanel = document.createElement('div');
@@ -4633,15 +4652,7 @@ window.finalizzaDocente = async function() {
         return;
       }
 
-      if (!isAreaActive) {
-        if (!isAreaActive && user.role !== 'docente' && user.role !== 'admin') {
-            const warningAlert = document.createElement('div');
-            warningAlert.className = 'alert alert-warning';
-            warningAlert.style.cssText = "background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #ef4444; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;";
-            warningAlert.innerHTML = `<i class="fa-solid fa-lock" style="font-size: 1.1rem;"></i> Questa sezione del diario non è stata ancora attivata dal docente. Le esplorazioni sono bloccate.`;
-            tasksContainer.appendChild(warningAlert);
-        }
-      }
+      // (isAreaActive check removed as it's merged into isUnlockedOnMap)
 
       const prompts = this.getDiaryPrompts(area);
 

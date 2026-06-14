@@ -402,16 +402,16 @@ body {
   position: relative; /* Fa parte del flusso del documento, non copre nulla */
   left: 0;
   right: 0;
-  min-height: 40px;
+  min-height: 30px;
   background: var(--bg-dark);
   border-top: 1px solid rgba(212, 175, 55, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 10px 20px 10px; /* Ridotto per evitare scroll su login */
+  padding: 5px; /* Molto ridotto */
   z-index: 10;
-  gap: 5px;
+  gap: 2px;
 }
 
 .footer-prof-logo {
@@ -437,7 +437,8 @@ body {
 
 .footer-links {
   display: flex;
-  gap: 20px;
+  gap: 15px;
+  margin-bottom: 2px;
 }
 
 .footer-link {
@@ -892,7 +893,8 @@ h3.panel-title {
 #view-map .section-title {
   margin-top: 0;
   margin-bottom: 8px;
-  border-bottom: none;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+  padding-bottom: 10px;
 }
 
 #view-map p {
@@ -1071,7 +1073,9 @@ h3.panel-title {
 }
 
 .guides-reader {
-  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .btn-back-to-guides {
@@ -1170,6 +1174,12 @@ h3.panel-title {
   z-index: 1000;
   padding: 20px;
   backdrop-filter: blur(5px);
+}
+
+@media (max-width: 768px) {
+  .desktop-timer {
+    display: none !important;
+  }
 }
 
 .modal-overlay.active {
@@ -3830,7 +3840,7 @@ table.game-table tr:hover td {
 
 /* --- NON SCROLL VIEWS ON DESKTOP --- */
 @media (min-width: 1024px) {
-    #view-map, #view-student-dashboard, #view-selezione-profilo {
+    #view-map, #view-selezione-profilo, #view-guides {
         overflow: hidden;
         max-height: calc(100vh - 70px);
     }
@@ -3841,5 +3851,16 @@ table.game-table tr:hover td {
     #view-student-dashboard .profile-card,
     #view-student-dashboard .stat-card {
         max-height: 100%;
+    }
+    
+    #view-student-dashboard .dashboard-grid {
+        gap: 10px;
+    }
+    #view-student-dashboard .glass-panel {
+        margin-bottom: 10px;
+    }
+    #view-student-dashboard .student-header {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
     }
 }

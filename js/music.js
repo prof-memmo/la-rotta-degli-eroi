@@ -32,6 +32,9 @@ const MusicPlayer = {
     togglePlay: function() {
         if (!this.audioElement) this.init();
         
+        // Non avviare la musica se il video introduttivo è in riproduzione
+        if (!this.isPlaying && window.introVideoActive) return;
+        
         if (this.isPlaying) {
             this.audioElement.pause();
             this.isPlaying = false;
