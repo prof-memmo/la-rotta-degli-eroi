@@ -390,7 +390,6 @@ body {
   margin-left: 0;
   margin-top: 70px; /* Altezza dell'header superiore */
   padding: 0; /* Rimosso il padding per consentire viste a tutto schermo (es. mappa) */
-  min-height: calc(100vh - 70px - 64px); /* Sottrae header + bottom-nav */
   display: flex;
   flex-direction: column;
   padding-bottom: 64px; /* Spazio per evitare che il contenuto finisca sotto il dock fisso */
@@ -893,7 +892,7 @@ h3.panel-title {
 #view-map .section-title {
   margin-top: 0;
   margin-bottom: 8px;
-  border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+  border-bottom: 2px solid var(--gold);
   padding-bottom: 10px;
 }
 
@@ -913,7 +912,7 @@ h3.panel-title {
   border-left: none !important;
   border-right: none !important;
   border-bottom: none !important;
-  border-top: 2px solid var(--gold) !important; /* Bordo dorato netto sopra la mappa */
+  border-top: none !important;
   background-color: #1a1510;
   position: relative;
   overflow: hidden;
@@ -1028,10 +1027,26 @@ h3.panel-title {
 }
 
 /* Study Guides Layout */
+#view-guides {
+  overflow: hidden;
+  max-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+}
+
+#view-guides > div {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .guides-container {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 24px;
+  flex: 1;
+  min-height: 0;
 }
 
 .guides-sidebar {
@@ -1042,7 +1057,7 @@ h3.panel-title {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-height: 600px;
+  max-height: 100%;
   overflow-y: auto;
 }
 
@@ -1073,7 +1088,7 @@ h3.panel-title {
 }
 
 .guides-reader {
-  max-height: 600px;
+  max-height: 100%;
   overflow-y: auto;
   padding-right: 10px;
 }
@@ -3840,7 +3855,7 @@ table.game-table tr:hover td {
 
 /* --- NON SCROLL VIEWS ON DESKTOP --- */
 @media (min-width: 1024px) {
-    #view-map, #view-selezione-profilo, #view-guides {
+    #view-map, #view-selezione-profilo {
         overflow: hidden;
         max-height: calc(100vh - 70px);
     }

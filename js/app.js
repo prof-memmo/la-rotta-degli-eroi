@@ -2689,7 +2689,7 @@ window.finalizzaDocente = async function() {
 
         blueTerms.forEach(term => {
           const regex = new RegExp(`\\b${term}\\b`, 'gi');
-          content = content.replace(regex, match => `<span style="color: var(--primary-color); font-weight: bold;">${match}</span>`);
+          content = content.replace(regex, match => `<span style="color: #3b82f6; font-weight: bold;">${match}</span>`);
         });
         greenTerms.forEach(term => {
           const regex = new RegExp(`\\b${term}\\b`, 'gi');
@@ -4558,7 +4558,8 @@ window.finalizzaDocente = async function() {
         const areaDiaries = diaries.filter(d => d.studentEmail === studentEmail && d.area === area && !d.isSelfEval);
         const count = areaDiaries.length;
         const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
-        const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area)) && !isSecondTermLocked;
+        const isTeacherUnlocked = activeDiaries.includes(area);
+        const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area) || isTeacherUnlocked) && !isSecondTermLocked;
 
         
         let badgeColor = 'rgba(255,255,255,0.1)';
@@ -4629,7 +4630,8 @@ window.finalizzaDocente = async function() {
       tasksContainer.innerHTML = '';
 
       const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
-      const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area)) && !isSecondTermLocked;
+      const isTeacherUnlocked = activeDiaries.includes(area);
+      const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area) || isTeacherUnlocked) && !isSecondTermLocked;
 
       if (!isUnlockedOnMap) {
         const lockPanel = document.createElement('div');
@@ -4706,6 +4708,28 @@ window.finalizzaDocente = async function() {
           </p>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <textarea id="ta-${diaryId}" class="form-control" style="width: 100%; height: 100px; resize: none; font-size: 0.9rem; padding: 8px; line-height: 1.4;" placeholder="Scrivi qui la tua riflessione..." ${readOnly ? 'disabled' : ''}>${existing ? existing.text : ''}</textarea>
+            
+            <div style="display: flex; gap: 15px; margin-top: 5px; align-items: center; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <label style="font-size: 0.85rem; color: var(--text-light); margin:0;">L'argomento ti è piaciuto?</label>
+                <select id="sel-liked-${diaryId}" class="form-control" style="padding: 4px 8px; font-size: 0.85rem; width: auto; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.2);" ${readOnly ? 'disabled' : ''}>
+                  <option value="" ${(!existing || !existing.liked) ? 'selected' : ''}>-</option>
+                  <option value="yes" ${existing && existing.liked === 'yes' ? 'selected' : ''}>Sì, molto</option>
+                  <option value="ok" ${existing && existing.liked === 'ok' ? 'selected' : ''}>Abbastanza</option>
+                  <option value="no" ${existing && existing.liked === 'no' ? 'selected' : ''}>Per niente</option>
+                </select>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" id="chk-more-${diaryId}" ${existing && existing.wantMore ? 'checked' : ''} ${readOnly ? 'disabled' : ''} style="cursor: pointer; width: 16px; height: 16px;">
+                <label for="chk-more-${diaryId}" style="font-size: 0.85rem; color: var(--text-light); margin: 0; cursor: pointer;">Desidero approfondirlo</label>
+              </div>
+            </div>
+            
+            <div>
+              <label style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 4px; display: block;">Consigli, migliorie o richieste di aiuto (opzionale):</label>
+              <textarea id="ta-help-${diaryId}" class="form-control" style="width: 100%; height: 50px; resize: none; font-size: 0.85rem; padding: 6px; line-height: 1.4;" placeholder="Scrivi qui se hai bisogno di chiarimenti o hai suggerimenti..." ${readOnly ? 'disabled' : ''}>${existing && existing.helpNotes ? existing.helpNotes : ''}</textarea>
+            </div>
+
             ${!readOnly ? `
               <div style="display: flex; justify-content: flex-end;">
                 <button class="btn btn-primary" style="padding: 6px 15px; font-size: 0.8rem; border-radius: 4px;" onclick="EroiApp.submitDiaryEntry('${diaryId}', '${area}', ${index})">
@@ -4792,6 +4816,9 @@ window.finalizzaDocente = async function() {
           taskIndex: taskIndex,
           text: text,
           submittedAt: new Date().toISOString(),
+          liked: document.getElementById(`sel-liked-${diaryId}`)?.value || '',
+          wantMore: document.getElementById(`chk-more-${diaryId}`)?.checked || false,
+          helpNotes: document.getElementById(`ta-help-${diaryId}`)?.value.trim() || '',
           grade: null,
           feedback: null,
           gradedAt: null,
