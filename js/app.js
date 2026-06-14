@@ -390,6 +390,7 @@ window.finalizzaDocente = async function() {
             }
         }
         
+        document.body.style.overflow = 'hidden';
         overlay.style.display = 'flex';
         video.currentTime = 0;
         video.muted = false; // Forza un-mute iniziale
@@ -419,6 +420,7 @@ window.finalizzaDocente = async function() {
         const video = document.getElementById('intro-video');
         if (overlay) overlay.style.display = 'none';
         if (video) video.pause();
+        document.body.style.overflow = '';
         
         // Riprendi musica di sottofondo se disattivata
         if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
@@ -608,10 +610,6 @@ window.finalizzaDocente = async function() {
         dropdownHtml += `
           <div class="dropdown-divider"></div>
           
-          <div id="dropdown-timer-container" style="display: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center;">
-              <div style="font-size: 0.65rem; color: #ccc; font-weight: bold; margin-bottom: 5px;"><i class="fa-regular fa-clock"></i> TEMPO SESSIONE</div>
-              <div id="dropdown-session-timer" style="font-family: monospace; font-size: 1.2rem; color: var(--gold); font-weight: bold;">--:--</div>
-          </div>
           <div style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                   <span style="font-size: 0.65rem; color: #ccc; font-weight: bold;"><i class="fa-solid fa-music"></i> SOTTOFONDO</span>
@@ -4607,7 +4605,7 @@ window.finalizzaDocente = async function() {
       const activeState = document.getElementById('diario-active-state');
 
       emptyState.style.display = 'none';
-      activeState.style.display = 'block';
+      activeState.style.display = 'flex';
 
       const area = window.activeDiarioArea;
       const displayTitle = areaTitles[area] || area;
@@ -4692,27 +4690,7 @@ window.finalizzaDocente = async function() {
           </p>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <textarea id="ta-${diaryId}" class="form-control" style="width: 100%; height: 100px; resize: none; font-size: 0.9rem; padding: 8px; line-height: 1.4;" placeholder="Scrivi qui la tua riflessione..." ${readOnly ? 'disabled' : ''}>${existing ? existing.text : ''}</textarea>
-            
-            <div style="display: flex; gap: 15px; margin-top: 5px; align-items: center; flex-wrap: wrap;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <label style="font-size: 0.85rem; color: var(--text-light); margin:0;">L'argomento ti è piaciuto?</label>
-                <select id="sel-liked-${diaryId}" class="form-control" style="padding: 4px 8px; font-size: 0.85rem; width: auto; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.2);" ${readOnly ? 'disabled' : ''}>
-                  <option value="" ${(!existing || !existing.liked) ? 'selected' : ''}>-</option>
-                  <option value="yes" ${existing && existing.liked === 'yes' ? 'selected' : ''}>Sì, molto</option>
-                  <option value="ok" ${existing && existing.liked === 'ok' ? 'selected' : ''}>Abbastanza</option>
-                  <option value="no" ${existing && existing.liked === 'no' ? 'selected' : ''}>Per niente</option>
-                </select>
-              </div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="checkbox" id="chk-more-${diaryId}" ${existing && existing.wantMore ? 'checked' : ''} ${readOnly ? 'disabled' : ''} style="cursor: pointer; width: 16px; height: 16px;">
-                <label for="chk-more-${diaryId}" style="font-size: 0.85rem; color: var(--text-light); margin: 0; cursor: pointer;">Desidero approfondirlo</label>
-              </div>
-            </div>
-            
-            <div>
-              <label style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 4px; display: block;">Consigli, migliorie o richieste di aiuto (opzionale):</label>
-              <textarea id="ta-help-${diaryId}" class="form-control" style="width: 100%; height: 50px; resize: none; font-size: 0.85rem; padding: 6px; line-height: 1.4;" placeholder="Scrivi qui se hai bisogno di chiarimenti o hai suggerimenti..." ${readOnly ? 'disabled' : ''}>${existing && existing.helpNotes ? existing.helpNotes : ''}</textarea>
-            </div>
+
 
             ${!readOnly ? `
               <div style="display: flex; justify-content: flex-end;">
@@ -4765,6 +4743,25 @@ window.finalizzaDocente = async function() {
               ${selectOptions}
             </select>
           </div>
+          <div style="display: flex; gap: 15px; margin-top: 5px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="font-size: 0.85rem; color: var(--text-light); margin:0;">L'argomento ti è piaciuto?</label>
+              <select id="sel-liked-${selfValId}" class="form-control" style="padding: 4px 8px; font-size: 0.85rem; width: auto; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.2);" ${isReadOnly ? 'disabled' : ''}>
+                <option value="" ${(!selfVal || !selfVal.liked) ? 'selected' : ''}>-</option>
+                <option value="yes" ${selfVal && selfVal.liked === 'yes' ? 'selected' : ''}>Sì, molto</option>
+                <option value="ok" ${selfVal && selfVal.liked === 'ok' ? 'selected' : ''}>Abbastanza</option>
+                <option value="no" ${selfVal && selfVal.liked === 'no' ? 'selected' : ''}>Per niente</option>
+              </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <input type="checkbox" id="chk-more-${selfValId}" ${selfVal && selfVal.wantMore ? 'checked' : ''} ${isReadOnly ? 'disabled' : ''} style="cursor: pointer; width: 16px; height: 16px;">
+              <label for="chk-more-${selfValId}" style="font-size: 0.85rem; color: var(--text-light); margin: 0; cursor: pointer;">Desidero approfondirlo</label>
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 4px; display: block;">Consigli, migliorie o richieste di aiuto (opzionale):</label>
+            <textarea id="ta-help-${selfValId}" class="form-control" style="width: 100%; height: 50px; resize: none; font-size: 0.85rem; padding: 6px; line-height: 1.4; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.15);" placeholder="Scrivi qui se hai bisogno di chiarimenti o hai suggerimenti..." ${isReadOnly ? 'disabled' : ''}>${selfVal && selfVal.helpNotes ? selfVal.helpNotes : ''}</textarea>
+          </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--gold); display: block; margin-bottom: 4px;"><strong>Come stai affrontando lo studio di questa sezione?</strong></label>
             <textarea id="ta-study-${selfValId}" class="form-control" style="width: 100%; height: 80px; resize: none; font-size: 0.9rem; padding: 8px; line-height: 1.4; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px;" placeholder="Descrivi brevemente il tuo metodo (es. riassunti, schemi, ripasso a gruppi)..." ${isReadOnly ? 'disabled' : ''}>${selfVal ? selfVal.studyMethod : ''}</textarea>
@@ -4800,9 +4797,9 @@ window.finalizzaDocente = async function() {
           taskIndex: taskIndex,
           text: text,
           submittedAt: new Date().toISOString(),
-          liked: document.getElementById(`sel-liked-${diaryId}`)?.value || '',
-          wantMore: document.getElementById(`chk-more-${diaryId}`)?.checked || false,
-          helpNotes: document.getElementById(`ta-help-${diaryId}`)?.value.trim() || '',
+          liked: '',
+          wantMore: false,
+          helpNotes: '',
           grade: null,
           feedback: null,
           gradedAt: null,
@@ -4843,6 +4840,9 @@ window.finalizzaDocente = async function() {
         isSelfEval: true,
         favoriteCharacter: charVal,
         studyMethod: textVal,
+        liked: document.getElementById(`sel-liked-${selfValId}`)?.value || '',
+        wantMore: document.getElementById(`chk-more-${selfValId}`)?.checked || false,
+        helpNotes: document.getElementById(`ta-help-${selfValId}`)?.value.trim() || '',
         submittedAt: new Date().toISOString()
       };
       
