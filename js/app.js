@@ -595,10 +595,10 @@ window.finalizzaDocente = async function() {
           </div>
           
           <div class="dropdown-actions" style="display: flex; gap: 5px;">
-            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.65rem; padding: 6px; flex: 1;">
+            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.55rem; padding: 4px; flex: 1;">
               <i class="fa-solid fa-volume-high"></i> Effetti
             </button>
-            <button class="btn btn-danger btn-logout-action" style="font-size: 0.65rem; padding: 6px; flex: 1;">
+            <button class="btn btn-danger btn-logout-action" style="font-size: 0.55rem; padding: 4px; flex: 1;">
               <i class="fa-solid fa-power-off"></i> Esci
             </button>
           </div>

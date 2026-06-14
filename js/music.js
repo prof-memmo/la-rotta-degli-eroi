@@ -35,23 +35,53 @@ const MusicPlayer = {
         if (this.isPlaying) {
             this.audioElement.pause();
             this.isPlaying = false;
+            this.updateUI();
         } else {
-            this.audioElement.play().catch(e => console.log("Autoplay prevented", e));
-            this.isPlaying = true;
+            const playPromise = this.audioElement.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    this.isPlaying = true;
+                    this.updateUI();
+                }).catch(e => {
+                    console.log("Autoplay prevented", e);
+                    this.isPlaying = false;
+                    this.updateUI();
+                });
+            } else {
+                this.isPlaying = true;
+                this.updateUI();
+            }
         }
-        this.updateUI();
     },
 
     nextTrack: function() {
         if (!this.audioElement) this.init();
         this.loadTrack(this.currentTrackIndex + 1);
-        if (this.isPlaying) this.audioElement.play();
+        if (this.isPlaying) {
+            const playPromise = this.audioElement.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.log("Autoplay prevented", e);
+                    this.isPlaying = false;
+                    this.updateUI();
+                });
+            }
+        }
     },
 
     prevTrack: function() {
         if (!this.audioElement) this.init();
         this.loadTrack(this.currentTrackIndex - 1);
-        if (this.isPlaying) this.audioElement.play();
+        if (this.isPlaying) {
+            const playPromise = this.audioElement.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.log("Autoplay prevented", e);
+                    this.isPlaying = false;
+                    this.updateUI();
+                });
+            }
+        }
     },
 
     updateUI: function() {

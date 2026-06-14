@@ -112,7 +112,7 @@ const SessionTimer = {
                 el = document.createElement('div');
                 el.id = 'student-session-timer';
                 el.style.cssText = "margin-left: 15px; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; color: var(--gold); font-family: monospace; font-weight: bold; border: 1px solid var(--gold); font-size: 1.1rem; display: flex; align-items: center; gap: 5px;";
-                headerLogo.parentNode.insertBefore(el, headerLogo.nextSibling);
+                headerLogo.appendChild(el);
             }
         }
         if (el) {
