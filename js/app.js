@@ -642,74 +642,7 @@ window.handleGoogleLogin = function() {
         }
       });
 
-      // Form Login
-      document.getElementById('form-login-submit').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const pass = document.getElementById('login-password').value;
-        try {
-          const session = await window.EroiAuth.login(email, pass);
-          self.showToast(`Benvenuto, ${session.name}!`, "success");
-          self.checkSession();
-        } catch (err) {
-          self.showToast(err.message, "danger");
-        }
-      });
 
-      // Toggle Login / Registrazione Forestiero
-      const linkShowRegister = document.getElementById('link-show-register');
-      const linkShowLogin = document.getElementById('link-show-login');
-      const formLogin = document.getElementById('form-login-submit');
-      const formRegister = document.getElementById('form-register-submit');
-
-      if (linkShowRegister && linkShowLogin && formLogin && formRegister) {
-        linkShowRegister.addEventListener('click', function() {
-          formLogin.style.display = 'none';
-          formRegister.style.display = 'block';
-        });
-        linkShowLogin.addEventListener('click', function() {
-          formRegister.style.display = 'none';
-          formLogin.style.display = 'block';
-        });
-      }
-
-      // Registrazione Forestiero (Ospite / Amico)
-      if (formRegister) {
-        formRegister.addEventListener('submit', async function(e) {
-          e.preventDefault();
-          const name = document.getElementById('register-name').value;
-          const email = document.getElementById('register-email').value;
-          const password = document.getElementById('register-password').value;
-          const avatar = document.getElementById('register-avatar').value;
-
-          try {
-            const session = await window.EroiAuth.register(name, email, password, avatar);
-            self.showToast(`Benvenuto, ${session.name}! Registrato come Forestiero.`, "success");
-            
-            document.getElementById('register-name').value = '';
-            document.getElementById('register-email').value = '';
-            document.getElementById('register-password').value = '';
-            
-            self.checkSession();
-          } catch (err) {
-            self.showToast(err.message, "danger");
-          }
-        });
-      }
-
-
-      // Recupero Password
-      document.getElementById('link-recover-password').addEventListener('click', async function() {
-        const email = prompt("Inserisci la tua email scolastica per ricevere il link di ripristino:");
-        if (email) {
-          try {
-            await window.EroiAuth.recoverPassword(email);
-            alert("Simulazione: È stata inviata un'email di ripristino della password a " + email);
-          } catch (err) {
-            alert("Errore: " + err.message);
-          }
-        }
-      });
 
       // Pulsante Logout
       document.getElementById('btn-logout').addEventListener('click', function() {
