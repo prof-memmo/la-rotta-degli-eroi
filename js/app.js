@@ -423,6 +423,11 @@ window.finalizzaDocente = async function() {
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
         
+        // Listener handles view switch
+        if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
+            window.MusicPlayer.togglePlay();
+        }
+        
         // Genera i bottoni disabilitati per il login
         this.generateNavbarLinks(null);
         
@@ -471,6 +476,12 @@ window.finalizzaDocente = async function() {
 
       // Innesca il rendering specifico della vista caricata
       this.renderViewData(viewId, user);
+      
+      // Video Intro per studenti (solo prima volta per sessione)
+      if (viewId === 'view-student-dashboard' && user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed')) {
+          sessionStorage.setItem('introVideoPlayed', 'true');
+          this.playIntroVideo();
+      }
     },
 
     switchActiveView: function(viewId) {
@@ -567,11 +578,27 @@ window.finalizzaDocente = async function() {
         // Aggiungi azioni comuni in fondo al dropdown
         dropdownHtml += `
           <div class="dropdown-divider"></div>
-          <div class="dropdown-actions">
-            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.75rem; padding: 8px;">
-              <i class="fa-solid fa-volume-high"></i> Suoni
+          
+          <div style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 0.65rem; color: #ccc; font-weight: bold;"><i class="fa-solid fa-music"></i> SOTTOFONDO</span>
+                  <a href="https://freetouse.com/music" target="_blank" style="font-size: 0.5rem; color: var(--gold); text-decoration: none;">freetouse.com/music</a>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 5px 8px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.3);">
+                  <div id="music-track-title" style="font-size: 0.65rem; color: white; white-space: nowrap; max-width: 90px; overflow: hidden; text-overflow: ellipsis;">Traccia...</div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                      <button onclick="MusicPlayer.prevTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-backward-step"></i></button>
+                      <button id="music-play-btn" onclick="MusicPlayer.togglePlay()" style="background: var(--gold); border: none; color: #1a1a2e; cursor: pointer; font-size: 0.7rem; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-play"></i></button>
+                      <button onclick="MusicPlayer.nextTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-forward-step"></i></button>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="dropdown-actions" style="display: flex; gap: 5px;">
+            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.65rem; padding: 6px; flex: 1;">
+              <i class="fa-solid fa-volume-high"></i> Effetti
             </button>
-            <button class="btn btn-danger btn-logout-action" style="font-size: 0.75rem; padding: 8px;">
+            <button class="btn btn-danger btn-logout-action" style="font-size: 0.65rem; padding: 6px; flex: 1;">
               <i class="fa-solid fa-power-off"></i> Esci
             </button>
           </div>
@@ -589,6 +616,9 @@ window.finalizzaDocente = async function() {
         `;
         
         profileDropdown.innerHTML = dropdownHtml;
+        if (window.MusicPlayer) {
+            window.MusicPlayer.updateUI();
+        }
 
         const userInfoClick = profileWidget.querySelector('#header-user-info-click');
         if (userInfoClick) {
@@ -703,6 +733,7 @@ window.finalizzaDocente = async function() {
           e.stopPropagation();
           const isHidden = profileDropdown.style.display === 'none';
           profileDropdown.style.display = isHidden ? 'block' : 'none';
+          if (window.MusicPlayer) window.MusicPlayer.updateUI();
         });
         
         document.addEventListener('click', function() {
@@ -1181,6 +1212,11 @@ window.finalizzaDocente = async function() {
     checkSession: function() {
       const user = Auth.getUser();
       if (user) {
+        // Handle auto-play on session restoration
+        if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
+            window.MusicPlayer.togglePlay();
+        }
+        
         document.getElementById('user-display-name').textContent = user.name;
         document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : (user.role === 'docente' ? 'Docente' : (user.role === 'forestiero' ? 'Forestiero' : 'Studente'));
         
@@ -2584,12 +2620,8 @@ window.finalizzaDocente = async function() {
         content = content.substring("Biografia:".length).trim();
       }
 
-      // Applica l'uppercase e l'evidenziazione se NON è una lezione dell'inizio del viaggio
+      // Evidenziazione parole chiave (mantenendo il case originale)
       if (g.category !== "L'inizio del viaggio") {
-        // Converti in maiuscolo
-        content = content.toUpperCase();
-
-        // Parole chiave da evidenziare
         const blueTerms = [
           "OMERO", "VIRGILIO", "TUROLDO", "CHRÉTIEN DE TROYES", "PROMETEO", "ERACLE", "ERCOLE", 
           "TESEO", "MINOTAURO", "PERSEO", "MEDUSA", "ACHILLE", "ETTORE", "PATROCLO", "PRIAMO", 
@@ -2601,26 +2633,28 @@ window.finalizzaDocente = async function() {
           "ANGELICA", "BRADAMANTE", "RUGGIERO", "MORDRED", "ZEUS", "GIOVE", "ERA", "GIUNONE", "ATENA",
           "MINERVA", "POSEIDONE", "NETTUNO", "APOLLO", "ARTEMIDE", "DIANA", "ARES", "MARTE", "AFRODITE",
           "VENERE", "ERMES", "MERCURIO", "EFESTO", "VULCANO", "ADE", "PLUTONE", "DEMETRA", "CERERE",
-          "ESTIA", "VESTA", "DIONISO", "BACCO"
+          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO"
         ];
         const greenTerms = [
-          "ILIADE", "ODISSEA", "ENEIDE", "TAVOLA ROTONDA", "SACRO GRAAL", "DURENDAL", "OLIFANTE", "EXCALIBUR", "FIORENTINO"
+          "ILIADE", "ODISSEA", "ENEIDE", "TAVOLA ROTONDA", "SACRO GRAAL", "DURENDAL", "OLIFANTE", "EXCALIBUR", "FIORENTINO",
+          "BUCOLICHE", "GEORGICHE", "CHANSON DE ROLAND"
         ];
         const orangeTerms = [
-          "TROIA", "ROMA", "CARTAGINE", "ITACA", "CAMELOT", "AQUISGRANA", "RONCISVALLE", "VOLGARE", "LETTERATURA", "LAZIO", "CATAI"
+          "TROIA", "ROMA", "CARTAGINE", "ITACA", "CAMELOT", "AQUISGRANA", "RONCISVALLE", "VOLGARE", "LETTERATURA", "LAZIO", "CATAI",
+          "LABIRINTO", "PROCI", "ACHEI", "TROIANI"
         ];
 
         blueTerms.forEach(term => {
-          const regex = new RegExp(`\\b${term}\\b`, 'g');
-          content = content.replace(regex, `<span style="color: #2563eb; font-weight: bold;">${term}</span>`);
+          const regex = new RegExp(`\\b${term}\\b`, 'gi');
+          content = content.replace(regex, match => `<span style="color: var(--primary-color); font-weight: bold;">${match}</span>`);
         });
         greenTerms.forEach(term => {
-          const regex = new RegExp(`\\b${term}\\b`, 'g');
-          content = content.replace(regex, `<span style="color: #16a34a; font-weight: bold;">${term}</span>`);
+          const regex = new RegExp(`\\b${term}\\b`, 'gi');
+          content = content.replace(regex, match => `<span style="color: #16a34a; font-weight: bold;">${match}</span>`);
         });
         orangeTerms.forEach(term => {
-          const regex = new RegExp(`\\b${term}\\b`, 'g');
-          content = content.replace(regex, `<span style="color: #ea580c; font-weight: bold;">${term}</span>`);
+          const regex = new RegExp(`\\b${term}\\b`, 'gi');
+          content = content.replace(regex, match => `<span style="color: var(--gold); font-weight: bold;">${match}</span>`);
         });
         content = content.replace(/ARTÙ/g, `<span style="color: #2563eb; font-weight: bold;">ARTÙ</span>`);
       }
@@ -4468,6 +4502,16 @@ window.finalizzaDocente = async function() {
         window.activeDiarioArea = "Accademia";
       }
 
+      const legendHtml = `
+        <div style="font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+          <strong style="color: var(--gold);">LEGENDA:</strong>
+          <span><i class="fa-solid fa-circle" style="color: #22c55e; font-size: 0.6rem; margin-right: 4px;"></i>Completata</span>
+          <span><i class="fa-solid fa-lock" style="color: #ef4444; margin-right: 4px;"></i>Bloccata sulla Mappa</span>
+          <span><i class="fa-solid fa-lock" style="color: var(--text-muted); margin-right: 4px;"></i>Non Attivata dal Docente</span>
+        </div>
+      `;
+      nodeListContainer.innerHTML = legendHtml;
+
       allAreas.forEach(area => {
         const areaDiaries = diaries.filter(d => d.studentEmail === studentEmail && d.area === area && !d.isSelfEval);
         const count = areaDiaries.length;
@@ -4508,9 +4552,11 @@ window.finalizzaDocente = async function() {
         
         let lockIcon = '';
         if (!isUnlockedOnMap) {
-          lockIcon = '<i class="fa-solid fa-map-pin" style="font-size: 0.75rem; margin-left: 6px; color: #ef4444;" title="Bloccato sulla Mappa"></i>';
+          lockIcon = '<i class="fa-solid fa-lock" style="font-size: 0.75rem; margin-left: 6px; color: #ef4444;" title="Bloccato sulla Mappa"></i>';
         } else if (!isActive) {
           lockIcon = '<i class="fa-solid fa-lock" style="font-size: 0.75rem; margin-left: 6px; color: var(--text-muted);" title="Non attivato dal docente"></i>';
+        } else if (count >= 3) {
+          lockIcon = '<i class="fa-solid fa-circle" style="font-size: 0.5rem; margin-left: 6px; color: #22c55e;" title="Completato"></i>';
         }
 
         btn.innerHTML = `
@@ -4565,21 +4611,13 @@ window.finalizzaDocente = async function() {
       }
 
       if (!isAreaActive) {
-        const warningAlert = document.createElement('div');
-        warningAlert.className = 'alert alert-warning';
-        warningAlert.style.background = 'rgba(245, 158, 11, 0.15)';
-        warningAlert.style.border = '1px solid rgb(245, 158, 11)';
-        warningAlert.style.color = '#f59e0b';
-        warningAlert.style.padding = '12px 16px';
-        warningAlert.style.borderRadius = '8px';
-        warningAlert.style.marginBottom = '20px';
-        warningAlert.style.fontWeight = '500';
-        warningAlert.style.display = 'flex';
-        warningAlert.style.alignItems = 'center';
-        warningAlert.style.gap = '10px';
-        warningAlert.style.fontSize = '0.9rem';
-        warningAlert.innerHTML = `<i class="fa-solid fa-lock" style="font-size: 1.1rem;"></i> Questa sezione del diario non è stata ancora attivata dal docente. Puoi visualizzare i quesiti ma non puoi inviare riflessioni.`;
-        tasksContainer.appendChild(warningAlert);
+        if (!isAreaActive && user.role !== 'docente' && user.role !== 'admin') {
+            const warningAlert = document.createElement('div');
+            warningAlert.className = 'alert alert-warning';
+            warningAlert.style.cssText = "background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #ef4444; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;";
+            warningAlert.innerHTML = `<i class="fa-solid fa-lock" style="font-size: 1.1rem;"></i> Questa sezione del diario non è stata ancora attivata dal docente. Le esplorazioni sono bloccate.`;
+            tasksContainer.appendChild(warningAlert);
+        }
       }
 
       const prompts = this.getDiaryPrompts(area);

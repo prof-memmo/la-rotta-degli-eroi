@@ -107,12 +107,12 @@ const SessionTimer = {
         
         let el = document.getElementById('student-session-timer');
         if (!el) {
-            const header = document.querySelector('.header-profile-container');
-            if (header) {
+            const headerLogo = document.querySelector('.header-logo-container');
+            if (headerLogo) {
                 el = document.createElement('div');
                 el.id = 'student-session-timer';
-                el.style.cssText = "margin-right: 15px; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; color: var(--gold); font-family: monospace; font-weight: bold; border: 1px solid var(--gold); font-size: 1.1rem; display: flex; align-items: center; gap: 5px;";
-                header.insertBefore(el, header.firstChild);
+                el.style.cssText = "margin-left: 15px; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; color: var(--gold); font-family: monospace; font-weight: bold; border: 1px solid var(--gold); font-size: 1.1rem; display: flex; align-items: center; gap: 5px;";
+                headerLogo.parentNode.insertBefore(el, headerLogo.nextSibling);
             }
         }
         if (el) {
