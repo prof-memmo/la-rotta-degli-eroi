@@ -1,12 +1,12 @@
 // Configurazione Firebase: LA ROTTA DEGLI EROI
 // INSERISCI QUI LE CHIAVI DEL TUO NUOVO PROGETTO FIREBASE QUANDO LO CREERAI
 const firebaseConfig = {
-    apiKey: "INSERISCI_QUI_LA_TUA_API_KEY",
-    authDomain: "INSERISCI_QUI_IL_TUO_AUTH_DOMAIN",
-    projectId: "INSERISCI_QUI_IL_TUO_PROJECT_ID",
-    storageBucket: "INSERISCI_QUI_IL_TUO_STORAGE_BUCKET",
-    messagingSenderId: "INSERISCI_QUI_IL_TUO_MESSAGING_SENDER_ID",
-    appId: "INSERISCI_QUI_IL_TUO_APP_ID"
+    apiKey: "AIzaSyCVCg9G6RbDDYMoQ0oWCs2Z9-1iFBSZZ5A",
+    authDomain: "la-rotta-degli-eroi.firebaseapp.com",
+    projectId: "la-rotta-degli-eroi",
+    storageBucket: "la-rotta-degli-eroi.firebasestorage.app",
+    messagingSenderId: "947694535022",
+    appId: "1:947694535022:web:905d6739ebe61fe27f417f"
 };
 
 // Inizializza Firebase
