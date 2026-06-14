@@ -1030,8 +1030,11 @@ h3.panel-title {
 #view-guides {
   overflow: hidden;
   max-height: calc(100vh - 70px);
-  display: flex;
   flex-direction: column;
+}
+
+#view-guides.active {
+  display: flex;
 }
 
 #view-guides > div {
@@ -1856,9 +1859,7 @@ table.game-table tr:hover td {
 }
 
 .dropdown-actions .btn {
-  flex: 1;
-  padding: 8px 12px;
-  font-size: 0.75rem;
+  /* Override default padding per permettere i padding inline */
 }
 
 /* ==========================================

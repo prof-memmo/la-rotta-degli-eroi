@@ -627,11 +627,11 @@ window.finalizzaDocente = async function() {
               </div>
           </div>
           
-          <div class="dropdown-actions" style="display: flex; gap: 5px;">
-            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.55rem; padding: 4px; flex: 1;">
+          <div class="dropdown-actions" style="display: flex; gap: 10px; justify-content: center;">
+            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.65rem; padding: 4px 10px; min-width: 80px;">
               <i class="fa-solid fa-volume-high"></i> Effetti
             </button>
-            <button class="btn btn-danger btn-logout-action" style="font-size: 0.55rem; padding: 4px; flex: 1;">
+            <button class="btn btn-danger btn-logout-action" style="font-size: 0.65rem; padding: 4px 10px; min-width: 80px;">
               <i class="fa-solid fa-power-off"></i> Esci
             </button>
           </div>
@@ -2669,22 +2669,15 @@ window.finalizzaDocente = async function() {
           "ANGELICA", "BRADAMANTE", "RUGGIERO", "MORDRED", "ZEUS", "GIOVE", "ERA", "GIUNONE", "ATENA",
           "MINERVA", "POSEIDONE", "NETTUNO", "APOLLO", "ARTEMIDE", "DIANA", "ARES", "MARTE", "AFRODITE",
           "VENERE", "ERMES", "MERCURIO", "EFESTO", "VULCANO", "ADE", "PLUTONE", "DEMETRA", "CERERE",
-          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO", "RE", "EROE", "DIO", "DEA", "NINFA",
-          "CAVALIERE", "PALADINO", "MAGO", "FATA", "GUERRIERO", "POETA", "CANTORE"
+          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO"
         ];
         const greenTerms = [
           "ILIADE", "ODISSEA", "ENEIDE", "TAVOLA ROTONDA", "SACRO GRAAL", "DURENDAL", "OLIFANTE", "EXCALIBUR", "FIORENTINO",
-          "BUCOLICHE", "GEORGICHE", "CHANSON DE ROLAND", "POEMA", "EPICA", "MITO", "LEGGENDA", "RACCONTO", "OPERA",
-          "FORESTA", "MARE", "OCEANO", "VIAGGIO", "ISOLA", "NATURA", "ALBERO"
+          "BUCOLICHE", "GEORGICHE", "CHANSON DE ROLAND"
         ];
         const orangeTerms = [
           "TROIA", "ROMA", "CARTAGINE", "ITACA", "CAMELOT", "AQUISGRANA", "RONCISVALLE", "VOLGARE", "LETTERATURA", "LAZIO", "CATAI",
-          "LABIRINTO", "PROCI", "ACHEI", "TROIANI", "ATENE", "SPARTA", "MICENE", "OLIMPO", "TARTARO", "CAMPI ELISI",
-          "CAVALLO DI TROIA", "REGNO", "IMPERO", "CITTÀ", "MONDO", "TERRA"
-        ];
-        const redTerms = [
-          "GUERRA", "BATTAGLIA", "SANGUE", "MORTE", "VENDETTA", "IRA", "DISTRUZIONE", "NEMICO", "FUOCO", "SPADA", "LANCIA", 
-          "ARMI", "COMBATTIMENTO", "DUELLO", "TRADIMENTO", "INGANNO", "SACRIFICIO", "MOSTRO", "SFIDA", "PERICOLO"
+          "LABIRINTO", "PROCI", "ACHEI", "TROIANI"
         ];
 
         blueTerms.forEach(term => {
@@ -2698,10 +2691,6 @@ window.finalizzaDocente = async function() {
         orangeTerms.forEach(term => {
           const regex = new RegExp(`\\b${term}\\b`, 'gi');
           content = content.replace(regex, match => `<span style="color: var(--gold); font-weight: bold;">${match}</span>`);
-        });
-        redTerms.forEach(term => {
-          const regex = new RegExp(`\\b${term}\\b`, 'gi');
-          content = content.replace(regex, match => `<span style="color: #dc2626; font-weight: bold;">${match}</span>`);
         });
         content = content.replace(/ARTÙ/g, `<span style="color: #2563eb; font-weight: bold;">ARTÙ</span>`);
       }
@@ -4690,12 +4679,7 @@ window.finalizzaDocente = async function() {
             readOnly = true;
           }
         } else {
-          if (isAreaActive) {
-            statusBadge = `<span class="badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted); font-size: 0.75rem; padding: 3px 8px;"><i class="fa-regular fa-pen-to-square"></i> Da completare</span>`;
-          } else {
-            statusBadge = `<span class="badge" style="background: rgba(239,68,68,0.15); border: 1px solid rgb(239,68,68); color: #ef4444; font-size: 0.75rem; padding: 3px 8px;"><i class="fa-solid fa-lock"></i> Disattivato</span>`;
-            readOnly = true;
-          }
+          statusBadge = `<span class="badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted); font-size: 0.75rem; padding: 3px 8px;"><i class="fa-regular fa-pen-to-square"></i> Da completare</span>`;
         }
 
         taskCard.innerHTML = `
