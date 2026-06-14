@@ -147,7 +147,7 @@
           <div class="glass" style="padding: 20px; margin-top: 30px; max-width: 500px; margin-left: auto; margin-right: auto;" id="login-section">
               <p class="text-center" style="font-size: 0.9rem; color: #fff; margin-bottom: 15px;">Accedi per iniziare a giocare.</p>
               
-              <div class="consent-group mb-2" style="margin-bottom: 15px; text-align: left;">
+              <div class="consent-group mb-2" style="margin-bottom: 20px; text-align: left;">
                   <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; margin-bottom: 10px; cursor: pointer;">
                       <input type="checkbox" id="welcome-check-age">
                       <span class="checkmark"></span>
@@ -160,16 +160,17 @@
                   </label>
               </div>
 
-              <div id="login-email-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                  <input type="email" id="login-email" placeholder="Email (es: prof.memmo@gmail.com)" style="padding: 12px; border-radius: 5px; border: 1px solid #ddd; background: rgba(255,255,255,0.9);">
-                  <input type="password" id="login-password" placeholder="Password (es: password123)" style="padding: 12px; border-radius: 5px; border: 1px solid #ddd; background: rgba(255,255,255,0.9);">
-                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-weight: bold; border-radius: 5px; padding: 12px;" onclick="window.handleEmailLogin()">Accedi con Email</button>
-              </div>
-              <div style="text-align: center; color: #ddd; margin-bottom: 15px; font-size: 0.85rem;">oppure</div>
-
-              <button type="button" class="btn" style="background: #fff; color: #444; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s;" onclick="window.handleGoogleLogin()">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24" height="24"> Entra con Google
+              <button type="button" class="btn" style="background: #fff; color: #444; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s; margin-bottom: 20px;" onclick="window.handleGoogleLogin()">
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="28" height="28"> Accedi con Google
               </button>
+
+              <div style="text-align: center; color: #ddd; margin-bottom: 20px; font-size: 0.95rem; font-weight: bold;">— OPPURE —</div>
+
+              <div id="login-email-form" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;">
+                  <input type="email" id="login-email" placeholder="Email (es: prof.memmo@gmail.com)" style="padding: 15px; border-radius: 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1.1rem;">
+                  <input type="password" id="login-password" placeholder="Password (es: password123)" style="padding: 15px; border-radius: 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1.1rem;">
+                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-weight: bold; border-radius: 10px; padding: 15px; font-size: 1.2rem;" onclick="window.handleEmailLogin()">Accedi con Email</button>
+              </div>
               
               <p class="text-center mt-2" style="font-size: 0.75rem; color: #aaa; margin-top: 15px;">Se è il tuo primo accesso, verrai guidato alla selezione del profilo.</p>
           </div>
@@ -177,6 +178,7 @@
 
       <!-- VIEW: Onboarding -->
       <section id="view-onboarding" class="view">
+          <button class="btn btn-secondary" onclick="window.EroiApp.switchActiveView('view-welcome')" style="margin-bottom: 15px; align-self: flex-start;"><i class="fa-solid fa-arrow-left"></i> Indietro</button>
           <h2 class="text-center mb-2" style="color: var(--gold);">Scegli il tuo profilo</h2>
           <p class="text-center" style="font-size: 0.95rem; margin-bottom: 20px; color: #ddd;">Seleziona il ruolo con cui vuoi partecipare a La Rotta degli Eroi.</p>
           
@@ -206,6 +208,7 @@
 
       <!-- VIEW: Selezione Profilo Studente -->
       <section id="view-selezione-profilo" class="view">
+          <button class="btn btn-secondary" onclick="window.EroiApp.switchActiveView('view-onboarding')" style="margin-bottom: 15px; align-self: flex-start;"><i class="fa-solid fa-arrow-left"></i> Indietro</button>
           <h2 class="text-center mb-2" style="color: var(--gold);">La Tua Origine</h2>
           <p class="text-center" style="font-size: 0.95rem; margin-bottom: 20px; color: #ddd;">Studente, scegli la tua classe di eroe prima di iniziare il viaggio.</p>
           <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -215,8 +218,8 @@
                       <input type="text" id="studente-nickname" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Il tuo nome da Eroe">
                   </div>
                   <div style="margin-bottom: 1.5rem;">
-                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Classe (Es. 3A):</label>
-                      <input type="text" id="studente-classe" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="La tua classe">
+                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Codice Classe (fornito dal docente):</label>
+                      <input type="text" id="studente-classe" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Inserisci il codice classe">
                   </div>
                   <div style="margin-bottom: 1.5rem;">
                       <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Scegli la tua Classe Eroe:</label>
@@ -235,6 +238,7 @@
 
       <!-- VIEW: Iscrizione Docente -->
       <section id="view-iscrizione" class="view">
+          <button class="btn btn-secondary" onclick="window.EroiApp.switchActiveView('view-onboarding')" style="margin-bottom: 15px; align-self: flex-start;"><i class="fa-solid fa-arrow-left"></i> Indietro</button>
           <h2 class="text-center mb-2" style="color: var(--gold);">Benvenuto Docente!</h2>
           <div class="glass" style="max-width: 600px; margin: 0 auto; padding: 20px; font-size: 0.95rem; color: #ddd;">
               <p style="margin-bottom: 15px;">Grazie per l'interesse verso La Rotta degli Eroi. L'obiettivo del gioco è stimolare l'interesse per testi e contesti storici attraverso una dinamica di esplorazione, missioni didattiche e punteggi.</p>

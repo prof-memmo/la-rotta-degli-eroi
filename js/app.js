@@ -17,7 +17,7 @@ const LEGAL_TEXTS = {
         <h3>1. Titolare del trattamento</h3>
         <p>Il titolare del trattamento è Guglielmo Piersanti, contattabile all’indirizzo email: prof.memmo@gmail.com</p>
         <h3>2. Finalità del sito</h3>
-        <p>“Palestra di Riflessione” è un’applicazione web didattica, utilizzata a scopo educativo e ludico e senza fini di lucro per l'apprendimento della lingua italiana.</p>
+        <p>“La Rotta degli Eroi” è un’applicazione web didattica, utilizzata a scopo educativo e ludico e senza fini di lucro per l'apprendimento della lingua italiana.</p>
         <h3>3. Dati raccolti</h3>
         <p>Il sito può raccogliere i seguenti dati: nome utente (scelto dall'utente); informazioni di utilizzo relative agli esercizi (punteggi, attività completate, progressi); messaggi inviati tramite il modulo di contatto (nome, email, messaggio); dati tecnici minimi per il funzionamento (es. tipo di dispositivo tramite browser).</p>
         <h3>4. Finalità del trattamento</h3>
@@ -41,7 +41,7 @@ const LEGAL_TEXTS = {
         <h2>📜 Termini e Condizioni</h2>
         <p>Ultimo aggiornamento: 02/05/26</p>
         <h3>1. Titolare del sito</h3>
-        <p>Il presente sito web "Palestra di Riflessione" è gestito da: Guglielmo Piersanti. Email di contatto: prof.memmo@gmail.com</p>
+        <p>Il presente sito web "La Rotta degli Eroi" è gestito da: Guglielmo Piersanti. Email di contatto: prof.memmo@gmail.com</p>
         <h3>2. Accettazione dei termini</h3>
         <p>L’accesso alla Palestra implica l’accettazione dei presenti Termini e Condizioni. Se non si accettano tali condizioni, si invita a non utilizzare il sito.</p>
         <h3>3. Descrizione del servizio</h3>
@@ -419,9 +419,12 @@ window.finalizzaDocente = async function() {
         // Forza login se non autenticato
         hideLoginOverlay(); // Not needed anymore as view-welcome is a normal view
         document.getElementById('main-sidebar').style.display = 'none';
-        document.getElementById('mobile-navigation').style.display = 'none';
+        document.getElementById('mobile-navigation').style.display = 'flex';
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
+        
+        // Genera i bottoni disabilitati per il login
+        this.generateNavbarLinks(null);
         
         this.switchActiveView('view-welcome');
         return;
@@ -445,7 +448,7 @@ window.finalizzaDocente = async function() {
       // Hide sidebar/header during onboarding
       if (['view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente', 'view-pausa-obbligatoria'].includes(viewId)) {
         document.getElementById('main-sidebar').style.display = 'none';
-        document.getElementById('mobile-navigation').style.display = 'none';
+        document.getElementById('mobile-navigation').style.display = 'flex';
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
       } else {
@@ -483,7 +486,6 @@ window.finalizzaDocente = async function() {
 
     updateNavigationUI: function(viewId) {
       const user = Auth.getUser();
-      if (!user) return;
 
       // Hiddiamo sempre la sidebar e mostriamo l'header e la navigazione bottom
       document.getElementById('main-sidebar').style.display = 'none';
@@ -495,12 +497,14 @@ window.finalizzaDocente = async function() {
       this.generateNavbarLinks(user);
 
       // Evidenzia la bottom-nav mobile/desktop dock
-      document.querySelectorAll('.mobile-nav-item').forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('data-view') === viewId) {
-          link.classList.add('active');
-        }
-      });
+      if (document.querySelectorAll('.mobile-nav-item').length > 0) {
+        document.querySelectorAll('.mobile-nav-item').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('data-view') === viewId) {
+            link.classList.add('active');
+          }
+        });
+      }
     },
 
     generateNavbarLinks: function(user) {
@@ -509,7 +513,7 @@ window.finalizzaDocente = async function() {
       const profileDropdown = document.getElementById('profile-dropdown-card');
       
       // Renderizza Header Profile Widget e Dropdown Card
-      if (profileWidget && profileDropdown) {
+      if (user && profileWidget && profileDropdown) {
         let avatarImg = 'assets/images/pergamena_crest.png';
         let levelText = '';
         let dropdownHtml = '';
@@ -571,19 +575,6 @@ window.finalizzaDocente = async function() {
               <i class="fa-solid fa-power-off"></i> Esci
             </button>
           </div>
-          <div class="dropdown-divider"></div>
-          <div class="music-player-container" style="padding: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
-            <div style="font-weight: bold; color: var(--gold); margin-bottom: 5px;">🎵 Musica di Sottofondo</div>
-            <div id="music-track-title" style="margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; margin-left: auto; margin-right: auto;">Nessuna traccia</div>
-            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 8px;">
-                <button class="btn btn-secondary" onclick="if(window.MusicPlayer) window.MusicPlayer.prevTrack()" style="padding: 5px 10px;"><i class="fa-solid fa-backward-step"></i></button>
-                <button class="btn btn-secondary" id="music-play-btn" onclick="if(window.MusicPlayer) window.MusicPlayer.togglePlay()" style="padding: 5px 10px;"><i class="fa-solid fa-play"></i></button>
-                <button class="btn btn-secondary" onclick="if(window.MusicPlayer) window.MusicPlayer.nextTrack()" style="padding: 5px 10px;"><i class="fa-solid fa-forward-step"></i></button>
-            </div>
-            <div style="font-size: 0.65rem; color: rgba(255,255,255,0.4); line-height: 1.2;">
-                Source: <a href="https://freetouse.com/music" target="_blank" style="color: rgba(255,255,255,0.6);">freetouse.com/music</a><br>No Copyright Vlog Music for Video
-            </div>
-          </div>
         `;
         
         profileWidget.innerHTML = `
@@ -637,7 +628,13 @@ window.finalizzaDocente = async function() {
 
       let links = [];
 
-      if (user.role === 'studente' || user.role === 'forestiero') {
+      if (!user) {
+        links = [
+          { view: 'disabled', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'disabled', label: 'Diario', icon: 'fa-feather-pointed' },
+          { view: 'disabled', label: 'Tempio', icon: 'fa-book-open' }
+        ];
+      } else if (user.role === 'studente' || user.role === 'forestiero') {
         links = [
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
@@ -661,20 +658,37 @@ window.finalizzaDocente = async function() {
       }
 
       // Renderizza links nella bottom navigation per desktop/mobile dock (senza lo slice a 5 per mostrarli tutti)
-      mobileMenu.innerHTML = links.map(l => `
+      mobileMenu.innerHTML = links.map(l => {
+        if (l.view === 'disabled') {
+            return `
+            <a href="#" class="mobile-nav-item" style="opacity: 0.5; cursor: not-allowed;">
+              <i class="fa-solid ${l.icon}"></i>
+              <span>${l.label}</span>
+            </a>
+            `;
+        }
+        return `
         <a href="#${l.view}" class="mobile-nav-item" data-view="${l.view}">
           <i class="fa-solid ${l.icon}"></i>
           <span>${l.label}</span>
         </a>
-      `).join('');
+        `;
+      }).join('');
 
       // Aggiungi click listener a mobile
       mobileMenu.querySelectorAll('.mobile-nav-item').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const view = link.getAttribute('data-view');
-          this.navigateTo(view);
-        });
+        if (link.getAttribute('data-view')) {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              const view = link.getAttribute('data-view');
+              this.navigateTo(view);
+            });
+        } else {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              this.showToast("Devi completare l'accesso per esplorare questa sezione.", "warning");
+            });
+        }
       });
     },
 
