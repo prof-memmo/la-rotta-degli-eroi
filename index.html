@@ -61,8 +61,8 @@
     
     <!-- Top Header -->
     <header class="app-header" id="app-header" style="display: none;">
-      <div class="logo-container" style="display: flex; align-items: center;">
-        <img src="assets/LOGO 'La rotta degli eroi' - Header.png" alt="La Rotta degli Eroi Header Logo" style="max-height: 40px; object-fit: contain;">
+      <div class="header-logo-container" style="display: flex; align-items: center; margin: 0; padding: 0; border: none;">
+        <img src="assets/LOGO 'La rotta degli eroi' - Header.png" alt="La Rotta degli Eroi Header Logo" style="height: 60px; max-width: 250px; object-fit: contain;">
       </div>
 
       <!-- Logo Avatar Centrato -->
@@ -102,8 +102,8 @@
 
     <!-- Sidebar Navigation (Desktop) - HIDDEN but kept in DOM to avoid JS errors -->
     <nav class="sidebar" id="main-sidebar" style="display: none !important;">
-      <div class="logo-container" style="display: flex; justify-content: center; align-items: center;">
-        <img src="assets/LOGO 'La rotta degli eroi' - Header.png" alt="La Rotta degli Eroi Header Logo" style="max-height: 50px; object-fit: contain;">
+      <div class="logo-container" style="display: flex; justify-content: center; align-items: center; border: none; padding-bottom: 0; margin-bottom: 10px;">
+        <img src="assets/LOGO 'La rotta degli eroi' - Header.png" alt="La Rotta degli Eroi Header Logo" style="height: 65px; object-fit: contain;">
       </div>
       
       <!-- RPG Player Card / Character Frame -->
@@ -139,13 +139,13 @@
     <main class="main-content" id="main-layout" style="width: 100%;">
       
       <!-- VIEW: Welcome Home -->
-      <section id="view-welcome" class="view">
+      <section id="view-welcome" class="view" style="padding: 10px 16px;">
           <h1 class="text-center" style="color: white; display: none;">Benvenuto ne La Rotta degli Eroi!<br>Accedi per iniziare il tuo viaggio epico.</h1>
-          <div class="logo-container text-center" style="margin-top: 20px;">
-              <img src="assets/LOGO 'La rotta degli eroi'.png" alt="Logo La Rotta degli Eroi" style="width: 250px; max-width: 90%; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3));">
+          <div class="text-center" style="margin-top: 5px; margin-bottom: 10px;">
+              <img src="assets/LOGO 'La rotta degli eroi'.png" alt="Logo La Rotta degli Eroi" style="width: 220px; max-width: 80%; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3));">
           </div>
-          <div class="glass" style="padding: 20px; margin-top: 30px; max-width: 500px; margin-left: auto; margin-right: auto;" id="login-section">
-              <p class="text-center" style="font-size: 0.9rem; color: #fff; margin-bottom: 15px;">Accedi per iniziare a giocare.</p>
+          <div class="glass" style="padding: 15px; margin-top: 5px; max-width: 450px; margin-left: auto; margin-right: auto;" id="login-section">
+              <p class="text-center" style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">Accedi per iniziare a giocare.</p>
               
               <div class="consent-group mb-2" style="margin-bottom: 20px; text-align: left;">
                   <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; margin-bottom: 10px; cursor: pointer;">
@@ -160,19 +160,19 @@
                   </label>
               </div>
 
-              <button type="button" class="btn" style="background: #fff; color: #444; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s; margin-bottom: 20px;" onclick="window.handleGoogleLogin()">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="28" height="28"> Accedi con Google
+              <button type="button" class="btn" style="background: #fff; color: #444; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s; margin-bottom: 15px;" onclick="window.handleGoogleLogin()">
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24" height="24"> Accedi con Google
               </button>
 
-              <div style="text-align: center; color: #ddd; margin-bottom: 20px; font-size: 0.95rem; font-weight: bold;">— OPPURE —</div>
+              <div style="text-align: center; color: #ddd; margin-bottom: 15px; font-size: 0.85rem; font-weight: bold;">— OPPURE —</div>
 
-              <div id="login-email-form" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;">
-                  <input type="email" id="login-email" placeholder="Email (es: prof.memmo@gmail.com)" style="padding: 15px; border-radius: 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1.1rem;">
-                  <input type="password" id="login-password" placeholder="Password (es: password123)" style="padding: 15px; border-radius: 10px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1.1rem;">
-                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-weight: bold; border-radius: 10px; padding: 15px; font-size: 1.2rem;" onclick="window.handleEmailLogin()">Accedi con Email</button>
+              <div id="login-email-form" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+                  <input type="email" id="login-email" placeholder="Email (es: prof.memmo@gmail.com)" style="padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1rem;">
+                  <input type="password" id="login-password" placeholder="Password (es: password123)" style="padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1rem;">
+                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-weight: bold; border-radius: 8px; padding: 12px; font-size: 1.1rem;" onclick="window.handleEmailLogin()">Accedi con Email</button>
               </div>
               
-              <p class="text-center mt-2" style="font-size: 0.75rem; color: #aaa; margin-top: 15px;">Se è il tuo primo accesso, verrai guidato alla selezione del profilo.</p>
+              <p class="text-center mt-2" style="font-size: 0.7rem; color: #aaa; margin-top: 10px;">Se è il tuo primo accesso, verrai guidato alla selezione del profilo.</p>
           </div>
       </section>
 
