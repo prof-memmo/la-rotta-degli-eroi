@@ -97,8 +97,8 @@ window.confirmLegal = function() {
 };
 
 window.handleEmailLogin = async function() {
-    const checkAge = document.getElementById('login-check-age')?.checked;
-    const checkPrivacy = document.getElementById('login-check-privacy')?.checked;
+    const checkAge = document.getElementById('welcome-check-age')?.checked;
+    const checkPrivacy = document.getElementById('welcome-check-privacy')?.checked;
     
     if (!checkAge || !checkPrivacy) {
         alert("Devi confermare l'età e accettare Privacy Policy e Termini per continuare.");
@@ -120,21 +120,110 @@ window.handleEmailLogin = async function() {
 };
 
 window.handleGoogleLogin = function() {
-    const checkAge = document.getElementById('login-check-age')?.checked;
-    const checkPrivacy = document.getElementById('login-check-privacy')?.checked;
+    const checkAge = document.getElementById('welcome-check-age')?.checked;
+    const checkPrivacy = document.getElementById('welcome-check-privacy')?.checked;
     
     if (!checkAge || !checkPrivacy) {
         alert("Devi confermare l'età e accettare Privacy Policy e Termini per continuare.");
         return;
     }
 
-    const role = document.getElementById('login-role-select')?.value || 'studente';
-    localStorage.setItem('pending_role', role);
-
     Auth.loginWithGoogle();
 };
 
+window.selectOnboardingRole = async function(role) {
+    const user = Auth.getUser();
+    if (!user) return;
+    
+    if (role === 'studente') {
+        window.EroiApp.switchActiveView('view-selezione-profilo');
+    } else if (role === 'docente') {
+        window.EroiApp.switchActiveView('view-iscrizione');
+    } else if (role === 'forestiero') {
+        // Forestiero completa subito
+        user.role = 'forestiero';
+        user.setupComplete = true;
+        await window.fbDb.collection('users').doc(user.uid).update({ role: 'forestiero', setupComplete: true });
+        localStorage.setItem('eroi_user', JSON.stringify(user));
+        window.EroiApp.checkSession();
+    }
+};
 
+window.finalizzaStudente = async function() {
+    const nickname = document.getElementById('studente-nickname').value.trim();
+    const classe = document.getElementById('studente-classe').value.trim();
+    const eroeClass = document.getElementById('studente-classe-eroe').value;
+    
+    if (!nickname || !classe || !eroeClass) {
+        alert("Compila tutti i campi!"); return;
+    }
+    
+    const user = Auth.getUser();
+    if (!user) return;
+    
+    user.role = 'studente';
+    user.setupComplete = true;
+    user.classId = classe;
+    user.name = nickname; // Use nickname instead of full Google name if they want
+    
+    await window.fbDb.collection('users').doc(user.uid).update({ 
+        role: 'studente', 
+        setupComplete: true,
+        classId: classe,
+        name: nickname
+    });
+    
+    // Create student profile in game DB
+    let profile = window.EroiDB.getStudentProfile(user.email);
+    if (!profile) {
+        profile = {
+            email: user.email,
+            name: nickname,
+            level: 1,
+            xp: 0,
+            dracme: 100,
+            avatarClass: eroeClass.charAt(0).toUpperCase() + eroeClass.slice(1),
+            inventory: [],
+            stats: { missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+            visitedRegions: [],
+            discoveredNodes: [],
+            completedMissions: [],
+            activeMissions: [],
+            diario: []
+        };
+        window.EroiDB.saveStudentProfile(profile);
+    }
+    
+    localStorage.setItem('eroi_user', JSON.stringify(user));
+    window.EroiApp.checkSession();
+};
+
+window.finalizzaDocente = async function() {
+    const scuola = document.getElementById('iscrizione-scuola').value.trim();
+    const citta = document.getElementById('iscrizione-citta').value.trim();
+    
+    if (!scuola || !citta) {
+        alert("Compila tutti i campi!"); return;
+    }
+    
+    const user = Auth.getUser();
+    if (!user) return;
+    
+    user.role = 'docente';
+    user.setupComplete = true;
+    user.approved = false; // Pending approval
+    
+    await window.fbDb.collection('users').doc(user.uid).update({ 
+        role: 'docente', 
+        setupComplete: true,
+        approved: false,
+        scuola: scuola,
+        citta: citta
+    });
+    
+    localStorage.setItem('eroi_user', JSON.stringify(user));
+    window.EroiApp.checkSession();
+};
 (function() {
   let currentShopFilter = 'all';
   let activeTeacherTab = 'panoramica';
@@ -321,20 +410,20 @@ window.handleGoogleLogin = function() {
       const user = isLogged ? Auth.getUser() : null;
       
       // Protezione delle rotte in base al ruolo
-      const publicViews = ['view-login'];
-      const studentViews = ['view-student-dashboard', 'view-map', 'view-diario', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento'];
+      const publicViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
+      const studentViews = ['view-student-dashboard', 'view-map', 'view-diario', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento', 'view-pausa-obbligatoria'];
       const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento'];
       const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento'];
 
       if (!isLogged || !user) {
         // Forza login se non autenticato
-        showLoginOverlay();
+        hideLoginOverlay(); // Not needed anymore as view-welcome is a normal view
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none';
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
-        // Non usiamo più view-login ma nascondiamo le viste
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        
+        this.switchActiveView('view-welcome');
         return;
       }
 
@@ -342,21 +431,34 @@ window.handleGoogleLogin = function() {
       hideLoginOverlay();
 
       // Se autenticato e chiede login, reindirizza
-      if (viewId === 'view-login' || !viewId) {
-        if (user.role === 'studente' || user.role === 'forestiero') viewId = 'view-student-dashboard';
-        else if (user.role === 'docente') viewId = 'view-teacher-dashboard';
-        else if (user.role === 'admin') viewId = 'view-admin-dashboard';
+      if (publicViews.includes(viewId)) {
+         // Lascia passare se è in onboarding
+         if (!user.setupComplete || (user.role === 'docente' && user.approved === false)) {
+             // pass
+         } else {
+            if (user.role === 'studente' || user.role === 'forestiero') viewId = 'view-student-dashboard';
+            else if (user.role === 'docente') viewId = 'view-teacher-dashboard';
+            else if (user.role === 'admin') viewId = 'view-admin-dashboard';
+         }
       }
 
-      // Controllo permessi ruoli
-      if ((user.role === 'studente' || user.role === 'forestiero') && !studentViews.includes(viewId)) {
-        this.showToast("Accesso negato.", "danger");
-        viewId = 'view-student-dashboard';
-      } else if (user.role === 'docente' && !teacherViews.includes(viewId) && viewId !== 'view-student-dashboard') {
-        // I docenti non possono accedere alla dashboard amministrativa globale o alle viste di gioco studente
-        if (adminViews.includes(viewId) && viewId !== 'view-teacher-dashboard' && viewId !== 'view-guides' && viewId !== 'view-regolamento') {
-          this.showToast("Accesso negato: Sezione riservata all'Amministratore.", "danger");
-          viewId = 'view-teacher-dashboard';
+      // Hide sidebar/header during onboarding
+      if (['view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente', 'view-pausa-obbligatoria'].includes(viewId)) {
+        document.getElementById('main-sidebar').style.display = 'none';
+        document.getElementById('mobile-navigation').style.display = 'none';
+        document.getElementById('app-header').style.display = 'none';
+        document.getElementById('main-layout').style.marginLeft = '0';
+      } else {
+        // Controllo permessi ruoli per le view principali
+        if ((user.role === 'studente' || user.role === 'forestiero') && !studentViews.includes(viewId)) {
+          this.showToast("Accesso negato.", "danger");
+          viewId = 'view-student-dashboard';
+        } else if (user.role === 'docente' && !teacherViews.includes(viewId) && viewId !== 'view-student-dashboard') {
+          // I docenti non possono accedere alla dashboard amministrativa globale o alle viste di gioco studente
+          if (adminViews.includes(viewId) && viewId !== 'view-teacher-dashboard' && viewId !== 'view-guides' && viewId !== 'view-regolamento') {
+            this.showToast("Accesso negato: Sezione riservata all'Amministratore.", "danger");
+            viewId = 'view-teacher-dashboard';
+          }
         }
       }
 
@@ -463,11 +565,24 @@ window.handleGoogleLogin = function() {
           <div class="dropdown-divider"></div>
           <div class="dropdown-actions">
             <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.75rem; padding: 8px;">
-              <i class="fa-solid fa-volume-high"></i> Audio
+              <i class="fa-solid fa-volume-high"></i> Suoni
             </button>
             <button class="btn btn-danger btn-logout-action" style="font-size: 0.75rem; padding: 8px;">
               <i class="fa-solid fa-power-off"></i> Esci
             </button>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="music-player-container" style="padding: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+            <div style="font-weight: bold; color: var(--gold); margin-bottom: 5px;">🎵 Musica di Sottofondo</div>
+            <div id="music-track-title" style="margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; margin-left: auto; margin-right: auto;">Nessuna traccia</div>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 8px;">
+                <button class="btn btn-secondary" onclick="if(window.MusicPlayer) window.MusicPlayer.prevTrack()" style="padding: 5px 10px;"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="btn btn-secondary" id="music-play-btn" onclick="if(window.MusicPlayer) window.MusicPlayer.togglePlay()" style="padding: 5px 10px;"><i class="fa-solid fa-play"></i></button>
+                <button class="btn btn-secondary" onclick="if(window.MusicPlayer) window.MusicPlayer.nextTrack()" style="padding: 5px 10px;"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
+            <div style="font-size: 0.65rem; color: rgba(255,255,255,0.4); line-height: 1.2;">
+                Source: <a href="https://freetouse.com/music" target="_blank" style="color: rgba(255,255,255,0.6);">freetouse.com/music</a><br>No Copyright Vlog Music for Video
+            </div>
           </div>
         `;
         
@@ -1055,16 +1170,48 @@ window.handleGoogleLogin = function() {
         document.getElementById('user-display-name').textContent = user.name;
         document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : (user.role === 'docente' ? 'Docente' : (user.role === 'forestiero' ? 'Forestiero' : 'Studente'));
         
-        // Reindirizza alla dashboard corretta se eravamo fermi alla login
-        if (this.getCurrentViewId() === 'view-login') {
+        // Controlla se l'onboarding è completo
+        if (!user.setupComplete) {
+            if (user.role === 'pending') {
+                this.navigateTo('view-onboarding');
+                return;
+            }
+            if (user.role === 'docente') {
+                this.navigateTo('view-iscrizione');
+                return;
+            }
+            if (user.role === 'studente') {
+                this.navigateTo('view-selezione-profilo');
+                return;
+            }
+        }
+        
+        // Docente in attesa di approvazione
+        if (user.role === 'docente' && user.setupComplete && user.approved === false) {
+            this.navigateTo('view-pending-docente');
+            return;
+        }
+        
+        // Reindirizza alla dashboard corretta se eravamo fermi alla login o all'onboarding
+        const currentView = this.getCurrentViewId();
+        const authViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
+        if (authViews.includes(currentView)) {
           if (user.role === 'studente' || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
           else if (user.role === 'docente') this.navigateTo('view-teacher-dashboard');
           else if (user.role === 'admin') this.navigateTo('view-admin-dashboard');
         } else {
-          this.navigateTo(this.getCurrentViewId());
+          this.navigateTo(currentView);
+        }
+        
+        // Initialize timer if applicable
+        if (typeof SessionTimer !== 'undefined') {
+            SessionTimer.init();
         }
       } else {
-        this.navigateTo('view-login');
+        this.navigateTo('view-welcome');
+        if (typeof SessionTimer !== 'undefined' && SessionTimer.timerInterval) {
+            clearInterval(SessionTimer.timerInterval);
+        }
       }
     },
 

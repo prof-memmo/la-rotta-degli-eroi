@@ -67,28 +67,22 @@ const Auth = {
                     Auth._user.email = fbUser.email;
                     await window.fbDb.collection('users').doc(fbUser.uid).update({ email: fbUser.email });
                 }
-                // Se l'utente ha selezionato un ruolo diverso (e non è admin), aggiorniamo il profilo esistente
-                if (pendingRole && Auth._user.role !== pendingRole && Auth._user.role !== 'admin') {
-                    Auth._user.role = pendingRole;
-                    await window.fbDb.collection('users').doc(fbUser.uid).update({ role: pendingRole });
-                }
             } else {
-                // Se l'utente non esiste nel database (es. primo accesso Google), creiamo un profilo base
+                // Se l'utente non esiste nel database (es. primo accesso Google), creiamo un profilo base non completato
                 Auth._user = {
                     uid: fbUser.uid,
                     name: fbUser.displayName || '',
                     avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: pendingRole || 'studente',
+                    role: 'pending', // Ruolo da scegliere nell'onboarding
                     points: 0,
                     isGuest: false,
                     email: fbUser.email,
-                    setupComplete: true, // Non c'è onboarding in Eroi in Viaggio
+                    setupComplete: false, // Richiede onboarding
                     createdAt: new Date().toISOString()
                 };
                 // Salvataggio iniziale nel DB per persistere il profilo
                 await window.fbDb.collection('users').doc(fbUser.uid).set(Auth._user);
             }
-            localStorage.removeItem('pending_role'); // Pulisci dopo l'uso
             
             // Controllo privilegi Admin per email specifiche
             const ADMIN_EMAILS = ['prof.memmo@gmail.com'];

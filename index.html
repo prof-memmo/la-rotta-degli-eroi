@@ -42,60 +42,6 @@
 </head>
 <body>
 
-  <!-- Login Overlay -->
-  <div id="login-overlay" class="login-overlay hidden">
-      <div class="login-card">
-          <div class="login-header">
-              <img src="assets/prof_memmo.png" alt="Logo" class="login-logo">
-              <h2>BENVENUTO NELLA ROTTA</h2>
-              <p>Accedi per iniziare il tuo viaggio epico.</p>
-          </div>
-          <div class="login-form">
-              <div class="legal-notice" style="margin-bottom: 1.5rem; text-align: left;">
-                  <div style="display: flex; flex-direction: column; gap: 8px;">
-                      <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: #777; cursor: pointer; line-height: 1.2;">
-                          <input type="checkbox" id="login-check-age" style="margin-top: 2px;">
-                          <span>Ho almeno 16 anni o sono sotto la supervisione di un adulto</span>
-                      </label>
-                      <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: #777; cursor: pointer; line-height: 1.2;">
-                          <input type="checkbox" id="login-check-privacy" style="margin-top: 2px;">
-                          <span>Accetto la <a href="javascript:void(0)" onclick="showLegal('privacy')" style="color: var(--primary-color); font-weight: 600;">Privacy Policy</a> e i <a href="javascript:void(0)" onclick="showLegal('terms')" style="color: var(--primary-color); font-weight: 600;">Termini</a></span>
-                      </label>
-                  </div>
-              </div>
-
-              <!-- Autenticazione Centrale -->
-              <div id="login-primary-actions" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
-                  <button id="google-login-btn" class="btn" onclick="handleGoogleLogin()" style="width:100%; display:flex; align-items:center; justify-content:center; gap:1rem; background:white; border:2px solid #eee; color:#444; padding:1.2rem; border-radius:50px; font-weight:800; font-size: 1.1rem; cursor:pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s;">
-                      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24"> ACCEDI CON GOOGLE
-                  </button>
-                  
-                  <div style="margin: 0.5rem 0; display: flex; align-items: center; gap: 1rem; color: #ddd; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px;">
-                      <hr style="flex:1; border:0; border-top:1px solid #f0f0f0;"> OPPURE <hr style="flex:1; border:0; border-top:1px solid #f0f0f0;">
-                  </div>
-
-                  <div style="background: #fafafa; padding: 1.8rem; border-radius: 35px; border: 2px solid #f0f0f0;">
-                      <div id="registration-input-area" style="display:flex; flex-direction:column; gap:1rem;">
-                          
-                          <!-- Selezione Ruolo -->
-                          <div style="text-align: left; margin-bottom: 0.5rem;">
-                              <label style="font-weight: 800; color: #555; display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Scegli il tuo ruolo:</label>
-                              <select id="login-role-select" style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 2px solid #eee; font-size: 1rem; outline: none; background: white;">
-                                  <option value="studente">Studente</option>
-                                  <option value="docente">Docente</option>
-                                  <option value="forestiero">Forestiero (se non sei docente o studente)</option>
-                              </select>
-                          </div>
-
-                          <input type="email" id="login-email" placeholder="La tua email" style="padding:1rem 1.5rem; border:2px solid #eee; border-radius:50px; font-size:1.1rem; outline:none; width: 100%;">
-                          <input type="password" id="login-password" placeholder="Password" style="padding:1rem 1.5rem; border:2px solid #eee; border-radius:50px; font-size:1.1rem; outline:none; width: 100%;">
-                          <button class="btn btn-primary" onclick="handleEmailLogin()" style="width: 100%; padding: 1.2rem; font-weight: 900; border-radius: 50px; font-size: 1.1rem; margin-top: 0.5rem;">ACCEDI ORA ➜</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
 
   <!-- Legal Modals -->
   <div id="legal-modal" class="legal-modal hidden">
@@ -115,12 +61,8 @@
     
     <!-- Top Header -->
     <header class="app-header" id="app-header" style="display: none;">
-      <div class="header-logo-container" id="header-logo-container">
-        <div class="logo-shield"><i class="fa-solid fa-shield-halved"></i></div>
-        <div class="logo-text">
-          <h1>La Rotta degli Eroi</h1>
-          <p>Viaggio didattico</p>
-        </div>
+      <div class="logo-container" style="display: flex; align-items: center;">
+        <img src="assets/LOGO 'La rotta degli eroi' - Header.png" alt="La Rotta degli Eroi Header Logo" style="max-height: 40px; object-fit: contain;">
       </div>
 
       <!-- Logo Avatar Centrato -->
@@ -131,22 +73,37 @@
       </div>
       
       <!-- Top Profile Card Widget with Dropdown -->
-      <div class="header-profile-container">
-        <div class="header-profile-widget" id="header-profile-widget">
-          <!-- Popolato dinamicamente -->
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <!-- MUSIC PLAYER WIDGET IN HEADER -->
+        <div id="music-player-widget" style="background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); border: 1px solid var(--gold); border-radius: 20px; padding: 4px 10px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                <div id="music-track-title" style="font-size: 0.65rem; color: white; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; font-weight: bold;">Seleziona Traccia</div>
+                <div style="font-size: 0.5rem; color: #ccc; line-height: 1; text-align: right;">
+                    <a href="https://freetouse.com/music" target="_blank" style="color: var(--gold); text-decoration: none;">freetouse.com/music</a> - No Copyright Vlog Music
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 5px;">
+                <button onclick="MusicPlayer.prevTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-backward-step"></i></button>
+                <button id="music-play-btn" onclick="MusicPlayer.togglePlay()" style="background: var(--gold); border: none; color: #1a1a2e; cursor: pointer; font-size: 0.8rem; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-play"></i></button>
+                <button onclick="MusicPlayer.nextTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
         </div>
-        <div class="profile-dropdown-card" id="profile-dropdown-card" style="display: none;">
-          <!-- Popolato dinamicamente (XP, Dracme, Logout, Audio) -->
+
+        <div class="header-profile-container">
+          <div class="header-profile-widget" id="header-profile-widget">
+            <!-- Popolato dinamicamente -->
+          </div>
+          <div class="profile-dropdown-card" id="profile-dropdown-card" style="display: none;">
+            <!-- Popolato dinamicamente (XP, Dracme, Logout, Audio) -->
+          </div>
         </div>
       </div>
     </header>
 
     <!-- Sidebar Navigation (Desktop) - HIDDEN but kept in DOM to avoid JS errors -->
     <nav class="sidebar" id="main-sidebar" style="display: none !important;">
-      <div class="logo-container">
-        <div class="logo-shield"><i class="fa-solid fa-shield-halved"></i></div>
-        <h1>La Rotta degli Eroi</h1>
-        <p>Viaggio didattico</p>
+      <div class="logo-container" style="display: flex; justify-content: center; align-items: center;">
+        <img src="assets/LOGO 'La rotta degli eroi' - Header.png" alt="La Rotta degli Eroi Header Logo" style="max-height: 50px; object-fit: contain;">
       </div>
       
       <!-- RPG Player Card / Character Frame -->
@@ -181,10 +138,152 @@
     <!-- Main Content Panel -->
     <main class="main-content" id="main-layout" style="width: 100%;">
       
-      <!-- 1. LOGIN & PASSWORD RECOVERY VIEW -->
-      
+      <!-- VIEW: Welcome Home -->
+      <section id="view-welcome" class="view">
+          <h1 class="text-center" style="color: white; display: none;">Benvenuto ne La Rotta degli Eroi!<br>Accedi per iniziare il tuo viaggio epico.</h1>
+          <div class="logo-container text-center" style="margin-top: 20px;">
+              <img src="assets/LOGO 'La rotta degli eroi'.png" alt="Logo La Rotta degli Eroi" style="width: 250px; max-width: 90%; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3));">
+          </div>
+          <div class="glass" style="padding: 20px; margin-top: 30px; max-width: 500px; margin-left: auto; margin-right: auto;" id="login-section">
+              <p class="text-center" style="font-size: 0.9rem; color: #fff; margin-bottom: 15px;">Accedi per iniziare a giocare.</p>
+              
+              <div class="consent-group mb-2" style="margin-bottom: 15px; text-align: left;">
+                  <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; margin-bottom: 10px; cursor: pointer;">
+                      <input type="checkbox" id="welcome-check-age">
+                      <span class="checkmark"></span>
+                      Ho almeno 16 anni o supervisione di un adulto
+                  </label>
+                  <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; cursor: pointer;">
+                      <input type="checkbox" id="welcome-check-privacy">
+                      <span class="checkmark"></span>
+                      Accetto <a href="#" onclick="event.preventDefault(); showLegal('privacy')" style="color:var(--primary-color);">Privacy</a> e <a href="#" onclick="event.preventDefault(); showLegal('terms')" style="color:var(--primary-color);">Termini</a>
+                  </label>
+              </div>
 
-<!-- 2. STUDENT DASHBOARD VIEW -->
+              <div id="login-email-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                  <input type="email" id="login-email" placeholder="Email (es: prof.memmo@gmail.com)" style="padding: 12px; border-radius: 5px; border: 1px solid #ddd; background: rgba(255,255,255,0.9);">
+                  <input type="password" id="login-password" placeholder="Password (es: password123)" style="padding: 12px; border-radius: 5px; border: 1px solid #ddd; background: rgba(255,255,255,0.9);">
+                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-weight: bold; border-radius: 5px; padding: 12px;" onclick="window.handleEmailLogin()">Accedi con Email</button>
+              </div>
+              <div style="text-align: center; color: #ddd; margin-bottom: 15px; font-size: 0.85rem;">oppure</div>
+
+              <button type="button" class="btn" style="background: #fff; color: #444; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s;" onclick="window.handleGoogleLogin()">
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24" height="24"> Entra con Google
+              </button>
+              
+              <p class="text-center mt-2" style="font-size: 0.75rem; color: #aaa; margin-top: 15px;">Se è il tuo primo accesso, verrai guidato alla selezione del profilo.</p>
+          </div>
+      </section>
+
+      <!-- VIEW: Onboarding -->
+      <section id="view-onboarding" class="view">
+          <h2 class="text-center mb-2" style="color: var(--gold);">Scegli il tuo profilo</h2>
+          <p class="text-center" style="font-size: 0.95rem; margin-bottom: 20px; color: #ddd;">Seleziona il ruolo con cui vuoi partecipare a La Rotta degli Eroi.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 0 auto;">
+              <!-- Studente -->
+              <div class="glass" style="padding: 20px; text-align: center; border: 2px solid var(--primary-color); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="selectOnboardingRole('studente')">
+                  <div style="font-size: 3rem; margin-bottom: 10px;">🎓</div>
+                  <h3 style="color: var(--primary-color); margin: 0;">STUDENTE</h3>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">Unisciti a una classe usando il codice fornito dal docente e scegli la tua classe eroe.</p>
+              </div>
+
+              <!-- Docente -->
+              <div class="glass" style="padding: 20px; text-align: center; border: 2px solid var(--gold); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="selectOnboardingRole('docente')">
+                  <div style="font-size: 3rem; margin-bottom: 10px;">👨‍🏫</div>
+                  <h3 style="color: var(--gold); margin: 0;">DOCENTE</h3>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">Crea classi, organizza missioni e convalida i progressi degli studenti (richiede approvazione).</p>
+              </div>
+
+              <!-- Forestiero -->
+              <div class="glass" style="padding: 20px; text-align: center; border: 2px solid #ccc; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="selectOnboardingRole('forestiero')">
+                  <div style="font-size: 3rem; margin-bottom: 10px;">🤝</div>
+                  <h3 style="color: #ccc; margin: 0;">FORESTIERO</h3>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">(Se non sei uno studente o un docente). Esplora liberamente i contenuti senza vincoli di classe.</p>
+              </div>
+          </div>
+      </section>
+
+      <!-- VIEW: Selezione Profilo Studente -->
+      <section id="view-selezione-profilo" class="view">
+          <h2 class="text-center mb-2" style="color: var(--gold);">La Tua Origine</h2>
+          <p class="text-center" style="font-size: 0.95rem; margin-bottom: 20px; color: #ddd;">Studente, scegli la tua classe di eroe prima di iniziare il viaggio.</p>
+          <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+              <form id="form-finalizza-studente" onsubmit="event.preventDefault(); finalizzaStudente();">
+                  <div style="margin-bottom: 1.5rem;">
+                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Nickname (visibile in classifica):</label>
+                      <input type="text" id="studente-nickname" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Il tuo nome da Eroe">
+                  </div>
+                  <div style="margin-bottom: 1.5rem;">
+                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Classe (Es. 3A):</label>
+                      <input type="text" id="studente-classe" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="La tua classe">
+                  </div>
+                  <div style="margin-bottom: 1.5rem;">
+                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Scegli la tua Classe Eroe:</label>
+                      <select id="studente-classe-eroe" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;">
+                          <option value="avventuriero">Avventuriero</option>
+                          <option value="condottiero">Condottiero</option>
+                          <option value="curatore">Curatore</option>
+                          <option value="saggio">Saggio</option>
+                          <option value="stratega">Stratega</option>
+                      </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; border-radius: 30px; font-weight: 800;">Conferma ed Entra nel Gioco</button>
+              </form>
+          </div>
+      </section>
+
+      <!-- VIEW: Iscrizione Docente -->
+      <section id="view-iscrizione" class="view">
+          <h2 class="text-center mb-2" style="color: var(--gold);">Benvenuto Docente!</h2>
+          <div class="glass" style="max-width: 600px; margin: 0 auto; padding: 20px; font-size: 0.95rem; color: #ddd;">
+              <p style="margin-bottom: 15px;">Grazie per l'interesse verso La Rotta degli Eroi. L'obiettivo del gioco è stimolare l'interesse per testi e contesti storici attraverso una dinamica di esplorazione, missioni didattiche e punteggi.</p>
+              <p style="margin-bottom: 15px;">Compila il modulo qui sotto per inviare la tua richiesta di iscrizione come docente. Verrai approvato a breve!</p>
+              
+              <form id="form-iscrizione-docente" onsubmit="event.preventDefault(); finalizzaDocente();">
+                  <div style="margin-bottom: 1.5rem;">
+                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">Scuola:</label>
+                      <input type="text" id="iscrizione-scuola" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Nome della tua scuola">
+                  </div>
+                  <div style="margin-bottom: 1.5rem;">
+                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">Città:</label>
+                      <input type="text" id="iscrizione-citta" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Città della scuola">
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; border-radius: 30px; font-weight: 800;">Invia Richiesta</button>
+              </form>
+          </div>
+      </section>
+      
+      <!-- VIEW: Pending Docente -->
+      <section id="view-pending-docente" class="view">
+          <div class="glass" style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center;">
+              <div style="font-size: 3rem; margin-bottom: 15px; color: var(--gold);"><i class="fa-solid fa-hourglass-half"></i></div>
+              <h2 style="color: var(--gold); margin-bottom: 15px;">Richiesta in Attesa</h2>
+              <p style="color: #ddd;">Il tuo account docente è in attesa di approvazione dal Game Master.<br>Ti avviseremo appena sarai attivo!</p>
+              <button class="btn mt-2" onclick="Auth.logout();">Esci</button>
+          </div>
+      </section>
+
+      <!-- VIEW: Pausa Obbligatoria Timer -->
+      <section id="view-pausa-obbligatoria" class="view">
+          <div style="max-width: 600px; margin: 50px auto; text-align: center; padding: 20px;">
+              <h2 style="color: var(--gold); margin-bottom: 20px; font-size: 2rem;">Tempo di Riposo!</h2>
+              <div id="pausa-video-container" style="margin-bottom: 20px; border-radius: 20px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                  <video src="assets/Gatto che dorme.mp4" autoplay loop muted playsinline style="width: 100%; height: 300px; object-fit: cover; border-radius: 20px;"></video>
+              </div>
+              <p style="font-size: 1.1rem; color: #ddd; line-height: 1.5; margin-bottom: 20px;">
+                  Hai giocato per 45 minuti! È il momento di fare una pausa.<br><br>
+                  Lo studente deve fare una pausa e dedicarsi ad altre attività allontanandosi dallo schermo per allenare anche il corpo e riposare gli occhi.
+              </p>
+              <div id="pausa-timer-display" style="font-size: 3rem; font-family: monospace; font-weight: bold; color: var(--gold); margin-bottom: 20px;">
+                  15:00
+              </div>
+              <p id="pausa-block-msg" style="color: var(--danger-color); font-weight: bold; display: none;">
+                  Hai raggiunto il limite massimo di 2 sessioni giornaliere.<br>Torna domani per continuare l'avventura!
+              </p>
+          </div>
+      </section>
+
       <section id="view-student-dashboard" class="view">
         <div class="glass-panel">
           <div class="student-header">
@@ -1456,12 +1555,14 @@
 
   <!-- INTRO VIDEO OVERLAY -->
   <div id="intro-video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 999999; flex-direction: column; align-items: center; justify-content: center;">
-      <video id="intro-video" style="max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: contain;" playsinline>
-          <source src="assets/la_rotta_degli_dei_video.mp4" type="video/mp4">
-          Il tuo browser non supporta il tag video.
+      <video id="intro-video" style="width: 100vw; height: 100vh; object-fit: cover;" playsinline controls>
+          <source src="assets/La rotta degli eroi - video.mp4" type="video/mp4">
+          Il tuo browser non supporta il video.
       </video>
       <button id="btn-skip-video" style="position: absolute; bottom: 30px; right: 30px; background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: var(--font-heading); z-index: 9999999;" onclick="window.EroiApp.skipIntroVideo()">SALTA VIDEO <i class="fa-solid fa-forward-step"></i></button>
   </div>
+
+
 
   <!-- SCRIPT DI PROGETTO -->
   <!-- 1. Dati Iniziali -->
@@ -1474,6 +1575,8 @@
   <script src="js/auth.js?v=10"></script>
   <!-- 4. Bilanciamento e Gioco -->
   <script src="js/game.js?v=10"></script>
+  <script src="js/music.js?v=1"></script>
+  <script src="js/timer.js?v=1"></script>
   <!-- 5. Logica Applicativa e Interfaccia -->
   <script src="js/app.js?v=7"></script>
   <!-- 6. Mini-giochi Interattivi -->
