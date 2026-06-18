@@ -105,17 +105,9 @@ const SessionTimer = {
         const currentView = window.EroiApp.getCurrentViewId();
         const onboardingViews = ['view-welcome', 'view-login', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pausa-obbligatoria'];
         
-        let el = document.getElementById('student-session-timer');
-        if (!el) {
-            const headerLogo = document.querySelector('.header-logo-container');
-            if (headerLogo) {
-                el = document.createElement('div');
-                el.id = 'student-session-timer';
-                el.className = 'desktop-timer';
-                el.style.cssText = "margin-left: 15px; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; color: var(--gold); font-family: monospace; font-weight: bold; border: 1px solid var(--gold); font-size: 1.1rem; display: flex; align-items: center; gap: 5px;";
-                headerLogo.appendChild(el);
-            }
-        }
+        // Rimuovi timer dall'header se esiste (legacy)
+        const oldHeaderTimer = document.getElementById('student-session-timer');
+        if (oldHeaderTimer) oldHeaderTimer.remove();
         
         const dropdownContainer = document.getElementById('dropdown-timer-container');
         const dropdownTimer = document.getElementById('dropdown-session-timer');
@@ -125,13 +117,8 @@ const SessionTimer = {
         const timeStr = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         
         if (onboardingViews.includes(currentView)) {
-            if (el) el.style.display = 'none';
             if (dropdownContainer) dropdownContainer.style.display = 'none';
         } else {
-            if (el) {
-                el.style.display = 'flex';
-                el.innerHTML = `<i class="fa-regular fa-clock"></i> ${timeStr}`;
-            }
             if (dropdownContainer && dropdownTimer) {
                 dropdownContainer.style.display = 'block';
                 dropdownTimer.textContent = timeStr;

@@ -3936,3 +3936,207 @@ table.game-table tr:hover td {
         margin-bottom: 10px;
     }
 }
+
+/* ==========================================
+   SCROLL INTERNO: Mercato, Inventario, Regolamento, Missioni
+   ========================================== */
+
+/* Mercato */
+#view-shop {
+    overflow: hidden;
+    padding: 15px;
+    flex-direction: column;
+}
+#view-shop.active { display: flex; }
+#view-shop > div {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#view-shop .cards-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* Inventario */
+#view-inventory {
+    overflow: hidden;
+    padding: 15px;
+    flex-direction: column;
+}
+#view-inventory.active { display: flex; }
+#view-inventory > div {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#view-inventory .tab-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+#view-inventory .tab-content.active {
+    display: flex;
+    flex-direction: column;
+}
+#view-inventory .cards-grid {
+    flex: 1;
+    min-height: 0;
+}
+
+/* Regolamento */
+#view-regolamento {
+    overflow: hidden;
+    padding: 15px;
+    flex-direction: column;
+}
+#view-regolamento.active { display: flex; }
+#view-regolamento > div {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#view-regolamento > div > *:not(.section-title) {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* Missioni */
+#view-missions {
+    overflow: hidden;
+    padding: 15px;
+    flex-direction: column;
+}
+#view-missions.active { display: flex; }
+#view-missions > div {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#missions-categories-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* ==========================================
+   FOOTER: nascosto su schermi grandi
+   (i link sono ora nel menu a tendina)
+   ========================================== */
+@media (min-width: 769px) {
+    .main-footer {
+        display: none !important;
+    }
+}
+
+/* Su mobile il footer è già in column flow, lo mostriamo */
+@media (max-width: 768px) {
+    .main-footer {
+        display: flex;
+    }
+}
+
+/* ==========================================
+   MAPPA: padding inferiore per non toccare
+   la bottom navigation
+   ========================================== */
+#view-map {
+    padding-bottom: 64px !important;
+}
+
+/* ==========================================
+   MOBILE: Diario si comporta come il Tempio
+   (nascondi pannello lista quando si seleziona
+   un nodo, mostra solo il dettaglio)
+   ========================================== */
+@media (max-width: 1024px) {
+    /* Diario: colonna singola su mobile */
+    #view-diario .grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Di default su mobile mostra solo la lista dei nodi */
+    #view-diario .grid-container #diario-nodes-list-wrapper {
+        display: block;
+    }
+    #view-diario .grid-container #diario-reflection-panel {
+        display: none;
+    }
+
+    /* Quando è attivo il dettaglio, nascondi la lista e mostra il pannello */
+    #view-diario .grid-container.detail-active #diario-nodes-list-wrapper {
+        display: none;
+    }
+    #view-diario .grid-container.detail-active #diario-reflection-panel {
+        display: flex !important;
+    }
+
+    /* Pulsante "Torna ai Nodi" visibile solo su mobile in detail mode */
+    .btn-back-to-diario-nodes {
+        display: flex;
+        margin-bottom: 15px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Tempio: fix scroll su mobile */
+    #view-guides {
+        overflow-y: auto !important;
+        max-height: calc(100vh - 70px - 64px) !important;
+    }
+    #view-guides .guides-container {
+        grid-template-columns: 1fr;
+    }
+    #view-guides .guides-sidebar {
+        max-height: 300px;
+    }
+    /* Su mobile il reader del tempio può scorrere */
+    #view-guides .guides-reader {
+        overflow-y: visible;
+        max-height: none;
+    }
+    /* Diario su mobile: fix scroll */
+    #view-diario {
+        overflow-y: auto !important;
+        max-height: calc(100vh - 70px - 64px) !important;
+    }
+    #view-diario .grid-container {
+        overflow: visible;
+    }
+    #diario-nodes-list {
+        overflow-y: visible;
+        max-height: none;
+    }
+    #diario-reflection-panel {
+        max-height: none;
+        overflow: visible;
+    }
+    #diario-tasks-container {
+        overflow-y: visible;
+        max-height: none;
+    }
+}
+
+/* Pulsante "Torna ai Nodi" nascosto su desktop */
+@media (min-width: 1025px) {
+    .btn-back-to-diario-nodes {
+        display: none !important;
+    }
+}
+
+/* ==========================================
+   MISSIONI: Titolo da "Campagne" a "Missioni"
+   (solo nella view missions il h2)
+   ========================================== */

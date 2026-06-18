@@ -1188,6 +1188,78 @@ window.EroiMockData = {
       image: "assets/images/tempio/aquisgrana_landscape.png",
       summary: "Il cuore dell'impero cristiano di Carlo Magno, base di partenza delle imprese dei Paladini.",
       content: "Descrizione: Aquisgrana (Aachen) è la capitale storica dell'Impero Carolingio, eletta da Carlo Magno come centro amministrativo e culturale del suo regno. Nel ciclo carolingio, Aquisgrana rappresenta il baluardo e la culla della fede e dell'autorità cristiana in Europa. Da qui l'imperatore governava circondato dai suoi dodici Paladini, guidati dal prode Orlando. La città funge da base di partenza logistica e ideale per le leggendarie spedizioni militari contro i Saraceni in Spagna e nei Pirenei, celebrando l'unione mitica tra il potere imperiale sacro e la difesa dei confini dell'Europa cristiana. La corte di Aquisgrana è anche un luogo di ritrovo e di festa, dove le virtù cavalleresche vengono esaltate e dove si narrano le epiche gesta degli eroi in difesa della fede. La maestosa Cappella Palatina, cuore architettonico della città, è il simbolo del profondo legame tra il potere temporale dell'imperatore e l'autorità spirituale della Chiesa."
+    },
+    {
+      id: "theme_destino",
+      category: "Schede Tematiche",
+      title: "Il destino",
+      summary: "IL CONCETTO DI FATO, MOIRA E FATUM NEI GRANDI POEMI EPICI IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  NEL MONDO EPICO IL <span style="color: #ea580c;">DESTINO</span> NON È UNA SCELTA DELL'UOMO, MA UN DISEGNO SUPERIORE TRACCIATO DAGLI DEI E DALLE FORZE COSMICHE. NEI POEMI GRECI QUESTA FORZA INELUTTABILE SI CHIAMA <span style="color: #2563eb;">MOIRA</span>, CHE ASSEGNA AD OGNI MORTALE UNA SORTE PRECISA SIN DALLA NASCITA. ACHILLE SA CHE LA GLORIA ETERNA COSTERÀ LA VITA, EPPURE SCEGLIE DI COMBATTERE. ULISSE DEVE PASSARE PER LE SOFFERENZE DEL MARE PRIMA DI RAGGIUNGERE ITACA. NELL'ENEIDE IL <span style="color: #16a34a;">FATUM</span> DI ENEA COINCIDE CON I PIANI DI GIOVE PER LA FONDAZIONE DI ROMA, E NESSUNA FORZA — NEMMENO L'AMORE PER DIDONE — PUÒ FERMARLO. ANCHE I NIBELUNGHI VIVONO SOTTO L'OMBRA DI UN DESTINO MALEDETTO SEGNATO DALL'ORO DEL RENO.
+</div>`
+    },
+    {
+      id: "theme_amicizia",
+      category: "Schede Tematiche",
+      title: "L'amicizia",
+      summary: "IL VALORE DEL LEGAME TRA COMPAGNI D'ARME E FIDATI ALLEATI IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  L'<span style="color: #2563eb;">AMICIZIA</span> TRA COMPAGNI COSTITUISCE UNO DEI TEMI PIÙ POTENTI DELL'EPICA. IL LEGAME TRA <span style="color: #ea580c;">ACHILLE E PATROCLO</span> NELL'ILIADE TRASCENDE LA SEMPLICE CAMARADERIA: LA MORTE DI PATROCLO RISVEGLIA L'EROE DAL SUO LETARGO D'IRA E LO SPINGE A TORNARE IN BATTAGLIA, ACCETTANDO IL PROPRIO DESTINO MORTALE PUR DI VENDICARE L'AMICO. NELL'ODISSEA L'AMICIZIA TRA ULISSE E I SUOI COMPAGNI DI NAVIGAZIONE È CONTINUAMENTE MESSA ALLA PROVA, EVIDENZIANDO QUANTO LA FEDELTÀ SIA UN DONO PREZIOSO. NEI CICLI MEDIEVALI TROVIAMO LA <span style="color: #16a34a;">FRATELLANZA D'ARMI</span> TRA I PALADINI DI CARLO MAGNO, LA TAVOLA ROTONDA DI ARTÙ E IL PATTO TRA ORLANDO E OLIVIERO, SPECCHIO DI LEALTÀ ASSOLUTA.
+</div>`
+    },
+    {
+      id: "theme_vendetta",
+      category: "Schede Tematiche",
+      title: "La vendetta",
+      summary: "IL CICLO SENZA FINE DELL'ODIO E DELLA RIVALSA NEI POEMI EPICI IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  LA <span style="color: #ea580c;">VENDETTA</span> È UN MOTORE NARRATIVO POTENTE NELL'EPICA: ESSA ALIMENTA CONFLITTI CHE SPESSO SUPERANO I CONFINI DELLA VITA DEL SINGOLO EROE. ACHILLE NON COMBATTE PER CONQUISTARE TROIA, MA PER VENDICARE LA MORTE DI <span style="color: #2563eb;">PATROCLO</span>. NELL'ODISSEA ULISSE TORNA A ITACA E STERMINARA I PROCI IN UNO SLANCIO DI GIUSTIZIA E RISCATTO. NEL CICLO DEI NIBELUNGHI <span style="color: #16a34a;">CRIMILDE</span> CONSACRA L'INTERA SECONDA PARTE DELLA SUA VITA ALL'IMPLACABILE PIANIFICAZIONE DELLA MORTE DI HAGEN, ARRIVANDO A SPOSARE IL RE DEGLI UNNI SOLO PER USARLO COME STRUMENTO DI DISTRUZIONE. IL TEMA DELLA VENDETTA RIVELA COME L'ODIO POSSA CORROMPERE ANCHE LE ANIME PIÙ NOBILI.
+</div>`
+    },
+    {
+      id: "theme_amore",
+      category: "Schede Tematiche",
+      title: "L'amore",
+      summary: "LE DIVERSE FORME DELL'EROS E DELL'AMOR CORTESE DALL'EPICA CLASSICA AL MEDIOEVO IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  L'<span style="color: #2563eb;">AMORE</span> NELL'EPICA CAMBIA FORMA E SIGNIFICATO A SECONDA DEL CONTESTO STORICO-CULTURALE. NELL'ILIADE L'EROS HA FORZA COSMICA: È L'AMORE DI PARIDE PER <span style="color: #ea580c;">ELENA</span> A SCATENARE UNA GUERRA DI DIECI ANNI. NELL'ODISSEA L'AMORE CONIUGALE TRA ULISSE E PENELOPE È RESISTENZA, FEDELTÀ E PROMESSA. NELL'ENEIDE L'AMORE TRAGICO TRA <span style="color: #16a34a;">ENEA E DIDONE</span> INCARNA IL DRAMMA DI CHI DEVE SCEGLIERE TRA IL CUORE E IL DOVERE. NEL MEDIOEVO NASCE L'<span style="color: #2563eb;">AMOR CORTESE</span>: UN AMORE PURIFICANTE E SPIRITUALIZZATO (LANCILLOTTO-GINEVRA, TRISTANO-ISOTTA) CHE INNALZA L'AMANTE E LO RENDE VIRTUOSO, MA CHE TALVOLTA ENTRA IN CONFLITTO CON LA LEALTÀ VERSO IL PROPRIO SIGNORE.
+</div>`
+    },
+    {
+      id: "theme_tradimento",
+      category: "Schede Tematiche",
+      title: "Il tradimento",
+      summary: "L'INGANNO E LA ROTTURA DEL PATTO DI LEALTÀ COME CAUSA DI TRAGEDIA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  IL <span style="color: #ea580c;">TRADIMENTO</span> È LA SCINTILLA CHE INNESCA LE TRAGEDIE PIÙ DEVASTANTI DEI POEMI EPICI. IL TRADIMENTO DI <span style="color: #2563eb;">GANO DI MAGANZA</span> CAUSA L'IMBOSCATA DI RONCISVALLE E LA MORTE DI ORLANDO E DELL'INTERA RETROGUARDIA FRANCA: UN ATTO CODARDO CHE MACCHIA PER SEMPRE L'ONORE DEL VASSALLO. NEL CICLO DEI NIBELUNGHI <span style="color: #16a34a;">HAGEN</span> TRADISCE L'OSPITALITÀ SACRA UCCIDENDO SIGFRIDO A TRADIMENTO DURANTE UNA CACCIA. NEL CICLO BRETONE, L'AMORE DI LANCILLOTTO PER GINEVRA RAPPRESENTA IL TRADIMENTO INVOLONTARIO VERSO IL RE E L'IDEALE DELLA TAVOLA ROTONDA. OGNI TRADIMENTO NELL'EPICA NON È MAI IMPUNITO: SCATENA SEMPRE UNA CATENA DI CONSEGUENZE CHE PORTA ALLA ROVINA DEI TRADITORI E DEI TRADITI.
+</div>`
+    },
+    {
+      id: "theme_fedelta",
+      category: "Schede Tematiche",
+      title: "La fedeltà",
+      summary: "LA LEALTÀ E IL RISPETTO DEI VINCOLI DI ONORE COME VIRTÙ EROICA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  LA <span style="color: #16a34a;">FEDELTÀ</span> È IL CONTRALTARE VIRTUOSO DEL TRADIMENTO E COSTITUISCE IL CODICE D'ONORE DEGLI EROI. <span style="color: #2563eb;">PENELOPE</span> INCARNA LA FEDELTÀ CONIUGALE PIÙ ASSOLUTA: ASPETTA IL MARITO VENT'ANNI SENZA CEDERE AI PRETENDENTI, PROTEGGENDO ITACA E L'ONORE DELLA SUA CASA. <span style="color: #ea580c;">ENEA</span> È FEDELE AGLI DEI E AL SUO DESTINO ANCHE QUANDO QUESTO SIGNIFICA ABBANDONARE DIDONE E LA FELICITÀ PERSONALE. NEI CICLI MEDIEVALI LA FEDELTÀ AL PROPRIO SIGNORE (VASSALLO → SIGNORE) COSTITUISCE IL CARDINE DEL SISTEMA FEUDALE: I PALADINI GIURANO LEALTÀ A CARLO MAGNO, I CAVALIERI AD ARTÙ, E QUESTA LEALTÀ LI RENDE NOBILI. ANCHE IL VECCHIO CANE ARGO DI ULISSE, CHE MUORE APPENA RIVEDE IL PADRONE, DIVENTA SIMBOLO DI FEDELTÀ ETERNA.
+</div>`
+    },
+    {
+      id: "theme_patria",
+      category: "Schede Tematiche",
+      title: "La patria",
+      summary: "IL SENSO DI APPARTENENZA AL PROPRIO POPOLO E ALLA PROPRIA TERRA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  LA <span style="color: #2563eb;">PATRIA</span> — LA TERRA NATIA, IL PROPRIO POPOLO, LE TRADIZIONI — È UNO DEI VALORI PIÙ PROFONDI ATTORNO A CUI RUOTANO I POEMI EPICI. <span style="color: #ea580c;">ETTORE</span> DIFENDE TROIA SAPENDO CHE MORRÀ, PER AMORE DELLA SUA FAMIGLIA E DELLA SUA CITTÀ. <span style="color: #16a34a;">ULISSE</span> RINUNCIA ALL'IMMORTALITÀ OFFERTA DALLA NINFA CALIPSO PUR DI TORNARE ALLA ROCCIOSA ITACA: LA PATRIA VALE PIÙ DELL'ETERNITÀ. NELL'ENEIDE ENEA PORTA CON SÉ NON ORO O RICCHEZZE, MA I PENATI E LA MEMORIA DI TROIA, PERCHÉ LA VERA PATRIA SOPRAVVIVE NEI VALORI, NEI RITI E NELLA MEMORIA DEL PROPRIO POPOLO. ANCHE IL SACRIFICIO DI ORLANDO A RONCISVALLE HA UNA DIMENSIONE PATRIOTTICA: MUORE PER L'IMPERO CRISTIANO DI CARLO MAGNO, PER UNA PATRIA SPIRITUALE PIÙ GRANDE.
+</div>`
+    },
+    {
+      id: "theme_conoscenza",
+      category: "Schede Tematiche",
+      title: "La conoscenza",
+      summary: "LA SETE DI SAPERE E IL RUOLO DEL POETA COME CUSTODE DELLA MEMORIA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  LA <span style="color: #2563eb;">CONOSCENZA</span> È UNA DELLE SPINTE PIÙ POTENTI CHE MUOVONO GLI EROI EPICI. <span style="color: #ea580c;">ULISSE</span> RISCHIA LA VITA PER ASCOLTARE IL CANTO DELLE SIRENE: PREFERISCE CONOSCERE (LEGATO ALL'ALBERO) PIUTTOSTO CHE IGNORARE. DANTE, NELL'INFERNO, METTE IN BOCCA AD ULISSE L'ESORTAZIONE PIÙ BELLA SULLA SETE DI CONOSCENZA: "FATTI NON FOSTE A VIVER COME BRUTI, MA PER SEGUIR VIRTUTE E CANOSCENZA." IL <span style="color: #16a34a;">POETA-AEDO</span> (OMERO, VIRGILIO) STESSO È IL SUPREMO CUSTODE DELLA CONOSCENZA: TRAMANDA LE GESTA DEGLI EROI PER PRESERVARLE DALL'OBLIO. NEL TEMPIO DELLO STUDIO DI QUESTO GIOCO, TU SEI L'EREDE DI QUESTA TRADIZIONE: OGNI SCHEDA È UNA TESSERA DEL GRANDE MOSAICO DELLA CIVILTÀ LETTERARIA.
+</div>`
     }
   ],
 

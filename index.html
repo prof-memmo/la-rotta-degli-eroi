@@ -486,7 +486,7 @@
       <!-- 4. SEZIONE MISSIONI E QUIZ VIEW -->
       <section id="view-missions" class="view">
         <div class="glass-panel">
-          <h2 class="section-title"><i class="fa-solid fa-flag-checkered" style="color: var(--gold);"></i> Campagne e Missioni Didattiche</h2>
+          <h2 class="section-title"><i class="fa-solid fa-flag-checkered" style="color: var(--gold);"></i> Missioni</h2>
           
           <!-- Sezione elenchi missioni -->
           <div id="missions-categories-container">
@@ -542,9 +542,9 @@
             In questa sezione puoi scrivere le tue riflessioni guidate sui nodi della mappa che hai sbloccato. Ogni riflessione completata verrà valutata dal docente e ti farà guadagnare XP e Dracme!
           </p>
 
-          <div class="grid-container">
+          <div class="grid-container" id="diario-grid-container">
             <!-- Lista dei nodi sbloccati -->
-            <div id="diario-nodes-list" class="glass-panel" style="padding: 15px; border-radius: 8px; margin-bottom: 0;">
+            <div id="diario-nodes-list-wrapper" class="glass-panel" style="padding: 15px; border-radius: 8px; margin-bottom: 0;">
               <h3 style="font-family: var(--font-heading); color: var(--gold); font-size: 1.1rem; margin-bottom: 12px; border-bottom: 1px solid rgba(212,175,55,0.15); padding-bottom: 6px;">
                 Nodi del Viaggio
               </h3>
@@ -555,6 +555,10 @@
 
             <!-- Dettaglio delle riflessioni -->
             <div class="glass-panel" id="diario-reflection-panel" style="padding: 20px; border-radius: 8px; margin-bottom: 0; min-height: 400px;">
+              <!-- Pulsante torna ai nodi (solo mobile) -->
+              <button class="btn btn-secondary btn-back-to-diario-nodes" onclick="EroiApp.backToDiarioNodes()" style="margin-bottom: 15px;">
+                <i class="fa-solid fa-arrow-left"></i> Torna ai Nodi
+              </button>
               <div id="diario-empty-state" style="text-align: center; color: var(--text-muted); padding-top: 80px;">
                 <i class="fa-solid fa-feather" style="font-size: 3.5rem; color: rgba(212,175,55,0.15); margin-bottom: 15px; display: block;"></i>
                 Seleziona un nodo sbloccato a sinistra per iniziare o visualizzare le tue riflessioni.

@@ -15,19 +15,19 @@ const LEGAL_TEXTS = {
     privacy: `
         <h2>🔒 Privacy Policy</h2>
         <h3>1. Titolare del trattamento</h3>
-        <p>Il titolare del trattamento è Guglielmo Piersanti, contattabile all’indirizzo email: prof.memmo@gmail.com</p>
+        <p>Il titolare del trattamento è Guglielmo Piersanti, contattabile all'indirizzo email: prof.memmo@gmail.com</p>
         <h3>2. Finalità del sito</h3>
-        <p>“La Rotta degli Eroi” è un’applicazione web didattica, utilizzata a scopo educativo e ludico e senza fini di lucro per l'apprendimento della lingua italiana.</p>
+        <p>"La Rotta degli Eroi" è un'applicazione web didattica, utilizzata a scopo educativo e ludico e senza fini di lucro per l'apprendimento della lingua italiana.</p>
         <h3>3. Dati raccolti</h3>
         <p>Il sito può raccogliere i seguenti dati: nome utente (scelto dall'utente); informazioni di utilizzo relative agli esercizi (punteggi, attività completate, progressi); messaggi inviati tramite il modulo di contatto (nome, email, messaggio); dati tecnici minimi per il funzionamento (es. tipo di dispositivo tramite browser).</p>
         <h3>4. Finalità del trattamento</h3>
-        <p>I dati vengono trattati esclusivamente per consentire l’accesso alle funzionalità della Palestra, gestire l’esperienza didattica personalizzata (come il salvataggio dei progressi e del vocabolario), rispondere alle richieste inviate tramite il modulo di contatto e migliorare il servizio didattico. Non vengono utilizzati per scopi commerciali o pubblicitari.</p>
+        <p>I dati vengono trattati esclusivamente per consentire l'accesso alle funzionalità della Palestra, gestire l'esperienza didattica personalizzata (come il salvataggio dei progressi e del vocabolario), rispondere alle richieste inviate tramite il modulo di contatto e migliorare il servizio didattico. Non vengono utilizzati per scopi commerciali o pubblicitari.</p>
         <h3>5. Base giuridica</h3>
-        <p>Il trattamento dei dati si basa sul consenso fornito dall’utente al momento del primo accesso e sull'utilizzo delle funzionalità didattiche del sito.</p>
+        <p>Il trattamento dei dati si basa sul consenso fornito dall'utente al momento del primo accesso e sull'utilizzo delle funzionalità didattiche del sito.</p>
         <h3>6. Conservazione dei dati</h3>
         <p>I dati sono salvati localmente sul browser dell'utente (LocalStorage) e, se implementato, su database sicuri. Non vengono venduti né ceduti a terzi. Sono mantenuti solo per il tempo necessario al funzionamento didattico o fino alla richiesta di cancellazione da parte dell'utente.</p>
-        <h3>8. Diritti dell’utente</h3>
-        <p>L'utente può richiedere in qualsiasi momento l'accesso ai propri dati o la loro cancellazione (che può avvenire anche tramite il proprio profilo utente cancellando i dati locali). Per assistenza, è possibile contattare il titolare all’indirizzo email sopra indicato.</p>
+        <h3>8. Diritti dell'utente</h3>
+        <p>L'utente può richiedere in qualsiasi momento l'accesso ai propri dati o la loro cancellazione (che può avvenire anche tramite il proprio profilo utente cancellando i dati locali). Per assistenza, è possibile contattare il titolare all'indirizzo email sopra indicato.</p>
         <h3>9. Cookie</h3>
         <p>Il sito non utilizza cookie di profilazione a scopo pubblicitario. Utilizza esclusivamente elementi tecnici necessari per il salvataggio dei progressi di studio.</p>
         <h3>9. Utenti minori</h3>
@@ -43,13 +43,13 @@ const LEGAL_TEXTS = {
         <h3>1. Titolare del sito</h3>
         <p>Il presente sito web "La Rotta degli Eroi" è gestito da: Guglielmo Piersanti. Email di contatto: prof.memmo@gmail.com</p>
         <h3>2. Accettazione dei termini</h3>
-        <p>L’accesso alla Palestra implica l’accettazione dei presenti Termini e Condizioni. Se non si accettano tali condizioni, si invita a non utilizzare il sito.</p>
+        <p>L'accesso alla Palestra implica l'accettazione dei presenti Termini e Condizioni. Se non si accettano tali condizioni, si invita a non utilizzare il sito.</p>
         <h3>3. Descrizione del servizio</h3>
         <p>Il sito offre esercizi interattivi di grammatica, lettura, lessico e produzione per la scuola secondaria di primo grado. Gli utenti possono: svolgere esercizi, monitorare i propri progressi e contattare il gestore per supporto o collaborazione.</p>
         <h3>4. Utilizzo del sito</h3>
-        <p>L’utente si impegna a utilizzare il sito in modo corretto, evitando comportamenti che possano danneggiare la piattaforma o gli altri utenti. È vietato l'invio di messaggi offensivi o spam tramite il modulo di contatto.</p>
+        <p>L'utente si impegna a utilizzare il sito in modo corretto, evitando comportamenti che possano danneggiare la piattaforma o gli altri utenti. È vietato l'invio di messaggi offensivi o spam tramite il modulo di contatto.</p>
         <h3>5. Modulo di contatto</h3>
-        <p>L’utente è responsabile dei dati inviati tramite il modulo. Il titolare si riserva il diritto di non rispondere a messaggi non pertinenti o inappropriati.</p>
+        <p>L'utente è responsabile dei dati inviati tramite il modulo. Il titolare si riserva il diritto di non rispondere a messaggi non pertinenti o inappropriati.</p>
         <h3>6. Proprietà intellettuale</h3>
         <p>I testi e i materiali didattici originali contenuti nel sito sono di proprietà del titolare, salvo dove diversamente indicato (es. fonti letterarie citate). È vietata la riproduzione per scopi commerciali senza autorizzazione.</p>
         <h3>7. Limitazione di responsabilità</h3>
@@ -63,6 +63,55 @@ const LEGAL_TEXTS = {
     `
 };
 
+// --- Funzione contatti (stile Palestra di Riflessione) ---
+window.showContattiModal = function() {
+    const modal = document.getElementById('modal-legal');
+    const title = document.getElementById('modal-legal-title');
+    const body = document.getElementById('modal-legal-body');
+    if (!modal || !title || !body) return;
+    title.textContent = '📧 Contatti';
+    body.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="padding: 16px; background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold); border-radius: 8px;">
+          <h4 style="color: var(--gold); margin-bottom: 8px; font-family: var(--font-heading);">Mettiamoci in Contatto</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Hai domande, vuoi provare le missioni nella tua classe o proporre una collaborazione? Scrivimi!</p>
+          <div style="display: flex; align-items: center; gap: 10px; color: var(--gold); font-weight: bold;">
+            <i class="fa-solid fa-envelope"></i> <span>prof.memmo@gmail.com</span>
+          </div>
+        </div>
+        <div style="padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px;">
+          <h4 style="color: var(--text-light); margin-bottom: 12px; font-family: var(--font-heading); font-size: 0.95rem;">Invia un Messaggio</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <input type="text" id="contact-modal-name" placeholder="Il tuo nome" class="form-control" style="padding: 8px 12px;">
+            <input type="email" id="contact-modal-email" placeholder="La tua email" class="form-control" style="padding: 8px 12px;">
+            <textarea id="contact-modal-message" placeholder="Come posso aiutarti?" class="form-control" style="height: 80px; resize: none; padding: 8px 12px;"></textarea>
+            <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">
+              <input type="checkbox" id="contact-modal-check" style="margin-top: 2px;">
+              <span>Ho almeno 16 anni o sono sotto supervisione di un adulto. Accetto la 
+                <a href="#" onclick="event.preventDefault(); showLegal('privacy')" style="color: var(--gold);">Privacy Policy</a> e i 
+                <a href="#" onclick="event.preventDefault(); showLegal('terms')" style="color: var(--gold);">Termini</a>.
+              </span>
+            </label>
+            <button class="btn" style="width: 100%; padding: 10px;" onclick="window.submitContattiModal()">
+              <i class="fa-solid fa-paper-plane"></i> Invia Messaggio
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    modal.classList.add('active');
+};
+
+window.submitContattiModal = function() {
+    const name = document.getElementById('contact-modal-name')?.value.trim();
+    const email = document.getElementById('contact-modal-email')?.value.trim();
+    const message = document.getElementById('contact-modal-message')?.value.trim();
+    const check = document.getElementById('contact-modal-check')?.checked;
+    if (!name || !email || !message) { alert('Compila tutti i campi.'); return; }
+    if (!check) { alert('Devi accettare la Privacy Policy e i Termini.'); return; }
+    if (window.EroiApp) window.EroiApp.showToast('Messaggio inviato! Ti risponderemo presto.', 'success');
+    window.EroiApp.closeLegalModal();
+};
 
 let _currentLegalType = null;
 let _hasConfirmedPrivacy = false;
@@ -606,9 +655,17 @@ window.finalizzaDocente = async function() {
           `;
         }
         
-        // Aggiungi azioni comuni in fondo al dropdown
+        // Aggiungi azioni comuni in fondo al dropdown (con timer per studente, privacy/contatti per tutti)
+        const isStudente = user.role === 'studente' || user.role === 'forestiero';
+        const timerHtml = isStudente ? `
+          <div id="dropdown-timer-container" style="display: none; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; margin-bottom: 10px; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;"><i class="fa-regular fa-clock"></i> TEMPO SESSIONE</div>
+            <div id="dropdown-session-timer" style="font-family: monospace; font-size: 1.3rem; font-weight: bold; color: var(--gold); letter-spacing: 2px;">45:00</div>
+          </div>` : '';
         dropdownHtml += `
           <div class="dropdown-divider"></div>
+          
+          ${timerHtml}
           
           <div style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -623,6 +680,15 @@ window.finalizzaDocente = async function() {
                       <button onclick="MusicPlayer.nextTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-forward-step"></i></button>
                   </div>
               </div>
+          </div>
+          
+          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px;">
+            <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="EroiApp.openLegalModal('privacy')">
+              <i class="fa-solid fa-shield"></i> Privacy
+            </button>
+            <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="window.showContattiModal()">
+              <i class="fa-solid fa-envelope"></i> Contatti
+            </button>
           </div>
           
           <div class="dropdown-actions" style="display: flex; gap: 10px; justify-content: center;">
@@ -1661,16 +1727,18 @@ window.finalizzaDocente = async function() {
         : allMissions;
 
       const categories = [
-        { name: "Primo Viaggio", term: 1, icon: "fa-compass", color: "#a78bfa" },
-        { name: "Mitologia", term: 1, icon: "fa-bolt", color: "#f59e0b" },
-        { name: "Iliade", term: 1, icon: "fa-shield-halved", color: "#ef4444" },
-        { name: "Odissea", term: 1, icon: "fa-anchor", color: "#3b82f6" },
-        { name: "Eneide", term: 1, icon: "fa-scroll", color: "#10b981" },
-        { name: "Ciclo Carolingio", term: 2, icon: "fa-chess-rook", color: "#ec4899" },
-        { name: "Ciclo Bretone", term: 2, icon: "fa-wand-magic-sparkles", color: "#8b5cf6" },
-        { name: "Ciclo dei Nibelunghi", term: 2, icon: "fa-dragon", color: "#ea580c" },
-        { name: "La Rimediazione", term: 2, icon: "fa-film", color: "#f43f5e" },
-        { name: "I Videogiochi", term: 2, icon: "fa-gamepad", color: "#10b981" }
+        // Nodi 1° Quadrimestre (seguono la mappa)
+        { name: "Primo Viaggio",           mapArea: "Accademia",              term: 1, icon: "fa-compass",             color: "#a78bfa" },
+        { name: "Mitologia",               mapArea: "Miti di Fondazione",     term: 1, icon: "fa-bolt",                color: "#f59e0b" },
+        { name: "Iliade",                  mapArea: "Troia",                  term: 1, icon: "fa-shield-halved",       color: "#ef4444" },
+        { name: "Odissea",                 mapArea: "Itaca",                  term: 1, icon: "fa-anchor",              color: "#3b82f6" },
+        { name: "Eneide",                  mapArea: "Lazio",                  term: 1, icon: "fa-scroll",             color: "#10b981" },
+        // Nodi 2° Quadrimestre
+        { name: "Ciclo Carolingio",        mapArea: "Aquisgrana",             term: 2, icon: "fa-chess-rook",         color: "#ec4899" },
+        { name: "Ciclo Bretone",           mapArea: "Camelot",               term: 2, icon: "fa-wand-magic-sparkles", color: "#8b5cf6" },
+        { name: "Ciclo dei Nibelunghi",    mapArea: "Worms",                  term: 2, icon: "fa-dragon",             color: "#ea580c" },
+        { name: "La Rimediazione",         mapArea: null,                    term: 2, icon: "fa-film",               color: "#f43f5e" },
+        { name: "I Videogiochi",           mapArea: null,                    term: 2, icon: "fa-gamepad",            color: "#10b981" }
       ];
 
       function miniGameButtons(missionId) {
@@ -2725,6 +2793,12 @@ window.finalizzaDocente = async function() {
       document.querySelectorAll('.guide-list-item').forEach(item => {
         item.classList.remove('active');
       });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    backToDiarioNodes: function() {
+      const grid = document.getElementById('diario-grid-container');
+      if (grid) grid.classList.remove('detail-active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
@@ -4334,6 +4408,12 @@ window.finalizzaDocente = async function() {
 
     // --- LEGAL POPUPS ---
     openLegalModal: function(docKey) {
+      // Contatti: usa il modal personalizzato stile palestra
+      if (docKey === 'contacts') {
+        window.showContattiModal();
+        return;
+      }
+      
       const settings = window.EroiDB.getSettings();
       const title = document.getElementById('modal-legal-title');
       const body = document.getElementById('modal-legal-body');
@@ -4353,13 +4433,10 @@ window.finalizzaDocente = async function() {
       } else if (docKey === 'gdpr') {
         heading = 'Informativa GDPR';
         text = settings.gdpr;
-      } else if (docKey === 'contacts') {
-        heading = 'Contatti Globali';
-        text = settings.contacts;
       }
 
       title.textContent = heading;
-      body.innerHTML = text.replace(/\n/g, '<br>');
+      body.innerHTML = (text || '').replace(/\n/g, '<br>');
 
       document.getElementById('modal-legal').classList.add('active');
     },
@@ -4577,6 +4654,9 @@ window.finalizzaDocente = async function() {
 
         btn.onclick = () => {
           window.activeDiarioArea = area;
+          // Su mobile: attiva il pannello dettaglio (nasconde la lista)
+          const grid = document.getElementById('diario-grid-container');
+          if (grid) grid.classList.add('detail-active');
           this.renderDiario(studentEmail);
         };
 
@@ -4690,20 +4770,28 @@ window.finalizzaDocente = async function() {
           </p>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <textarea id="ta-${diaryId}" class="form-control" style="width: 100%; height: 100px; resize: none; font-size: 0.9rem; padding: 8px; line-height: 1.4;" placeholder="Scrivi qui la tua riflessione..." ${readOnly ? 'disabled' : ''}>${existing ? existing.text : ''}</textarea>
-
-
-            ${!readOnly ? `
-              <div style="display: flex; justify-content: flex-end;">
-                <button class="btn btn-primary" style="padding: 6px 15px; font-size: 0.8rem; border-radius: 4px;" onclick="EroiApp.submitDiaryEntry('${diaryId}', '${area}', ${index})">
-                  <i class="fa-solid fa-paper-plane"></i> Invia al Docente
-                </button>
-              </div>
-            ` : ''}
           </div>
           ${gradeHTML}
         `;
         tasksContainer.appendChild(taskCard);
       });
+
+      // Pulsante unico per inviare tutta la scheda al docente
+      const hasUnsentEntries = prompts.some((p, index) => {
+        const diaryId = `diary_${studentEmail}_${area.replace(/\s+/g, '_')}_${index}`;
+        const existing = diaries.find(d => d.id === diaryId);
+        return !existing; // non ancora inviata
+      });
+      if (hasUnsentEntries) {
+        const submitAllBtn = document.createElement('div');
+        submitAllBtn.style.cssText = 'display: flex; justify-content: flex-end; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(212,175,55,0.15);';
+        submitAllBtn.innerHTML = `
+          <button class="btn btn-primary" style="padding: 10px 24px; font-size: 0.9rem; border-radius: 6px;" onclick="EroiApp.submitAllDiaryEntries('${area}')">
+            <i class="fa-solid fa-paper-plane"></i> Invia Scheda al Docente
+          </button>
+        `;
+        tasksContainer.appendChild(submitAllBtn);
+      }
 
       // Form di autovalutazione
       const selfValId = `selfval_${studentEmail}_${area.replace(/\s+/g, '_')}`;
@@ -4724,7 +4812,7 @@ window.finalizzaDocente = async function() {
         selectOptions += `<option value="${char.title}" ${isSel}>${char.title}</option>`;
       });
 
-      const isReadOnly = !isAreaActive;
+      const isReadOnly = !isUnlockedOnMap;
 
       selfValCard.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(37,99,235,0.2); padding-bottom: 6px;">
@@ -4776,6 +4864,61 @@ window.finalizzaDocente = async function() {
         </div>
       `;
       tasksContainer.appendChild(selfValCard);
+    },
+
+    submitAllDiaryEntries: function(area) {
+      const studentEmail = Auth.getUser().email;
+      const diaries = window.EroiDB.getDiaries();
+      const prompts = this.getDiaryPrompts(area);
+      const entries = [];
+
+      for (let index = 0; index < prompts.length; index++) {
+        const diaryId = `diary_${studentEmail}_${area.replace(/\s+/g, '_')}_${index}`;
+        const existing = diaries.find(d => d.id === diaryId);
+        if (existing) continue; // già inviata, salta
+
+        const ta = document.getElementById(`ta-${diaryId}`);
+        if (!ta) continue;
+        const text = ta.value.trim();
+        if (text.length < 10) {
+          alert(`La riflessione n. ${index + 1} deve essere lunga almeno 10 caratteri!`);
+          ta.focus();
+          return;
+        }
+        entries.push({ diaryId, area, taskIndex: index, text });
+      }
+
+      if (entries.length === 0) {
+        this.showToast('Tutte le riflessioni sono già state inviate.', 'warning');
+        return;
+      }
+
+      if (!confirm(`Sei sicuro di voler inviare tutte le ${entries.length} riflessioni? Una volta inviate non potrai più modificarle finché il docente non le avrà valutate.`)) return;
+
+      entries.forEach(e => {
+        const entry = {
+          id: e.diaryId,
+          studentEmail,
+          area: e.area,
+          taskIndex: e.taskIndex,
+          text: e.text,
+          submittedAt: new Date().toISOString(),
+          liked: '',
+          wantMore: false,
+          helpNotes: '',
+          grade: null,
+          feedback: null,
+          gradedAt: null,
+          gradedBy: null
+        };
+        window.EroiDB.saveDiaryEntry(entry);
+      });
+
+      const profile = window.EroiDB.getStudentProfile(studentEmail);
+      const profileName = profile ? profile.name : studentEmail;
+      window.EroiDB.logActivity('student', `${profileName} ha inviato la scheda del Diario per ${area}.`);
+      this.showToast('Scheda inviata al docente!', 'success');
+      this.renderDiario(studentEmail);
     },
 
     submitDiaryEntry: function(diaryId, area, taskIndex) {
