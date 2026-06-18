@@ -1306,6 +1306,29 @@ h3.panel-title {
   flex-grow: 1;
   font-size: 0.95rem;
   line-height: 1.5;
+  color: var(--text-light);
+}
+
+/* Stili specifici per il contenuto della privacy e dei termini */
+.modal-body h2 {
+  color: var(--gold);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+.modal-body h3 {
+  color: var(--gold);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  margin: 16px 0 6px 0;
+  border-bottom: 1px solid rgba(212,175,55,0.2);
+  padding-bottom: 4px;
+}
+.modal-body p {
+  color: var(--text-light);
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+  line-height: 1.6;
 }
 
 .modal-footer {
@@ -3945,6 +3968,7 @@ table.game-table tr:hover td {
 #view-shop {
     overflow: hidden;
     padding: 15px;
+    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-shop.active { display: flex; }
@@ -3960,12 +3984,14 @@ table.game-table tr:hover td {
     min-height: 0;
     overflow-y: auto;
     padding-right: 6px;
+    padding-bottom: 64px;
 }
 
 /* Inventario */
 #view-inventory {
     overflow: hidden;
     padding: 15px;
+    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-inventory.active { display: flex; }
@@ -3994,6 +4020,7 @@ table.game-table tr:hover td {
 #view-regolamento {
     overflow: hidden;
     padding: 15px;
+    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-regolamento.active { display: flex; }
@@ -4002,18 +4029,24 @@ table.game-table tr:hover td {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
 }
-#view-regolamento > div > *:not(.section-title) {
+/* La griglia delle regole scrolla, la descrizione rimane in cima */
+#view-regolamento > div > p {
+    flex-shrink: 0;
+}
+#view-regolamento .dashboard-grid {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    padding-bottom: 10px;
 }
 
 /* Missioni */
 #view-missions {
     overflow: hidden;
     padding: 15px;
+    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-missions.active { display: flex; }
@@ -4029,6 +4062,7 @@ table.game-table tr:hover td {
     min-height: 0;
     overflow-y: auto;
     padding-right: 6px;
+    padding-bottom: 64px;
 }
 
 /* ==========================================
@@ -4095,6 +4129,7 @@ table.game-table tr:hover td {
     #view-guides {
         overflow-y: auto !important;
         max-height: calc(100vh - 70px - 64px) !important;
+        padding-bottom: 64px;
     }
     #view-guides .guides-container {
         grid-template-columns: 1fr;
@@ -4111,6 +4146,7 @@ table.game-table tr:hover td {
     #view-diario {
         overflow-y: auto !important;
         max-height: calc(100vh - 70px - 64px) !important;
+        padding-bottom: 64px;
     }
     #view-diario .grid-container {
         overflow: visible;

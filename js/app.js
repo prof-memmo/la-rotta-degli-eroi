@@ -557,9 +557,9 @@ window.finalizzaDocente = async function() {
       // Innesca il rendering specifico della vista caricata
       this.renderViewData(viewId, user);
       
-      // Video Intro per studenti (solo prima volta per sessione)
-      if (viewId === 'view-student-dashboard' && user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed')) {
-          sessionStorage.setItem('introVideoPlayed', 'true');
+      // Video Intro per studenti (solo prima volta assoluta, usa localStorage)
+      if (viewId === 'view-student-dashboard' && user.role === 'studente' && !localStorage.getItem('introVideoPlayed')) {
+          localStorage.setItem('introVideoPlayed', 'true');
           this.playIntroVideo();
       }
     },
@@ -685,6 +685,9 @@ window.finalizzaDocente = async function() {
           <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px;">
             <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="EroiApp.openLegalModal('privacy')">
               <i class="fa-solid fa-shield"></i> Privacy
+            </button>
+            <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="EroiApp.openLegalModal('terms')">
+              <i class="fa-solid fa-scroll"></i> Termini
             </button>
             <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="window.showContattiModal()">
               <i class="fa-solid fa-envelope"></i> Contatti
@@ -1310,8 +1313,9 @@ window.finalizzaDocente = async function() {
       const user = Auth.getUser();
       if (user) {
         // Handle auto-play on session restoration
-        const needsVideo = user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed');
+        const needsVideo = user.role === 'studente' && !localStorage.getItem('introVideoPlayed');
         if (window.MusicPlayer && !window.MusicPlayer.isPlaying && !needsVideo) {
+            // Musica: parte subito dopo login (la prima interazione utente ha già avuto luogo)
             window.MusicPlayer.togglePlay();
         }
         
@@ -4414,20 +4418,23 @@ window.finalizzaDocente = async function() {
         return;
       }
       
-      const settings = window.EroiDB.getSettings();
       const title = document.getElementById('modal-legal-title');
       const body = document.getElementById('modal-legal-body');
 
+      // Privacy e Termini: usa il testo ricco di LEGAL_TEXTS (formattato con h3/p)
+      if (docKey === 'privacy' || docKey === 'terms') {
+        title.textContent = docKey === 'privacy' ? 'Privacy Policy' : 'Termini e Condizioni';
+        body.innerHTML = LEGAL_TEXTS[docKey] || 'Contenuto non disponibile.';
+        document.getElementById('modal-legal').classList.add('active');
+        return;
+      }
+
+      // Altri documenti (cookies, gdpr): usa testo da settings
+      const settings = window.EroiDB.getSettings();
       let heading = '';
       let text = '';
 
-      if (docKey === 'privacy') {
-        heading = 'Privacy Policy';
-        text = settings.privacy;
-      } else if (docKey === 'terms') {
-        heading = 'Termini e Condizioni';
-        text = settings.terms;
-      } else if (docKey === 'cookies') {
+      if (docKey === 'cookies') {
         heading = 'Cookie Policy';
         text = settings.cookies;
       } else if (docKey === 'gdpr') {
@@ -4437,7 +4444,6 @@ window.finalizzaDocente = async function() {
 
       title.textContent = heading;
       body.innerHTML = (text || '').replace(/\n/g, '<br>');
-
       document.getElementById('modal-legal').classList.add('active');
     },
 
