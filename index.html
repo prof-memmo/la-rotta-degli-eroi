@@ -7,7 +7,7 @@
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Stylesheet di Progetto -->
-  <link rel="stylesheet" href="css/style.css?v=14">
+  <link rel="stylesheet" href="css/style.css?v=15">
   <link rel="stylesheet" href="css/components.css?v=7">
   <style>
     .vis-bar {
@@ -105,7 +105,7 @@
           <span class="user-badge-role" id="user-display-role">Ruolo</span>
         </div>
         <div style="display: flex; gap: 6px; align-items: center;">
-          <button id="btn-toggle-audio" title="Disattiva Audio" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 6px; font-size: 1.05rem; transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center;">
+          <button id="btn-toggle-audio" title="Disattiva Audio" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 6px; font-size: 1.05rem; transition: var(--transition-smooth);">
             <i class="fa-solid fa-volume-high"></i>
           </button>
           <button class="btn-logout-small" id="btn-logout" title="Disconnettiti">
@@ -141,7 +141,7 @@
                   <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; cursor: pointer;">
                       <input type="checkbox" id="welcome-check-privacy">
                       <span class="checkmark"></span>
-                      Accetto <a href="#" onclick="event.preventDefault(); showLegal('privacy')" style="color:var(--primary-color);">Privacy</a> e <a href="#" onclick="event.preventDefault(); showLegal('terms')" style="color:var(--primary-color);">Termini</a>
+                      Accetto <a href="#" onclick="event.preventDefault(); if(window.EroiApp) EroiApp.openLegalModal('privacy'); else showLegal('privacy')" style="color:var(--gold); text-decoration: underline; font-weight: bold;">Privacy</a> e <a href="#" onclick="event.preventDefault(); if(window.EroiApp) EroiApp.openLegalModal('terms'); else showLegal('terms')" style="color:var(--gold); text-decoration: underline; font-weight: bold;">Termini</a>
                   </label>
               </div>
 

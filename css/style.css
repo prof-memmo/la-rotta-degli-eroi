@@ -385,19 +385,19 @@ body {
   text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
 }
 
-/* Main Content Area */
+/* Main Content Area - Desktop: occupa esattamente lo spazio sotto l'header */
 .main-content {
   flex: 1;
   min-height: 0;
   margin-left: 0;
-  margin-top: 0;
-  padding: 0; 
-  padding-top: 70px; /* Spazio per l'header fisso */
+  margin-top: 70px; /* sposta sotto l'header fisso */
+  padding: 0;
+  height: calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
-  padding-bottom: 0px; 
   box-sizing: border-box;
-  overflow-y: auto; /* Fallback scrolling for the main content area */
+  overflow: hidden;
 }
 
 /* Footer rules */
@@ -461,15 +461,17 @@ body {
   color: var(--text-muted);
 }
 
-/* SPA Views */
+/* SPA Views - ogni view occupa tutto lo spazio disponibile e scrolla internamente */
 .view {
   display: none;
   flex-direction: column;
   animation: fadeIn 0.4s ease;
   flex: 1;
   min-height: 0;
-  padding: 30px; 
+  height: 100%;
+  padding: 30px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .view.active {
@@ -1512,8 +1514,9 @@ table.game-table tr:hover td {
 }
 
 /* Bottom Bar / Dock per Mobile e Desktop */
+/* Bottom nav mobile: senza !important così il JS può nasconderla con style.display */
 .mobile-bottom-nav {
-  display: flex !important;
+  display: flex; /* NO !important: il JS usa style.display='flex'/'none' */
   position: fixed;
   bottom: 0;
   left: 0;
@@ -1533,6 +1536,13 @@ table.game-table tr:hover td {
   box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   padding: 0;
+}
+
+/* Su desktop la bottom nav è sempre nascosta */
+@media (min-width: 769px) {
+  #mobile-navigation {
+    display: none !important;
+  }
 }
 
 .mobile-nav-item {
@@ -1622,10 +1632,9 @@ table.game-table tr:hover td {
   .sidebar {
     display: none;
   }
-  
-  /* SOLUZIONE STRUTTURALE: l'area contenuto occupa esattamente
-     lo spazio disponibile tra header e bottom nav.
-     Nessun view può finire sotto la nav. */
+
+  /* SOLUZIONE STRUTTURALE MOBILE:
+     L'area contenuto occupa esattamente lo spazio tra header e bottom nav */
   .main-content {
     margin-left: 0;
     margin-top: 70px;
@@ -1637,12 +1646,26 @@ table.game-table tr:hover td {
     flex-direction: column;
   }
 
-  /* Ogni view attiva occupa tutta l'area disponibile */
+  /* View mobile: padding ridotto, altezza piena */
   .view {
-    padding: 16px;
+    padding: 12px;
     height: 100%;
     max-height: 100%;
     box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Titoli pagina: più piccoli su mobile */
+  h2.section-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  h3.panel-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
   }
 
   .main-footer {
@@ -4220,11 +4243,138 @@ table.game-table tr:hover td {
     50% { opacity: 0.85; transform: translateX(-50%) scale(1.03); }
 }
 
+
 /* ==========================================
    STUDENT DASHBOARD: su mobile scrolla internamente
    ========================================== */
 @media (max-width: 768px) {
     #view-student-dashboard {
         overflow-y: auto;
+    }
+}
+
+/* ==========================================
+   DESKTOP: ogni view attiva scrolla internamente
+   (il main-content è overflow:hidden, le view scrollano)
+   ========================================== */
+.view.active {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Eccezioni: view che gestiscono lo scroll internamente */
+#view-diario.active,
+#view-guides.active,
+#view-shop.active,
+#view-inventory.active,
+#view-missions.active,
+#view-regolamento.active {
+    overflow: hidden;
+}
+
+/* ==========================================
+   DIARIO: scroll interno dei nodi garantito
+   ========================================== */
+#diario-nodes-list {
+    overflow-y: auto;
+    height: 100%;
+    max-height: 100%;
+}
+
+#diario-reflection-panel {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#diario-active-state {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#diario-tasks-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* ==========================================
+   INVENTARIO: riduzione padding card su desktop
+   ========================================== */
+#view-inventory .card {
+    padding: 14px;
+    min-height: 200px;
+}
+
+/* ==========================================
+   HEADER: responsive su smartphone (< 480px)
+   ========================================== */
+@media (max-width: 480px) {
+    .app-header {
+        padding: 0 10px;
+        height: 60px;
+    }
+    /* Adatta il main-content su schermi con header 60px */
+    .main-content {
+        margin-top: 60px;
+        height: calc(100vh - 60px);
+        max-height: calc(100vh - 60px);
+    }
+    @media (max-width: 768px) {
+        .main-content {
+            height: calc(100vh - 60px - 64px);
+            max-height: calc(100vh - 60px - 64px);
+        }
+    }
+    .header-logo-text {
+        display: none; /* nasconde testo logo su smartphone piccolo */
+    }
+    .header-logo-container img {
+        height: 36px !important;
+    }
+    /* Header user info compatta */
+    .header-user-name { font-size: 0.7rem; }
+    .header-user-level { font-size: 0.6rem; }
+    .header-avatar-img { width: 30px !important; height: 30px !important; }
+}
+
+/* ==========================================
+   TEMPIO (guide cards): responsive su mobile
+   ========================================== */
+@media (max-width: 768px) {
+    .guide-game-portrait-layout {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .guide-portrait-container {
+        width: 100% !important;
+        max-height: 160px;
+        overflow: hidden;
+    }
+    .guide-portrait-img {
+        width: 100% !important;
+        height: 160px !important;
+        object-fit: cover !important;
+    }
+    /* Cards griglia: 1 colonna su mobile */
+    .cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    /* View welcome: scrolla su mobile */
+    #view-welcome {
+        overflow-y: auto;
+    }
+}
+
+/* Su smartphone molto piccolo: 1 sola colonna */
+@media (max-width: 400px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
     }
 }
