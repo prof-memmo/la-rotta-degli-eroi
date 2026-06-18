@@ -1098,7 +1098,6 @@ h3.panel-title {
   min-height: 0;
   overflow-y: auto;
   padding-right: 10px;
-  padding-bottom: 80px; /* spazio per bottom nav */
 }
 
 .guides-container {
@@ -1621,18 +1620,29 @@ table.game-table tr:hover td {
 
 @media (max-width: 768px) {
   .sidebar {
-    display: none; /* Nascondiamo la sidebar e mostriamo la bottom bar */
+    display: none;
   }
   
+  /* SOLUZIONE STRUTTURALE: l'area contenuto occupa esattamente
+     lo spazio disponibile tra header e bottom nav.
+     Nessun view può finire sotto la nav. */
   .main-content {
     margin-left: 0;
     margin-top: 70px;
     padding: 0;
-    padding-bottom: 64px;
+    height: calc(100vh - 70px - 64px);
+    max-height: calc(100vh - 70px - 64px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
+  /* Ogni view attiva occupa tutta l'area disponibile */
   .view {
-    padding: 16px; /* Padding delle singole viste su mobile */
+    padding: 16px;
+    height: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
   }
 
   .main-footer {
@@ -3995,7 +4005,6 @@ table.game-table tr:hover td {
 #view-shop {
     overflow: hidden;
     padding: 15px;
-    padding-bottom: 0;
     flex-direction: column;
 }
 #view-shop.active { display: flex; }
@@ -4011,14 +4020,12 @@ table.game-table tr:hover td {
     min-height: 0;
     overflow-y: auto;
     padding-right: 6px;
-    padding-bottom: 80px;
 }
 
 /* Inventario */
 #view-inventory {
     overflow: hidden;
     padding: 15px;
-    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-inventory.active { display: flex; }
@@ -4047,7 +4054,6 @@ table.game-table tr:hover td {
 #view-regolamento {
     overflow: hidden;
     padding: 15px;
-    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-regolamento.active { display: flex; }
@@ -4073,7 +4079,6 @@ table.game-table tr:hover td {
 #view-missions {
     overflow: hidden;
     padding: 15px;
-    padding-bottom: 64px;
     flex-direction: column;
 }
 #view-missions.active { display: flex; }
@@ -4089,7 +4094,6 @@ table.game-table tr:hover td {
     min-height: 0;
     overflow-y: auto;
     padding-right: 6px;
-    padding-bottom: 64px;
 }
 
 /* ==========================================
@@ -4114,7 +4118,7 @@ table.game-table tr:hover td {
    la bottom navigation
    ========================================== */
 #view-map {
-    padding-bottom: 64px !important;
+    padding-bottom: 0 !important;
 }
 
 /* ==========================================
@@ -4152,49 +4156,46 @@ table.game-table tr:hover td {
         justify-content: center;
     }
 
-    /* Tempio: fix scroll su mobile */
+    /* Tempio: flex column su mobile, sidebar + reader impilati */
     #view-guides {
-        overflow-y: auto !important;
-        max-height: calc(100vh - 70px - 64px) !important;
-        padding-bottom: 80px;
+        overflow: hidden;
     }
     #view-guides .guides-container {
         grid-template-columns: 1fr;
         display: flex;
         flex-direction: column;
         min-height: 0;
+        flex: 1;
     }
     #view-guides .guides-sidebar {
-        max-height: 260px;
+        max-height: 220px;
         flex-shrink: 0;
-    }
-    /* Su mobile il reader del tempio si espande e scrolla */
-    #view-guides .guides-reader {
         overflow-y: auto;
-        max-height: none;
-        min-height: 200px;
-        padding-bottom: 20px;
     }
-    /* Diario su mobile: fix scroll */
+    #view-guides .guides-reader {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+    }
+    /* Diario su mobile: scroll interno */
     #view-diario {
-        overflow-y: auto !important;
-        max-height: calc(100vh - 70px - 64px) !important;
-        padding-bottom: 80px;
+        overflow: hidden;
     }
     #view-diario .grid-container {
-        overflow: visible;
+        overflow: hidden;
+        flex: 1;
+        min-height: 0;
     }
     #diario-nodes-list {
-        overflow-y: visible;
-        max-height: none;
+        overflow-y: auto;
+        max-height: 100%;
     }
     #diario-reflection-panel {
-        max-height: none;
-        overflow: visible;
-        padding-bottom: 80px;
+        overflow-y: auto;
+        max-height: 100%;
     }
     #diario-tasks-container {
-        overflow-y: visible;
+        overflow-y: auto;
         max-height: none;
     }
 }
@@ -4220,15 +4221,10 @@ table.game-table tr:hover td {
 }
 
 /* ==========================================
-   STUDENT DASHBOARD: padding-bottom su mobile
-   per non essere coperta dalla bottom nav
+   STUDENT DASHBOARD: su mobile scrolla internamente
    ========================================== */
 @media (max-width: 768px) {
     #view-student-dashboard {
-        padding-bottom: 80px;
         overflow-y: auto;
-    }
-    #view-map {
-        padding-bottom: 80px !important;
     }
 }
