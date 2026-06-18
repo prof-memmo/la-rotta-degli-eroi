@@ -104,11 +104,51 @@ const MusicPlayer = {
             }
         }
     }
+    // Avvia musica se il player è pronto e non è in corso un video
+    startAutoplay: function() {
+        if (this.isPlaying) return;
+        if (window.introVideoActive) return;
+        if (!this.audioElement) this.init();
+        const playPromise = this.audioElement.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                this.isPlaying = true;
+                this.updateUI();
+            }).catch(() => {
+                // Autoplay bloccato dal browser, l'utente dovrà premere play manualmente
+                this.isPlaying = false;
+                this.updateUI();
+            });
+        }
+    }
 };
 
 window.MusicPlayer = MusicPlayer;
 
-// Initialize on first user interaction if needed, or wait for manual play
+// Inizializza al caricamento
 document.addEventListener('DOMContentLoaded', () => {
     MusicPlayer.init();
 });
+
+// Avvia la musica automaticamente al PRIMO click/touch dell'utente
+// (necessario: i browser bloccano l'autoplay audio finché non c'è interazione)
+(function() {
+    let _started = false;
+    function startOnInteraction() {
+        if (_started) return;
+        _started = true;
+        // Rimuove subito i listener per non attivarsi più volte
+        document.removeEventListener('click', startOnInteraction, true);
+        document.removeEventListener('touchstart', startOnInteraction, true);
+        document.removeEventListener('keydown', startOnInteraction, true);
+        // Piccolo ritardo per far sì che il login e il video siano gestiti prima
+        setTimeout(() => {
+            if (window.MusicPlayer && !window.MusicPlayer.isPlaying && !window.introVideoActive) {
+                window.MusicPlayer.startAutoplay();
+            }
+        }, 500);
+    }
+    document.addEventListener('click', startOnInteraction, true);
+    document.addEventListener('touchstart', startOnInteraction, true);
+    document.addEventListener('keydown', startOnInteraction, true);
+})();

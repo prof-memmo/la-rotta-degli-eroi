@@ -1097,7 +1097,8 @@ h3.panel-title {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-right: 10px; /* Spazio per la scrollbar */
+  padding-right: 10px;
+  padding-bottom: 80px; /* spazio per bottom nav */
 }
 
 .guides-container {
@@ -3968,7 +3969,7 @@ table.game-table tr:hover td {
 #view-shop {
     overflow: hidden;
     padding: 15px;
-    padding-bottom: 64px;
+    padding-bottom: 0;
     flex-direction: column;
 }
 #view-shop.active { display: flex; }
@@ -3984,7 +3985,7 @@ table.game-table tr:hover td {
     min-height: 0;
     overflow-y: auto;
     padding-right: 6px;
-    padding-bottom: 64px;
+    padding-bottom: 80px;
 }
 
 /* Inventario */
@@ -4129,24 +4130,30 @@ table.game-table tr:hover td {
     #view-guides {
         overflow-y: auto !important;
         max-height: calc(100vh - 70px - 64px) !important;
-        padding-bottom: 64px;
+        padding-bottom: 80px;
     }
     #view-guides .guides-container {
         grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
     }
     #view-guides .guides-sidebar {
-        max-height: 300px;
+        max-height: 260px;
+        flex-shrink: 0;
     }
-    /* Su mobile il reader del tempio può scorrere */
+    /* Su mobile il reader del tempio si espande e scrolla */
     #view-guides .guides-reader {
-        overflow-y: visible;
+        overflow-y: auto;
         max-height: none;
+        min-height: 200px;
+        padding-bottom: 20px;
     }
     /* Diario su mobile: fix scroll */
     #view-diario {
         overflow-y: auto !important;
         max-height: calc(100vh - 70px - 64px) !important;
-        padding-bottom: 64px;
+        padding-bottom: 80px;
     }
     #view-diario .grid-container {
         overflow: visible;
@@ -4158,6 +4165,7 @@ table.game-table tr:hover td {
     #diario-reflection-panel {
         max-height: none;
         overflow: visible;
+        padding-bottom: 80px;
     }
     #diario-tasks-container {
         overflow-y: visible;
