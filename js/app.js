@@ -557,9 +557,9 @@ window.finalizzaDocente = async function() {
       // Innesca il rendering specifico della vista caricata
       this.renderViewData(viewId, user);
       
-      // Video Intro per studenti (solo prima volta assoluta, usa localStorage)
-      if (viewId === 'view-student-dashboard' && user.role === 'studente' && !localStorage.getItem('introVideoPlayed')) {
-          localStorage.setItem('introVideoPlayed', 'true');
+      // Video Intro per studenti (una volta per sessione di login)
+      if (viewId === 'view-student-dashboard' && user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed')) {
+          sessionStorage.setItem('introVideoPlayed', 'true');
           this.playIntroVideo();
       }
     },
@@ -1313,9 +1313,9 @@ window.finalizzaDocente = async function() {
       const user = Auth.getUser();
       if (user) {
         // Handle auto-play on session restoration
-        const needsVideo = user.role === 'studente' && !localStorage.getItem('introVideoPlayed');
+        const needsVideo = user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed');
         if (window.MusicPlayer && !window.MusicPlayer.isPlaying && !needsVideo) {
-            // Musica: parte subito dopo login (la prima interazione utente ha già avuto luogo)
+            // Musica: parte subito dopo login
             window.MusicPlayer.togglePlay();
         }
         
