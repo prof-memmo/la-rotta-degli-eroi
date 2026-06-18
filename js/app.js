@@ -497,16 +497,11 @@ window.finalizzaDocente = async function() {
 
       if (!isLogged || !user) {
         // Forza login se non autenticato
-        hideLoginOverlay(); // Not needed anymore as view-welcome is a normal view
+        hideLoginOverlay();
         document.getElementById('main-sidebar').style.display = 'none';
-        document.getElementById('mobile-navigation').style.display = 'flex';
+        document.getElementById('mobile-navigation').style.display = 'none'; // nascosta su login
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
-        
-        // Listener handles view switch
-        if (window.MusicPlayer && !window.MusicPlayer.isPlaying) {
-            // Se siamo nel welcome, non facciamo partire la musica in automatico, la lasceremo gestire al login
-        }
         
         // Genera i bottoni disabilitati per il login
         this.generateNavbarLinks(null);
@@ -533,7 +528,7 @@ window.finalizzaDocente = async function() {
       // Hide sidebar/header during onboarding
       if (['view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente', 'view-pausa-obbligatoria'].includes(viewId)) {
         document.getElementById('main-sidebar').style.display = 'none';
-        document.getElementById('mobile-navigation').style.display = 'flex';
+        document.getElementById('mobile-navigation').style.display = 'none'; // nascosta anche durante onboarding
         document.getElementById('app-header').style.display = 'none';
         document.getElementById('main-layout').style.marginLeft = '0';
       } else {
@@ -682,23 +677,23 @@ window.finalizzaDocente = async function() {
               </div>
           </div>
           
-          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px;">
-            <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="EroiApp.openLegalModal('privacy')">
+          <div class="dropdown-legal-btns">
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('privacy')">
               <i class="fa-solid fa-shield"></i> Privacy
             </button>
-            <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="EroiApp.openLegalModal('terms')">
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('terms')">
               <i class="fa-solid fa-scroll"></i> Termini
             </button>
-            <button class="btn btn-secondary" style="font-size: 0.62rem; padding: 4px 8px;" onclick="window.showContattiModal()">
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="window.showContattiModal()">
               <i class="fa-solid fa-envelope"></i> Contatti
             </button>
           </div>
           
-          <div class="dropdown-actions" style="display: flex; gap: 10px; justify-content: center;">
-            <button class="btn btn-secondary btn-toggle-audio-action" title="Toggle Audio" style="font-size: 0.65rem; padding: 4px 10px; min-width: 80px;">
+          <div class="dropdown-actions">
+            <button class="btn btn-secondary btn-toggle-audio-action dropdown-sm-btn" title="Toggle Audio">
               <i class="fa-solid fa-volume-high"></i> Effetti
             </button>
-            <button class="btn btn-danger btn-logout-action" style="font-size: 0.65rem; padding: 4px 10px; min-width: 80px;">
+            <button class="btn btn-danger btn-logout-action dropdown-sm-btn">
               <i class="fa-solid fa-power-off"></i> Esci
             </button>
           </div>

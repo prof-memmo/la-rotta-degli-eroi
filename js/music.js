@@ -15,7 +15,7 @@ const MusicPlayer = {
         if (!this.audioElement) {
             this.audioElement = new Audio();
             this.audioElement.loop = false;
-            this.audioElement.volume = 0.3; // Default volume for background music
+            this.audioElement.volume = 0.3;
             this.audioElement.addEventListener('ended', () => this.nextTrack());
             this.loadTrack(this.currentTrackIndex);
         }
@@ -31,29 +31,38 @@ const MusicPlayer = {
 
     togglePlay: function() {
         if (!this.audioElement) this.init();
-        
+
         // Non avviare la musica se il video introduttivo è in riproduzione
         if (!this.isPlaying && window.introVideoActive) return;
-        
+
         if (this.isPlaying) {
             this.audioElement.pause();
             this.isPlaying = false;
             this.updateUI();
         } else {
-            const playPromise = this.audioElement.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    this.isPlaying = true;
-                    this.updateUI();
-                }).catch(e => {
-                    console.log("Autoplay prevented", e);
-                    this.isPlaying = false;
-                    this.updateUI();
-                });
-            } else {
+            this._doPlay();
+        }
+    },
+
+    // Avvia la riproduzione (interno)
+    _doPlay: function() {
+        if (!this.audioElement) this.init();
+        if (window.introVideoActive) return;
+        const playPromise = this.audioElement.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
                 this.isPlaying = true;
                 this.updateUI();
-            }
+                this._hideAutoplayBanner();
+            }).catch(() => {
+                this.isPlaying = false;
+                this.updateUI();
+                // Autoplay bloccato: mostra il banner
+                this._showAutoplayBanner();
+            });
+        } else {
+            this.isPlaying = true;
+            this.updateUI();
         }
     },
 
@@ -61,14 +70,10 @@ const MusicPlayer = {
         if (!this.audioElement) this.init();
         this.loadTrack(this.currentTrackIndex + 1);
         if (this.isPlaying) {
-            const playPromise = this.audioElement.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(e => {
-                    console.log("Autoplay prevented", e);
-                    this.isPlaying = false;
-                    this.updateUI();
-                });
-            }
+            this.audioElement.play().catch(() => {
+                this.isPlaying = false;
+                this.updateUI();
+            });
         }
     },
 
@@ -76,77 +81,84 @@ const MusicPlayer = {
         if (!this.audioElement) this.init();
         this.loadTrack(this.currentTrackIndex - 1);
         if (this.isPlaying) {
-            const playPromise = this.audioElement.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(e => {
-                    console.log("Autoplay prevented", e);
-                    this.isPlaying = false;
-                    this.updateUI();
-                });
-            }
+            this.audioElement.play().catch(() => {
+                this.isPlaying = false;
+                this.updateUI();
+            });
         }
     },
 
     updateUI: function() {
         const titleEl = document.getElementById('music-track-title');
         const playBtnEl = document.getElementById('music-play-btn');
-        
         if (titleEl) {
             let title = this.tracks[this.currentTrackIndex].replace(" (freetouse.com).mp3", "");
             titleEl.textContent = title;
         }
-        
         if (playBtnEl) {
-            if (this.isPlaying) {
-                playBtnEl.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            } else {
-                playBtnEl.innerHTML = '<i class="fa-solid fa-play"></i>';
-            }
+            playBtnEl.innerHTML = this.isPlaying
+                ? '<i class="fa-solid fa-pause"></i>'
+                : '<i class="fa-solid fa-play"></i>';
         }
-    }
-    // Avvia musica se il player è pronto e non è in corso un video
-    startAutoplay: function() {
-        if (this.isPlaying) return;
-        if (window.introVideoActive) return;
-        if (!this.audioElement) this.init();
-        const playPromise = this.audioElement.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                this.isPlaying = true;
-                this.updateUI();
-            }).catch(() => {
-                // Autoplay bloccato dal browser, l'utente dovrà premere play manualmente
-                this.isPlaying = false;
-                this.updateUI();
-            });
-        }
+    },
+
+    // Banner sottile "tap per avviare la musica" mostrato se autoplay bloccato
+    _showAutoplayBanner: function() {
+        if (document.getElementById('autoplay-banner')) return;
+        const banner = document.createElement('div');
+        banner.id = 'autoplay-banner';
+        banner.style.cssText = `
+            position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+            background: rgba(212,175,55,0.95); color: #1a1a2e;
+            padding: 8px 20px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: bold; cursor: pointer;
+            z-index: 99999; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex; align-items: center; gap: 8px;
+            animation: pulse 1.5s ease-in-out infinite;
+        `;
+        banner.innerHTML = '<i class="fa-solid fa-music"></i> Tocca per avviare la musica';
+        banner.addEventListener('click', () => {
+            this._doPlay();
+            this._hideAutoplayBanner();
+        });
+        document.body.appendChild(banner);
+    },
+
+    _hideAutoplayBanner: function() {
+        const banner = document.getElementById('autoplay-banner');
+        if (banner) banner.remove();
     }
 };
 
 window.MusicPlayer = MusicPlayer;
 
-// Inizializza al caricamento
+// Inizializza al caricamento DOM
 document.addEventListener('DOMContentLoaded', () => {
     MusicPlayer.init();
+
+    // Tenta autoplay immediato: i browser moderni lo bloccano,
+    // ma alcuni (es. Chrome se l'utente ha già visitato il sito) lo permettono.
+    setTimeout(() => {
+        if (!window.introVideoActive) {
+            MusicPlayer._doPlay();
+        }
+    }, 800);
 });
 
-// Avvia la musica automaticamente al PRIMO click/touch dell'utente
-// (necessario: i browser bloccano l'autoplay audio finché non c'è interazione)
+// Fallback: avvia al primo click/touch se ancora non in play
 (function() {
     let _started = false;
     function startOnInteraction() {
         if (_started) return;
         _started = true;
-        // Rimuove subito i listener per non attivarsi più volte
         document.removeEventListener('click', startOnInteraction, true);
         document.removeEventListener('touchstart', startOnInteraction, true);
         document.removeEventListener('keydown', startOnInteraction, true);
-        // Piccolo ritardo per far sì che il login e il video siano gestiti prima
         setTimeout(() => {
             if (window.MusicPlayer && !window.MusicPlayer.isPlaying && !window.introVideoActive) {
-                window.MusicPlayer.startAutoplay();
+                window.MusicPlayer._doPlay();
             }
-        }, 500);
+        }, 300);
     }
     document.addEventListener('click', startOnInteraction, true);
     document.addEventListener('touchstart', startOnInteraction, true);

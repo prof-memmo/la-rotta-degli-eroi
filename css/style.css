@@ -1933,9 +1933,35 @@ table.game-table tr:hover td {
   margin: 12px 0;
 }
 
+.dropdown-legal-btns {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
 .dropdown-actions {
   display: flex;
   gap: 8px;
+  justify-content: center;
+}
+
+/* Bottoni piccoli nel dropdown */
+.dropdown-sm-btn {
+  font-size: 0.62rem !important;
+  padding: 4px 8px !important;
+  min-width: 0 !important;
+  white-space: nowrap;
+}
+
+/* Su schermi molto piccoli (< 400px): mostra solo icona */
+@media (max-width: 400px) {
+  .dropdown-sm-btn span.btn-label { display: none; }
+  .dropdown-sm-btn {
+    font-size: 0.58rem !important;
+    padding: 4px 6px !important;
+  }
 }
 
 .dropdown-actions .btn {
@@ -4184,3 +4210,25 @@ table.game-table tr:hover td {
    MISSIONI: Titolo da "Campagne" a "Missioni"
    (solo nella view missions il h2)
    ========================================== */
+
+/* ==========================================
+   ANIMAZIONE PULSE (usata dal banner musica)
+   ========================================== */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+    50% { opacity: 0.85; transform: translateX(-50%) scale(1.03); }
+}
+
+/* ==========================================
+   STUDENT DASHBOARD: padding-bottom su mobile
+   per non essere coperta dalla bottom nav
+   ========================================== */
+@media (max-width: 768px) {
+    #view-student-dashboard {
+        padding-bottom: 80px;
+        overflow-y: auto;
+    }
+    #view-map {
+        padding-bottom: 80px !important;
+    }
+}
