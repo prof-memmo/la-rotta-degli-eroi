@@ -689,6 +689,13 @@ window.finalizzaDocente = async function() {
             </button>
           </div>
           
+          <!-- Link dashboard visibile solo su mobile -->
+          <div class="dropdown-dashboard-link">
+            <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${user.role === 'docente' ? 'view-teacher-dashboard' : user.role === 'admin' ? 'view-admin-dashboard' : 'view-student-dashboard'}')">
+              <i class="fa-solid fa-gauge"></i> Dashboard
+            </button>
+          </div>
+          
           <div class="dropdown-actions">
             <button class="btn btn-secondary btn-toggle-audio-action dropdown-sm-btn" title="Toggle Audio">
               <i class="fa-solid fa-volume-high"></i> Effetti

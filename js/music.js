@@ -53,12 +53,10 @@ const MusicPlayer = {
             playPromise.then(() => {
                 this.isPlaying = true;
                 this.updateUI();
-                this._hideAutoplayBanner();
             }).catch(() => {
+                // Autoplay bloccato dal browser — riprova al primo click (listener globale)
                 this.isPlaying = false;
                 this.updateUI();
-                // Autoplay bloccato: mostra il banner
-                this._showAutoplayBanner();
             });
         } else {
             this.isPlaying = true;
@@ -100,33 +98,6 @@ const MusicPlayer = {
                 ? '<i class="fa-solid fa-pause"></i>'
                 : '<i class="fa-solid fa-play"></i>';
         }
-    },
-
-    // Banner sottile "tap per avviare la musica" mostrato se autoplay bloccato
-    _showAutoplayBanner: function() {
-        if (document.getElementById('autoplay-banner')) return;
-        const banner = document.createElement('div');
-        banner.id = 'autoplay-banner';
-        banner.style.cssText = `
-            position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
-            background: rgba(212,175,55,0.95); color: #1a1a2e;
-            padding: 8px 20px; border-radius: 20px;
-            font-size: 0.78rem; font-weight: bold; cursor: pointer;
-            z-index: 99999; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: flex; align-items: center; gap: 8px;
-            animation: pulse 1.5s ease-in-out infinite;
-        `;
-        banner.innerHTML = '<i class="fa-solid fa-music"></i> Tocca per avviare la musica';
-        banner.addEventListener('click', () => {
-            this._doPlay();
-            this._hideAutoplayBanner();
-        });
-        document.body.appendChild(banner);
-    },
-
-    _hideAutoplayBanner: function() {
-        const banner = document.getElementById('autoplay-banner');
-        if (banner) banner.remove();
     }
 };
 
