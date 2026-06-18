@@ -4315,31 +4315,32 @@ table.game-table tr:hover td {
    ========================================== */
 @media (max-width: 480px) {
     .app-header {
-        padding: 0 10px;
+        padding: 0 8px;
         height: 60px;
+        flex-wrap: nowrap;
+        gap: 6px;
     }
-    /* Adatta il main-content su schermi con header 60px */
+    /* Su smartphone < 480px siamo sempre mobile (bottom nav attiva):
+       main-content = 100vh - header(60px) - bottom-nav(64px) */
     .main-content {
         margin-top: 60px;
-        height: calc(100vh - 60px);
-        max-height: calc(100vh - 60px);
-    }
-    @media (max-width: 768px) {
-        .main-content {
-            height: calc(100vh - 60px - 64px);
-            max-height: calc(100vh - 60px - 64px);
-        }
+        height: calc(100vh - 60px - 64px);
+        max-height: calc(100vh - 60px - 64px);
     }
     .header-logo-text {
-        display: none; /* nasconde testo logo su smartphone piccolo */
+        display: none;
     }
     .header-logo-container img {
-        height: 36px !important;
+        height: 34px !important;
     }
-    /* Header user info compatta */
-    .header-user-name { font-size: 0.7rem; }
-    .header-user-level { font-size: 0.6rem; }
-    .header-avatar-img { width: 30px !important; height: 30px !important; }
+    .header-user-name { font-size: 0.68rem; }
+    .header-user-level { font-size: 0.58rem; }
+    .header-avatar-img { width: 28px !important; height: 28px !important; }
+    /* Timer e altri elementi header compatti */
+    #student-timer-display {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
 }
 
 /* ==========================================
