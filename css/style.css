@@ -385,15 +385,15 @@ body {
   text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
 }
 
-/* Main Content Area - Desktop: occupa esattamente lo spazio sotto l'header */
+/* Main Content Area - occupa esattamente lo spazio tra header e bottom nav su tutti gli schermi */
 .main-content {
   flex: 1;
   min-height: 0;
   margin-left: 0;
-  margin-top: 70px; /* sposta sotto l'header fisso */
+  margin-top: 70px;
   padding: 0;
-  height: calc(100vh - 70px);
-  max-height: calc(100vh - 70px);
+  height: calc(100vh - 70px - 64px); /* header 70px + bottom nav 64px */
+  max-height: calc(100vh - 70px - 64px);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -1538,12 +1538,8 @@ table.game-table tr:hover td {
   padding: 0;
 }
 
-/* Su desktop la bottom nav è sempre nascosta */
-@media (min-width: 769px) {
-  #mobile-navigation {
-    display: none !important;
-  }
-}
+/* Bottom nav visibile su TUTTI gli schermi (desktop e mobile)
+   Il JS controlla la visibilità con style.display */
 
 .mobile-nav-item {
   flex: 1;
@@ -1633,17 +1629,11 @@ table.game-table tr:hover td {
     display: none;
   }
 
-  /* SOLUZIONE STRUTTURALE MOBILE:
-     L'area contenuto occupa esattamente lo spazio tra header e bottom nav */
+  /* MOBILE: main-content già ha la stessa altezza del desktop
+     (calc 100vh - 70px - 64px), quindi non serve ridefinirla */
   .main-content {
     margin-left: 0;
-    margin-top: 70px;
-    padding: 0;
-    height: calc(100vh - 70px - 64px);
-    max-height: calc(100vh - 70px - 64px);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    /* altezza identica al desktop: già definita nella regola base */
   }
 
   /* View mobile: padding ridotto, altezza piena */
@@ -1897,6 +1887,9 @@ table.game-table tr:hover td {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.15);
   animation: dropdownFadeIn 0.3s ease;
   z-index: 1001;
+  /* Su schermi piccoli: scrollabile se il contenuto è troppo lungo */
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
 }
 
 @keyframes dropdownFadeIn {
