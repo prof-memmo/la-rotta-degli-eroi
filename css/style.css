@@ -385,24 +385,22 @@ body {
   text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
 }
 
-/* Main Content Area - occupa esattamente lo spazio tra header e bottom nav su tutti gli schermi */
 .main-content {
-  flex: 1;
-  min-height: 0;
-  margin-left: 0;
-  margin-top: 70px;
+  margin-top: 70px;       /* sotto l'header fisso */
+  margin-bottom: 0;
   padding: 0;
-  height: calc(100vh - 70px - 64px); /* header 70px + bottom nav 64px */
-  max-height: calc(100vh - 70px - 64px);
+  overflow: hidden;       /* Il contenuto principale NON scrolla, scrollano le view */
+  min-height: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 /* Footer rules */
 .main-footer {
   position: relative; /* Fa parte del flusso del documento, non copre nulla */
+  margin-bottom: 64px; /* Spazio per la bottom nav */
   left: 0;
   right: 0;
   min-height: 30px;
@@ -461,17 +459,16 @@ body {
   color: var(--text-muted);
 }
 
-/* SPA Views - ogni view occupa tutto lo spazio disponibile e scrolla internamente */
+/* SPA Views */
 .view {
   display: none;
   flex-direction: column;
   animation: fadeIn 0.4s ease;
   flex: 1;
   min-height: 0;
-  height: 100%;
-  padding: 30px;
+  padding: 20px 30px;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible; /* ogni view è nel flusso scroll del main-content */
 }
 
 .view.active {
@@ -797,6 +794,7 @@ h3.panel-title {
   flex-direction: column;
   justify-content: space-between;
   min-height: 280px;
+  height: auto !important;
 }
 
 .card:hover {
@@ -1078,8 +1076,10 @@ h3.panel-title {
 }
 
 #diario-nodes-list {
+  min-height: 0;
   max-height: 100%;
   overflow-y: auto;
+  padding-right: 10px; /* Spazio per la scrollbar */
 }
 
 #diario-reflection-panel {
@@ -1629,20 +1629,15 @@ table.game-table tr:hover td {
     display: none;
   }
 
-  /* MOBILE: main-content già ha la stessa altezza del desktop
-     (calc 100vh - 70px - 64px), quindi non serve ridefinirla */
+  /* Mobile: main-content già corretto con margin-top/bottom dalla regola base */
   .main-content {
     margin-left: 0;
-    /* altezza identica al desktop: già definita nella regola base */
   }
 
-  /* View mobile: padding ridotto, altezza piena */
+  /* View mobile: padding ridotto */
   .view {
-    padding: 12px;
-    height: 100%;
-    max-height: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
+    padding: 10px 12px;
+    overflow: visible;
   }
 
   /* Titoli pagina: più piccoli su mobile */
@@ -1652,6 +1647,7 @@ table.game-table tr:hover td {
     padding-bottom: 6px;
     gap: 8px;
     flex-shrink: 0;
+    margin-top: 0;
   }
   h3.panel-title {
     font-size: 1rem;
@@ -1873,11 +1869,13 @@ table.game-table tr:hover td {
   margin-left: 2px;
 }
 
+/* Dropdown: position FIXED così non esce mai dalla finestra */
 .profile-dropdown-card {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
+  position: fixed;
+  top: 70px;
+  right: 10px;
   width: 280px;
+  max-width: calc(100vw - 20px);
   background: rgba(13, 19, 38, 0.98);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -1887,7 +1885,6 @@ table.game-table tr:hover td {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.15);
   animation: dropdownFadeIn 0.3s ease;
   z-index: 1001;
-  /* Su schermi piccoli: scrollabile se il contenuto è troppo lungo */
   max-height: calc(100vh - 80px);
   overflow-y: auto;
 }
@@ -4020,9 +4017,9 @@ table.game-table tr:hover td {
 
 /* Mercato */
 #view-shop {
-    overflow: hidden;
     padding: 15px;
     flex-direction: column;
+    min-height: auto;
 }
 #view-shop.active { display: flex; }
 #view-shop > div {
@@ -4030,38 +4027,30 @@ table.game-table tr:hover td {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 #view-shop .cards-grid {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding-right: 6px;
-    /* Grid: non sovrappone mai le card */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     align-content: start;
     gap: 20px;
+    padding-bottom: 10px;
 }
 
 /* Inventario */
 #view-inventory {
-    overflow: hidden;
     padding: 15px;
     flex-direction: column;
+    min-height: auto;
 }
 #view-inventory.active { display: flex; }
 #view-inventory > div {
     flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 #view-inventory .tab-content {
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
 }
 #view-inventory .tab-content.active {
     display: flex;
@@ -4074,26 +4063,19 @@ table.game-table tr:hover td {
 
 /* Regolamento */
 #view-regolamento {
-    overflow: hidden;
     padding: 15px;
     flex-direction: column;
+    min-height: auto;
 }
 #view-regolamento.active { display: flex; }
 #view-regolamento > div {
     flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
-/* La griglia delle regole scrolla, la descrizione rimane in cima */
-#view-regolamento > div > p {
-    flex-shrink: 0;
-}
+#view-regolamento > div > p { flex-shrink: 0; }
 #view-regolamento .dashboard-grid {
     flex: 1;
-    min-height: 0;
-    overflow-y: auto;
     padding-bottom: 10px;
 }
 
@@ -4122,11 +4104,7 @@ table.game-table tr:hover td {
    FOOTER: nascosto su schermi grandi
    (i link sono ora nel menu a tendina)
    ========================================== */
-@media (min-width: 769px) {
-    .main-footer {
-        display: none !important;
-    }
-}
+/* Il footer è visibile su desktop come richiesto dall'utente */
 
 /* Su mobile il footer è già in column flow, lo mostriamo */
 @media (max-width: 768px) {
@@ -4259,16 +4237,15 @@ table.game-table tr:hover td {
 .view.active {
     overflow-y: auto;
     overflow-x: hidden;
+    max-height: 100%;
+    padding-bottom: 80px !important; /* Spazio per la bottom nav mobile */
 }
 
 /* Eccezioni: view che gestiscono lo scroll internamente */
 #view-diario.active,
-#view-guides.active,
-#view-shop.active,
-#view-inventory.active,
-#view-missions.active,
-#view-regolamento.active {
+#view-guides.active {
     overflow: hidden;
+    padding-bottom: 80px !important; /* Spazio per la bottom nav mobile */
 }
 
 /* ==========================================
