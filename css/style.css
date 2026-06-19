@@ -2049,7 +2049,7 @@ table.game-table tr:hover td {
 /* Frame del personaggio nell'Area Studio (Guide) */
 .guide-portrait-container {
   width: auto;
-  max-width: 240px;
+  max-width: 280px;
   height: auto;
   background: none;
   border: none;
@@ -2058,15 +2058,17 @@ table.game-table tr:hover td {
   position: relative;
   box-shadow: none;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
 .guide-portrait-img {
-  width: 216px !important;
-  height: 380px !important;
+  width: 100% !important;
+  max-width: 280px !important;
+  height: auto !important;
+  max-height: 420px !important;
   object-fit: contain !important;
-  object-position: top !important;
+  object-position: top center !important;
   z-index: 2;
   transition: transform 0.1s ease-out;
   transform-style: preserve-3d;
@@ -2174,11 +2176,11 @@ table.game-table tr:hover td {
 }
 
 .guide-game-portrait-layout.horizontal-layout .guide-portrait-img {
-  width: 100%;
-  max-width: none;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: center !important;
   transform: none;
   -webkit-mask-image: none !important;
   mask-image: none !important;
