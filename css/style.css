@@ -1587,18 +1587,21 @@ table.game-table tr:hover td {
   .guides-container {
     display: block;
   }
-  .guides-container:not(.detail-active) .guides-sidebar {
+  #view-guides:not(.detail-active) .guides-sidebar {
     display: flex;
     max-height: none;
   }
-  .guides-container:not(.detail-active) .guides-reader {
+  #view-guides:not(.detail-active) .guides-reader {
     display: none;
   }
-  .guides-container.detail-active .guides-sidebar {
+  #view-guides.detail-active .guides-sidebar {
     display: none;
   }
-  .guides-container.detail-active .guides-reader {
-    display: block;
+  #view-guides.detail-active .guides-reader {
+    display: flex;
+  }
+  #view-guides.detail-active #guides-back-btn {
+    display: flex !important;
   }
   .btn-back-to-guides {
     display: inline-flex;
@@ -4151,10 +4154,13 @@ table.game-table tr:hover td {
     }
 
     /* Quando è attivo il dettaglio, nascondi la lista e mostra il pannello */
-    #view-diario .grid-container.detail-active #diario-nodes-list-wrapper {
+    #view-diario.detail-active #diario-nodes-list-wrapper {
         display: none;
     }
-    #view-diario .grid-container.detail-active #diario-reflection-panel {
+    #view-diario.detail-active #diario-reflection-panel {
+        display: flex !important;
+    }
+    #view-diario.detail-active #diario-back-btn {
         display: flex !important;
     }
 
@@ -4246,17 +4252,16 @@ table.game-table tr:hover td {
    (il main-content è overflow:hidden, le view scrollano)
    ========================================== */
 .view.active {
+    display: flex;
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 100%;
-    padding-bottom: 80px !important; /* Spazio per la bottom nav mobile */
 }
 
 /* Eccezioni: view che gestiscono lo scroll internamente */
 #view-diario.active,
 #view-guides.active {
     overflow: hidden;
-    padding-bottom: 80px !important; /* Spazio per la bottom nav mobile */
 }
 
 /* ==========================================
@@ -4522,13 +4527,14 @@ table.game-table tr:hover td {
     
     /* SPAZIO TITOLO: riduce padding-top della view su schermi ridotti */
     .view.active {
-        padding-top: 5px !important;
+        padding-top: 0px !important;
     }
     .view h2, .view h1 {
         margin-top: 0 !important;
     }
     .glass-panel {
-        padding: 15px !important;
+        padding: 10px !important;
+        padding-top: 5px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
         max-height: none;

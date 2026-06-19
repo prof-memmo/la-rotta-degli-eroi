@@ -537,6 +537,9 @@
             <h2 class="section-title" style="border: none; margin: 0; padding: 0;">
               <i class="fa-solid fa-feather-pointed" style="color: var(--gold);"></i> Diario di Bordo
             </h2>
+            <button class="btn btn-secondary btn-back-to-diario-nodes" id="diario-back-btn" onclick="EroiApp.backToDiarioNodes()" style="padding: 4px 12px; font-size: 0.8rem; border-radius: 20px; height: 32px; display: none;">
+              <i class="fa-solid fa-arrow-left"></i> Nodi
+            </button>
           </div>
           <p style="color: var(--text-muted); margin-bottom: 20px;">
             In questa sezione puoi scrivere le tue riflessioni guidate sui nodi della mappa che hai sbloccato. Ogni riflessione completata verrà valutata dal docente e ti farà guadagnare XP e Dracme!
@@ -555,10 +558,7 @@
 
             <!-- Dettaglio delle riflessioni -->
             <div class="glass-panel" id="diario-reflection-panel" style="padding: 20px; border-radius: 8px; margin-bottom: 0; min-height: 400px;">
-              <!-- Pulsante torna ai nodi (solo mobile) -->
-              <button class="btn btn-secondary btn-back-to-diario-nodes" onclick="EroiApp.backToDiarioNodes()" style="margin-bottom: 15px;">
-                <i class="fa-solid fa-arrow-left"></i> Torna ai Nodi
-              </button>
+              <!-- Il pulsante torna ai nodi è stato spostato in alto -->
               <div id="diario-empty-state" style="text-align: center; color: var(--text-muted); padding-top: 80px;">
                 <i class="fa-solid fa-feather" style="font-size: 3.5rem; color: rgba(212,175,55,0.15); margin-bottom: 15px; display: block;"></i>
                 Seleziona un nodo sbloccato a sinistra per iniziare o visualizzare le tue riflessioni.
@@ -654,7 +654,14 @@
       <!-- 7. GUIDE DIDATTICHE STUDY AREA VIEW -->
       <section id="view-guides" class="view">
         <div class="glass-panel">
-          <h2 class="section-title"><i class="fa-solid fa-book-open" style="color: var(--gold);"></i> Tempio dello Studio</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold-dark); padding-bottom: 8px; margin-bottom: 20px;">
+            <h2 class="section-title" style="border: none; margin: 0; padding: 0;">
+              <i class="fa-solid fa-book-open" style="color: var(--gold);"></i> Tempio dello Studio
+            </h2>
+            <button class="btn btn-secondary btn-back-to-guides" id="guides-back-btn" onclick="EroiApp.backToGuidesList()" style="padding: 4px 12px; font-size: 0.8rem; border-radius: 20px; height: 32px; display: none;">
+              <i class="fa-solid fa-arrow-left"></i> Elenco Schede
+            </button>
+          </div>
           
           <div class="guides-container">
             <!-- Sidebar elenco guide -->
@@ -670,9 +677,7 @@
                   <p style="font-family: var(--font-heading); color: #78350f; font-weight: bold; font-size: 1.1rem;">Seleziona una scheda dalla colonna sinistra per srotolare la pergamena dello studio.</p>
                 </div>
                 <div id="guide-content-box" style="display: none;">
-                  <button class="btn btn-secondary btn-back-to-guides" id="btn-back-to-guides" style="margin-bottom: 15px; width: 100%; justify-content: center;" onclick="EroiApp.backToGuidesList()">
-                    <i class="fa-solid fa-arrow-left"></i> Torna all'elenco delle schede
-                  </button>
+                  <!-- Il pulsante Torna all'elenco è stato spostato in alto -->
                   <span class="category-badge" id="guide-display-category">Categoria</span>
                   <h3 id="guide-display-title">Titolo della scheda</h3>
                   <div class="guide-game-portrait-layout">

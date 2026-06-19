@@ -2616,9 +2616,9 @@ window.finalizzaDocente = async function() {
 
     // --- GUIDE DIDATTICHE STUDY PLAN ---
     renderGuides: function() {
-      const container = document.querySelector('.guides-container');
-      if (container) {
-        container.classList.remove('detail-active');
+      const viewGuides = document.getElementById('view-guides');
+      if (viewGuides) {
+        viewGuides.classList.remove('detail-active');
       }
       const guides = window.EroiDB.getStudyGuides();
       const sidebar = document.getElementById('guides-sidebar-list');
@@ -2776,9 +2776,9 @@ window.finalizzaDocente = async function() {
         document.getElementById('guide-display-body').innerHTML = content.replace(/\n/g, '<br>');
       }
 
-      const container = document.querySelector('.guides-container');
-      if (container) {
-        container.classList.add('detail-active');
+      const viewGuides = document.getElementById('view-guides');
+      if (viewGuides) {
+        viewGuides.classList.add('detail-active');
       }
 
       // Gestione Note al Testo (docente) e Appunti Personali (studente)
@@ -2795,9 +2795,9 @@ window.finalizzaDocente = async function() {
 
 
     backToGuidesList: function() {
-      const container = document.querySelector('.guides-container');
-      if (container) {
-        container.classList.remove('detail-active');
+      const viewGuides = document.getElementById('view-guides');
+      if (viewGuides) {
+        viewGuides.classList.remove('detail-active');
       }
       document.querySelectorAll('.guide-list-item').forEach(item => {
         item.classList.remove('active');
@@ -2806,8 +2806,8 @@ window.finalizzaDocente = async function() {
     },
 
     backToDiarioNodes: function() {
-      const grid = document.getElementById('diario-grid-container');
-      if (grid) grid.classList.remove('detail-active');
+      const viewDiario = document.getElementById('view-diario');
+      if (viewDiario) viewDiario.classList.remove('detail-active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
@@ -4666,8 +4666,8 @@ window.finalizzaDocente = async function() {
         btn.onclick = () => {
           window.activeDiarioArea = area;
           // Su mobile: attiva il pannello dettaglio (nasconde la lista)
-          const grid = document.getElementById('diario-grid-container');
-          if (grid) grid.classList.add('detail-active');
+          const viewDiario = document.getElementById('view-diario');
+          if (viewDiario) viewDiario.classList.add('detail-active');
           this.renderDiario(studentEmail);
         };
 
