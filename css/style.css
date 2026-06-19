@@ -4330,13 +4330,13 @@ table.game-table tr:hover td {
     }
     .guide-portrait-container {
         width: 100% !important;
-        max-height: 160px;
-        overflow: hidden;
+        max-height: 240px;
+        overflow: visible;
     }
     .guide-portrait-img {
         width: 100% !important;
-        height: 160px !important;
-        object-fit: cover !important;
+        max-height: 240px !important;
+        object-fit: contain !important;
     }
     /* Cards griglia: 1 colonna su mobile */
     .cards-grid {
