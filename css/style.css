@@ -880,7 +880,7 @@ h3.panel-title {
 }
 
 #view-map .glass-panel {
-  padding: 30px 40px 10px 40px !important; /* Spazio generoso per distribuire i contenuti lontano dai margini */
+  padding: 0 40px 0 40px !important; /* Spazio solo laterale */
   margin: 0 !important;
   max-width: none !important;
   width: 100% !important;
@@ -4425,10 +4425,9 @@ table.game-table tr:hover td {
    GUIDE (TEMPIO): testo card non esce fuori
    ========================================== */
 .guide-game-portrait-layout {
-    overflow: hidden;
+    overflow: visible;
 }
-.guide-game-portrait-layout .sheet-body,
-.guide-game-portrait-layout .parchment-sheet {
+.guide-game-portrait-layout .sheet-body {
     overflow: hidden;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -4537,8 +4536,7 @@ table.game-table tr:hover td {
         padding-top: 5px !important;
     }
     #view-map .glass-panel {
-        padding: 10px !important;
-        padding-top: 5px !important;
+        padding: 0 10px 0 10px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
         max-height: none;
