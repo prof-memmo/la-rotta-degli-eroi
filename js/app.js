@@ -396,6 +396,10 @@ window.finalizzaDocente = async function() {
   };
 
   window.EroiApp = {
+    toggleAudio: function() {
+      EroiAudio.toggleMute();
+    },
+
     init: function() {
       EroiAudio.updateMuteUI();
       this.bindEvents();
