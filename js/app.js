@@ -303,12 +303,16 @@ window.finalizzaDocente = async function() {
 
     updateMuteUI: function() {
       const btns = document.querySelectorAll('.btn-toggle-audio-action, #btn-toggle-audio');
+      const btnLogin = document.getElementById('login-audio-btn');
+      const updateBtn = (b) => {
+          if(!b) return;
+          b.innerHTML = this.isMuted ? '<i class="fa-solid fa-volume-xmark"></i> Attiva Musica' : '<i class="fa-solid fa-volume-high"></i> Disattiva Musica';
+          b.title = this.isMuted ? 'Attiva Audio' : 'Disattiva Audio';
+      };
       btns.forEach(btn => {
-        btn.innerHTML = this.isMuted 
-          ? '<i class="fa-solid fa-volume-xmark"></i>' 
-          : '<i class="fa-solid fa-volume-high"></i>';
-        btn.title = this.isMuted ? 'Attiva Audio' : 'Disattiva Audio';
+        updateBtn(btn);
       });
+      updateBtn(btnLogin);
     },
 
     playTone: function(frequency, type, duration, startTimeOffset = 0) {

@@ -221,7 +221,11 @@ const Auth = {
             }
         } catch (e) {
             console.error("Errore Google Login:", e);
+        if (window.EroiApp && window.EroiApp.showToast) {
+            window.EroiApp.showToast("Si è verificato un errore durante l'accesso con Google. Se stai usando un browser in-app (es. Instagram/Facebook), prova ad aprire il sito nel browser di sistema (Safari/Chrome).", "error");
+        } else {
             alert("Si è verificato un errore durante l'accesso con Google. Se stai usando un browser in-app (es. Instagram/Facebook), prova ad aprire il sito nel browser di sistema (Safari/Chrome).");
+        }
         }
     },
 

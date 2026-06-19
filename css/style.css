@@ -66,6 +66,14 @@ body {
   background: var(--gold);
 }
 
+/* View Map Container */
+#view-map .glass-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
 /* Layout SPA Wrapper */
 #app-container {
   display: flex;
@@ -788,6 +796,8 @@ h3.panel-title {
   background: rgba(13, 19, 38, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
+  max-width: 380px;
+  margin: 0 auto;
   padding: 20px;
   text-align: center;
   transition: var(--transition-smooth);
@@ -883,7 +893,7 @@ h3.panel-title {
 
 #view-map .glass-panel {
   padding: 0 40px 10px 40px !important; /* Gap in basso per non toccare la linea */
-  margin: 0 !important;
+  margin-bottom: 20px !important;
   max-width: none !important;
   width: 100% !important;
   height: 100% !important;
@@ -1083,6 +1093,11 @@ h3.panel-title {
   max-height: 100%;
   overflow-y: auto;
   padding-right: 10px; /* Spazio per la scrollbar */
+}
+
+.cards-grid .card {
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 #diario-reflection-panel {
@@ -4541,6 +4556,7 @@ table.game-table tr:hover td {
     }
     #view-map .glass-panel {
         padding: 0 10px 10px 10px !important;
+        margin-bottom: 20px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
         max-height: none;
