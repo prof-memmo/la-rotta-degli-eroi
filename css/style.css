@@ -70,7 +70,7 @@ body {
 #app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh; /* Usa dvh per Safari mobile */
   position: relative;
   overflow: hidden;
 }
@@ -4300,8 +4300,8 @@ table.game-table tr:hover td {
        main-content = 100vh - header(60px) - bottom-nav(64px) */
     .main-content {
         margin-top: 60px;
-        height: calc(100vh - 60px - 64px);
-        max-height: calc(100vh - 60px - 64px);
+        height: calc(100dvh - 60px - 64px);
+        max-height: calc(100dvh - 60px - 64px);
     }
     .header-logo-text {
         display: none;
