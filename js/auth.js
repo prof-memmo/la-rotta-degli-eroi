@@ -162,7 +162,10 @@ const Auth = {
             // Salva il nome scelto come pending per _handleFirebaseUser
             localStorage.setItem('pending_display_name', name || email.split('@')[0]);
             Auth._handleFirebaseUser(fbUser);
-            hideLoginOverlay();
+            if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
+            if (window.EroiApp && window.EroiApp.playIntroVideo) {
+                window.EroiApp.playIntroVideo();
+            }
         } catch (e) {
             console.error("Errore Email Login:", e);
             if (e.code === 'auth/wrong-password') alert("Password errata. Riprova.");
@@ -254,6 +257,7 @@ const Auth = {
         
         Auth._user = null;
         localStorage.removeItem('eroi_user');
+        sessionStorage.removeItem('introVideoPlayed');
         window.dispatchEvent(new CustomEvent('authChange'));
         window.location.hash = 'home';
         setTimeout(() => {

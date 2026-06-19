@@ -4404,16 +4404,6 @@ table.game-table tr:hover td {
         max-width: 120px !important;
     }
 
-    /* SPAZIO TITOLO: riduce padding-top della view su mobile */
-    .view.active {
-        padding-top: 0px !important;
-    }
-    .glass-panel {
-        padding: 15px !important;
-    }
-    h2.section-title {
-        margin-top: 0 !important;
-    }
 }
 
 /* ==========================================
@@ -4433,7 +4423,7 @@ table.game-table tr:hover td {
 .guide-list-item {
     white-space: normal;
     word-break: break-word;
-    overflow: hidden;
+    line-height: 1.4;
 }
 
 /* ==========================================
@@ -4451,16 +4441,84 @@ table.game-table tr:hover td {
 }
 
 /* ==========================================
-   SHOP MOBILE: cards 1 colonna, non si sovrappongono
+   SHOP E INVENTARIO MOBILE: layout a lista compatta
    ========================================== */
 @media (max-width: 768px) {
-    #view-shop .cards-grid {
+    #view-shop .cards-grid, #view-inventory .cards-grid {
         grid-template-columns: 1fr !important;
-        gap: 12px;
+        gap: 10px;
+    }
+    #view-shop .card, #view-inventory .card {
+        flex-direction: row;
+        align-items: center;
+        padding: 12px;
+        min-height: auto;
+        text-align: left;
+    }
+    #view-shop .card-icon, #view-inventory .card-icon {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 0;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+    #view-shop .card-content, #view-inventory .card-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0; /* previene overflow text */
+    }
+    #view-shop .card-title, #view-inventory .card-title {
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #view-shop .card-desc, #view-inventory .card-desc {
+        display: none; /* Nasconde la descrizione per fare spazio */
+    }
+    #view-shop .card-meta, #view-inventory .card-meta {
+        justify-content: flex-start;
+        margin: 2px 0;
+        font-size: 0.8rem;
+    }
+    #view-shop .card button, #view-inventory .card button {
+        margin-top: 6px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        width: auto !important;
+        align-self: flex-start;
+    }
+    #view-shop .card > p, #view-inventory .card > p,
+    #view-shop .card-content > p, #view-inventory .card-content > p {
+        margin-bottom: 4px !important;
+    }
+    #view-shop .card-rarity-badge, #view-inventory .card-rarity-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 0.55rem;
+        padding: 2px 6px;
     }
     /* Tempio mobile: testo card non esce */
     .guides-reader .guide-game-portrait-layout {
         flex-direction: column;
+    }
+    .guides-reader .guide-game-portrait-layout .parchment-sheet {
+        padding: 15px;
+    }
+    
+    /* SPAZIO TITOLO: riduce padding-top della view su schermi ridotti */
+    .view.active {
+        padding-top: 5px !important;
+    }
+    .view h2, .view h1 {
+        margin-top: 0 !important;
+    }
+    .glass-panel {
+        padding: 15px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
         max-height: none;
