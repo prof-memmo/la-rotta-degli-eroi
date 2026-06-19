@@ -466,7 +466,7 @@ body {
   animation: fadeIn 0.4s ease;
   flex: 1;
   min-height: 0;
-  padding: 20px 30px;
+  padding: 0 30px 20px 30px;
   box-sizing: border-box;
   overflow: visible; /* ogni view è nel flusso scroll del main-content */
 }
@@ -796,6 +796,8 @@ h3.panel-title {
   flex-direction: column;
   justify-content: space-between;
   height: auto;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 .card:hover {
@@ -880,7 +882,7 @@ h3.panel-title {
 }
 
 #view-map .glass-panel {
-  padding: 0 40px 0 40px !important; /* Spazio solo laterale */
+  padding: 0 40px 10px 40px !important; /* Gap in basso per non toccare la linea */
   margin: 0 !important;
   max-width: none !important;
   width: 100% !important;
@@ -4464,6 +4466,8 @@ table.game-table tr:hover td {
     }
     #view-shop .card, #view-inventory .card {
         flex-direction: row;
+        max-width: 100%;
+        margin: 0;
         align-items: center;
         padding: 12px;
         min-height: auto;
@@ -4536,7 +4540,7 @@ table.game-table tr:hover td {
         padding-top: 5px !important;
     }
     #view-map .glass-panel {
-        padding: 0 10px 0 10px !important;
+        padding: 0 10px 10px 10px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
         max-height: none;
