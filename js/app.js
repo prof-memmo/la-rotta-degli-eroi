@@ -298,6 +298,15 @@ window.finalizzaDocente = async function() {
       if (!this.isMuted) {
         this.initContext();
         this.playClick();
+        if (window.MusicPlayer) {
+          window.MusicPlayer._doPlay();
+        }
+      } else {
+        if (window.MusicPlayer && window.MusicPlayer.audioElement) {
+          window.MusicPlayer.audioElement.pause();
+          window.MusicPlayer.isPlaying = false;
+          window.MusicPlayer.updateUI();
+        }
       }
     },
 
@@ -398,6 +407,14 @@ window.finalizzaDocente = async function() {
   window.EroiApp = {
     toggleAudio: function() {
       EroiAudio.toggleMute();
+    },
+    isMuted: function() {
+      return EroiAudio.isMuted;
+    },
+    unmute: function() {
+      if (EroiAudio.isMuted) {
+        EroiAudio.toggleMute();
+      }
     },
 
     init: function() {

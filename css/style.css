@@ -1657,7 +1657,7 @@ table.game-table tr:hover td {
 
   /* View mobile: padding ridotto */
   .view {
-    padding: 10px 12px;
+    padding: 10px 12px 40px 12px !important;
     overflow: visible;
   }
 
@@ -3795,7 +3795,7 @@ table.game-table tr:hover td {
 /* 📱 OTTIMIZZAZIONE RADICALE MOBILE: Eliminazione "Effetto Card" */
 @media (max-width: 992px) {
     main {
-        padding: 5rem 0.5rem 1rem 0.5rem !important; 
+        padding: 0px 0.5rem 30px 0.5rem !important; 
         background-color: transparent !important; 
     }
 
@@ -4148,7 +4148,7 @@ table.game-table tr:hover td {
    la bottom navigation
    ========================================== */
 #view-map {
-    padding-bottom: 0 !important;
+    padding-bottom: 30px !important;
 }
 
 /* ==========================================
@@ -4547,6 +4547,7 @@ table.game-table tr:hover td {
     /* SPAZIO TITOLO: riduce padding-top della view su schermi ridotti */
     .view.active {
         padding-top: 0px !important;
+        padding-bottom: 40px !important;
     }
     .view h2, .view h1 {
         margin-top: 0 !important;
@@ -4556,7 +4557,7 @@ table.game-table tr:hover td {
         padding-top: 5px !important;
     }
     #view-map .glass-panel {
-        padding: 0 10px 10px 10px !important;
+        padding: 0 10px 30px 10px !important;
         margin-bottom: 20px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {

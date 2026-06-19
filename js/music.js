@@ -40,6 +40,9 @@ const MusicPlayer = {
             this.isPlaying = false;
             this.updateUI();
         } else {
+            if (window.EroiApp && typeof window.EroiApp.isMuted === 'function' && window.EroiApp.isMuted()) {
+                window.EroiApp.unmute();
+            }
             this._doPlay();
         }
     },
@@ -48,6 +51,8 @@ const MusicPlayer = {
     _doPlay: function() {
         if (!this.audioElement) this.init();
         if (window.introVideoActive) return;
+        if (localStorage.getItem('eroi_audio_muted') === 'true') return;
+
         const playPromise = this.audioElement.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
