@@ -394,15 +394,20 @@ body {
 }
 
 .main-content {
-  margin-top: 70px;       /* sotto l'header fisso */
+  margin-top: 0;
   margin-bottom: 0;
   padding: 0;
   overflow: hidden;       /* Il contenuto principale NON scrolla, scrollano le view */
-  height: calc(100dvh - 70px);
+  height: 100dvh;
   flex: none;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+}
+
+body.logged-in .main-content {
+  margin-top: 70px;       /* sotto l'header fisso */
+  height: calc(100dvh - 70px - 64px);
 }
 
 /* Footer rules */
@@ -481,6 +486,12 @@ body {
 
 .view.active {
   display: flex;
+}
+
+.view > .glass-panel > p {
+  font-size: 0.85rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 12px !important;
 }
 
 @keyframes fadeIn {
@@ -892,7 +903,7 @@ h3.panel-title {
 }
 
 #view-map .glass-panel {
-  padding: 0 40px 10px 40px !important; /* Gap in basso per non toccare la linea */
+  padding: 0 40px 30px 40px !important; /* Gap in basso per non toccare la linea */
   margin-bottom: 20px !important;
   max-width: none !important;
   width: 100% !important;
@@ -1657,7 +1668,7 @@ table.game-table tr:hover td {
 
   /* View mobile: padding ridotto */
   .view {
-    padding: 10px 12px 40px 12px !important;
+    padding: 10px 12px 20px 12px !important;
     overflow: visible;
   }
 
@@ -2052,10 +2063,10 @@ table.game-table tr:hover td {
 }
 
 .guide-portrait-img {
-  width: 100%;
-  height: auto;
-  max-height: 380px;
-  object-fit: contain;
+  width: 216px !important;
+  height: 380px !important;
+  object-fit: contain !important;
+  object-position: top !important;
   z-index: 2;
   transition: transform 0.1s ease-out;
   transform-style: preserve-3d;
@@ -3795,7 +3806,7 @@ table.game-table tr:hover td {
 /* 📱 OTTIMIZZAZIONE RADICALE MOBILE: Eliminazione "Effetto Card" */
 @media (max-width: 992px) {
     main {
-        padding: 0px 0.5rem 30px 0.5rem !important; 
+        padding: 0px 0.5rem 0px 0.5rem !important; 
         background-color: transparent !important; 
     }
 
@@ -4081,6 +4092,10 @@ table.game-table tr:hover td {
     flex-direction: column;
 }
 #view-inventory .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-content: start;
+    gap: 20px;
     flex: 1;
     min-height: 0;
     overflow-y: auto;
@@ -4330,10 +4345,16 @@ table.game-table tr:hover td {
     }
     /* Su schermi < 768px (bottom nav attiva):
        main-content = 100vh - header(60px) - bottom-nav(64px) */
-    .main-content {
+    body.logged-in .main-content {
         margin-top: 60px;
         height: calc(100dvh - 60px - 64px);
         max-height: calc(100dvh - 60px - 64px);
+        flex: none;
+    }
+    body:not(.logged-in) .main-content {
+        margin-top: 0;
+        height: 100dvh;
+        max-height: 100dvh;
         flex: none;
     }
     .header-logo-text {

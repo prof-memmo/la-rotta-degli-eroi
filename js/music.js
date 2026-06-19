@@ -124,8 +124,26 @@ document.addEventListener('DOMContentLoaded', () => {
 // Fallback: avvia al primo click/touch se ancora non in play
 (function() {
     let _started = false;
-    function startOnInteraction() {
+    function startOnInteraction(e) {
         if (_started) return;
+        
+        // Se il click avviene su un pulsante audio, non avviare automaticamente la musica qui
+        if (e && e.target) {
+            const isAudioBtn = e.target.closest('#login-audio-btn') || 
+                               e.target.closest('.btn-toggle-audio-action') || 
+                               e.target.closest('#btn-toggle-audio') || 
+                               e.target.closest('.music-control-btn') ||
+                               e.target.closest('#music-play-btn');
+            if (isAudioBtn) {
+                // Rimuoviamo i listener per evitare attivazioni indesiderate, ma non eseguiamo l'autoplay ritardato
+                _started = true;
+                document.removeEventListener('click', startOnInteraction, true);
+                document.removeEventListener('touchstart', startOnInteraction, true);
+                document.removeEventListener('keydown', startOnInteraction, true);
+                return;
+            }
+        }
+        
         _started = true;
         document.removeEventListener('click', startOnInteraction, true);
         document.removeEventListener('touchstart', startOnInteraction, true);

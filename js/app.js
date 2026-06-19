@@ -315,7 +315,12 @@ window.finalizzaDocente = async function() {
       const btnLogin = document.getElementById('login-audio-btn');
       const updateBtn = (b) => {
           if(!b) return;
-          b.innerHTML = this.isMuted ? '<i class="fa-solid fa-volume-xmark"></i> Attiva Musica' : '<i class="fa-solid fa-volume-high"></i> Disattiva Musica';
+          const isIconOnly = b.id === 'btn-toggle-audio';
+          if (isIconOnly) {
+              b.innerHTML = this.isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+          } else {
+              b.innerHTML = this.isMuted ? '<i class="fa-solid fa-volume-xmark"></i> Attiva Musica' : '<i class="fa-solid fa-volume-high"></i> Disattiva Musica';
+          }
           b.title = this.isMuted ? 'Attiva Audio' : 'Disattiva Audio';
       };
       btns.forEach(btn => {
@@ -523,6 +528,7 @@ window.finalizzaDocente = async function() {
       if (!isLogged || !user) {
         // Forza login se non autenticato
         hideLoginOverlay();
+        document.body.classList.remove('logged-in');
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none'; // nascosta su login
         document.getElementById('app-header').style.display = 'none';
@@ -553,6 +559,7 @@ window.finalizzaDocente = async function() {
 
       // Hide sidebar/header during onboarding
       if (['view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente', 'view-pausa-obbligatoria'].includes(viewId)) {
+        document.body.classList.remove('logged-in');
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none'; // nascosta anche durante onboarding
         document.getElementById('app-header').style.display = 'none';
@@ -601,6 +608,7 @@ window.finalizzaDocente = async function() {
       const user = Auth.getUser();
 
       // Hiddiamo sempre la sidebar e mostriamo l'header e la navigazione bottom
+      document.body.classList.add('logged-in');
       document.getElementById('main-sidebar').style.display = 'none';
       document.getElementById('app-header').style.display = 'flex';
       document.getElementById('mobile-navigation').style.display = 'flex';
@@ -2753,8 +2761,6 @@ window.finalizzaDocente = async function() {
       } else if (content.startsWith("Biografia:")) {
         content = content.substring("Biografia:".length).trim();
       }
-      
-      content = content.toUpperCase();
 
       // Evidenziazione parole chiave
       if (g.category !== "L'inizio del viaggio") {
@@ -2769,7 +2775,10 @@ window.finalizzaDocente = async function() {
           "ANGELICA", "BRADAMANTE", "RUGGIERO", "MORDRED", "ZEUS", "GIOVE", "ERA", "GIUNONE", "ATENA",
           "MINERVA", "POSEIDONE", "NETTUNO", "APOLLO", "ARTEMIDE", "DIANA", "ARES", "MARTE", "AFRODITE",
           "VENERE", "ERMES", "MERCURIO", "EFESTO", "VULCANO", "ADE", "PLUTONE", "DEMETRA", "CERERE",
-          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO"
+          "ESTIA", "VESTA", "DIONISO", "BACCO", "MECENATE", "AUGUSTO",
+          "CARLO", "DANTE", "ARTÙ", "SIGFRIDO", "BRUNILDE", "CRIMILDE", "HAGEN", "GUNTHER", "FAFNIR", 
+          "NIBELUNGHI", "VALCHIRIE", "LOKI", "ODINO", "THOR", "FRIGG", "FREYA", "TYR", "ETZEL", 
+          "GERNOT", "GISELHER", "RÜDIGER", "ALBERICO"
         ];
         const greenTerms = [
           "ILIADE", "ODISSEA", "ENEIDE", "TAVOLA ROTONDA", "SACRO GRAAL", "DURENDAL", "OLIFANTE", "EXCALIBUR", "FIORENTINO",
@@ -2777,7 +2786,8 @@ window.finalizzaDocente = async function() {
         ];
         const orangeTerms = [
           "TROIA", "ROMA", "CARTAGINE", "ITACA", "CAMELOT", "AQUISGRANA", "RONCISVALLE", "VOLGARE", "LETTERATURA", "LAZIO", "CATAI",
-          "LABIRINTO", "PROCI", "ACHEI", "TROIANI"
+          "LABIRINTO", "PROCI", "ACHEI", "TROIANI",
+          "SPARTA", "URUK", "TEBE", "MICENE", "WORMS", "ATENE", "CRETA", "ILIO", "ILION"
         ];
 
         blueTerms.forEach(term => {
@@ -2792,7 +2802,7 @@ window.finalizzaDocente = async function() {
           const regex = new RegExp(`\\b${term}\\b`, 'gi');
           content = content.replace(regex, match => `<span style="color: var(--gold); font-weight: bold;">${match}</span>`);
         });
-        content = content.replace(/ARTÙ/g, `<span style="color: #2563eb; font-weight: bold;">ARTÙ</span>`);
+        content = content.replace(/ARTÙ/gi, match => `<span style="color: #2563eb; font-weight: bold;">${match}</span>`);
       }
 
       if (content.trim().startsWith("<")) {
