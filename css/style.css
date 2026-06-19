@@ -1598,7 +1598,7 @@ table.game-table tr:hover td {
     display: none;
   }
   #view-guides.detail-active .guides-reader {
-    display: flex;
+    display: block;
   }
   #view-guides.detail-active #guides-back-btn {
     display: flex !important;
@@ -1608,9 +1608,9 @@ table.game-table tr:hover td {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 12px;
+    width: auto;
+    margin: 0;
+    padding: 4px 12px;
     font-family: var(--font-heading);
     font-size: 0.95rem;
     font-weight: bold;
@@ -4166,8 +4166,8 @@ table.game-table tr:hover td {
 
     /* Pulsante "Torna ai Nodi" visibile solo su mobile in detail mode */
     .btn-back-to-diario-nodes {
-        display: block;
-        margin: 0 auto 20px auto;
+        display: inline-flex;
+        margin: 0;
         width: auto;
         padding: 8px 24px;
         font-size: 0.9rem;
@@ -4185,7 +4185,7 @@ table.game-table tr:hover td {
         flex: 1;
     }
     #view-guides .guides-sidebar {
-        max-height: 220px;
+        flex: 1;
         flex-shrink: 0;
         overflow-y: auto;
     }
@@ -4533,6 +4533,10 @@ table.game-table tr:hover td {
         margin-top: 0 !important;
     }
     .glass-panel {
+        padding: 10px !important;
+        padding-top: 5px !important;
+    }
+    #view-map .glass-panel {
         padding: 10px !important;
         padding-top: 5px !important;
     }
