@@ -4106,10 +4106,10 @@ table.game-table tr:hover td {
    ========================================== */
 /* Il footer è visibile su desktop come richiesto dall'utente */
 
-/* Su mobile il footer è già in column flow, lo mostriamo */
+/* Su mobile il footer è nascosto perché i link sono nel menù a tendina */
 @media (max-width: 768px) {
     .main-footer {
-        display: flex;
+        display: none !important;
     }
 }
 
