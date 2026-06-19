@@ -501,6 +501,7 @@ window.finalizzaDocente = async function() {
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none'; // nascosta su login
         document.getElementById('app-header').style.display = 'none';
+        document.getElementById('main-layout').style.marginTop = '0';
         document.getElementById('main-layout').style.marginLeft = '0';
         
         // Genera i bottoni disabilitati per il login
@@ -530,6 +531,7 @@ window.finalizzaDocente = async function() {
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none'; // nascosta anche durante onboarding
         document.getElementById('app-header').style.display = 'none';
+        document.getElementById('main-layout').style.marginTop = '0';
         document.getElementById('main-layout').style.marginLeft = '0';
       } else {
         // Controllo permessi ruoli per le view principali
@@ -577,6 +579,7 @@ window.finalizzaDocente = async function() {
       document.getElementById('main-sidebar').style.display = 'none';
       document.getElementById('app-header').style.display = 'flex';
       document.getElementById('mobile-navigation').style.display = 'flex';
+      document.getElementById('main-layout').style.marginTop = '';
       document.getElementById('main-layout').style.marginLeft = '0';
 
       // Rigenera i link della navbar se non ancora fatti

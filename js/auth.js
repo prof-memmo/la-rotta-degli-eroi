@@ -163,9 +163,6 @@ const Auth = {
             localStorage.setItem('pending_display_name', name || email.split('@')[0]);
             Auth._handleFirebaseUser(fbUser);
             if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
-            if (window.EroiApp && window.EroiApp.playIntroVideo) {
-                window.EroiApp.playIntroVideo();
-            }
         } catch (e) {
             console.error("Errore Email Login:", e);
             if (e.code === 'auth/wrong-password') alert("Password errata. Riprova.");
@@ -203,9 +200,6 @@ const Auth = {
 
             localStorage.setItem('eroi_user', JSON.stringify(Auth._user));
             window.dispatchEvent(new CustomEvent('authChange'));
-            if (window.EroiApp && window.EroiApp.playIntroVideo) {
-                window.EroiApp.playIntroVideo();
-            }
             return true;
         } catch (e) {
             console.error("Errore login con codice:", e);
@@ -224,9 +218,6 @@ const Auth = {
             if (result && result.user) {
                 await Auth._handleFirebaseUser(result.user);
                 if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
-                if (window.EroiApp && window.EroiApp.playIntroVideo) {
-                    window.EroiApp.playIntroVideo();
-                }
             }
         } catch (e) {
             console.error("Errore Google Login:", e);
@@ -245,9 +236,6 @@ const Auth = {
         };
         window.dispatchEvent(new CustomEvent('authChange'));
         if (typeof hideLoginOverlay === 'function') hideLoginOverlay(); // Assicura che l'overlay scompaia
-        if (window.EroiApp && window.EroiApp.playIntroVideo) {
-            window.EroiApp.playIntroVideo();
-        }
     },
 
     logout: async () => {
