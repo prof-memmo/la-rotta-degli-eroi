@@ -20,6 +20,22 @@
           // Migrazione automatica per nuove schede, missioni, aiutanti, artefatti o allineamento contenuti
           let updated = false;
           
+          // Rimozione hardcoded delle vecchie lezioni rimosse
+          if (dbState.study_guides) {
+            const idx = dbState.study_guides.findIndex(g => g.id === "ref_rimediazione_film_libri");
+            if (idx > -1) { dbState.study_guides.splice(idx, 1); updated = true; }
+          }
+          if (dbState.missions) {
+            const idx = dbState.missions.findIndex(m => m.id === "quiz_rimediazione");
+            if (idx > -1) { dbState.missions.splice(idx, 1); updated = true; }
+            
+            const qV = dbState.missions.find(m => m.id === "quiz_videogiochi");
+            if (qV && qV.unlockedBy === "quiz_rimediazione") {
+              qV.unlockedBy = "nib_vendetta";
+              updated = true;
+            }
+          }
+          
           // 1. Migrazione per study_guides (aggiorna contenuti/immagini delle schede predefinite)
           if (dbState && dbState.study_guides && window.EroiMockData && window.EroiMockData.study_guides) {
             window.EroiMockData.study_guides.forEach(mockG => {
