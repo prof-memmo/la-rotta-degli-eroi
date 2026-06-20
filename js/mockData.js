@@ -1041,7 +1041,7 @@ window.EroiMockData = {
       <span style="font-size: 0.85rem; color: #6b7280; font-weight: normal;">(ENCICLOPEDIA TRECCANI)</span>
     </div>
     <div style="background: rgba(239,68,68,0.08); border-left: 5px solid #ef4444; padding: 15px; border-radius: 6px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #dc2626; margin-bottom: 20px;">
-      È UN <span style="color: #2563eb;">MEDIUM</span> CHE RIMEDIA UN MESSAGGIO
+      È UN <span style="color: #2563eb;">MEDIUM</span> CHE VEICOLA UN MESSAGGIO
     </div>
     <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
       🎮

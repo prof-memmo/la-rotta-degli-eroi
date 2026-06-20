@@ -368,7 +368,7 @@
         { word: "NINTENDO", hint: "Azienda giapponese ideatrice di Mario e della Wii" }
       ],
       puzzle: [
-        { words: ["Il", "videogioco", "è", "un", "medium", "che", "rimedia", "un", "messaggio"], solution: "Il videogioco è un medium che rimedia un messaggio", source: "Definizione Treccani" },
+        { words: ["Il", "videogioco", "è", "un", "medium", "che", "veicola", "un", "messaggio"], solution: "Il videogioco è un medium che veicola un messaggio", source: "Definizione Treccani" },
         { words: ["Minecraft", "ha", "venduto", "oltre", "trecento", "milioni", "di", "copie"], solution: "Minecraft ha venduto oltre trecento milioni di copie", source: "Il più venduto" }
       ],
       cloze: [
