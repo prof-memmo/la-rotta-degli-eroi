@@ -1387,7 +1387,7 @@ window.EroiMockData = {
     </div>
   </div>
 </div>`
-    }
+    },
 
     { id: "quiz_rimediazione", category: "La Rimediazione", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
       { q: "Cosa si intende per 'Rimediazione'?", a: ["La traduzione di un testo da una lingua antica a una moderna", "La presentazione di un medium all'interno di un altro medium", "La riscrittura di un'opera censurando le parti scandalose", "La spiegazione scientifica di un racconto mitologico"], correct: 1 },
