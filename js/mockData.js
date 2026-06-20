@@ -1027,6 +1027,372 @@ window.EroiMockData = {
   </p>
 </div>`
     },
+    {
+      id: "ref_rimediazione_film_libri",
+      category: "La Rimediazione",
+      title: "Film e Libri (La Rimediazione)",
+      summary: "SCOPRI COME LE STORIE DEGLI EROI ANTICHI RIVIVONO NEI FILM, NELLE SERIE TV E NEI ROMANZI MODERNI.",
+      image: "assets/images/pergamena_crest.png",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-transform: uppercase; font-family: 'Outfit', sans-serif;">
+  <div style="background: linear-gradient(135deg, #2563eb22, #ea580c11); border: 2px solid #2563eb; border-radius: 10px; padding: 18px; margin-bottom: 20px; text-align: center;">
+    <div style="font-size: 1.6rem; margin-bottom: 6px;">🎬</div>
+    <div style="color: #2563eb; font-size: 1.2rem; letter-spacing: 1px; font-weight: 950;">LA RIMEDIAZIONE NELL'EPICA: FILM E LIBRI</div>
+  </div>
+  <div style="background: rgba(37,99,235,0.06); border-left: 4px solid #2563eb; padding: 14px; border-radius: 6px; margin-bottom: 16px; text-align: justify;">
+    QUANDO UN'OPERA LETTERARIA VIENE RAPPRESENTATA ATTRAVERSO UN ALTRO LINGUAGGIO, COME IL <span style="color: #2563eb;">CINEMA</span> O UN <span style="color: #ea580c;">NUOVO ROMANZO</span>, PARLIAMO DI <span style="color: #16a34a;">RIMEDIAZIONE</span>. GLI EROI CLASSICI NON MUOIONO MAI: CAMBIANO SOLO IL MEDIUM CON CUI SI PRESENTANO AL PUBBLICO.
+  </div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+    <div style="background: rgba(220,38,38,0.07); border-left: 4px solid #dc2626; padding: 12px; border-radius: 6px;">
+      <div style="color: #dc2626; font-size: 0.88rem; margin-bottom: 8px; font-weight: 900;">🎬 IL CINEMA (TROY, PERCY JACKSON)</div>
+      <div style="font-size: 0.85rem; line-height: 1.6;">
+        NEI FILM COME <span style="color:#dc2626;">TROY</span> L'ILIADE VIENE RIMEDIATA ELIMINANDO GLI DEI PER RENDERE LA STORIA PIÙ REALISTICA. NELLE SERIE DI <span style="color:#dc2626;">PERCY JACKSON</span> IL MITO GRECO RIVIVE NELLA SOCIETÀ CONTEMPORANEA.
+      </div>
+    </div>
+    <div style="background: rgba(22,163,74,0.07); border-left: 4px solid #16a34a; padding: 12px; border-radius: 6px;">
+      <div style="color: #16a34a; font-size: 0.88rem; margin-bottom: 8px; font-weight: 900;">📚 I LIBRI (IL CANTO DI ACHILLE)</div>
+      <div style="font-size: 0.85rem; line-height: 1.6;">
+        ROMANZI MODERNI LIKE <span style="color:#16a34a;">IL CANTO DI ACHILLE</span> DI MADELINE MILLER RIMEDIANO L'EPICA CAMBIANDO IL PUNTO DI VISTA (NARRATO DA PATROCLO) PER ESPLORARE I SENTIMENTI PROFONDI DEGLI EROI.
+      </div>
+    </div>
+  </div>
+</div>`
+    },
+    {
+      id: "ref_videogiochi",
+      category: "I Videogiochi",
+      title: "I Videogiochi",
+      summary: "LA LEZIONE COMPLETA IN DIAPOSITIVE SUI VIDEOGIOCHI, SULLA LORO STORIA, FUNZIONAMENTO E RIMEDIAZIONE.",
+      image: "assets/images/pergamena_crest.png",
+      content: `<div style="display: flex; flex-direction: column; gap: 30px; font-family: 'Outfit', sans-serif; text-transform: uppercase;">
+  <!-- SLIDE 2 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">I VIDEOGIOCHI</div>
+    <div style="font-size: 1rem; line-height: 1.8; text-align: justify; margin-bottom: 20px; font-weight: bold;">
+      DISPOSITIVO ELETTRONICO CHE CONSENTE DI GIOCARE INTERAGENDO CON LE <span style="color: #2563eb;">IMMAGINI DI UNO SCHERMO</span>.<br>
+      <span style="font-size: 0.85rem; color: #6b7280; font-weight: normal;">(ENCICLOPEDIA TRECCANI)</span>
+    </div>
+    <div style="background: rgba(239,68,68,0.08); border-left: 5px solid #ef4444; padding: 15px; border-radius: 6px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #dc2626; margin-bottom: 20px;">
+      È UN <span style="color: #2563eb;">MEDIUM</span> CHE RIMEDIA UN MESSAGGIO
+    </div>
+    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
+      🎮
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #16a34a; margin-bottom: 20px; border-bottom: 2px solid #16a34a; padding-bottom: 8px; display: inline-block;">STORIA</div>
+    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
+      <div style="display: flex; flex-direction: column; gap: 15px; font-size: 0.95rem; font-weight: bold; line-height: 1.7; flex: 1;">
+        <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #2563eb;">
+          I GIOCHI ELETTRONICI SONO APPARSI ALL'INIZIO DEGLI <span style="color: #2563eb;">ANNI '50</span> INSIEME AI PRIMI COMPUTER.
+        </div>
+        <div style="background: rgba(220,38,38,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #dc2626;">
+          IL PRIMO VIDEOGIOCO ERA UNA SIMULAZIONE DI UN <span style="color: #dc2626;">LANCIO DI MISSILE</span>.
+        </div>
+      </div>
+      <div style="flex-shrink: 0; font-size: 3rem;">
+        🖥️
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 15px; font-size: 0.95rem; font-weight: bold; line-height: 1.7;">
+      <div style="background: rgba(124,58,237,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #7c3aed;">
+        NEL 1961 SI DIFFUSE NEI LABORATORI TECNICI DI TUTTO IL MONDO <span style="color: #7c3aed;">SPACEWAR</span>, UN GIOCO CHE SIMULAVA UNA BATTAGLIA TRA DUE ASTRONAVI.
+      </div>
+      <div style="background: rgba(245,158,11,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #ea580c;">
+        FU BREVETTATO UN VIDEOGIOCO DI SIMULAZIONE CHE RIGUARDAVA IL <span style="color: #ea580c;">PING PONG</span>.
+      </div>
+      <div style="background: rgba(16,185,129,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #10b981;">
+        NEGLI <span style="color: #10b981;">ANNI '70</span> COMINCIARONO A DISTRIBUIRSI CONSOLE PRIVATE.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #16a34a; margin-bottom: 20px; border-bottom: 2px solid #16a34a; padding-bottom: 8px; display: inline-block;">STORIA</div>
+    <div style="background: rgba(245,158,11,0.08); border: 2px solid #f59e0b; padding: 15px; border-radius: 8px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #b45309; margin-bottom: 20px;">
+      NEGLI <span style="color: #2563eb;">ANNI '90</span> CON L'AVVENTO DI <span style="color: #16a34a;">INTERNET</span> L'INDUSTRIA DEL VIDEOGAME HA SUBITO UNA <span style="color: #ef4444;">FORTE ESPANSIONE</span>.
+    </div>
+    <div style="display: flex; gap: 20px; align-items: center;">
+      <div style="flex-shrink: 0; font-size: 3rem;">
+        🌐
+      </div>
+      <div style="background: rgba(37,99,235,0.05); border-left: 5px solid #2563eb; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; flex: 1;">
+        IN INFORMATICA, <span style="color: #2563eb;">INTERNET</span> È UNA RETE DI ELABORATORI A ESTENSIONE MONDIALE, MEDIANTE LA QUALE LE INFORMAZIONI CONTENUTE IN CIASCUN CALCOLATORE POSSONO ESSERE MESSE A DISPOSIZIONE DI ALTRI UTENTI CHE POSSONO ACCEDERE ALLA RETE IN QUALSIASI LOCALITÀ DEL MONDO.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">STORIA</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+        <span style="font-size: 2.5rem;">🕹️</span>
+        <div style="color: #2563eb; font-size: 0.85rem;">LE MACCHINE A GETTONI</div>
+      </div>
+      <div style="background: rgba(124,58,237,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+        <span style="font-size: 2.5rem;">📺</span>
+        <div style="color: #7c3aed; font-size: 0.85rem;">QUELLO CON CONSOLE</div>
+      </div>
+      <div style="background: rgba(220,38,38,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+        <span style="font-size: 2.5rem;">💻</span>
+        <div style="color: #dc2626; font-size: 0.85rem;">DA COMPUTER</div>
+      </div>
+      <div style="background: rgba(16,185,129,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+        <span style="font-size: 2.5rem;">📱</span>
+        <div style="color: #10b981; font-size: 0.85rem;">I TASCABILI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #ea580c; margin-bottom: 20px; border-bottom: 2px solid #ea580c; padding-bottom: 8px; display: inline-block;">STORIA</div>
+    <div style="background: rgba(234,88,12,0.08); border-radius: 8px; padding: 15px; text-align: center; font-size: 1.1rem; font-weight: 900; color: #c2410c; margin-bottom: 20px;">
+      POSSONO USARE O MENO INTERNET
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div style="background: rgba(37,99,235,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-top: 4px solid #2563eb;">
+        <div style="color: #2563eb; margin-bottom: 10px; font-size: 0.95rem; text-align: center;">SE USANO INTERNET:<br>SONO FRUIBILI ONLINE</div>
+        <div style="font-size: 0.85rem; line-height: 1.6; display: flex; flex-direction: column; gap: 6px;">
+          <div>• POSSONO AGGIORNARE</div>
+          <div>• PERMETTONO LA SOCIALITÀ VIA WEB</div>
+        </div>
+      </div>
+      <div style="background: rgba(220,38,38,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-top: 4px solid #dc2626;">
+        <div style="color: #dc2626; margin-bottom: 10px; font-size: 0.95rem; text-align: center;">SE NON USANO INTERNET:<br>SONO FRUIBILI OFFLINE</div>
+        <div style="font-size: 0.85rem; line-height: 1.6; display: flex; flex-direction: column; gap: 6px;">
+          <div>• NON SI AGGIORNANO</div>
+          <div>• SI GIOCA DA SOLI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #7c3aed; margin-bottom: 20px; border-bottom: 2px solid #7c3aed; padding-bottom: 8px; display: inline-block;">LA SCHEDA DI MEMORIA</div>
+    <div style="background: rgba(124,58,237,0.05); border-left: 5px solid #7c3aed; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 20px;">
+      UN DISPOSITIVO ELETTRONICO DI RIDOTTE DIMENSIONI USATO PER <span style="color: #7c3aed;">MEMORIZZARE DATI IN FORMA DIGITALE</span>. SONO COMUNEMENTE USATE IN DISPOSITIVI ELETTRONICI PORTATILI COME FOTOCAMERE E TELECAMERE DIGITALI, SMARTPHONE, COMPUTER PORTATILI E TABLET, LETTORI MULTIMEDIALI E ALTRI DISPOSITIVI.
+    </div>
+    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
+      💾
+    </div>
+  </div>
+
+  <!-- SLIDE 8 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">TIPOLOGIE</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.82rem; font-weight: bold; line-height: 1.5;">
+      <div style="background: rgba(239,68,68,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #ef4444;">
+        <span style="color: #ef4444; font-size: 0.9rem;">AZIONE</span><br>COMBATTERE CONTRO NEMICI E SUPERARE OSTACOLI.
+      </div>
+      <div style="background: rgba(37,99,235,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #2563eb;">
+        <span style="color: #2563eb; font-size: 0.9rem;">DI RUOLO (RPG)</span><br>IL GIOCATORE ASSUME IL RUOLO DI UN PERSONAGGIO CHE CRESCE DI LIVELLO.
+      </div>
+      <div style="background: rgba(16,185,129,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #10b981;">
+        <span style="color: #10b981; font-size: 0.9rem; margin-bottom: 4px; display: inline-block;">AVVENTURA</span><br>ESPLORAZIONE DI AMBIENTI E RISOLUZIONE DI ENIGMI CON RIFERIMENTO ALLA TRAMA.
+      </div>
+      <div style="background: rgba(245,158,11,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #f59e0b;">
+        <span style="color: #f59e0b; font-size: 0.9rem; margin-bottom: 4px; display: inline-block;">STRATEGIA</span><br>PIANIFICAZIONE DELLE MOSSE E GESTIONE DELLE RISORSE.
+      </div>
+      <div style="background: rgba(124,58,237,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #7c3aed;">
+        <span style="color: #7c3aed; font-size: 0.9rem;">SIMULAZIONE</span><br>GUIDARE VEICOLI, SIMULARE VITA O SPORT.
+      </div>
+      <div style="background: rgba(236,72,153,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #ec7299;">
+        <span style="color: #ec7299; font-size: 0.9rem;">MULTIPLAY</span><br>COOPERARE O SFIDARE ALTRI UTENTI IN RETE.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #10b981; margin-bottom: 20px; border-bottom: 2px solid #10b981; padding-bottom: 8px; display: inline-block;">LE PAROLE DEI VIDEOGIOCHI</div>
+    <div style="display: flex; gap: 20px; align-items: center;">
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; font-weight: bold; flex: 1;">
+        <div style="background: rgba(37,99,235,0.06); padding: 10px; border-radius: 6px;">
+          <span style="color: #2563eb;">PROGRAMMATORE:</span> COLUI CHE PROGETTA UN VIDEOGIOCO.
+        </div>
+        <div style="background: rgba(16,185,129,0.06); padding: 10px; border-radius: 6px;">
+          <span style="color: #10b981;">GAMER / GIOCATORE:</span> COLUI CHE GIOCA.
+        </div>
+        <div style="background: rgba(245,158,11,0.06); padding: 10px; border-radius: 6px;">
+          <span style="color: #ea580c;">JOYSTICK:</span> È UNA PERIFERICA CHE TRASFORMA I MOVIMENTI.
+        </div>
+        <div style="background: rgba(124,58,237,0.06); padding: 10px; border-radius: 6px;">
+          <span style="color: #7c3aed;">AVATAR:</span> ALTER EGO DI UN GIOCATORE.
+        </div>
+      </div>
+      <div style="flex-shrink: 0; text-align: center; font-size: 3rem;">
+        👾
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #dc2626; margin-bottom: 20px; border-bottom: 2px solid #dc2626; padding-bottom: 8px; display: inline-block;">LE AZIENDE DI VIDEOGAME</div>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: rgba(220,38,38,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-left: 5px solid #dc2626; display: flex; gap: 15px; align-items: center;">
+        <span style="font-size: 2.5rem; flex-shrink: 0;">🇯🇵</span>
+        <div>
+          <div style="color: #dc2626; font-size: 1.05rem; margin-bottom: 4px;">NINTENDO</div>
+          <div style="font-size: 0.9rem; line-height: 1.6; font-weight: normal;">AZIENDA GIAPPONESE CHE REALIZZA E DISTRIBUISCE SU SCALA MONDIALE VIDEOGIOCHI E CONSOLE.</div>
+        </div>
+      </div>
+      <div style="background: rgba(37,99,235,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-left: 5px solid #2563eb; display: flex; gap: 15px; align-items: center;">
+        <span style="font-size: 2.5rem; flex-shrink: 0;">🎵</span>
+        <div>
+          <div style="color: #2563eb; font-size: 1.05rem; margin-bottom: 4px;">SONY</div>
+          <div style="font-size: 0.9rem; line-height: 1.6; font-weight: normal;">SOCIETÀ GIAPPONESE PER LA PRODUZIONE DI APPARECCHI RADIOTELEVISIVI E DI APPARECCHIATURE ELETTRONICHE PER LE TELECOMUNICAZIONI E L'INFORMATICA.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #7c3aed; margin-bottom: 20px; border-bottom: 2px solid #7c3aed; padding-bottom: 8px; display: inline-block;">LE CONSOLLE</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div style="background: rgba(124,58,237,0.07); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="font-size: 1.1rem; color: #7c3aed;">PLAYSTATION</div>
+        <span style="font-size: 2.8rem; margin: 4px 0;">🎮</span>
+        <div style="font-size: 0.85rem; line-height: 1.5; color: #4b5563;">
+          CONSOLE PER GIOCHI ELETTRONICI IDEATA DALLA SONY E COMMERCIALIZZATA DAL <span style="color:#7c3aed;">1994</span>.
+        </div>
+      </div>
+      <div style="background: rgba(16,185,129,0.07); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="font-size: 1.1rem; color: #10b981;">WII</div>
+        <span style="font-size: 2.8rem; margin: 4px 0;">🕹️</span>
+        <div style="font-size: 0.85rem; line-height: 1.5; color: #4b5563;">
+          CONSOLE PER VIDEOGIOCHI PRODOTTA DA NINTENDO E IN VENDITA DAL <span style="color:#10b981;">2006</span>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #1e3a8a; margin-bottom: 20px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; display: inline-block;">L'INTELLIGENZA COLLETTIVA</div>
+    <div style="background: rgba(30,58,138,0.05); border-left: 5px solid #1e3a8a; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 16px;">
+      SUL WEB È POSSIBILE GIOCARE ALLO STESSO VIDEOGIOCO ANCHE IN <span style="color: #2563eb;">GRUPPI COMPOSTI DA PIÙ PERSONE</span> SITUATE IN DIVERSE POSTAZIONI SPARSI PER IL GLOBO.
+    </div>
+    <div style="background: rgba(16,185,129,0.05); border-left: 5px solid #10b981; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify;">
+      NEI GIOCHI DI RUOLO ONLINE È POSSIBILE FAR PARTE DI UN MONDO E CREARSI UN'<span style="color: #10b981;">IDENTITÀ VIRTUALE</span>.
+    </div>
+    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 2.5rem;">
+      <span title="Roblox">🟥</span>
+      <span title="The Sims">💎</span>
+      <span title="Avatar virtuale">🧑‍💻</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 13 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #ea580c; margin-bottom: 20px; border-bottom: 2px solid #ea580c; padding-bottom: 8px; display: inline-block;">LA REALTÀ AUMENTATA (A/R)</div>
+    <div style="background: rgba(234,88,12,0.05); border-left: 5px solid #ea580c; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 20px;">
+      LA REALTÀ AUMENTATA È IL MODO IN CUI SI INDICA L'<span style="color: #ea580c;">ARRICCHIMENTO DELLA REALTÀ</span> ATTRAVERSO DISPOSITIVI ELETTRONICI.
+    </div>
+    <div style="background: rgba(31,41,55,0.08); border-radius: 8px; padding: 12px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #1f2937;">
+      I DISPOSITIVI SONO FILTRI
+    </div>
+    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
+      📲
+    </div>
+  </div>
+
+  <!-- SLIDE 14 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">LA REALTÀ VIRTUALE (V/R)</div>
+    <div style="font-size: 0.9rem; line-height: 1.6; font-weight: bold; display: flex; flex-direction: column; gap: 14px;">
+      <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 6px; border-left: 4px solid #2563eb;">
+        CON IL TERMINE REALTÀ VIRTUALE SI IDENTIFICANO VARI MODI DI SIMULAZIONE DI SITUAZIONI REALI MEDIANTE L'UTILIZZO DI COMPUTER E L'AUSILIO DI INTERFACCE APPOSITAMENTE SVILUPPATE.
+      </div>
+      <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 6px; border-left: 4px solid #2563eb;">
+        LE PERSONE SI TROVANO IMMERSE IN UNA SITUAZIONE NELLA QUALE LE PERCEZIONI NATURALI DI VISTA E UDITO SONO ANNULLATE O SOSTITUITE DA QUELE DELLA REALTÀ VIRTUALE.
+      </div>
+      <div style="background: rgba(245,158,11,0.06); padding: 12px; border-radius: 6px; border-left: 4px solid #f59e0b;">
+        NELLA REALTÀ AUMENTATA (A/R), INVECE, LA PERSONA CONTINUA A VEDERE LA REALTÀ FISICA, MA USUFRUISCE DI INFORMAZIONI AGGIUNTIVE E SOVRAPPOSTE ALLA REALTÀ FISICA.
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
+      🥽
+    </div>
+  </div>
+
+  <!-- SLIDE 15 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #10b981; margin-bottom: 20px; border-bottom: 2px solid #10b981; padding-bottom: 8px; display: inline-block;">ALCUNI GIOCHI</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; font-weight: bold; text-align: center; font-size: 0.75rem;">
+      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🏺</span>
+        <div>TOMB RAIDER</div>
+      </div>
+      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🦊</span>
+        <div>CRASH BANDICOOT</div>
+      </div>
+      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🍄</span>
+        <div>SUPER MARIO BROS</div>
+      </div>
+      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">👾</span>
+        <div>SPACE INVADERS</div>
+      </div>
+      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🔫</span>
+        <div>CALL OF DUTY</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 16 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #16a34a; margin-bottom: 20px; border-bottom: 2px solid #16a34a; padding-bottom: 8px; display: inline-block;">IL PIÙ VENDUTO</div>
+    <div style="background: rgba(22,163,74,0.08); border-radius: 8px; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+      <span style="font-size: 4rem;">⛏️</span>
+      <div style="font-size: 1.8rem; font-weight: 900; color: #15803d;">MINECRAFT</div>
+      <div style="font-size: 0.95rem; font-weight: bold; color: #4b5563;">IL VIDEOGIOCO PIÙ VENDUTO NELLA STORIA CON OLTRE 300 MILIONI DI COPIE.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 17 -->
+  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <div style="font-size: 1.2rem; font-weight: 900; color: #ef4444; margin-bottom: 20px; border-bottom: 2px solid #ef4444; padding-bottom: 8px; display: inline-block;">LA RIMEDIAZIONE</div>
+    <div style="background: rgba(239,68,68,0.08); border-left: 5px solid #ef4444; padding: 18px; border-radius: 6px; font-size: 0.98rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 20px; color: #c2410c;">
+      PER <span style="color: #2563eb;">RIMEDIAZIONE</span> SI INTENDE LA PRESENTAZIONE DI UN <span style="color: #16a34a;">MEDIUM</span> IN UN ALTRO MEDIUM.
+    </div>
+    <div style="background: rgba(31,41,55,0.05); border-radius: 8px; padding: 15px; font-size: 0.95rem; line-height: 1.6; font-weight: bold; text-align: justify; margin-bottom: 20px;">
+      CI SONO CASI IN CUI UNA <span style="color: #2563eb;">TAVOLA (FUMETTO)</span> DIVENTA UN FILM, UN FILM DIVENTA UN VIDEOGIOCO, UN LIBRO DIVENTA UN VIDEOGIOCO E COSÌ VIA.
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; text-align: center; font-size: 0.75rem; font-weight: bold;">
+      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🏦</span>
+        <div>MONOPOLY</div>
+      </div>
+      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">💃</span>
+        <div>JUST DANCE</div>
+      </div>
+      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🪆</span>
+        <div>PINOCCHIO</div>
+      </div>
+      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 2.2rem;">🦆</span>
+        <div>DISNEY COMICS</div>
+      </div>
+    </div>
+  </div>
+</div>`
+    }
+],
+
+  citations: [
+    { text: "Cantami, o Diva, del pelide Achille l'ira funesta...", author: "Omero, Iliade" },
     { id: "char_menelao", category: "Schede Personaggio (Iliade)", title: "Menelao", image: "assets/images/tempio/menelao_portrait.png", summary: "Re di Sparta e sposo di Elena.", content: "Descrizione: Re di Sparta e fratello di Agamennone. Sposo di Elena, il cui rapimento da parte di Paride scatena la guerra di Troia. Combatte con ardore nel conflitto per vendicare l'onore offeso.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"IL MIO CUORE ANELA ALLA VENDETTA E AL RITORNO DI ELENA NELLA MIA REGGIA A SPARTA.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ILIADE</span></div>" },
     { id: "char_aiace", category: "Schede Personaggio (Iliade)", title: "Aiace Telamonio", image: "assets/images/tempio/aiace_portrait.png", summary: "Imponente e indomito guerriero acheo.", content: "Descrizione: Re di Salamina, secondo solo ad Achille per valore militare e forza fisica. Famoso per il suo gigantesco scudo di bronzo e pelli di bue con cui difende strenuamente le navi dei Greci.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"PADRE ZEUS, LIBERACI DALLA NEBBIA, CONCEDI LA LUCE AI NOSTRI OCCHI E POI FACCI ANCHE MORIRE.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ILIADE</span></div>" },
     { id: "char_nestore", category: "Schede Personaggio (Iliade)", title: "Nestore", image: "assets/images/tempio/nestore_portrait.png", summary: "Il più anziano e saggio dei sovrani greci.", content: "Descrizione: Re di Pilo, celebre per la sua incredibile longevità ed eloquenza. Rispettato da tutti i condottieri achei come consigliere fidato, interviene spesso per placare le liti, come quella tra Achille e Agamennone.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"ASCOLTATE I MIEI PARERI, O GIOVANI RE: NESSUNO HA MAI VISTO EROI COME QUELLI DI UN TEMPO.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ILIADE</span></div>" },
@@ -1036,6 +1402,19 @@ window.EroiMockData = {
     { id: "char_calipso", category: "Schede Personaggio (Odissea)", title: "Calipso", image: "assets/images/tempio/calipso_portrait.png", summary: "La ninfa marina innamorata di Ulisse.", content: "Descrizione: Splendida ninfa che regna sulla solitaria isola di Ogigia. Accoglie Ulisse dopo il naufragio e lo trattiene per sette anni, offrendogli l'immortalità pur di averlo come sposo, prima di cedere al volere degli dei.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"VORREI RENDERTI IMMORTALE E SEMPRE GIOVANE, MA CAPISCO CHE LA TUA PATRIA TI CHIAMA.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ODISSEA</span></div>" },
     { id: "char_scilla", category: "Schede Personaggio (Odissea)", title: "Scilla", image: "assets/images/tempio/scilla_portrait.png", summary: "Mostro marino a sei teste dello stretto di Messina.", content: "Descrizione: Terribile mostro marino con sei teste canine e dodici piedi, nascosto in una grotta dello stretto. Divora sei compagni di Ulisse mentre la nave tenta di evitare l'adiacente Gorgo di Cariddi.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"CON LE MIE SEI TESTE GRAPPO I MARINAI DALLE NAVI NELLO STRETTO DI MESSINA.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ODISSEA</span></div>" },
     { id: "char_cariddi", category: "Schede Personaggio (Odissea)", title: "Cariddi", image: "assets/images/tempio/cariddi_portrait.png", summary: "Il gorgo marino distruttore dello stretto.", content: "Descrizione: Mostruosa creatura marina situata di fronte a Scilla. Tre volte al giorno inghiotte l'acqua di mare risputandola con violenza, creando gorghi letali in grado di inghiottire intere navi.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"TRE VOLTE AL GIORNO ASSORBO LE ACQUE AZZURRE E TRE VOLTE LE RIGETTO IN UN VORTICE DI MORTE.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ODISSEA</span></div>" },
+
+    { id: "quiz_rimediazione", category: "La Rimediazione", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
+      { q: "Cosa si intende per 'Rimediazione'?", a: ["La traduzione di un testo da una lingua antica a una moderna", "La presentazione di un medium all'interno di un altro medium", "La riscrittura di un'opera censurando le parti scandalose", "La spiegazione scientifica di un racconto mitologico"], correct: 1 },
+      { q: "Nel film 'Troy', come viene rimediata l'Iliade omerica?", a: ["Inserendo divinità aliene", "Eliminando l'intervento diretto degli dei per renderla più realistica", "Cambiando l'esito della guerra con la vittoria troiana", "Sostituendo il cavallo di legno con un toro"], correct: 1 },
+      { q: "Nelle avventure di 'Percy Jackson', come rivive la mitologia greca?", a: ["In un lontano futuro fantascientifico nello spazio", "Ambientandola nella società contemporanea americana", "Attraverso manoscritti medievali ritrovati in Inghilterra", "Sotto forma di geroglifici egizi parlanti"], correct: 1 },
+      { q: "Quale celebre romanzo moderno rimedia l'epica dell'Iliade concentrandosi sulla relazione intima tra due eroi?", a: ["Il Signore degli Anelli", "Il Canto di Achille di Madeline Miller", "L'Eneide di Virgilio", "Il romanzo di Alessandro"], correct: 1 },
+      { q: "Chi era la voce narrante che racconta le vicende nel romanzo 'Il Canto di Achille'?", a: ["Achille stesso", "Omero", "Patroclo", "Ulisse"], correct: 2 },
+      { q: "Quale poema epico inglese è stato rimediato da J.R.R. Tolkien nel 'Signore degli Anelli'?", a: ["Beowulf e le saghe norrene", "L'Eneide", "L'Orlando Furioso", "La Chanson de Roland"], correct: 0 },
+      { q: "Chi ha diretto il kolossal cinematografico del 2004 'Troy'?", a: ["Steven Spielberg", "Wolfgang Petersen", "Ridley Scott", "James Cameron"], correct: 1 },
+      { q: "Quale opera lirica in quattro parti di Richard Wagner rimedia il mito dei Nibelunghi?", a: ["L'Anello del Nibelungo", "Il Tristano e Isotta", "Il Parsifal", "La Valchiria"], correct: 0 },
+      { q: "Nel film 'O Brother, Where Art Thou?' dei fratelli Coen, quale poema classico viene rimediato in chiave moderna?", a: ["L'Iliade", "L'Odissea", "L'Eneide", "Il Canto dei Nibelunghi"], correct: 1 },
+      { q: "In quale celebre opera fantascientifica di George Lucas si ritrovano evidenti rimandi all'eroe classico e al viaggio dell'eroe?", a: ["Star Wars", "Blade Runner", "Star Trek", "Matrix"], correct: 0 }
+    ] },
 
     { id: "char_enea", category: "Schede Personaggio (Eneide)", title: "Enea", image: "assets/images/tempio/enea_portrait.png", summary: "Eroe troiano e pio fondatore del futuro impero romano.", content: "Descrizione: Figlio di Anchise e della dea Venere. Fugge da Troia in fiamme portando in salvo il padre, il figlio Ascanio e i Penati. Simbolo di 'pietas' (devozione agli dèi, alla patria e alla famiglia), il suo destino è giungere nel Lazio e porre le basi per la fondazione di Roma.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"CANTO LE ARMI E L'UOMO CHE PER PRIMO DALLE COSTE DI TROIA GIUNSE IN ITALIA PROFUGOP ER DECRETO DEL FATO.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— VIRGILIO, ENEIDE</span></div>" },
     { id: "char_anchise", category: "Schede Personaggio (Eneide)", title: "Anchise", image: "assets/images/tempio/anchise_portrait.png", summary: "Padre di Enea e custode della tradizione troiana.", content: "Descrizione: Principe troiano amato dalla dea Venere. Enea lo porta sulle spalle fuori da Troia in fiamme. Muore durante il viaggio, ma la sua anima incontra Enea negli Inferi rivelandogli la futura grandezza di Roma.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"GUARDA QUESTI EROI, ENEA: SONO I NOSTRI DISCENDENTI CHE FONDERANNO L'IMPERO DI ROMA.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— VIRGILIO, ENEIDE</span></div>" },
@@ -1418,372 +1797,6 @@ window.EroiMockData = {
 </div>`
     }
 ,
-    {
-      id: "ref_rimediazione_film_libri",
-      category: "La Rimediazione",
-      title: "Film e Libri (La Rimediazione)",
-      summary: "SCOPRI COME LE STORIE DEGLI EROI ANTICHI RIVIVONO NEI FILM, NELLE SERIE TV E NEI ROMANZI MODERNI.",
-      image: "assets/images/pergamena_crest.png",
-      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-transform: uppercase; font-family: 'Outfit', sans-serif;">
-  <div style="background: linear-gradient(135deg, #2563eb22, #ea580c11); border: 2px solid #2563eb; border-radius: 10px; padding: 18px; margin-bottom: 20px; text-align: center;">
-    <div style="font-size: 1.6rem; margin-bottom: 6px;">🎬</div>
-    <div style="color: #2563eb; font-size: 1.2rem; letter-spacing: 1px; font-weight: 950;">LA RIMEDIAZIONE NELL'EPICA: FILM E LIBRI</div>
-  </div>
-  <div style="background: rgba(37,99,235,0.06); border-left: 4px solid #2563eb; padding: 14px; border-radius: 6px; margin-bottom: 16px; text-align: justify;">
-    QUANDO UN'OPERA LETTERARIA VIENE RAPPRESENTATA ATTRAVERSO UN ALTRO LINGUAGGIO, COME IL <span style="color: #2563eb;">CINEMA</span> O UN <span style="color: #ea580c;">NUOVO ROMANZO</span>, PARLIAMO DI <span style="color: #16a34a;">RIMEDIAZIONE</span>. GLI EROI CLASSICI NON MUOIONO MAI: CAMBIANO SOLO IL MEDIUM CON CUI SI PRESENTANO AL PUBBLICO.
-  </div>
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
-    <div style="background: rgba(220,38,38,0.07); border-left: 4px solid #dc2626; padding: 12px; border-radius: 6px;">
-      <div style="color: #dc2626; font-size: 0.88rem; margin-bottom: 8px; font-weight: 900;">🎬 IL CINEMA (TROY, PERCY JACKSON)</div>
-      <div style="font-size: 0.85rem; line-height: 1.6;">
-        NEI FILM COME <span style="color:#dc2626;">TROY</span> L'ILIADE VIENE RIMEDIATA ELIMINANDO GLI DEI PER RENDERE LA STORIA PIÙ REALISTICA. NELLE SERIE DI <span style="color:#dc2626;">PERCY JACKSON</span> IL MITO GRECO RIVIVE NELLA SOCIETÀ CONTEMPORANEA.
-      </div>
-    </div>
-    <div style="background: rgba(22,163,74,0.07); border-left: 4px solid #16a34a; padding: 12px; border-radius: 6px;">
-      <div style="color: #16a34a; font-size: 0.88rem; margin-bottom: 8px; font-weight: 900;">📚 I LIBRI (IL CANTO DI ACHILLE)</div>
-      <div style="font-size: 0.85rem; line-height: 1.6;">
-        ROMANZI MODERNI LIKE <span style="color:#16a34a;">IL CANTO DI ACHILLE</span> DI MADELINE MILLER RIMEDIANO L'EPICA CAMBIANDO IL PUNTO DI VISTA (NARRATO DA PATROCLO) PER ESPLORARE I SENTIMENTI PROFONDI DEGLI EROI.
-      </div>
-    </div>
-  </div>
-</div>`
-    },
-    {
-      id: "ref_videogiochi",
-      category: "I Videogiochi",
-      title: "I Videogiochi",
-      summary: "LA LEZIONE COMPLETA IN DIAPOSITIVE SUI VIDEOGIOCHI, SULLA LORO STORIA, FUNZIONAMENTO E RIMEDIAZIONE.",
-      image: "assets/images/pergamena_crest.png",
-      content: `<div style="display: flex; flex-direction: column; gap: 30px; font-family: 'Outfit', sans-serif; text-transform: uppercase;">
-  <!-- SLIDE 2 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">I VIDEOGIOCHI</div>
-    <div style="font-size: 1rem; line-height: 1.8; text-align: justify; margin-bottom: 20px; font-weight: bold;">
-      DISPOSITIVO ELETTRONICO CHE CONSENTE DI GIOCARE INTERAGENDO CON LE <span style="color: #2563eb;">IMMAGINI DI UNO SCHERMO</span>.<br>
-      <span style="font-size: 0.85rem; color: #6b7280; font-weight: normal;">(ENCICLOPEDIA TRECCANI)</span>
-    </div>
-    <div style="background: rgba(239,68,68,0.08); border-left: 5px solid #ef4444; padding: 15px; border-radius: 6px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #dc2626; margin-bottom: 20px;">
-      È UN <span style="color: #2563eb;">MEDIUM</span> CHE RIMEDIA UN MESSAGGIO
-    </div>
-    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
-      🎮
-    </div>
-  </div>
-
-  <!-- SLIDE 3 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #16a34a; margin-bottom: 20px; border-bottom: 2px solid #16a34a; padding-bottom: 8px; display: inline-block;">STORIA</div>
-    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
-      <div style="display: flex; flex-direction: column; gap: 15px; font-size: 0.95rem; font-weight: bold; line-height: 1.7; flex: 1;">
-        <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #2563eb;">
-          I GIOCHI ELETTRONICI SONO APPARSI ALL'INIZIO DEGLI <span style="color: #2563eb;">ANNI '50</span> INSIEME AI PRIMI COMPUTER.
-        </div>
-        <div style="background: rgba(220,38,38,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #dc2626;">
-          IL PRIMO VIDEOGIOCO ERA UNA SIMULAZIONE DI UN <span style="color: #dc2626;">LANCIO DI MISSILE</span>.
-        </div>
-      </div>
-      <div style="flex-shrink: 0; font-size: 3rem;">
-        🖥️
-      </div>
-    </div>
-    <div style="display: flex; flex-direction: column; gap: 15px; font-size: 0.95rem; font-weight: bold; line-height: 1.7;">
-      <div style="background: rgba(124,58,237,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #7c3aed;">
-        NEL 1961 SI DIFFUSE NEI LABORATORI TECNICI DI TUTTO IL MONDO <span style="color: #7c3aed;">SPACEWAR</span>, UN GIOCO CHE SIMULAVA UNA BATTAGLIA TRA DUE ASTRONAVI.
-      </div>
-      <div style="background: rgba(245,158,11,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #ea580c;">
-        FU BREVETTATO UN VIDEOGIOCO DI SIMULAZIONE CHE RIGUARDAVA IL <span style="color: #ea580c;">PING PONG</span>.
-      </div>
-      <div style="background: rgba(16,185,129,0.06); padding: 12px; border-radius: 8px; border-left: 4px solid #10b981;">
-        NEGLI <span style="color: #10b981;">ANNI '70</span> COMINCIARONO A DISTRIBUIRSI CONSOLE PRIVATE.
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 4 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #16a34a; margin-bottom: 20px; border-bottom: 2px solid #16a34a; padding-bottom: 8px; display: inline-block;">STORIA</div>
-    <div style="background: rgba(245,158,11,0.08); border: 2px solid #f59e0b; padding: 15px; border-radius: 8px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #b45309; margin-bottom: 20px;">
-      NEGLI <span style="color: #2563eb;">ANNI '90</span> CON L'AVVENTO DI <span style="color: #16a34a;">INTERNET</span> L'INDUSTRIA DEL VIDEOGAME HA SUBITO UNA <span style="color: #ef4444;">FORTE ESPANSIONE</span>.
-    </div>
-    <div style="display: flex; gap: 20px; align-items: center;">
-      <div style="flex-shrink: 0; font-size: 3rem;">
-        🌐
-      </div>
-      <div style="background: rgba(37,99,235,0.05); border-left: 5px solid #2563eb; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; flex: 1;">
-        IN INFORMATICA, <span style="color: #2563eb;">INTERNET</span> È UNA RETE DI ELABORATORI A ESTENSIONE MONDIALE, MEDIANTE LA QUALE LE INFORMAZIONI CONTENUTE IN CIASCUN CALCOLATORE POSSONO ESSERE MESSE A DISPOSIZIONE DI ALTRI UTENTI CHE POSSONO ACCEDERE ALLA RETE IN QUALSIASI LOCALITÀ DEL MONDO.
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 5 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">STORIA</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-      <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
-        <span style="font-size: 2.5rem;">🕹️</span>
-        <div style="color: #2563eb; font-size: 0.85rem;">LE MACCHINE A GETTONI</div>
-      </div>
-      <div style="background: rgba(124,58,237,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
-        <span style="font-size: 2.5rem;">📺</span>
-        <div style="color: #7c3aed; font-size: 0.85rem;">QUELLO CON CONSOLE</div>
-      </div>
-      <div style="background: rgba(220,38,38,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
-        <span style="font-size: 2.5rem;">💻</span>
-        <div style="color: #dc2626; font-size: 0.85rem;">DA COMPUTER</div>
-      </div>
-      <div style="background: rgba(16,185,129,0.06); padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
-        <span style="font-size: 2.5rem;">📱</span>
-        <div style="color: #10b981; font-size: 0.85rem;">I TASCABILI</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 6 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #ea580c; margin-bottom: 20px; border-bottom: 2px solid #ea580c; padding-bottom: 8px; display: inline-block;">STORIA</div>
-    <div style="background: rgba(234,88,12,0.08); border-radius: 8px; padding: 15px; text-align: center; font-size: 1.1rem; font-weight: 900; color: #c2410c; margin-bottom: 20px;">
-      POSSONO USARE O MENO INTERNET
-    </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-      <div style="background: rgba(37,99,235,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-top: 4px solid #2563eb;">
-        <div style="color: #2563eb; margin-bottom: 10px; font-size: 0.95rem; text-align: center;">SE USANO INTERNET:<br>SONO FRUIBILI ONLINE</div>
-        <div style="font-size: 0.85rem; line-height: 1.6; display: flex; flex-direction: column; gap: 6px;">
-          <div>• POSSONO AGGIORNARE</div>
-          <div>• PERMETTONO LA SOCIALITÀ VIA WEB</div>
-        </div>
-      </div>
-      <div style="background: rgba(220,38,38,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-top: 4px solid #dc2626;">
-        <div style="color: #dc2626; margin-bottom: 10px; font-size: 0.95rem; text-align: center;">SE NON USANO INTERNET:<br>SONO FRUIBILI OFFLINE</div>
-        <div style="font-size: 0.85rem; line-height: 1.6; display: flex; flex-direction: column; gap: 6px;">
-          <div>• NON SI AGGIORNANO</div>
-          <div>• SI GIOCA DA SOLI</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 7 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #7c3aed; margin-bottom: 20px; border-bottom: 2px solid #7c3aed; padding-bottom: 8px; display: inline-block;">LA SCHEDA DI MEMORIA</div>
-    <div style="background: rgba(124,58,237,0.05); border-left: 5px solid #7c3aed; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 20px;">
-      UN DISPOSITIVO ELETTRONICO DI RIDOTTE DIMENSIONI USATO PER <span style="color: #7c3aed;">MEMORIZZARE DATI IN FORMA DIGITALE</span>. SONO COMUNEMENTE USATE IN DISPOSITIVI ELETTRONICI PORTATILI COME FOTOCAMERE E TELECAMERE DIGITALI, SMARTPHONE, COMPUTER PORTATILI E TABLET, LETTORI MULTIMEDIALI E ALTRI DISPOSITIVI.
-    </div>
-    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
-      💾
-    </div>
-  </div>
-
-  <!-- SLIDE 8 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">TIPOLOGIE</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.82rem; font-weight: bold; line-height: 1.5;">
-      <div style="background: rgba(239,68,68,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #ef4444;">
-        <span style="color: #ef4444; font-size: 0.9rem;">AZIONE</span><br>COMBATTERE CONTRO NEMICI E SUPERARE OSTACOLI.
-      </div>
-      <div style="background: rgba(37,99,235,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #2563eb;">
-        <span style="color: #2563eb; font-size: 0.9rem;">DI RUOLO (RPG)</span><br>IL GIOCATORE ASSUME IL RUOLO DI UN PERSONAGGIO CHE CRESCE DI LIVELLO.
-      </div>
-      <div style="background: rgba(16,185,129,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #10b981;">
-        <span style="color: #10b981; font-size: 0.9rem; margin-bottom: 4px; display: inline-block;">AVVENTURA</span><br>ESPLORAZIONE DI AMBIENTI E RISOLUZIONE DI ENIGMI CON RIFERIMENTO ALLA TRAMA.
-      </div>
-      <div style="background: rgba(245,158,11,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #f59e0b;">
-        <span style="color: #f59e0b; font-size: 0.9rem; margin-bottom: 4px; display: inline-block;">STRATEGIA</span><br>PIANIFICAZIONE DELLE MOSSE E GESTIONE DELLE RISORSE.
-      </div>
-      <div style="background: rgba(124,58,237,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #7c3aed;">
-        <span style="color: #7c3aed; font-size: 0.9rem;">SIMULAZIONE</span><br>GUIDARE VEICOLI, SIMULARE VITA O SPORT.
-      </div>
-      <div style="background: rgba(236,72,153,0.07); padding: 12px; border-radius: 6px; border-left: 3.5px solid #ec7299;">
-        <span style="color: #ec7299; font-size: 0.9rem;">MULTIPLAY</span><br>COOPERARE O SFIDARE ALTRI UTENTI IN RETE.
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 9 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #10b981; margin-bottom: 20px; border-bottom: 2px solid #10b981; padding-bottom: 8px; display: inline-block;">LE PAROLE DEI VIDEOGIOCHI</div>
-    <div style="display: flex; gap: 20px; align-items: center;">
-      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; font-weight: bold; flex: 1;">
-        <div style="background: rgba(37,99,235,0.06); padding: 10px; border-radius: 6px;">
-          <span style="color: #2563eb;">PROGRAMMATORE:</span> COLUI CHE PROGETTA UN VIDEOGIOCO.
-        </div>
-        <div style="background: rgba(16,185,129,0.06); padding: 10px; border-radius: 6px;">
-          <span style="color: #10b981;">GAMER / GIOCATORE:</span> COLUI CHE GIOCA.
-        </div>
-        <div style="background: rgba(245,158,11,0.06); padding: 10px; border-radius: 6px;">
-          <span style="color: #ea580c;">JOYSTICK:</span> È UNA PERIFERICA CHE TRASFORMA I MOVIMENTI.
-        </div>
-        <div style="background: rgba(124,58,237,0.06); padding: 10px; border-radius: 6px;">
-          <span style="color: #7c3aed;">AVATAR:</span> ALTER EGO DI UN GIOCATORE.
-        </div>
-      </div>
-      <div style="flex-shrink: 0; text-align: center; font-size: 3rem;">
-        👾
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 10 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #dc2626; margin-bottom: 20px; border-bottom: 2px solid #dc2626; padding-bottom: 8px; display: inline-block;">LE AZIENDE DI VIDEOGAME</div>
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: rgba(220,38,38,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-left: 5px solid #dc2626; display: flex; gap: 15px; align-items: center;">
-        <span style="font-size: 2.5rem; flex-shrink: 0;">🇯🇵</span>
-        <div>
-          <div style="color: #dc2626; font-size: 1.05rem; margin-bottom: 4px;">NINTENDO</div>
-          <div style="font-size: 0.9rem; line-height: 1.6; font-weight: normal;">AZIENDA GIAPPONESE CHE REALIZZA E DISTRIBUISCE SU SCALA MONDIALE VIDEOGIOCHI E CONSOLE.</div>
-        </div>
-      </div>
-      <div style="background: rgba(37,99,235,0.07); padding: 15px; border-radius: 8px; font-weight: bold; border-left: 5px solid #2563eb; display: flex; gap: 15px; align-items: center;">
-        <span style="font-size: 2.5rem; flex-shrink: 0;">🎵</span>
-        <div>
-          <div style="color: #2563eb; font-size: 1.05rem; margin-bottom: 4px;">SONY</div>
-          <div style="font-size: 0.9rem; line-height: 1.6; font-weight: normal;">SOCIETÀ GIAPPONESE PER LA PRODUZIONE DI APPARECCHI RADIOTELEVISIVI E DI APPARECCHIATURE ELETTRONICHE PER LE TELECOMUNICAZIONI E L'INFORMATICA.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 11 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #7c3aed; margin-bottom: 20px; border-bottom: 2px solid #7c3aed; padding-bottom: 8px; display: inline-block;">LE CONSOLLE</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-      <div style="background: rgba(124,58,237,0.07); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-        <div style="font-size: 1.1rem; color: #7c3aed;">PLAYSTATION</div>
-        <span style="font-size: 2.8rem; margin: 4px 0;">🎮</span>
-        <div style="font-size: 0.85rem; line-height: 1.5; color: #4b5563;">
-          CONSOLE PER GIOCHI ELETTRONICI IDEATA DALLA SONY E COMMERCIALIZZATA DAL <span style="color:#7c3aed;">1994</span>.
-        </div>
-      </div>
-      <div style="background: rgba(16,185,129,0.07); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-        <div style="font-size: 1.1rem; color: #10b981;">WII</div>
-        <span style="font-size: 2.8rem; margin: 4px 0;">🕹️</span>
-        <div style="font-size: 0.85rem; line-height: 1.5; color: #4b5563;">
-          CONSOLE PER VIDEOGIOCHI PRODOTTA DA NINTENDO E IN VENDITA DAL <span style="color:#10b981;">2006</span>.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 12 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #1e3a8a; margin-bottom: 20px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; display: inline-block;">L'INTELLIGENZA COLLETTIVA</div>
-    <div style="background: rgba(30,58,138,0.05); border-left: 5px solid #1e3a8a; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 16px;">
-      SUL WEB È POSSIBILE GIOCARE ALLO STESSO VIDEOGIOCO ANCHE IN <span style="color: #2563eb;">GRUPPI COMPOSTI DA PIÙ PERSONE</span> SITUATE IN DIVERSE POSTAZIONI SPARSI PER IL GLOBO.
-    </div>
-    <div style="background: rgba(16,185,129,0.05); border-left: 5px solid #10b981; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify;">
-      NEI GIOCHI DI RUOLO ONLINE È POSSIBILE FAR PARTE DI UN MONDO E CREARSI UN'<span style="color: #10b981;">IDENTITÀ VIRTUALE</span>.
-    </div>
-    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 2.5rem;">
-      <span title="Roblox">🟥</span>
-      <span title="The Sims">💎</span>
-      <span title="Avatar virtuale">🧑‍💻</span>
-    </div>
-  </div>
-
-  <!-- SLIDE 13 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #ea580c; margin-bottom: 20px; border-bottom: 2px solid #ea580c; padding-bottom: 8px; display: inline-block;">LA REALTÀ AUMENTATA (A/R)</div>
-    <div style="background: rgba(234,88,12,0.05); border-left: 5px solid #ea580c; padding: 18px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 20px;">
-      LA REALTÀ AUMENTATA È IL MODO IN CUI SI INDICA L'<span style="color: #ea580c;">ARRICCHIMENTO DELLA REALTÀ</span> ATTRAVERSO DISPOSITIVI ELETTRONICI.
-    </div>
-    <div style="background: rgba(31,41,55,0.08); border-radius: 8px; padding: 12px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #1f2937;">
-      I DISPOSITIVI SONO FILTRI
-    </div>
-    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
-      📲
-    </div>
-  </div>
-
-  <!-- SLIDE 14 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">LA REALTÀ VIRTUALE (V/R)</div>
-    <div style="font-size: 0.9rem; line-height: 1.6; font-weight: bold; display: flex; flex-direction: column; gap: 14px;">
-      <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 6px; border-left: 4px solid #2563eb;">
-        CON IL TERMINE REALTÀ VIRTUALE SI IDENTIFICANO VARI MODI DI SIMULAZIONE DI SITUAZIONI REALI MEDIANTE L'UTILIZZO DI COMPUTER E L'AUSILIO DI INTERFACCE APPOSITAMENTE SVILUPPATE.
-      </div>
-      <div style="background: rgba(37,99,235,0.06); padding: 12px; border-radius: 6px; border-left: 4px solid #2563eb;">
-        LE PERSONE SI TROVANO IMMERSE IN UNA SITUAZIONE NELLA QUALE LE PERCEZIONI NATURALI DI VISTA E UDITO SONO ANNULLATE O SOSTITUITE DA QUELE DELLA REALTÀ VIRTUALE.
-      </div>
-      <div style="background: rgba(245,158,11,0.06); padding: 12px; border-radius: 6px; border-left: 4px solid #f59e0b;">
-        NELLA REALTÀ AUMENTATA (A/R), INVECE, LA PERSONA CONTINUA A VEDERE LA REALTÀ FISICA, MA USUFRUISCE DI INFORMAZIONI AGGIUNTIVE E SOVRAPPOSTE ALLA REALTÀ FISICA.
-      </div>
-    </div>
-    <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
-      🥽
-    </div>
-  </div>
-
-  <!-- SLIDE 15 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #10b981; margin-bottom: 20px; border-bottom: 2px solid #10b981; padding-bottom: 8px; display: inline-block;">ALCUNI GIOCHI</div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; font-weight: bold; text-align: center; font-size: 0.75rem;">
-      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🏺</span>
-        <div>TOMB RAIDER</div>
-      </div>
-      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🦊</span>
-        <div>CRASH BANDICOOT</div>
-      </div>
-      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🍄</span>
-        <div>SUPER MARIO BROS</div>
-      </div>
-      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">👾</span>
-        <div>SPACE INVADERS</div>
-      </div>
-      <div style="background: #f3f4f6; padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🔫</span>
-        <div>CALL OF DUTY</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDE 16 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #16a34a; margin-bottom: 20px; border-bottom: 2px solid #16a34a; padding-bottom: 8px; display: inline-block;">IL PIÙ VENDUTO</div>
-    <div style="background: rgba(22,163,74,0.08); border-radius: 8px; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-      <span style="font-size: 4rem;">⛏️</span>
-      <div style="font-size: 1.8rem; font-weight: 900; color: #15803d;">MINECRAFT</div>
-      <div style="font-size: 0.95rem; font-weight: bold; color: #4b5563;">IL VIDEOGIOCO PIÙ VENDUTO NELLA STORIA CON OLTRE 300 MILIONI DI COPIE.</div>
-    </div>
-  </div>
-
-  <!-- SLIDE 17 -->
-  <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #ef4444; margin-bottom: 20px; border-bottom: 2px solid #ef4444; padding-bottom: 8px; display: inline-block;">LA RIMEDIAZIONE</div>
-    <div style="background: rgba(239,68,68,0.08); border-left: 5px solid #ef4444; padding: 18px; border-radius: 6px; font-size: 0.98rem; line-height: 1.7; font-weight: bold; text-align: justify; margin-bottom: 20px; color: #c2410c;">
-      PER <span style="color: #2563eb;">RIMEDIAZIONE</span> SI INTENDE LA PRESENTAZIONE DI UN <span style="color: #16a34a;">MEDIUM</span> IN UN ALTRO MEDIUM.
-    </div>
-    <div style="background: rgba(31,41,55,0.05); border-radius: 8px; padding: 15px; font-size: 0.95rem; line-height: 1.6; font-weight: bold; text-align: justify; margin-bottom: 20px;">
-      CI SONO CASI IN CUI UNA <span style="color: #2563eb;">TAVOLA (FUMETTO)</span> DIVENTA UN FILM, UN FILM DIVENTA UN VIDEOGIOCO, UN LIBRO DIVENTA UN VIDEOGIOCO E COSÌ VIA.
-    </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; text-align: center; font-size: 0.75rem; font-weight: bold;">
-      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🏦</span>
-        <div>MONOPOLY</div>
-      </div>
-      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">💃</span>
-        <div>JUST DANCE</div>
-      </div>
-      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🪆</span>
-        <div>PINOCCHIO</div>
-      </div>
-      <div style="background: #f9fafb; padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 8px;">
-        <span style="font-size: 2.2rem;">🦆</span>
-        <div>DISNEY COMICS</div>
-      </div>
-    </div>
-  </div>
-</div>`
-    }
-],
-
-  citations: [
-    { text: "Cantami, o Diva, del pelide Achille l'ira funesta...", author: "Omero, Iliade" },
     { text: "Considerate la vostra semenza: fatti non foste a viver come bruti, ma per seguir virtute e canoscenza.", author: "Dante, Inferno (riferito a Ulisse)" },
     { text: "Canto le armi e l'uomo che per primo dalle coste di Troia giunse profugo in Italia...", author: "Virgilio, Eneide" },
     { text: "Il re Carlo, il nostro grande imperatore, per sette anni interi è rimasto in Spagna...", author: "Turoldo, Chanson de Roland" }
