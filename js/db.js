@@ -25,8 +25,9 @@
             window.EroiMockData.study_guides.forEach(mockG => {
               const dbG = dbState.study_guides.find(g => g.id === mockG.id);
               if (dbG) {
-                if (dbG.content !== mockG.content || dbG.notes !== mockG.notes || dbG.image !== mockG.image || dbG.title !== mockG.title || dbG.summary !== mockG.summary || dbG.styleFilter !== mockG.styleFilter) {
+                if (dbG.content !== mockG.content || dbG.notes !== mockG.notes || dbG.image !== mockG.image || dbG.title !== mockG.title || dbG.summary !== mockG.summary || dbG.styleFilter !== mockG.styleFilter || dbG.category !== mockG.category) {
                   dbG.content = mockG.content;
+                  dbG.category = mockG.category;
                   dbG.notes = mockG.notes;
                   dbG.image = mockG.image;
                   dbG.title = mockG.title;
@@ -48,7 +49,7 @@
               if (dbM) {
                 const dbQStr = JSON.stringify(dbM.questions);
                 const mockQStr = JSON.stringify(mockM.questions);
-                if (dbQStr !== mockQStr || dbM.title !== mockM.title || dbM.desc !== mockM.desc || dbM.unlockedBy !== mockM.unlockedBy || dbM.area !== mockM.area) {
+                if (dbQStr !== mockQStr || dbM.title !== mockM.title || dbM.desc !== mockM.desc || dbM.unlockedBy !== mockM.unlockedBy || dbM.area !== mockM.area || dbM.category !== mockM.category) {
                   dbM.questions = JSON.parse(JSON.stringify(mockM.questions));
                   dbM.title = mockM.title;
                   dbM.desc = mockM.desc;
