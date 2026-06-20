@@ -544,6 +544,18 @@ window.EroiMockData = {
       { q: "Cosa si intende per 'gameplay' in un videogioco?", a: ["La grafica 3D", "L'insieme delle regole, delle meccaniche e dell'interattività che definiscono l'esperienza di gioco", "La colonna sonora", "Il manuale delle istruzioni"], correct: 1 },
       { q: "Chi è considerato il creatore di celebri brand di videogiochi come Super Mario e Zelda?", a: ["Hideo Kojima", "Shigeru Miyamoto", "Sid Meier", "John Carmack"], correct: 1 },
       { q: "Quale genere videoludico (sigla RPG) si basa sulla personalizzazione e crescita di un personaggio all'interno di una storia?", a: ["Sparatutto in prima persona", "Gioco di Ruolo (Role-Playing Game)", "Simulatore di volo", "Gioco di carte elettronico"], correct: 1 }
+    ] },
+    { id: "quiz_rimediazione", category: "Primo Viaggio", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
+      { q: "Cosa si intende per 'Rimediazione'?", a: ["La traduzione di un testo da una lingua antica a una moderna", "La presentazione di un medium all'interno di un altro medium", "La riscrittura di un'opera censurando le parti scandalose", "La spiegazione scientifica di un racconto mitologico"], correct: 1 },
+      { q: "Nel film 'Troy', come viene rimediata l'Iliade omerica?", a: ["Inserendo divinità aliene", "Eliminando l'intervento diretto degli dei per renderla più realistica", "Cambiando l'esito della guerra con la vittoria troiana", "Sostituendo il cavallo di legno con un toro"], correct: 1 },
+      { q: "Nelle avventure di 'Percy Jackson', come rivive la mitologia greca?", a: ["In un lontano futuro fantascientifico nello spazio", "Ambientandola nella società contemporanea americana", "Attraverso manoscritti medievali ritrovati in Inghilterra", "Sotto forma di geroglifici egizi parlanti"], correct: 1 },
+      { q: "Quale celebre romanzo moderno rimedia l'epica dell'Iliade concentrandosi sulla relazione intima tra due eroi?", a: ["Il Signore degli Anelli", "Il Canto di Achille di Madeline Miller", "L'Eneide di Virgilio", "Il romanzo di Alessandro"], correct: 1 },
+      { q: "Chi era la voce narrante che racconta le vicende nel romanzo 'Il Canto di Achille'?", a: ["Achille stesso", "Omero", "Patroclo", "Ulisse"], correct: 2 },
+      { q: "Quale poema epico inglese è stato rimediato da J.R.R. Tolkien nel 'Signore degli Anelli'?", a: ["Beowulf e le saghe norrene", "L'Eneide", "L'Orlando Furioso", "La Chanson de Roland"], correct: 0 },
+      { q: "Chi ha diretto il kolossal cinematografico del 2004 'Troy'?", a: ["Steven Spielberg", "Wolfgang Petersen", "Ridley Scott", "James Cameron"], correct: 1 },
+      { q: "Quale opera lirica in quattro parti di Richard Wagner rimedia il mito dei Nibelunghi?", a: ["L'Anello del Nibelungo", "Il Tristano e Isotta", "Il Parsifal", "La Valchiria"], correct: 0 },
+      { q: "Nel film 'O Brother, Where Art Thou?' dei fratelli Coen, quale poema classico viene rimediato in chiave moderna?", a: ["L'Iliade", "L'Odissea", "L'Eneide", "Il Canto dei Nibelunghi"], correct: 1 },
+      { q: "In quale celebre opera fantascientifica di George Lucas si ritrovano evidenti rimandi all'eroe classico e al viaggio dell'eroe?", a: ["Star Wars", "Blade Runner", "Star Trek", "Matrix"], correct: 0 }
     ] }
   ],
 
@@ -1388,19 +1400,6 @@ window.EroiMockData = {
   </div>
 </div>`
     },
-
-    { id: "quiz_rimediazione", category: "Primo Viaggio", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
-      { q: "Cosa si intende per 'Rimediazione'?", a: ["La traduzione di un testo da una lingua antica a una moderna", "La presentazione di un medium all'interno di un altro medium", "La riscrittura di un'opera censurando le parti scandalose", "La spiegazione scientifica di un racconto mitologico"], correct: 1 },
-      { q: "Nel film 'Troy', come viene rimediata l'Iliade omerica?", a: ["Inserendo divinità aliene", "Eliminando l'intervento diretto degli dei per renderla più realistica", "Cambiando l'esito della guerra con la vittoria troiana", "Sostituendo il cavallo di legno con un toro"], correct: 1 },
-      { q: "Nelle avventure di 'Percy Jackson', come rivive la mitologia greca?", a: ["In un lontano futuro fantascientifico nello spazio", "Ambientandola nella società contemporanea americana", "Attraverso manoscritti medievali ritrovati in Inghilterra", "Sotto forma di geroglifici egizi parlanti"], correct: 1 },
-      { q: "Quale celebre romanzo moderno rimedia l'epica dell'Iliade concentrandosi sulla relazione intima tra due eroi?", a: ["Il Signore degli Anelli", "Il Canto di Achille di Madeline Miller", "L'Eneide di Virgilio", "Il romanzo di Alessandro"], correct: 1 },
-      { q: "Chi era la voce narrante che racconta le vicende nel romanzo 'Il Canto di Achille'?", a: ["Achille stesso", "Omero", "Patroclo", "Ulisse"], correct: 2 },
-      { q: "Quale poema epico inglese è stato rimediato da J.R.R. Tolkien nel 'Signore degli Anelli'?", a: ["Beowulf e le saghe norrene", "L'Eneide", "L'Orlando Furioso", "La Chanson de Roland"], correct: 0 },
-      { q: "Chi ha diretto il kolossal cinematografico del 2004 'Troy'?", a: ["Steven Spielberg", "Wolfgang Petersen", "Ridley Scott", "James Cameron"], correct: 1 },
-      { q: "Quale opera lirica in quattro parti di Richard Wagner rimedia il mito dei Nibelunghi?", a: ["L'Anello del Nibelungo", "Il Tristano e Isotta", "Il Parsifal", "La Valchiria"], correct: 0 },
-      { q: "Nel film 'O Brother, Where Art Thou?' dei fratelli Coen, quale poema classico viene rimediato in chiave moderna?", a: ["L'Iliade", "L'Odissea", "L'Eneide", "Il Canto dei Nibelunghi"], correct: 1 },
-      { q: "In quale celebre opera fantascientifica di George Lucas si ritrovano evidenti rimandi all'eroe classico e al viaggio dell'eroe?", a: ["Star Wars", "Blade Runner", "Star Trek", "Matrix"], correct: 0 }
-    ] },
 
     { id: "char_menelao", category: "Schede Personaggio (Iliade)", title: "Menelao", image: "assets/images/tempio/menelao_portrait.png", summary: "Re di Sparta e sposo di Elena.", content: "Descrizione: Re di Sparta e fratello di Agamennone. Sposo di Elena, il cui rapimento da parte di Paride scatena la guerra di Troia. Combatte con ardore nel conflitto per vendicare l'onore offeso.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"IL MIO CUORE ANELA ALLA VENDETTA E AL RITORNO DI ELENA NELLA MIA REGGIA A SPARTA.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ILIADE</span></div>" },
     { id: "char_aiace", category: "Schede Personaggio (Iliade)", title: "Aiace Telamonio", image: "assets/images/tempio/aiace_portrait.png", summary: "Imponente e indomito guerriero acheo.", content: "Descrizione: Re di Salamina, secondo solo ad Achille per valore militare e forza fisica. Famoso per il suo gigantesco scudo di bronzo e pelli di bue con cui difende strenuamente le navi dei Greci.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"PADRE ZEUS, LIBERACI DALLA NEBBIA, CONCEDI LA LUCE AI NOSTRI OCCHI E POI FACCI ANCHE MORIRE.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— OMERO, ILIADE</span></div>" },
