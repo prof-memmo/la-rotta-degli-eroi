@@ -533,7 +533,7 @@ window.EroiMockData = {
       { q: "Chi uccide Hagen alla fine, decapitandolo con la spada di Sigfrido?", a: ["Gunther", "Etzel", "Crimilde stessa", "Alberico"], correct: 2 }
     ] },
 
-    { id: "quiz_videogiochi", category: "I Videogiochi", title: "I Videogiochi", desc: "Metti alla prova la tua conoscenza sulla storia, tipologie e rimediazione legati al mondo dei videogiochi.", rewards: { xp: 100, dracme: 90 }, area: "Accademia", unlockedBy: "quiz_rimediazione", questions: [
+    { id: "quiz_videogiochi", category: "Primo Viaggio", title: "I Videogiochi", desc: "Metti alla prova la tua conoscenza sulla storia, tipologie e rimediazione legati al mondo dei videogiochi.", rewards: { xp: 100, dracme: 90 }, area: "Accademia", unlockedBy: "quiz_rimediazione", questions: [
       { q: "Cos'è un videogioco secondo la definizione dell'Enciclopedia Treccani?", a: ["Un gioco da tavolo elettronico con dadi cartacei", "Un dispositivo elettronico che consente di giocare interagendo con le immagini di uno schermo", "Un film interattivo proiettato al cinema", "Un'applicazione per smartphone adatta solo allo studio"], correct: 1 },
       { q: "In quale decennio sono apparsi i primi giochi elettronici?", a: ["Negli anni '20", "Negli anni '50", "Negli anni '70", "Negli anni '90"], correct: 1 },
       { q: "Quale innovazione tecnologica degli anni '90 ha provocato la forte espansione dell'industria del videogioco?", a: ["L'invenzione dello schermo LCD", "L'avvento di Internet e delle reti globali", "La nascita dei floppy disk ad alta capacità", "La diffusione delle sale giochi a gettoni"], correct: 1 },
@@ -1028,7 +1028,7 @@ window.EroiMockData = {
 </div>`
     },    {
       id: "ref_rimediazione_film_libri",
-      category: "La Rimediazione",
+      category: "L\'inizio del viaggio",
       title: "Film e Libri (La Rimediazione)",
       summary: "SCOPRI COME LE STORIE DEGLI EROI ANTICHI RIVIVONO NEI FILM, NELLE SERIE TV E NEI ROMANZI MODERNI.",
       image: "assets/images/pergamena_crest.png",
@@ -1058,7 +1058,7 @@ window.EroiMockData = {
     },
     {
       id: "ref_videogiochi",
-      category: "I Videogiochi",
+      category: "L\'inizio del viaggio",
       title: "I Videogiochi",
       summary: "LA LEZIONE COMPLETA IN DIAPOSITIVE SUI VIDEOGIOCHI, SULLA LORO STORIA, FUNZIONAMENTO E RIMEDIAZIONE.",
       image: "assets/images/pergamena_crest.png",
@@ -1389,7 +1389,7 @@ window.EroiMockData = {
 </div>`
     },
 
-    { id: "quiz_rimediazione", category: "La Rimediazione", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
+    { id: "quiz_rimediazione", category: "Primo Viaggio", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
       { q: "Cosa si intende per 'Rimediazione'?", a: ["La traduzione di un testo da una lingua antica a una moderna", "La presentazione di un medium all'interno di un altro medium", "La riscrittura di un'opera censurando le parti scandalose", "La spiegazione scientifica di un racconto mitologico"], correct: 1 },
       { q: "Nel film 'Troy', come viene rimediata l'Iliade omerica?", a: ["Inserendo divinità aliene", "Eliminando l'intervento diretto degli dei per renderla più realistica", "Cambiando l'esito della guerra con la vittoria troiana", "Sostituendo il cavallo di legno con un toro"], correct: 1 },
       { q: "Nelle avventure di 'Percy Jackson', come rivive la mitologia greca?", a: ["In un lontano futuro fantascientifico nello spazio", "Ambientandola nella società contemporanea americana", "Attraverso manoscritti medievali ritrovati in Inghilterra", "Sotto forma di geroglifici egizi parlanti"], correct: 1 },
