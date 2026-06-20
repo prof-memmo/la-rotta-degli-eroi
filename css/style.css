@@ -1205,6 +1205,7 @@ h3.panel-title {
   margin-bottom: 10px;
   border-bottom: 1px solid var(--parchment-border);
   padding-bottom: 8px;
+  text-transform: uppercase;
 }
 
 .parchment-sheet .category-badge {
@@ -1225,6 +1226,7 @@ h3.panel-title {
   line-height: 1.65;
   color: #1e1503;
   text-align: justify;
+  text-transform: uppercase;
 }
 
 /* Video Game Character Portrait Layout */
@@ -2054,21 +2056,20 @@ table.game-table tr:hover td {
   background: none;
   border: none;
   border-radius: 0;
-  overflow: visible;
+  overflow: hidden; /* Prevent overflow if image is taller */
   position: relative;
   box-shadow: none;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end; /* Align image to bottom */
   justify-content: center;
 }
 
 .guide-portrait-img {
-  width: 100% !important;
-  max-width: 280px !important;
-  height: auto !important;
-  max-height: 420px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  height: 320px !important; /* Esatta altezza di Enea */
   object-fit: contain !important;
-  object-position: top center !important;
+  object-position: bottom center !important;
   z-index: 2;
   transition: transform 0.1s ease-out;
   transform-style: preserve-3d;
@@ -4165,7 +4166,7 @@ table.game-table tr:hover td {
    la bottom navigation
    ========================================== */
 #view-map {
-    padding-bottom: 30px !important;
+    padding-bottom: 5px !important;
 }
 
 /* ==========================================
@@ -4387,12 +4388,14 @@ table.game-table tr:hover td {
     .guide-portrait-container {
         width: 100% !important;
         max-height: 240px;
-        overflow: visible;
+        overflow: hidden; /* Changed from visible to prevent overlapping text */
     }
     .guide-portrait-img {
-        width: 100% !important;
-        max-height: 240px !important;
+        width: auto !important;
+        max-width: 100% !important;
+        height: 240px !important; /* Matches container max-height */
         object-fit: contain !important;
+        object-position: bottom center !important;
     }
     /* Cards griglia: 1 colonna su mobile */
     .cards-grid {
@@ -4570,7 +4573,7 @@ table.game-table tr:hover td {
     /* SPAZIO TITOLO: riduce padding-top della view su schermi ridotti */
     .view.active {
         padding-top: 0px !important;
-        padding-bottom: 40px !important;
+        padding-bottom: 5px !important;
     }
     .view h2, .view h1 {
         margin-top: 0 !important;
@@ -4580,7 +4583,7 @@ table.game-table tr:hover td {
         padding-top: 5px !important;
     }
     #view-map .glass-panel {
-        padding: 0 10px 30px 10px !important;
+        padding: 0 10px 5px 10px !important;
         margin-bottom: 20px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
