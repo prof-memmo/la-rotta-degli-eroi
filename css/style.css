@@ -4389,6 +4389,49 @@ table.game-table tr:hover td {
 /* ==========================================
    TEMPIO (guide cards): responsive su mobile
    ========================================== */
+@media (max-width: 1024px) {
+    .guide-game-portrait-layout {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        align-items: stretch;
+        gap: 18px;
+    }
+    .guide-portrait-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 auto;
+        overflow: hidden;
+    }
+    .guide-portrait-img {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+    }
+    .guide-game-portrait-layout:not(.horizontal-layout) .guide-portrait-img {
+        height: auto !important;
+        width: 100% !important;
+    }
+    .guide-game-portrait-layout .sheet-body {
+        width: 100% !important;
+        min-width: auto !important;
+        padding: 0 12px 12px !important;
+        box-sizing: border-box !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    .guide-game-portrait-layout.horizontal-layout {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .guide-game-portrait-layout.horizontal-layout .sheet-body {
+        padding: 0 12px !important;
+    }
+}
+
 @media (max-width: 768px) {
     .guide-game-portrait-layout {
         flex-direction: column !important;
