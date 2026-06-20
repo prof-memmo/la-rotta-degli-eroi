@@ -2056,26 +2056,36 @@ table.game-table tr:hover td {
   background: none;
   border: none;
   border-radius: 0;
-  overflow: hidden; /* Prevent overflow if image is taller */
+  overflow: visible;
   position: relative;
   box-shadow: none;
   display: flex;
-  align-items: flex-end; /* Align image to bottom */
+  align-items: flex-start;
   justify-content: center;
 }
 
 .guide-portrait-img {
-  width: auto !important;
-  max-width: 100% !important;
-  height: 320px !important; /* Esatta altezza di Enea */
+  width: 100% !important;
+  max-width: 280px !important;
+  height: auto !important;
+  max-height: 420px !important;
   object-fit: contain !important;
-  object-position: bottom center !important;
+  object-position: top center !important;
   z-index: 2;
   transition: transform 0.1s ease-out;
   transform-style: preserve-3d;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35)); /* Aggiunge un'ombra morbida all'avatar senza sfondo */
   -webkit-mask-image: none !important;
   mask-image: none !important;
+}
+
+/* Forza altezza uniforme solo per i ritratti verticali dei personaggi */
+.guide-game-portrait-layout:not(.horizontal-layout) .guide-portrait-img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: 350px !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
 }
 
 /* Modifiche al layout per posizionare l'avatar centrato sopra la descrizione */
@@ -4388,18 +4398,20 @@ table.game-table tr:hover td {
     .guide-portrait-container {
         width: 100% !important;
         max-height: 240px;
-        overflow: hidden; /* Changed from visible to prevent overlapping text */
+        overflow: visible;
     }
     .guide-portrait-img {
-        width: auto !important;
-        max-width: 100% !important;
-        height: 240px !important; /* Matches container max-height */
+        width: 100% !important;
+        max-height: 240px !important;
         object-fit: contain !important;
-        object-position: bottom center !important;
+    }
+    .guide-game-portrait-layout:not(.horizontal-layout) .guide-portrait-img {
+        height: 240px !important;
+        width: auto !important;
     }
     /* Cards griglia: 1 colonna su mobile */
     .cards-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 12px;
     }
     /* View welcome: scrolla su mobile */
