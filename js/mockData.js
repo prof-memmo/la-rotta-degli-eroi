@@ -1040,7 +1040,7 @@ window.EroiMockData = {
 </div>`
     },    {
       id: "ref_rimediazione_film_libri",
-      category: "L\'inizio del viaggio",
+      category: "L'inizio del viaggio",
       title: "Film e Libri (La Rimediazione)",
       summary: "SCOPRI COME LE STORIE DEGLI EROI ANTICHI RIVIVONO NEI FILM, NELLE SERIE TV E NEI ROMANZI MODERNI.",
       image: "assets/images/pergamena_crest.png",
@@ -1070,7 +1070,7 @@ window.EroiMockData = {
     },
     {
       id: "ref_videogiochi",
-      category: "L\'inizio del viaggio",
+      category: "L'inizio del viaggio",
       title: "I Videogiochi",
       summary: "LA LEZIONE COMPLETA IN DIAPOSITIVE SUI VIDEOGIOCHI, SULLA LORO STORIA, FUNZIONAMENTO E RIMEDIAZIONE.",
       image: "assets/images/pergamena_crest.png",
