@@ -16,15 +16,15 @@ window.EroiMockData = {
   regolamenti: {
     studente: [
       { id: "s1", titolo: "Il Cammino dell'Eroe", testo: "Il tuo obiettivo è guadagnare XP per salire di livello ed ottenere Dracme da spendere nello Shop. Risolvi i quiz e partecipa alle missioni per progredire sulla mappa." },
-      { id: "s2", titolo: "Guadagno di Dracme", testo: "Ottieni Dracme completando attività quotidiane (5-15 Dracme), risolvendo quiz brevi (10-20 Dracme), completando intere missioni (30-80 Dracme) e superando le verifiche in classe (50-120 Dracme)." },
+      { id: "s2", titolo: "Economia e Progressione", testo: "L'economia degli studenti è completamente indipendente. Le quantità di oggetti nel Mercato (stock) diminuiscono solo quando un altro studente acquista l'oggetto." },
       { id: "s3", titolo: "L'Inventario e gli Equipaggiamenti", testo: "Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per l'avatar e Artefatti. Puoi tenere attivi fino a 2 Artefatti contemporaneamente." },
       { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus." }
     ],
     docente: [
-      { id: "d1", titolo: "Gestione di Classi e Studenti", testo: "Puoi creare classi personalizzate ed iscrivere o modificare gli studenti. Il docente ha il potere di assegnare Dracme, XP ed Artefatti direttamente dal pannello di gestione." },
-      { id: "d2", titolo: "Creazione di Missioni e Quiz", testo: "Puoi creare nuove missioni didattiche o modificare quelle esistenti, stabilendo le domande a risposta multipla e definendo le ricompense in XP e Dracme." },
-      { id: "d3", titolo: "Controllo dello Shop e Bilanciamento", testo: "Il docente può inserire nuovi oggetti nello shop, impostare i prezzi in Dracme, attivare/disattivare gli articoli e limitarne la quantità disponibile (stock)." },
-      { id: "d4", titolo: "Personalizzazione degli Aiutanti", testo: "Puoi personalizzare i bonus passivi, i poteri speciali e le immunità degli aiutanti a livello globale o per singoli studenti meritevoli." }
+      { id: "d1", titolo: "Due Mondi Separati (Universo Parallelo)", testo: "Il docente opera in un universo parallelo. Può giocare come un normale studente (accumulando XP e Dracme reali sul proprio profilo), ma senza MAI interferire con l'economia, lo stock o i log degli studenti." },
+      { id: "d2", titolo: "Isolamento Economico", testo: "Gli acquisti del docente nello Shop NON decrementano la giacenza (stock) degli oggetti disponibili per gli studenti, né influenzano le statistiche globali." },
+      { id: "d3", titolo: "Gestione Didattica", testo: "Dal Pannello Docente, l'insegnante gestisce le classi, attiva il 2° quadrimestre e monitora i progressi degli studenti, leggendo esclusivamente i dati del sistema didattico." },
+      { id: "d4", titolo: "Non Interferenza", testo: "Il gameplay personale del docente è isolato. Qualsiasi progresso nella storia o acquisto effettuato dal docente non ha alcun impatto sul bilanciamento della classe." }
     ]
   },
 

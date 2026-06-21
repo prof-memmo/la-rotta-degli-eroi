@@ -46,7 +46,9 @@
 
     // Aggiunge XP e verifica passaggi di livello
     addXP: function(email, amount) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return { levelUp: false };
 
       const oldXP = profile.xp;
@@ -56,7 +58,9 @@
 
       profile.xp = newXP;
       profile.level = newLevel;
-      window.EroiDB.saveStudentProfile(email, profile);
+      const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
 
       let levelUp = false;
       if (oldLevel !== newLevel) {
@@ -69,19 +73,25 @@
 
     // Aggiunge Dracme (applicando eventuali moltiplicatori se specificati)
     addDracme: function(email, amount) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return 0;
 
       const oldDracme = profile.dracme;
       const newDracme = Math.max(0, oldDracme + amount);
       profile.dracme = newDracme;
-      window.EroiDB.saveStudentProfile(email, profile);
+      const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
       return newDracme;
     },
 
     // Sottrae Dracme (tenendo conto di immunità o limitazioni)
     deductDracme: function(email, amount) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return false;
 
       // Se lo studente ha un aiutante attivo con immunità alla perdita di Dracme
@@ -100,13 +110,17 @@
       }
 
       profile.dracme -= amount;
-      window.EroiDB.saveStudentProfile(email, profile);
+      const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
       return true;
     },
 
     // Calcola il prezzo finale scontato di un oggetto per uno studente
     calculateDiscountedPrice: function(email, item) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return item.price;
 
       let discount = 0; // in percentuale (es. 0.15 = 15%)
@@ -140,7 +154,7 @@
 
     // Gestione degli acquisti nello shop
     purchaseItem: function(email, itemId) {
-      const shopItems = window.EroiDB.getShopItems();
+      const shopItems = window.EroiDB.getShopItems(email);
       const item = shopItems.find(i => i.id === itemId);
       if (!item || !item.active) {
         throw new Error("Oggetto non disponibile o inesistente nello shop.");
@@ -156,10 +170,10 @@
         throw new Error("Dracme insufficienti per l'acquisto.");
       }
 
-      // Decrementa lo stock se non è infinito
+      // Decrementa lo stock se non è infinito (solo se non è un docente)
       if (item.stock < 99) {
         item.stock--;
-        window.EroiDB.saveShopItem(itemId, item);
+        window.EroiDB.saveShopItem(itemId, item, email);
       }
 
       // Aggiunge all'inventario dello studente
@@ -205,11 +219,13 @@
     // Equipaggia un aiutante (Secondo Quadrimestre)
     activateHelper: function(email, helperId) {
       const settings = window.EroiDB.getSettings();
-      if (!settings.secondTermActive) {
+      if (!window.EroiApp.isSecondTermActiveForUser()) {
         throw new Error("Gli aiutanti sono sbloccabili solo a partire dal secondo quadrimestre.");
       }
 
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return false;
 
       // Verifica che possieda l'aiutante (deve averlo comprato nello shop o assegnato dal docente)
@@ -231,14 +247,18 @@
       }
 
       profile.activeHelper = helperId;
-      window.EroiDB.saveStudentProfile(email, profile);
+      const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
       window.EroiDB.logActivity(email, `Equipaggiato l'aiutante: ${helperObj.name}.`);
       return true;
     },
 
     // Equipaggia/Rimuove un artefatto (massimo 2 attivi contemporaneamente)
     toggleArtifact: function(email, artifactId) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return false;
 
       if (!profile.activeArtifacts) {
@@ -250,7 +270,9 @@
       if (isEquipped) {
         // Disattiva
         profile.activeArtifacts = profile.activeArtifacts.filter(id => id !== artifactId);
-        window.EroiDB.saveStudentProfile(email, profile);
+        const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
         window.EroiDB.logActivity(email, `Rimosso l'artefatto equipaggiato: ${artifactId}.`);
         return { action: "removed", list: profile.activeArtifacts };
       } else {
@@ -269,7 +291,9 @@
         }
 
         profile.activeArtifacts.push(artifactId);
-        window.EroiDB.saveStudentProfile(email, profile);
+        const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
         window.EroiDB.logActivity(email, `Equipaggiato l'artefatto: ${artifactId}.`);
         return { action: "added", list: profile.activeArtifacts };
       }
@@ -277,7 +301,9 @@
 
     // Risolve una missione tramite risposte al quiz
     submitMission: function(email, missionId, answers) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) throw new Error("Profilo studente inesistente.");
 
       const missions = window.EroiDB.getMissions();
@@ -287,7 +313,7 @@
       // Controlla se la missione è già bloccata nel secondo quadrimestre
       const settings = window.EroiDB.getSettings();
       const categoryTerm2 = ["Ciclo Carolingio", "Ciclo Bretone"];
-      if (categoryTerm2.includes(mission.category) && !settings.secondTermActive) {
+      if (categoryTerm2.includes(mission.category) && !window.EroiApp.isSecondTermActiveForUser()) {
         throw new Error("Questa missione appartiene al Secondo Quadrimestre, che non è ancora attivo.");
       }
 
@@ -392,7 +418,9 @@
         profile.unlockedAreas.push(nextArea);
       }
 
-      window.EroiDB.saveStudentProfile(email, profile);
+      const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
 
       window.EroiDB.logActivity(email, `Completata missione "${mission.title}" con punteggio ${correctCount}/${totalQuestions}. Guadagnati ${finalXPGained} XP e ${finalDracmeGained} Dracme.`);
 

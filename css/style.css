@@ -39,6 +39,12 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-body);
   -webkit-text-size-adjust: 100%;
@@ -636,7 +642,7 @@ h3.panel-title {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 120px);
+  min-height: calc(100dvh - 120px);
   width: 100%;
 }
 
@@ -1942,7 +1948,7 @@ table.game-table tr:hover td {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.15);
   animation: dropdownFadeIn 0.3s ease;
   z-index: 1001;
-  max-height: calc(100vh - 80px);
+  max-height: calc(100dvh - 80px);
   overflow-y: auto;
 }
 
@@ -4380,8 +4386,8 @@ table.game-table tr:hover td {
         gap: 6px;
     }
     /* Su schermi < 768px (bottom nav attiva):
-       main-content = 100vh - header(60px) - bottom-nav(64px) */
-    body.logged-in .main-content {
+       main-content = 100dvh - header(60px) - bottom-nav(64px) */
+    .app-main-content {
         margin-top: 60px;
         height: calc(100dvh - 60px - 64px);
         max-height: calc(100dvh - 60px - 64px);
