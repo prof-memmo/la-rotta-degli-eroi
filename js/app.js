@@ -3981,93 +3981,93 @@ window.finalizzaDocente = async function() {
 
       if (tab === 'map') {
         const nodes = window.EroiDB.getMapNodes();
-        let mapHtml = \`<div class="map-container" style="position:relative; width:100%; height:100%; min-height:500px; background:rgba(0,0,0,0.5); border-radius:8px;">\`;
+        let mapHtml = `<div class="map-container" style="position:relative; width:100%; height:100%; min-height:500px; background:rgba(0,0,0,0.5); border-radius:8px;">`;
         nodes.forEach(node => {
           const isUnlocked = profile.unlockedAreas.includes(node.id);
           const icon = isUnlocked ? node.icon : "fa-lock";
           const color = isUnlocked ? "var(--gold)" : "var(--text-muted)";
-          mapHtml += \`
-            <div style="position:absolute; left:\${node.x}%; top:\${node.y}%; transform:translate(-50%, -50%); text-align:center; opacity:\${isUnlocked?1:0.5}; cursor:not-allowed;">
-              <div style="width:40px; height:40px; background:var(--bg-card); border:2px solid \${color}; border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto;">
-                <i class="fa-solid \${icon}" style="color:\${color};"></i>
+          mapHtml += `
+            <div style="position:absolute; left:${node.x}%; top:${node.y}%; transform:translate(-50%, -50%); text-align:center; opacity:${isUnlocked?1:0.5}; cursor:not-allowed;">
+              <div style="width:40px; height:40px; background:var(--bg-card); border:2px solid ${color}; border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto;">
+                <i class="fa-solid ${icon}" style="color:${color};"></i>
               </div>
-              <span style="font-size:0.75rem; color:\${color}; font-weight:bold; background:rgba(0,0,0,0.7); padding:2px 5px; border-radius:4px; white-space:nowrap;">\${node.name}</span>
+              <span style="font-size:0.75rem; color:${color}; font-weight:bold; background:rgba(0,0,0,0.7); padding:2px 5px; border-radius:4px; white-space:nowrap;">${node.name}</span>
             </div>
-          \`;
+          `;
         });
-        mapHtml += \`</div>\`;
+        mapHtml += `</div>`;
         container.innerHTML = mapHtml;
 
       } else if (tab === 'inv') {
-        let invHtml = \`<div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); display:grid; gap:15px;">\`;
+        let invHtml = `<div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); display:grid; gap:15px;">`;
         if (inventory.length === 0) {
-           invHtml = \`<p style="text-align:center; color:var(--text-muted); font-style:italic;">Nessun oggetto nell'inventario.</p>\`;
+           invHtml = `<p style="text-align:center; color:var(--text-muted); font-style:italic;">Nessun oggetto nell'inventario.</p>`;
         } else {
            inventory.forEach(item => {
-             invHtml += \`
-               <div class="card rarity-\${item.rarity.toLowerCase()}" style="cursor:not-allowed;">
-                 <span class="card-rarity-badge">\${item.rarity}</span>
-                 <h4 style="margin-top:20px; font-size:1.1rem; color:var(--text-light);">\${item.name}</h4>
-                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">Tipo: \${item.type}</p>
-                 <p style="font-size:0.8rem; color:var(--gold);">Quantità: <strong>\${item.quantity}</strong></p>
+             invHtml += `
+               <div class="card rarity-${item.rarity.toLowerCase()}" style="cursor:not-allowed;">
+                 <span class="card-rarity-badge">${item.rarity}</span>
+                 <h4 style="margin-top:20px; font-size:1.1rem; color:var(--text-light);">${item.name}</h4>
+                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">Tipo: ${item.type}</p>
+                 <p style="font-size:0.8rem; color:var(--gold);">Quantità: <strong>${item.quantity}</strong></p>
                </div>
-             \`;
+             `;
            });
         }
-        invHtml += \`</div>\`;
+        invHtml += `</div>`;
         
-        container.innerHTML = \`
+        container.innerHTML = `
            <h3 style="color:var(--gold); margin-bottom:15px;">Oggetti Posseduti</h3>
-           \${invHtml}
+           ${invHtml}
            <h3 style="color:var(--gold); margin-top:30px; margin-bottom:15px;">Artefatti Attivi</h3>
            <div style="display:flex; gap:10px;">
-             \${profile.activeArtifacts && profile.activeArtifacts.length > 0 ? profile.activeArtifacts.map(a => \`<span style="background:rgba(212,175,55,0.2); border:1px solid var(--gold); padding:5px 10px; border-radius:20px; font-size:0.85rem; color:var(--gold);">\${a}</span>\`).join('') : '<span style="color:var(--text-muted); font-size:0.85rem;">Nessun artefatto equipaggiato.</span>'}
+             ${profile.activeArtifacts && profile.activeArtifacts.length > 0 ? profile.activeArtifacts.map(a => `<span style="background:rgba(212,175,55,0.2); border:1px solid var(--gold); padding:5px 10px; border-radius:20px; font-size:0.85rem; color:var(--gold);">${a}</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.85rem;">Nessun artefatto equipaggiato.</span>'}
            </div>
-        \`;
+        `;
 
       } else if (tab === 'miss') {
-        let missHtml = \`<table class="game-table"><thead><tr><th>Titolo</th><th>Categoria</th><th>Area</th><th>Stato</th><th>Ricompensa Base</th></tr></thead><tbody>\`;
+        let missHtml = `<table class="game-table"><thead><tr><th>Titolo</th><th>Categoria</th><th>Area</th><th>Stato</th><th>Ricompensa Base</th></tr></thead><tbody>`;
         missions.forEach(m => {
            const isUnlocked = profile.unlockedAreas.includes(m.area) || m.unlockedBy === null; 
-           const isCompleted = window.EroiDB.getLogs().some(log => log.email === email && log.activity.includes(\`Completata missione "\${m.title}"\`));
+           const isCompleted = window.EroiDB.getLogs().some(log => log.email === email && log.activity.includes(`Completata missione "${m.title}"`));
            
            let statusText = "<span style='color:var(--text-muted);'>Bloccata</span>";
            if (isCompleted) statusText = "<span style='color:var(--success); font-weight:bold;'><i class='fa-solid fa-check'></i> Completata</span>";
            else if (isUnlocked) statusText = "<span style='color:var(--gold); font-weight:bold;'>Disponibile</span>";
 
-           missHtml += \`
+           missHtml += `
              <tr>
-               <td>\${m.title}</td>
-               <td>\${m.category}</td>
-               <td>\${m.area}</td>
-               <td>\${statusText}</td>
-               <td>\${m.rewards.xp} XP / \${m.rewards.dracme} Dracme</td>
+               <td>${m.title}</td>
+               <td>${m.category}</td>
+               <td>${m.area}</td>
+               <td>${statusText}</td>
+               <td>${m.rewards.xp} XP / ${m.rewards.dracme} Dracme</td>
              </tr>
-           \`;
+           `;
         });
-        missHtml += \`</tbody></table>\`;
+        missHtml += `</tbody></table>`;
         container.innerHTML = missHtml;
 
       } else if (tab === 'stat') {
-        const statsHtml = \`
+        const statsHtml = `
            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
              <div class="glass-panel" style="background:rgba(0,0,0,0.2);">
                <h3 style="color:var(--gold); margin-bottom:15px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:5px;"><i class="fa-solid fa-star"></i> Progressione Primaria</h3>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Livello: <strong style="color:var(--gold);">\${profile.level}</strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Esperienza: <strong style="color:var(--success);">\${profile.xp} XP</strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Dracme: <strong style="color:var(--gold);">\${profile.dracme} <i class="fa-solid fa-coins"></i></strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Avatar Classe: <strong>\${profile.avatarClass}</strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Aiutante Equipaggiato: <strong style="color:var(--info);">\${profile.activeHelper || 'Nessuno'}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Livello: <strong style="color:var(--gold);">${profile.level}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Esperienza: <strong style="color:var(--success);">${profile.xp} XP</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Dracme: <strong style="color:var(--gold);">${profile.dracme} <i class="fa-solid fa-coins"></i></strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Avatar Classe: <strong>${profile.avatarClass}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Aiutante Equipaggiato: <strong style="color:var(--info);">${profile.activeHelper || 'Nessuno'}</strong></p>
              </div>
              <div class="glass-panel" style="background:rgba(0,0,0,0.2);">
                <h3 style="color:var(--gold); margin-bottom:15px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:5px;"><i class="fa-solid fa-bolt"></i> Attributi Avatar</h3>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Coraggio: <strong>\${profile.stats.coraggio}</strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Astuzia: <strong>\${profile.stats.astuzia}</strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Sapienza: <strong>\${profile.stats.sapienza}</strong></p>
-               <p style="font-size:1.1rem; margin-bottom:8px;">Onore: <strong>\${profile.stats.onore}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Coraggio: <strong>${profile.stats.coraggio}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Astuzia: <strong>${profile.stats.astuzia}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Sapienza: <strong>${profile.stats.sapienza}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Onore: <strong>${profile.stats.onore}</strong></p>
              </div>
            </div>
-        \`;
+        `;
         container.innerHTML = statsHtml;
       }
     },
