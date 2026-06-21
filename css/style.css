@@ -525,6 +525,7 @@ h2.section-title {
   font-family: var(--font-heading);
   font-size: 1.8rem;
   color: var(--gold);
+  margin-top: 0;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
