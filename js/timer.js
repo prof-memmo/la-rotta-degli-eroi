@@ -10,17 +10,16 @@ const SessionTimer = {
     init: async function() {
         if (!window.Auth || !window.Auth.getUser) return;
         const user = window.Auth.getUser();
-        if (!user || user.role !== 'student') return;
+        if (!user || user.role !== 'studente') return;
 
         await this.loadSessionData(user);
         this.startEngine(user);
     },
 
-    
     loadSessionData: async function(user) {
         try {
-            const profile = window.EroiDB.getStudentProfile(user.email);
-            let data = profile ? profile.sessionData : null;
+            const doc = await window.fbDb.collection('users').doc(user.uid).get();
+            let data = doc.data().sessionData || null;
             const today = new Date().toLocaleDateString();
             
             if (!data || data.date !== today) {
@@ -30,27 +29,25 @@ const SessionTimer = {
                     timeLeft: this.SESSION_DURATION,
                     breakEndTime: null
                 };
-                await this.saveSessionData(user.email, data);
+                await this.saveSessionData(user.uid, data);
             }
             this.data = data;
         } catch(e) { console.error("Error loading timer", e); }
     },
 
-
-    saveSessionData: async function(email, data) {
+    saveSessionData: async function(uid, data) {
         this.data = data;
         try {
-            window.EroiDB.saveStudentProfile(email, { sessionData: data });
+            await window.fbDb.collection('users').doc(uid).update({ sessionData: data });
         } catch(e) {}
     },
-
 
     startEngine: function(user) {
         if (this.timerInterval) clearInterval(this.timerInterval);
         if (this.saveInterval) clearInterval(this.saveInterval);
 
         this.timerInterval = setInterval(() => this.tick(user), 1000);
-        this.saveInterval = setInterval(() => this.saveSessionData(user.email, this.data), 10000);
+        this.saveInterval = setInterval(() => this.saveSessionData(user.uid, this.data), 10000);
     },
 
     tick: function(user) {
@@ -62,7 +59,7 @@ const SessionTimer = {
                 // Pausa finita
                 this.data.breakEndTime = null;
                 this.data.timeLeft = this.SESSION_DURATION;
-                this.saveSessionData(user.email, this.data);
+                this.saveSessionData(user.uid, this.data);
                 
                 // Torna al gioco
                 if (window.EroiApp.getCurrentViewId() === 'view-pausa-obbligatoria') {
@@ -98,7 +95,7 @@ const SessionTimer = {
             if (this.data.sessionsPlayed < this.MAX_SESSIONS_PER_DAY) {
                 this.data.breakEndTime = now + (this.BREAK_DURATION * 1000);
             }
-            this.saveSessionData(user.email, this.data);
+            this.saveSessionData(user.uid, this.data);
             this.tick(user); // Force immediate UI update
         }
     },

@@ -19,9 +19,7 @@ window.EroiMockData = {
       { id: "s2", titolo: "Economia e Progressione", testo: "L'economia degli studenti è completamente indipendente. Le quantità di oggetti nel Mercato (stock) diminuiscono solo quando un altro studente acquista l'oggetto." },
       { id: "s3", titolo: "L'Inventario e gli Equipaggiamenti", testo: "Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per l'avatar e Artefatti. Puoi tenere attivi fino a 2 Artefatti contemporaneamente." },
       { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus." }
-    ,
-      { titolo: "5. Sistema Sessioni Studio", testo: "Per garantire un corretto equilibrio, ogni sessione di gioco/studio ha una durata massima di 45 minuti, seguiti da 15 minuti di pausa obbligatoria. È consentito svolgere al massimo 2 sessioni al giorno." }
-],
+    ],
     docente: [
       { id: "d1", titolo: "Due Mondi Separati (Universo Parallelo)", testo: "Il docente opera in un universo parallelo. Può giocare come un normale studente (accumulando XP e Dracme reali sul proprio profilo), ma senza MAI interferire con l'economia, lo stock o i log degli studenti." },
       { id: "d2", titolo: "Isolamento Economico", testo: "Gli acquisti del docente nello Shop NON decrementano la giacenza (stock) degli oggetti disponibili per gli studenti, né influenzano le statistiche globali." },
