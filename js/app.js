@@ -629,7 +629,7 @@ window.finalizzaDocente = async function() {
       const target = document.getElementById(viewId);
       if (target) {
         target.classList.add('active');
-        window.scrollTo(0, 0);
+        target.scrollTop = 0;
       }
     },
 
