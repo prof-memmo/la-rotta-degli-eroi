@@ -704,6 +704,35 @@
       this.save();
     },
 
+    
+    // --- ARCHIVIO ANNUALE ---
+    archiveCurrentYear: function(yearName) {
+      if (!dbState.archives) dbState.archives = {};
+      dbState.archives[yearName] = {
+        users: {},
+        students_profile: JSON.parse(JSON.stringify(dbState.students_profile || {})),
+        classes: JSON.parse(JSON.stringify(dbState.classes || {}))
+      };
+      
+      // Sposta solo studenti e forestieri (amici), preserva admin/teacher
+      const newUsers = {};
+      Object.keys(dbState.users).forEach(k => {
+        const u = dbState.users[k];
+        if (u.role === 'teacher' || u.role === 'admin') {
+          newUsers[k] = u;
+        } else {
+          dbState.archives[yearName].users[k] = u;
+        }
+      });
+      
+      dbState.users = newUsers;
+      dbState.students_profile = {};
+      dbState.classes = {};
+      
+      this.save();
+      return true;
+    },
+
     // --- LOG ATTIVITÀ ---
     getLogs: function() {
       return dbState.activity_logs || [];

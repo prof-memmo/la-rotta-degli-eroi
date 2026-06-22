@@ -3035,7 +3035,7 @@ window.finalizzaDocente = async function() {
       // Aggiorna titolo panel studenti per Forestieri
       const titleEl = document.getElementById('students-panel-title-text');
       if (titleEl) {
-        titleEl.textContent = category === 'forestieri' ? 'Forestieri (Senza Classe)' : 'Studenti Iscritti';
+        titleEl.textContent = category === 'forestieri' ? 'Fantamico' : 'Studenti Iscritti';
       }
 
       // Renderizza dati specifici del pannello
@@ -3182,9 +3182,9 @@ window.finalizzaDocente = async function() {
       });
       const myClassIds = myClasses.map(c => c.id);
 
-      const students = allUsers.filter(u => u.role === 'student' && (isAdmin || myClassIds.includes(u.classId)));
+      const students = allUsers.filter(u => u.role === 'student' && (isAdmin || !u.classId || myClassIds.includes(u.classId)));
       const teachers = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin');
-      const forestieri = allUsers.filter(u => u.role === 'amico' || (u.role === 'student' && !u.classId));
+      const forestieri = allUsers.filter(u => u.role === 'amico');
       
       const schools = new Set(myClasses.map(c => c.school).filter(Boolean));
 
@@ -3297,9 +3297,9 @@ window.finalizzaDocente = async function() {
         const u = window.EroiDB.getUser(s.email);
         let matchesClass = false;
         if (filterClass === 'all') {
-          matchesClass = (user.role === 'admin' || (u && u.classId && myClassIds.includes(u.classId)));
+          matchesClass = (user.role === 'admin' || (u && u.classId && myClassIds.includes(u.classId)) || (u && !u.classId && u.role === 'student'));
         } else if (filterClass === 'forestieri') {
-          matchesClass = (!u || !u.classId || u.role === 'amico');
+          matchesClass = (u && u.role === 'amico');
         } else {
           matchesClass = (u && u.classId === filterClass);
         }
@@ -4688,6 +4688,13 @@ window.finalizzaDocente = async function() {
       document.getElementById('admin-setting-copyright').value = settings.copyright;
       document.getElementById('admin-setting-contacts').value = settings.contacts;
 
+      
+      // Popola stats
+      const allUsers = window.EroiDB.getAllUsers();
+      document.getElementById('admin-stats-teachers').textContent = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin').length;
+      document.getElementById('admin-stats-students').textContent = allUsers.filter(u => u.role === 'student').length;
+      document.getElementById('admin-stats-forestieri').textContent = allUsers.filter(u => u.role === 'amico').length;
+
       this.renderPendingRequests();
       this.renderAdminStaff();
       
@@ -4731,6 +4738,13 @@ window.finalizzaDocente = async function() {
       document.getElementById('legal-doc-terms').value = settings.terms || '';
       document.getElementById('legal-doc-cookies').value = settings.cookies || '';
       document.getElementById('legal-doc-gdpr').value = settings.gdpr || '';
+
+      
+      // Popola stats
+      const allUsers = window.EroiDB.getAllUsers();
+      document.getElementById('admin-stats-teachers').textContent = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin').length;
+      document.getElementById('admin-stats-students').textContent = allUsers.filter(u => u.role === 'student').length;
+      document.getElementById('admin-stats-forestieri').textContent = allUsers.filter(u => u.role === 'amico').length;
 
       this.renderPendingRequests();
       this.renderAdminStaff();
@@ -4781,7 +4795,14 @@ window.finalizzaDocente = async function() {
         const data = JSON.parse(decodeURIComponent(atob(encodedData)));
         await window.EroiDB.approveTeacherRequest(requestId, data);
         this.showToast("Docente approvato con successo!", "success");
-        this.renderPendingRequests();
+        
+      // Popola stats
+      const allUsers = window.EroiDB.getAllUsers();
+      document.getElementById('admin-stats-teachers').textContent = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin').length;
+      document.getElementById('admin-stats-students').textContent = allUsers.filter(u => u.role === 'student').length;
+      document.getElementById('admin-stats-forestieri').textContent = allUsers.filter(u => u.role === 'amico').length;
+
+      this.renderPendingRequests();
         this.renderAdminStaff();
         
         // Apertura client mail (mailto)
@@ -4810,7 +4831,14 @@ window.finalizzaDocente = async function() {
       try {
         await window.EroiDB.rejectTeacherRequest(requestId);
         this.showToast("Richiesta rifiutata ed eliminata.", "success");
-        this.renderPendingRequests();
+        
+      // Popola stats
+      const allUsers = window.EroiDB.getAllUsers();
+      document.getElementById('admin-stats-teachers').textContent = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin').length;
+      document.getElementById('admin-stats-students').textContent = allUsers.filter(u => u.role === 'student').length;
+      document.getElementById('admin-stats-forestieri').textContent = allUsers.filter(u => u.role === 'amico').length;
+
+      this.renderPendingRequests();
       } catch (e) {
         console.error("Errore rifiuto docente:", e);
         alert("Errore durante l'operazione: " + e.message);
@@ -4937,6 +4965,26 @@ window.finalizzaDocente = async function() {
         this.showToast("Report CSV scaricato!", "success");
       } catch (e) {
         alert("Errore esportazione CSV: " + e.message);
+      }
+    },
+
+    
+    triggerArchiveYear: function() {
+      const yearName = document.getElementById('archive-year-name').value.trim();
+      if (!yearName) {
+        alert('Inserisci un nome per l'anno scolastico (es. Anno 2026/2027)');
+        return;
+      }
+      
+      const confirm1 = confirm('ATTENZIONE: Stai per archiviare tutti gli studenti e le classi. I profili docenti rimarranno. Questa azione NON è reversibile. Sei sicuro?');
+      if (!confirm1) return;
+      
+      const confirm2 = confirm('ULTIMO AVVISO: Digita OK per confermare l'archiviazione definitiva per: ' + yearName);
+      if (confirm2) {
+        window.EroiDB.archiveCurrentYear(yearName);
+        window.EroiDB.logActivity('admin', 'Archiviato anno scolastico: ' + yearName);
+        this.showToast('Anno archiviato con successo!', 'success');
+        this.renderAdminDashboard();
       }
     },
 

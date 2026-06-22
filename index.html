@@ -730,7 +730,11 @@
                 <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Studenti</span>
                 <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-students">0</h4>
               </div>
-              <div id="card-stats-classes" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('classes')">
+              <div id="card-stats-forestieri" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('forestieri')">
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Fantamico</span>
+                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-forestieri">0</h4>
+              </div>
+            <div id="card-stats-classes" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('classes')">
                 <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Classi</span>
                 <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-classes">0</h4>
               </div>
@@ -738,11 +742,7 @@
                 <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Scuole</span>
                 <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-schools">0</h4>
               </div>
-              <div id="card-stats-forestieri" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('forestieri')">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Forestieri</span>
-                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-forestieri">0</h4>
-              </div>
-            </div>
+                          </div>
             
 
             <!-- CONTENITORE PANNELLI DINAMICI -->
@@ -1038,6 +1038,21 @@
 
           <!-- TAB SISTEMA -->
           <div id="a-tab-sistema" class="tab-content active">
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 24px;">
+              <div class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Docenti</span>
+                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="admin-stats-teachers">0</h4>
+              </div>
+              <div class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Studenti iscritti</span>
+                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="admin-stats-students">0</h4>
+              </div>
+              <div class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Fantamico</span>
+                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="admin-stats-forestieri">0</h4>
+              </div>
+          </div>
             <div class="dashboard-grid">
               <!-- Manutenzione Database & Backup -->
               <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
@@ -1088,6 +1103,19 @@
                 </div>
               </div>
               
+              
+              <!-- Archivio Annuale -->
+              <div class="glass-panel" style="grid-column: 1 / -1; border: 2px solid var(--danger);">
+                <h3 class="panel-title" style="color: var(--danger);"><i class="fa-solid fa-box-archive"></i> Archivio Annuale</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
+                  Archivia tutti gli studenti, classi e punteggi dell'anno scolastico corrente. Il sistema si resetterà per il nuovo anno, preservando solo gli account Docenti e Amministratori.
+                </p>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" id="archive-year-name" class="form-control" placeholder="Es. Anno Scolastico 2026/2027" style="max-width: 300px; margin-bottom: 0;">
+                  <button class="btn btn-danger" onclick="EroiApp.triggerArchiveYear()">Archivia Anno in Corso</button>
+                </div>
+              </div>
+
               <!-- Gestione Amministratori e Docenti Secondari -->
               <div class="glass-panel" style="grid-column: 1 / -1;">
                 <h3 class="panel-title">Gestione Personale (Docenti e Amministratori Secondari)</h3>
