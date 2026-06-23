@@ -472,10 +472,17 @@ window.finalizzaDocente = async function() {
         document.body.style.overflow = 'hidden';
         overlay.style.display = 'flex';
         video.currentTime = 0;
-        video.muted = false; // Forza un-mute iniziale
+        video.muted = false;
+        const muteBtn = document.getElementById('btn-toggle-video-mute');
+        if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        
         video.play().catch(e => {
-            // Se autoplay fallisce chiudiamo
-            window.EroiApp.skipIntroVideo();
+            // Se l'autoplay con audio fallisce per le policy, proviamo in muto
+            video.muted = true;
+            if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            video.play().catch(e2 => {
+                window.EroiApp.skipIntroVideo();
+            });
         });
         
         this._videoCompleteCallback = onComplete;
@@ -600,8 +607,32 @@ window.finalizzaDocente = async function() {
       const target = document.getElementById(viewId);
       if (target) {
         target.classList.add('active');
-        window.scrollTo(0, 0);
+        target.scrollTop = 0;
       }
+      this.updateImpersonationBanner();
+    },
+
+    updateImpersonationBanner: function() {
+        const user = window.Auth ? window.Auth.getUser() : null;
+        const banner = document.getElementById('impersonation-banner');
+        if (!banner || !user) return;
+        
+        if (user.role === 'docente' || user.role === 'admin') {
+            const activeView = document.querySelector('.view.active');
+            if (!activeView) return;
+            const viewId = activeView.id;
+            
+            if (viewId === 'view-teacher-dashboard' || viewId === 'view-admin-dashboard' || viewId === 'view-regolamento' || viewId === 'view-guides') {
+                banner.style.display = 'none';
+            } else {
+                banner.innerHTML = '<i class="fa-solid fa-gamepad"></i> Stai esplorando in Modalità Giocatore (Docente)';
+                banner.style.backgroundColor = 'var(--gold)';
+                banner.style.color = '#000';
+                banner.style.display = 'block';
+            }
+        } else {
+            banner.style.display = 'none';
+        }
     },
 
     updateNavigationUI: function(viewId) {
@@ -2864,6 +2895,16 @@ window.finalizzaDocente = async function() {
       });
       const tabEl = document.getElementById(`t-tab-${tab}`);
       if (tabEl) tabEl.classList.add('active');
+
+      if (tab === 'nodi') {
+        const select = document.getElementById('teacher-nodi-class-select');
+        if (select) {
+            const allUsers = window.EroiDB.getAllUsers();
+            const classes = [...new Set(allUsers.filter(u => u.role === 'studente' && u.classId).map(u => u.classId))];
+            select.innerHTML = '<option value="">Seleziona una classe</option>' + classes.map(c => `<option value="${c}">Classe ${c}</option>`).join('');
+        }
+        this.renderTeacherMapNodes();
+      }
 
       if (tab === 'diario') {
         this.renderTeacherDiaries();
@@ -5164,7 +5205,7 @@ window.finalizzaDocente = async function() {
     renderTeacherDiaries: function() {
       this.renderTeacherDiarioToggles();
       const diaries = window.EroiDB.getDiaries();
-      const students = window.EroiDB.getStudents();
+      const students = window.EroiDB.getAllStudents();
       const classes = window.EroiDB.getClasses();
       
       const listContainer = document.getElementById('teacher-diaries-list');
@@ -5335,6 +5376,72 @@ window.finalizzaDocente = async function() {
         this.showToast("Valutazione salvata con successo!", "success");
         this.renderTeacherDiaries();
       }
+    // GESTIONE NODI DA PARTE DEL DOCENTE
+    renderTeacherMapNodes: function() {
+      const classSelect = document.getElementById('teacher-nodi-class-select');
+      const listContainer = document.getElementById('teacher-nodi-list');
+      if (!classSelect || !listContainer) return;
+
+      const classId = classSelect.value;
+      if (!classId) {
+          listContainer.innerHTML = '<p>Seleziona una classe.</p>';
+          return;
+      }
+
+      const allUsers = window.EroiDB.getAllUsers();
+      const students = allUsers.filter(u => u.role === 'studente' && u.classId === classId);
+      if (students.length === 0) {
+          listContainer.innerHTML = '<p>Nessuno studente in questa classe.</p>';
+          return;
+      }
+
+      // Prendi lo stato dei nodi basato sul primo studente della classe per praticità (supponendo che la classe viaggi insieme)
+      const firstStudentProfile = window.EroiDB.getStudentProfile(students[0].email);
+      const unlockedAreas = firstStudentProfile ? firstStudentProfile.unlockedAreas : [];
+      
+      const nodes = window.EroiDB.getMapNodes();
+      
+      let html = '';
+      nodes.forEach(node => {
+          const isUnlocked = unlockedAreas.includes(node.id);
+          html += `
+            <div class="glass-panel" style="padding:15px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <i class="${node.icon}" style="font-size:1.5rem; color:${isUnlocked ? 'var(--gold)' : 'var(--text-muted)'};"></i>
+                    <div>
+                        <h4 style="margin:0; font-size:1.1rem; color:${isUnlocked ? '#fff' : 'var(--text-muted)'};">${node.name}</h4>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">${node.region} - Lvl ${node.requiredLevel}</span>
+                    </div>
+                </div>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : ''}" style="width:auto; padding: 5px 15px;" onclick="window.EroiApp.toggleTeacherMapNode('${classId}', '${node.id}', ${!isUnlocked})">
+                    <i class="fa-solid ${isUnlocked ? 'fa-lock' : 'fa-lock-open'}"></i> ${isUnlocked ? 'Blocca' : 'Sblocca'}
+                </button>
+            </div>
+          `;
+      });
+      listContainer.innerHTML = html;
+    },
+
+    toggleTeacherMapNode: function(classId, nodeId, unlock) {
+        if (!confirm(`Sei sicuro di voler ${unlock ? 'sbloccare' : 'bloccare'} il nodo per tutta la classe ${classId}?`)) return;
+        
+        const allUsers = window.EroiDB.getAllUsers();
+        const students = allUsers.filter(u => u.role === 'studente' && u.classId === classId);
+        
+        students.forEach(student => {
+            const profile = window.EroiDB.getStudentProfile(student.email);
+            if (profile) {
+                if (unlock && !profile.unlockedAreas.includes(nodeId)) {
+                    profile.unlockedAreas.push(nodeId);
+                } else if (!unlock && profile.unlockedAreas.includes(nodeId)) {
+                    profile.unlockedAreas = profile.unlockedAreas.filter(id => id !== nodeId);
+                }
+                window.EroiDB.saveStudentProfile(profile);
+            }
+        });
+        
+        this.showToast(`Nodo ${unlock ? 'sbloccato' : 'bloccato'} per la classe ${classId}`, 'success');
+        this.renderTeacherMapNodes();
     }
   };
 

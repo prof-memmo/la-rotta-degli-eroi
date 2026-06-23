@@ -4139,9 +4139,14 @@ table.game-table tr:hover td {
     font-size: 0.65rem;
 }
 
+/* Admin Dashboard */
+#view-admin-dashboard {
+    padding-top: 0;
+}
+
 /* Regolamento */
 #view-regolamento {
-    padding: 15px;
+    padding: 0 15px 15px 15px;
     flex-direction: column;
     min-height: auto;
 }
