@@ -1079,7 +1079,10 @@
                     </button>
                   </div>
                 </div>
-                <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
+                <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                  <button class="btn text-danger" style="width: 100%; background: transparent; border: 1px solid var(--danger-color);" onclick="EroiApp.archiviaAnnoCorrente()">
+                    <i class="fa-solid fa-box-archive"></i> Esegui Archiviazione Anno
+                  </button>
                   <button class="btn btn-danger" style="width: 100%;" onclick="EroiApp.triggerDatabaseReset()">
                     <i class="fa-solid fa-triangle-exclamation"></i> Ripristina Valori Fabbrica
                   </button>

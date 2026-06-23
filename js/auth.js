@@ -68,6 +68,39 @@ const Auth = {
 
             if (doc.exists) {
                 Auth._user = doc.data();
+                if (Auth._user.status === 'archived' && Auth._user.role === 'studente') {
+                    const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
+                    if (newClassCode) {
+                        // Assuming window.EroiDB.getClassByCode is available or we just accept it and let the app handle it
+                        const targetClass = window.EroiDB ? window.EroiDB.getClassByCode(newClassCode) : null;
+                        if (targetClass) {
+                            Auth._user.status = 'active';
+                            Auth._user.classId = targetClass.id;
+                            await window.fbDb.collection('users').doc(fbUser.uid).update({
+                                status: 'active',
+                                classId: targetClass.id
+                            });
+                            alert("Bentornato! Sei stato riattivato.");
+                        } else {
+                            alert("Codice classe non trovato in locale. Riprova dalla dashboard.");
+                            // Let them in anyway but without a class, or logout?
+                            Auth._user.status = 'active';
+                            Auth._user.classId = null;
+                            await window.fbDb.collection('users').doc(fbUser.uid).update({
+                                status: 'active',
+                                classId: null
+                            });
+                        }
+                    } else {
+                        alert("Codice necessario per riattivare l'account in una classe.");
+                        Auth._user.status = 'active';
+                        Auth._user.classId = null;
+                        await window.fbDb.collection('users').doc(fbUser.uid).update({
+                            status: 'active',
+                            classId: null
+                        });
+                    }
+                }
                 // Ensure email is always present and updated from Firebase Auth
                 if (!Auth._user.email && fbUser.email) {
                     Auth._user.email = fbUser.email;

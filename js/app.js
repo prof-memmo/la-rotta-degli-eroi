@@ -4991,6 +4991,32 @@ window.finalizzaDocente = async function() {
       }
     },
 
+    archiviaAnnoCorrente: async function() {
+      const currentYear = new Date().getFullYear();
+      if(!confirm(`Sei ASSOLUTAMENTE sicuro di voler archiviare l'anno ${currentYear}?`)) return;
+      try {
+          const backupName = prompt("Inserisci un nome per l'archivio (es: Eroi_${currentYear}_${currentYear+1}):", `Archivio_${currentYear}`);
+          if(!backupName) return;
+          
+          const usersSnapshot = await window.fbDb.collection('users').get();
+          let batch = window.fbDb.batch();
+          
+          usersSnapshot.docs.forEach(doc => {
+              const data = doc.data();
+              if (data.role !== 'admin' && data.role !== 'docente') {
+                  batch.update(doc.ref, { archivedYear: backupName, status: 'archived', classId: null, classCode: null });
+              }
+          });
+
+          await batch.commit();
+          this.showToast(`Archiviazione "${backupName}" completata. Gli studenti sono stati archiviati.`, 'success');
+          setTimeout(() => window.location.reload(), 1500);
+      } catch(e) {
+          console.error(e);
+          alert("Errore archiviazione: " + e.message);
+      }
+    },
+
     // --- LEGAL POPUPS ---
     openLegalModal: function(docKey) {
       // Contatti: usa il modal personalizzato stile palestra
