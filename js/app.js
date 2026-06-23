@@ -73,8 +73,8 @@ window.showContattiModal = function() {
     body.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 20px;">
         <div style="padding: 16px; background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold); border-radius: 8px;">
-          <h4 style="color: var(--gold); margin-bottom: 8px; font-family: var(--font-heading);">Mettiamoci in Contatto</h4>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Hai domande, vuoi provare le missioni nella tua classe o proporre una collaborazione? Scrivimi!</p>
+          <h4 style="color: var(--gold); margin-bottom: 8px; font-family: var(--font-heading);">Scopri il mondo Prof. Memmo</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;"><a href="https://prof-memmo.github.io/games/" target="_blank" style="color: var(--gold); font-weight: bold; text-decoration: underline;">Visita il sito</a> per scoprire i materiali, i giochi e la filosofia, oppure <a href="https://prof-memmo.github.io/games/condividi-esperienza.html" target="_blank" style="color: var(--gold); font-weight: bold; text-decoration: underline;">condividi la tua esperienza</a> lasciando commenti e feedback tramite il modulo!</p>
           <div style="display: flex; align-items: center; gap: 10px; color: var(--gold); font-weight: bold;">
             <i class="fa-solid fa-envelope"></i> <span>prof.memmo@gmail.com</span>
           </div>
