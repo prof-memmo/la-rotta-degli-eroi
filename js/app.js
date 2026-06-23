@@ -641,26 +641,9 @@ window.finalizzaDocente = async function() {
     },
 
     updateImpersonationBanner: function() {
-        const user = window.Auth ? window.Auth.getUser() : null;
+        // Funzionalità disabilitata: il banner copriva l'header ed era poco utile
         const banner = document.getElementById('impersonation-banner');
-        if (!banner || !user) return;
-        
-        if (user.role === 'docente' || user.role === 'admin') {
-            const activeView = document.querySelector('.view.active');
-            if (!activeView) return;
-            const viewId = activeView.id;
-            
-            if (viewId === 'view-teacher-dashboard' || viewId === 'view-admin-dashboard' || viewId === 'view-regolamento' || viewId === 'view-guides') {
-                banner.style.display = 'none';
-            } else {
-                banner.innerHTML = '<i class="fa-solid fa-gamepad"></i> Stai esplorando in Modalità Giocatore (Docente)';
-                banner.style.backgroundColor = 'var(--gold)';
-                banner.style.color = '#000';
-                banner.style.display = 'block';
-            }
-        } else {
-            banner.style.display = 'none';
-        }
+        if (banner) banner.style.display = 'none';
     },
 
     updateNavigationUI: function(viewId) {
