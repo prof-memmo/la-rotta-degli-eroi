@@ -5887,6 +5887,7 @@ window.finalizzaDocente = async function() {
         this.showToast("Valutazione salvata con successo!", "success");
         this.renderTeacherDiaries();
       }
+    },
     // GESTIONE NODI DA PARTE DEL DOCENTE
     renderTeacherMapNodes: function() {
       const classSelect = document.getElementById('teacher-nodi-class-select');
