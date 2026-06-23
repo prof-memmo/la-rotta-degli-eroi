@@ -207,6 +207,24 @@
       this.save();
     },
 
+    updateUserRole: async function(email, newRole) {
+      const key = email.toLowerCase();
+      if (dbState.users[key]) {
+        dbState.users[key].role = newRole;
+        this.save();
+      }
+      if (window.fbDb) {
+        try {
+          const q = await window.fbDb.collection('users').where('email', '==', email).get();
+          if (!q.empty) {
+            await window.fbDb.collection('users').doc(q.docs[0].id).update({ role: newRole });
+          }
+        } catch (e) {
+          console.error("Firestore update role error:", e);
+        }
+      }
+    },
+
     deleteUser: function(email) {
       const key = email.toLowerCase();
       if (dbState.users[key]) {

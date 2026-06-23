@@ -947,6 +947,33 @@
             </div>
           </div>
 
+          <!-- TAB UTENTI & ISCRITTI -->
+          <div id="a-tab-utenti" class="tab-content">
+            <div class="dashboard-grid">
+              <div class="glass-panel" style="margin-bottom: 0;">
+                <h3 class="panel-title"><i class="fa-solid fa-users"></i> Gestione Tutti gli Utenti</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
+                  Elenco di tutti gli utenti registrati. Da qui puoi trasformare uno Studente in Docente (e viceversa), o eliminare account. Se un Docente ha fatto l'accesso con Google, comparirà qui come Studente finché non lo promuovi.
+                </p>
+                <div class="table-responsive">
+                  <table class="game-table" id="admin-all-users-table">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Ruolo</th>
+                        <th>Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Popolato da JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- TAB MISSIONI -->
           
 
@@ -1060,7 +1087,7 @@
       </section>
 
       <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
-            <section id="view-admin-dashboard" class="view">
+            <section id="view-admin-dashboard" class="view" style="justify-content: flex-start !important; align-items: flex-start !important; margin-top: 0 !important; padding-top: 0 !important;">
         <div class="glass-panel">
           <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Admin Principale</h2>
           
@@ -1069,6 +1096,7 @@
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('missioni')">Missioni & Quiz</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('shop')">Shop & Economia</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('aiutanti')">Aiutanti & Artefatti</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti & Iscritti</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('guide')">Guide Didattiche</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('registro')">Registro Attività</button>
           </div>
@@ -1171,6 +1199,33 @@
             </div>
           </div>
 
+          <!-- TAB UTENTI & ISCRITTI -->
+          <div id="a-tab-utenti" class="tab-content">
+            <div class="dashboard-grid">
+              <div class="glass-panel" style="margin-bottom: 0;">
+                <h3 class="panel-title"><i class="fa-solid fa-users"></i> Gestione Tutti gli Utenti</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
+                  Elenco di tutti gli utenti registrati. Da qui puoi trasformare uno Studente in Docente (e viceversa), o eliminare account. Se un Docente ha fatto l'accesso con Google, comparirà qui come Studente finché non lo promuovi.
+                </p>
+                <div class="table-responsive">
+                  <table class="game-table" id="admin-all-users-table">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Ruolo</th>
+                        <th>Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Popolato da JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- TAB MISSIONI -->
           
 
@@ -1195,7 +1250,7 @@
       </section>
 
       <!-- REGOLAMENTO POPUP VIEW -->
-      <section id="view-regolamento" class="view">
+      <section id="view-regolamento" class="view" style="justify-content: flex-start !important; align-items: flex-start !important; margin-top: 0 !important; padding-top: 0 !important;">
         <div class="glass-panel">
           <h2 class="section-title"><i class="fa-solid fa-gavel" style="color: var(--gold);"></i> Regolamento Ufficiale di Campagna</h2>
           <p style="color: var(--text-muted); margin-bottom: 20px;">

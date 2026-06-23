@@ -4743,6 +4743,7 @@ window.finalizzaDocente = async function() {
 
       this.renderPendingRequests();
       this.renderAdminStaff();
+      this.renderAdminAllUsers();
     },
 
     renderPendingRequests: async function() {
@@ -4855,6 +4856,71 @@ window.finalizzaDocente = async function() {
         window.EroiDB.logActivity("admin", `Eliminato l'account staff: ${email}`);
         this.showToast("Membro dello staff rimosso.", "success");
         this.renderAdminStaff();
+      }
+    },
+
+    renderAdminAllUsers: function() {
+      const users = window.EroiDB.getAllUsers();
+      const tbody = document.querySelector('#admin-all-users-table tbody');
+      if(!tbody) return;
+      tbody.innerHTML = '';
+
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Nessun utente trovato</td></tr>';
+        return;
+      }
+
+      users.forEach(u => {
+        const tr = document.createElement('tr');
+        const isDocente = u.role === 'docente' || u.role === 'admin' || u.role === 'teacher';
+        
+        tr.innerHTML = `
+          <td><strong>${u.name || 'Sconosciuto'}</strong></td>
+          <td>${u.email}</td>
+          <td>
+            <select class="input-field" style="padding: 4px; font-size: 0.75rem; width: auto;" onchange="EroiApp.changeUserRole('${u.email}', this.value)" ${u.email === 'prof.memmo@gmail.com' ? 'disabled' : ''}>
+              <option value="student" ${!isDocente ? 'selected' : ''}>Studente</option>
+              <option value="docente" ${isDocente ? 'selected' : ''}>Docente</option>
+            </select>
+          </td>
+          <td>
+            ${u.email !== 'prof.memmo@gmail.com' ? `
+              <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteUserAdmin('${u.email}')">
+                <i class="fa-solid fa-trash"></i> Elimina
+              </button>
+            ` : '<span style="color:var(--text-muted); font-size:0.75rem;">Admin Intoccabile</span>'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    },
+
+    changeUserRole: async function(email, newRole) {
+      if (!confirm(`Sei sicuro di voler cambiare il ruolo di ${email} in ${newRole.toUpperCase()}?`)) {
+        this.renderAdminAllUsers(); // reset select
+        return;
+      }
+      try {
+        await window.EroiDB.updateUserRole(email, newRole);
+        this.showToast(`Ruolo di ${email} aggiornato a ${newRole}.`, "success");
+        this.renderAdminStaff();
+        this.renderAdminAllUsers();
+      } catch (e) {
+        console.error("Errore cambio ruolo:", e);
+        alert("Errore durante l'operazione: " + e.message);
+      }
+    },
+
+    deleteUserAdmin: async function(email) {
+      if (!confirm(`Sei ASSOLUTAMENTE sicuro di voler eliminare DEFINITIVAMENTE l'utente ${email}? L'azione è irreversibile e cancellerà anche i suoi progressi se è studente.`)) return;
+      try {
+        await window.EroiDB.deleteUser(email);
+        this.showToast(`Utente ${email} eliminato.`, "success");
+        this.renderAdminStaff();
+        this.renderAdminAllUsers();
+      } catch (e) {
+        console.error("Errore eliminazione utente:", e);
+        alert("Errore durante l'operazione: " + e.message);
       }
     },
 
