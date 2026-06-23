@@ -1572,7 +1572,7 @@ window.finalizzaDocente = async function() {
       const nameEl = document.getElementById('footer-app-name');
       const copyEl = document.getElementById('footer-copyright-text');
       if (nameEl) nameEl.textContent = settings.appName;
-      if (copyEl) copyEl.textContent = settings.copyright;
+      // if (copyEl) copyEl.textContent = settings.copyright;
     },
 
     // --- STUDENT RENDERERS ---
