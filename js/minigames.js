@@ -355,31 +355,7 @@
         "Spiega le cause della vendetta di Crimilde e la fine tragica dei Burgundi."
       ]
     },
-    quiz_rimediazione: {
-      topic: "Rimediazione (Film e Libri)",
-      impiccato: [
-        { word: "RIMEDIAZIONE", hint: "La presentazione di un medium in un altro medium" },
-        { word: "CINEMA", hint: "Il medium che adatta l'Iliade nel film Troy" },
-        { word: "MILLER", hint: "Madeline ___, autrice del romanzo Il Canto di Achille" },
-        { word: "PATROCLO", hint: "Narratore e protagonista intimo del Canto di Achille" },
-        { word: "TROY", hint: "Film kolossal che adatta l'Iliade escludendo gli dei" },
-        { word: "JACKSON", hint: "Percy ___, serie di romanzi e film sul mito greco oggi" }
-      ],
-      puzzle: [
-        { words: ["La", "rimediazione", "è", "la", "presentazione", "di", "un", "medium", "in", "un", "altro", "medium"], solution: "La rimediazione è la presentazione di un medium in un altro medium", source: "Definizione di Rimediazione" },
-        { words: ["Il", "Canto", "di", "Achille", "cambia", "il", "punto", "di", "vista", "dell'Iliade"], solution: "Il Canto di Achille cambia il punto di vista dell'Iliade", source: "Il Canto di Achille" }
-      ],
-      cloze: [
-        { text: "Per ___ si intende la presentazione di un medium in un altro ___. Ad esempio, un libro che diventa ___.", blanks: ["rimediazione", "medium", "film"], source: "La Rimediazione" }
-      ],
-      versi: [
-        { title: "La Rimediazione dell'Epica", lines: ["Gli eroi dell'antichità non muoiono mai,", "cambiano solo il medium con cui si presentano,", "dal canto dell'aedo allo schermo del cinema,", "dalle pagine dell'epica ai romanzi moderni."], hint: "Dalla persistenza degli eroi ai diversi media moderni." }
-      ],
-      cantami_o_diva: [
-        "Spiega cos'è la rimediazione e fai un esempio pratico legato all'epica.",
-        "In che modo il romanzo 'Il Canto di Achille' rimedia la figura di Achille rispetto all'Iliade?"
-      ]
-    },
+
     quiz_videogiochi: {
       topic: "I Videogiochi",
       impiccato: [
@@ -392,7 +368,7 @@
         { word: "NINTENDO", hint: "Azienda giapponese ideatrice di Mario e della Wii" }
       ],
       puzzle: [
-        { words: ["Il", "videogioco", "è", "un", "medium", "che", "rimedia", "un", "messaggio"], solution: "Il videogioco è un medium che rimedia un messaggio", source: "Definizione Treccani" },
+        { words: ["Il", "videogioco", "è", "un", "medium", "che", "veicola", "un", "messaggio"], solution: "Il videogioco è un medium che veicola un messaggio", source: "Definizione Treccani" },
         { words: ["Minecraft", "ha", "venduto", "oltre", "trecento", "milioni", "di", "copie"], solution: "Minecraft ha venduto oltre trecento milioni di copie", source: "Il più venduto" }
       ],
       cloze: [

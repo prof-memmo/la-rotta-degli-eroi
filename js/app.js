@@ -223,7 +223,9 @@ window.finalizzaStudente = async function() {
     });
     
     // Create student profile in game DB
-    let profile = window.EroiDB.getStudentProfile(user.email);
+    const _u_profile = window.EroiDB.getUser(user.email);
+    const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+    let profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(user.email) : window.EroiDB.getStudentProfile(user.email);
     if (!profile) {
         profile = {
             email: user.email,
@@ -258,6 +260,18 @@ window.finalizzaDocente = async function() {
     const user = Auth.getUser();
     if (!user) return;
     
+    // Salva in pending_requests
+    const requestData = {
+        uid: user.uid,
+        email: user.email,
+        name: user.name,
+        scuola: scuola,
+        citta: citta,
+        role: 'docente',
+        status: 'pending'
+    };
+    await window.EroiDB.saveTeacherRequest(requestData);
+
     user.role = 'docente';
     user.setupComplete = true;
     user.approved = false; // Pending approval
@@ -410,6 +424,21 @@ window.finalizzaDocente = async function() {
   };
 
   window.EroiApp = {
+    isSecondTermActiveForUser: function(userEmail) {
+      const email = userEmail || (Auth.getUser() ? Auth.getUser().email : null);
+      if (!email) return false;
+      const user = window.EroiDB.getUser(email);
+      if (!user) return false;
+      
+      if (user.role === 'admin') return true;
+      if (user.role === 'docente') return true; // Un docente ha la vista globale sbloccata
+      
+      if (user.classId) {
+        const c = window.EroiDB.getClasses()[user.classId];
+        if (c && c.secondTermActive) return true;
+      }
+      return false;
+    },
     toggleAudio: function() {
       EroiAudio.toggleMute();
     },
@@ -475,7 +504,6 @@ window.finalizzaDocente = async function() {
         video.muted = false;
         const muteBtn = document.getElementById('btn-toggle-video-mute');
         if (muteBtn) muteBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        
         video.play().catch(e => {
             // Se l'autoplay con audio fallisce per le policy, proviamo in muto
             video.muted = true;
@@ -529,8 +557,8 @@ window.finalizzaDocente = async function() {
       // Protezione delle rotte in base al ruolo
       const publicViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
       const studentViews = ['view-student-dashboard', 'view-map', 'view-diario', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento', 'view-pausa-obbligatoria'];
-      const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento'];
-      const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento'];
+      const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento', 'view-map', 'view-diario', 'view-shop', 'view-inventory'];
+      const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento', 'view-map', 'view-diario', 'view-shop', 'view-inventory'];
 
       if (!isLogged || !user) {
         // Forza login se non autenticato
@@ -672,7 +700,9 @@ window.finalizzaDocente = async function() {
         let dropdownHtml = '';
         
         if (user.role === 'studente' || user.role === 'forestiero') {
-          const profile = window.EroiDB.getStudentProfile(user.email);
+          const _u_profile = window.EroiDB.getUser(user.email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(user.email) : window.EroiDB.getStudentProfile(user.email);
           if (profile) {
             const u = window.EroiDB.getUser(user.email);
             const classId = u ? u.classId : "";
@@ -844,6 +874,10 @@ window.finalizzaDocente = async function() {
         ];
       } else if (user.role === 'docente') {
         links = [
+          { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
+          { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
+          { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
           { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
         ];
@@ -851,6 +885,10 @@ window.finalizzaDocente = async function() {
         links = [
           { view: 'view-admin-dashboard', label: 'Pannello Admin', icon: 'fa-screwdriver-wrench' },
           { view: 'view-teacher-dashboard', label: 'Pannello Docente', icon: 'fa-chalkboard-user' },
+          { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
+          { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
+          { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
           { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
         ];
@@ -1023,7 +1061,20 @@ window.finalizzaDocente = async function() {
             passwordHash: hash
           });
 
-          window.EroiDB.saveStudentProfile(email, {
+          const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, {
+            email: email,
+            name: name,
+            avatarClass: avatar,
+            level: "Viaggiatore",
+            xp: 0,
+            dracme: 15, // Dracme di partenza
+            stats: { ...window.EroiMockData.avatars[avatar].baseStats },
+            activeHelper: null,
+            activeArtifacts: [],
+            unlockedAreas: ["Olimpo"]
+          });
+        else window.EroiDB.saveStudentProfile(email, {
             email: email,
             name: name,
             avatarClass: avatar,
@@ -1290,19 +1341,34 @@ window.finalizzaDocente = async function() {
         const name = document.getElementById('admin-setting-appname').value;
         const copy = document.getElementById('admin-setting-copyright').value;
         const cont = document.getElementById('admin-setting-contacts').value;
-        const secondTerm = document.getElementById('admin-setting-secondterm').checked;
 
         window.EroiDB.saveSettings({
           appName: name,
           copyright: copy,
-          contacts: cont,
-          secondTermActive: secondTerm
+          contacts: cont
         });
 
-        window.EroiDB.logActivity("admin", "Aggiornate le impostazioni globali e lo stato del 2° quadrimestre: " + secondTerm);
+        window.EroiDB.logActivity("admin", "Aggiornate le impostazioni globali");
         self.showToast("Configurazione globale salvata!", "success");
         self.renderFooterDetails();
       });
+
+      // Salva Impostazioni Docente (Classe)
+      const formTeacherSettings = document.getElementById('form-teacher-settings');
+      if (formTeacherSettings) {
+          formTeacherSettings.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const classId = document.getElementById('teacher-settings-class-select').value;
+            if (!classId) return;
+            const secondTerm = document.getElementById('teacher-setting-secondterm').checked;
+            
+            window.EroiDB.saveClass(classId, { secondTermActive: secondTerm });
+            
+            const teacher = Auth.getUser();
+            window.EroiDB.logActivity(teacher.email, `Aggiornato 2° Quadrimestre a ${secondTerm} per la classe ${classId}`);
+            self.showToast("Impostazioni classe salvate!", "success");
+          });
+      }
 
       // Registra Staff
       document.getElementById('form-create-staff').addEventListener('submit', async function(e) {
@@ -1412,6 +1478,29 @@ window.finalizzaDocente = async function() {
             this.navigateTo('view-pending-docente');
             return;
         }
+
+        // Inizializza profilo Player Docente/Admin se non esiste
+        if (user.role === 'docente' || user.role === 'admin') {
+            let tProfile = window.EroiDB.getTeacherPlayerProfile(user.email);
+            if (!tProfile) {
+                tProfile = {
+                    email: user.email,
+                    name: user.name,
+                    level: 1,
+                    xp: 0,
+                    dracme: 100,
+                    avatarClass: user.role === 'admin' ? 'Custode della Sapienza' : 'Custode della Sapienza', // Predefinito per lo staff
+                    inventory: [],
+                    stats: { missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+                    visitedRegions: [],
+                    discoveredNodes: [],
+                    completedMissions: [],
+                    activeMissions: [],
+                    diario: []
+                };
+                window.EroiDB.saveTeacherPlayerProfile(user.email, tProfile);
+            }
+        }
         
         // Reindirizza alla dashboard corretta se eravamo fermi alla login o all'onboarding
         const currentView = this.getCurrentViewId();
@@ -1502,7 +1591,9 @@ window.finalizzaDocente = async function() {
 
     // --- STUDENT RENDERERS ---
     renderStudentDashboard: function(email) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return;
 
       const avatarBox = document.getElementById('stud-dashboard-avatar');
@@ -1698,7 +1789,10 @@ window.finalizzaDocente = async function() {
 
     // --- INTERACTIVE MAP ---
     renderInteractiveMap: function(email) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return;
 
       const unlocked = profile.unlockedAreas || ["Accademia"];
@@ -1714,11 +1808,19 @@ window.finalizzaDocente = async function() {
 
         // Accademia è sempre sbloccata (punto di partenza)
         const alwaysUnlocked = area === 'Accademia';
-        const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
+        const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser();
 
         if ((alwaysUnlocked || unlocked.includes(area)) && !isSecondTermLocked) {
           node.classList.remove('locked');
           node.onclick = () => {
+            if (Auth.getUser() && Auth.getUser().role === 'docente' && secondTermAreas.includes(area)) {
+                // Controlla se il docente ha attivato il 2Q per le sue classi
+                const myClasses = Object.values(window.EroiDB.getClasses()).filter(c => c.teacher === Auth.getUser().email);
+                const hasActive = myClasses.some(c => c.secondTermActive);
+                if (!hasActive && myClasses.length > 0 && Auth.getUser().role !== 'admin') {
+                    EroiApp.showToast("Nota: Quest'area appartiene al 2° Quadrimestre che non è ancora attivo per le tue classi. Puoi attivarlo dalle Impostazioni Classe.", "info");
+                }
+            }
             EroiApp.navigateToMissionsAndFilter(area);
           };
         } else {
@@ -1760,7 +1862,7 @@ window.finalizzaDocente = async function() {
                        document.getElementById(`path-${p.from}-${p.to}`);
         if (!pathEl) return;
 
-        const isSecondTermLocked = secondTermAreas.includes(p.to) && !settings.secondTermActive;
+        const isSecondTermLocked = secondTermAreas.includes(p.to) && !window.EroiApp.isSecondTermActiveForUser();
         const fromUnlocked = p.from === 'Accademia' || unlocked.includes(p.from);
 
         if (fromUnlocked && unlocked.includes(p.to) && !isSecondTermLocked) {
@@ -1786,7 +1888,9 @@ window.finalizzaDocente = async function() {
 
     // --- MISSIONS & QUIZZES ---
     renderMissionsList: function(email) {
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       const allMissions = window.EroiDB.getMissions();
       const settings = window.EroiDB.getSettings();
       const container = document.getElementById('missions-categories-container');
@@ -1851,7 +1955,7 @@ window.finalizzaDocente = async function() {
       }
 
       categories.forEach(cat => {
-        const isSecondTermLocked = cat.term === 2 && !settings.secondTermActive;
+        const isSecondTermLocked = cat.term === 2 && !window.EroiApp.isSecondTermActiveForUser();
         const catMissions = missions.filter(m => m.category === cat.name);
         
         if (catMissions.length === 0) return;
@@ -2422,12 +2526,16 @@ window.finalizzaDocente = async function() {
 
     // --- SHOP ---
     renderShop: function(email) {
-      const items = window.EroiDB.getShopItems();
+      const items = window.EroiDB.getShopItems(email);
       const grid = document.getElementById('shop-items-grid');
-      const profile = window.EroiDB.getStudentProfile(email);
+      
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return;
 
-      document.getElementById('shop-balance-display').innerHTML = `${profile.dracme} <i class="fa-solid fa-coins"></i>`;
+      const dracme = profile.dracme;
+      document.getElementById('shop-balance-display').innerHTML = `${dracme} <i class="fa-solid fa-coins"></i>`;
       grid.innerHTML = '';
 
       const filtered = items.filter(item => {
@@ -2520,7 +2628,9 @@ window.finalizzaDocente = async function() {
     renderInventory: function(email) {
       const inventory = window.EroiDB.getInventory(email);
       const settings = window.EroiDB.getSettings();
-      const profile = window.EroiDB.getStudentProfile(email);
+      const _u_profile = window.EroiDB.getUser(email);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
 
       // 1. Render Consumables
       const consumablesGrid = document.getElementById('inventory-consumables-grid');
@@ -2600,7 +2710,7 @@ window.finalizzaDocente = async function() {
       const allHelpers = window.EroiDB.getHelpers();
       
       helpersGrid.innerHTML = '';
-      if (!settings.secondTermActive) {
+      if (!window.EroiApp.isSecondTermActiveForUser()) {
         warningHelper.style.display = 'block';
         helpersGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;"><i>Aiutanti bloccati fino al 2° Quadrimestre.</i></p>`;
       } else {
@@ -2911,6 +3021,31 @@ window.finalizzaDocente = async function() {
       }
     },
 
+    // --- ADMIN DASHBOARD ---
+    switchAdminTab: function(tab) {
+      document.querySelectorAll('#view-admin-dashboard .tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.querySelector(`#view-admin-dashboard .tab-btn[onclick*="'${tab}'"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.querySelectorAll('#view-admin-dashboard .tab-content').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      const tabEl = document.getElementById(`a-tab-${tab}`);
+      if (tabEl) tabEl.classList.add('active');
+    },
+
+    onTeacherClassSelectSettings: function() {
+        const classId = document.getElementById('teacher-settings-class-select').value;
+        const classes = window.EroiDB.getClasses();
+        if (classId && classes[classId]) {
+            document.getElementById('teacher-setting-secondterm').checked = !!classes[classId].secondTermActive;
+        } else {
+            document.getElementById('teacher-setting-secondterm').checked = false;
+        }
+    },
+
     selectStatsCategory: function(category) {
       // Rimuovi active da tutte le card
       ['teachers', 'students', 'classes', 'schools', 'forestieri'].forEach(cat => {
@@ -3078,54 +3213,33 @@ window.finalizzaDocente = async function() {
 
     renderTeacherStats: function() {
       const allUsers = window.EroiDB.getAllUsers();
-      const students = allUsers.filter(u => u.role === 'student');
+      const user = Auth.getUser();
+      const isAdmin = user && user.role === 'admin';
+      
+      const myClasses = Object.values(window.EroiDB.getClasses()).filter(c => {
+         if (isAdmin) return true;
+         return c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
+      });
+      const myClassIds = myClasses.map(c => c.id);
+
+      const students = allUsers.filter(u => u.role === 'student' && (isAdmin || myClassIds.includes(u.classId)));
       const teachers = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin');
-      const classes = window.EroiDB.getClasses();
       const forestieri = allUsers.filter(u => u.role === 'amico' || (u.role === 'student' && !u.classId));
       
-      const schools = new Set(Object.values(classes).map(c => c.school).filter(Boolean));
+      const schools = new Set(myClasses.map(c => c.school).filter(Boolean));
 
       document.getElementById('teacher-stats-teachers').textContent = teachers.length;
       document.getElementById('teacher-stats-students').textContent = students.length;
-      document.getElementById('teacher-stats-classes').textContent = Object.keys(classes).length;
+      document.getElementById('teacher-stats-classes').textContent = myClasses.length;
       document.getElementById('teacher-stats-schools').textContent = schools.size;
       document.getElementById('teacher-stats-forestieri').textContent = forestieri.length;
-
-      // Renderizza analytics shop
-      const shopLogs = window.EroiDB.getLogs().filter(l => l.action.includes("Acquistato"));
-      const analyticsBox = document.getElementById('shop-analytics-info');
-      
-      if (shopLogs.length === 0) {
-        analyticsBox.innerHTML = `<p><i>Nessun acquisto ancora effettuato nello shop da parte degli studenti.</i></p>`;
-      } else {
-        // Conta popolarità
-        const counts = {};
-        shopLogs.forEach(l => {
-          // Estrae il nome dell'oggetto racchiuso tra virgolette
-          const match = l.action.match(/"([^"]+)"/);
-          if (match) {
-            const name = match[1];
-            counts[name] = (counts[name] || 0) + 1;
-          }
-        });
-
-        let listHtml = '<ul>';
-        Object.keys(counts).forEach(name => {
-          listHtml += `<li>🛍️ <strong>${name}</strong>: acquistato ${counts[name]} volte</li>`;
-        });
-        listHtml += '</ul>';
-
-        analyticsBox.innerHTML = `
-          <p style="margin-bottom: 10px;">Storico acquisti registrato. Prodotti popolari nel regno:</p>
-          ${listHtml}
-        `;
-      }
     },
 
     populateClassSelects: function() {
       const classes = window.EroiDB.getClasses();
       const studentClassSelect = document.getElementById('new-student-class');
       const filterClassSelect = document.getElementById('filter-class-teacher');
+      const settingsClassSelect = document.getElementById('teacher-settings-class-select');
 
       const user = Auth.getUser();
       const filtered = Object.values(classes).filter(c => {
@@ -3137,10 +3251,14 @@ window.finalizzaDocente = async function() {
         <option value="${c.id}">${c.name} (${c.id})</option>
       `).join('');
 
-      studentClassSelect.innerHTML = optionsHtml;
-      filterClassSelect.innerHTML = `<option value="all">Tutte le Classi</option>` +
+      if (studentClassSelect) studentClassSelect.innerHTML = optionsHtml;
+      if (filterClassSelect) filterClassSelect.innerHTML = `<option value="all">Tutte le Classi</option>` +
                                      `<option value="forestieri">Forestieri (Senza classe)</option>` +
                                      optionsHtml;
+      if (settingsClassSelect) {
+          settingsClassSelect.innerHTML = optionsHtml;
+          this.onTeacherClassSelectSettings();
+      }
     },
 
     renderTeacherClasses: function() {
@@ -3252,6 +3370,9 @@ window.finalizzaDocente = async function() {
           <td>${s.xp} XP / ${s.dracme} Dracme</td>
           <td>
             <div style="display:flex; gap:6px;">
+              <button class="btn" style="padding:4px 8px; font-size:0.72rem; border: 1px solid var(--gold); color: var(--gold); background: transparent;" onclick="EroiApp.openStudentPreviewAll('${s.email}')" title="Preview Didattica">
+                <i class="fa-solid fa-eye"></i> Osserva
+              </button>
               <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openAwardModal('${s.email}', '${s.name.replace(/'/g, "\\'")}')">
                 🏆 Premia
               </button>
@@ -3689,7 +3810,24 @@ window.finalizzaDocente = async function() {
     renderTeacherShop: function() {
       const items = window.EroiDB.getShopItems();
       const tbody = document.querySelector('#teacher-shop-table tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
+
+      let container = document.getElementById('teacher-shop-preview-container');
+      if (!container) {
+          container = document.createElement('div');
+          container.id = 'teacher-shop-preview-container';
+          container.style.marginBottom = '15px';
+          container.innerHTML = `
+             <button class="btn" style="background: var(--bg-card); border: 1px solid var(--gold); color: var(--gold);" onclick="EroiApp.openStudentShopPreview()">
+               <i class="fa-solid fa-eye" style="color: var(--gold);"></i> Preview Mercato Studenti (Read-Only)
+             </button>
+          `;
+          const tableNode = document.getElementById('teacher-shop-table');
+          if (tableNode && tableNode.parentNode) {
+              tableNode.parentNode.insertBefore(container, tableNode);
+          }
+      }
 
       items.forEach(item => {
         const tr = document.createElement('tr');
@@ -3728,6 +3866,249 @@ window.finalizzaDocente = async function() {
         window.EroiDB.saveShopItem(itemId, item);
         window.EroiDB.logActivity(teacher.email, `${item.active ? 'Attivato' : 'Disattivato'} l'oggetto shop: ${item.name}`);
         this.renderTeacherShop();
+      }
+    },
+
+    openStudentShopPreview: function() {
+      const items = window.EroiDB.getShopItems(); // Legge stock studenti
+      const modal = document.createElement('div');
+      modal.id = 'student-shop-preview-modal';
+      modal.className = 'modal-overlay';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = '9999';
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100vw';
+      modal.style.height = '100vh';
+      modal.style.background = 'rgba(10, 15, 26, 0.85)';
+      modal.style.backdropFilter = 'blur(5px)';
+
+      const content = document.createElement('div');
+      content.className = 'glass-panel';
+      content.style.width = '90%';
+      content.style.maxWidth = '1000px';
+      content.style.maxHeight = '90vh';
+      content.style.overflowY = 'auto';
+      content.style.position = 'relative';
+      content.style.border = '2px solid var(--gold)';
+
+      let html = `
+        <button class="btn btn-danger" style="position:absolute; top:15px; right:15px;" onclick="document.getElementById('student-shop-preview-modal').remove()">Chiudi</button>
+        <h2 style="color:var(--gold); margin-bottom: 5px;"><i class="fa-solid fa-eye"></i> Preview Mercato Studenti</h2>
+        <p style="color:var(--danger); font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;">
+           MODALITÀ READ-ONLY: Fotografia statica del sistema didattico. Nessuna interazione possibile.
+        </p>
+        <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); display: grid; gap: 20px;">
+      `;
+
+      items.forEach(item => {
+        html += `
+          <div class="card rarity-${item.rarity.toLowerCase()}" style="opacity: ${item.active ? '1' : '0.5'}; position: relative; overflow: hidden;">
+            ${!item.active ? '<div style="position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1; display:flex; align-items:center; justify-content:center; color:var(--danger); font-weight:bold; font-size:1.2rem; transform:rotate(-15deg);">DISATTIVATO</div>' : ''}
+            <div>
+              <span class="card-rarity-badge">${item.rarity}</span>
+              <div style="font-size: 2.5rem; text-align: center; margin: 15px 0;">${item.image || '🎁'}</div>
+              <h4 class="card-title">${item.name}</h4>
+              <p class="card-desc" style="font-size: 0.8rem;">${item.desc}</p>
+              ${item.bonus ? `<p class="card-bonus" style="font-size: 0.75rem; color: var(--gold); margin-top:5px;"><strong>Bonus:</strong> ${item.bonus}</p>` : ''}
+            </div>
+            <div style="margin-top: 15px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 10px; color: var(--text-muted);">
+                <span>Prezzo: <strong style="color:var(--gold);">${item.price} <i class="fa-solid fa-coins"></i></strong></span>
+                <span>Stock: <strong>${item.stock >= 99 ? '∞' : item.stock}</strong></span>
+              </div>
+              <button class="btn btn-secondary" style="width: 100%; cursor: not-allowed; opacity: 0.5;" disabled>
+                Acquisto Disabilitato
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      content.innerHTML = html;
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+    },
+
+    openStudentPreviewAll: function(email) {
+      const student = window.EroiDB.getUser(email);
+      const profile = window.EroiDB.getStudentProfile(email);
+      if (!student || !profile) {
+        alert("Studente non trovato o profilo inesistente.");
+        return;
+      }
+
+      const modalId = 'student-preview-modal';
+      let modal = document.getElementById(modalId);
+      if (modal) modal.remove();
+
+      modal = document.createElement('div');
+      modal.id = modalId;
+      modal.className = 'modal-overlay';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = '9999';
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100vw';
+      modal.style.height = '100vh';
+      modal.style.background = 'rgba(10, 15, 26, 0.85)';
+      modal.style.backdropFilter = 'blur(5px)';
+
+      const content = document.createElement('div');
+      content.className = 'glass-panel';
+      content.style.width = '95%';
+      content.style.maxWidth = '1200px';
+      content.style.height = '90vh';
+      content.style.display = 'flex';
+      content.style.flexDirection = 'column';
+      content.style.position = 'relative';
+      content.style.border = '2px solid var(--gold)';
+
+      const header = document.createElement('div');
+      header.style.borderBottom = '1px solid rgba(212,175,55,0.3)';
+      header.style.paddingBottom = '10px';
+      header.style.marginBottom = '15px';
+      header.innerHTML = `
+        <button class="btn btn-danger" style="position:absolute; top:15px; right:15px;" onclick="document.getElementById('${modalId}').remove()">Chiudi</button>
+        <h2 style="color:var(--gold); margin-bottom: 5px;"><i class="fa-solid fa-user-graduate"></i> Preview Didattica: ${student.name}</h2>
+        <p style="color:var(--danger); font-size: 0.85rem; font-weight: bold; margin: 0;">
+           MODALITÀ READ-ONLY: Fotografia statica del profilo studente. Nessuna interazione attiva sul motore di gioco.
+        </p>
+      `;
+
+      const tabsDiv = document.createElement('div');
+      tabsDiv.style.display = 'flex';
+      tabsDiv.style.gap = '10px';
+      tabsDiv.style.marginBottom = '20px';
+      tabsDiv.innerHTML = `
+        <button class="tab-btn active" id="btn-prev-map" onclick="EroiApp.renderPreviewTab('${email}', 'map')"><i class="fa-solid fa-map"></i> Mappa</button>
+        <button class="tab-btn" id="btn-prev-inv" onclick="EroiApp.renderPreviewTab('${email}', 'inv')"><i class="fa-solid fa-box-open"></i> Inventario</button>
+        <button class="tab-btn" id="btn-prev-miss" onclick="EroiApp.renderPreviewTab('${email}', 'miss')"><i class="fa-solid fa-scroll"></i> Missioni</button>
+        <button class="tab-btn" id="btn-prev-stat" onclick="EroiApp.renderPreviewTab('${email}', 'stat')"><i class="fa-solid fa-chart-line"></i> Statistiche</button>
+      `;
+
+      const bodyContainer = document.createElement('div');
+      bodyContainer.id = 'preview-tab-container';
+      bodyContainer.style.flexGrow = '1';
+      bodyContainer.style.overflowY = 'auto';
+
+      content.appendChild(header);
+      content.appendChild(tabsDiv);
+      content.appendChild(bodyContainer);
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+
+      this.renderPreviewTab(email, 'map');
+    },
+
+    renderPreviewTab: function(email, tab) {
+      document.querySelectorAll('#student-preview-modal .tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-prev-${tab}`).classList.add('active');
+
+      const container = document.getElementById('preview-tab-container');
+      container.innerHTML = ''; 
+
+      const profile = window.EroiDB.getStudentProfile(email);
+      const inventory = window.EroiDB.getInventory(email);
+      const missions = window.EroiDB.getMissions();
+
+      if (tab === 'map') {
+        const nodes = window.EroiDB.getMapNodes();
+        let mapHtml = `<div class="map-container" style="position:relative; width:100%; height:100%; min-height:500px; background:rgba(0,0,0,0.5); border-radius:8px;">`;
+        nodes.forEach(node => {
+          const isUnlocked = profile.unlockedAreas.includes(node.id);
+          const icon = isUnlocked ? node.icon : "fa-lock";
+          const color = isUnlocked ? "var(--gold)" : "var(--text-muted)";
+          mapHtml += `
+            <div style="position:absolute; left:${node.x}%; top:${node.y}%; transform:translate(-50%, -50%); text-align:center; opacity:${isUnlocked?1:0.5}; cursor:not-allowed;">
+              <div style="width:40px; height:40px; background:var(--bg-card); border:2px solid ${color}; border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto;">
+                <i class="fa-solid ${icon}" style="color:${color};"></i>
+              </div>
+              <span style="font-size:0.75rem; color:${color}; font-weight:bold; background:rgba(0,0,0,0.7); padding:2px 5px; border-radius:4px; white-space:nowrap;">${node.name}</span>
+            </div>
+          `;
+        });
+        mapHtml += `</div>`;
+        container.innerHTML = mapHtml;
+
+      } else if (tab === 'inv') {
+        let invHtml = `<div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); display:grid; gap:15px;">`;
+        if (inventory.length === 0) {
+           invHtml = `<p style="text-align:center; color:var(--text-muted); font-style:italic;">Nessun oggetto nell'inventario.</p>`;
+        } else {
+           inventory.forEach(item => {
+             invHtml += `
+               <div class="card rarity-${item.rarity.toLowerCase()}" style="cursor:not-allowed;">
+                 <span class="card-rarity-badge">${item.rarity}</span>
+                 <h4 style="margin-top:20px; font-size:1.1rem; color:var(--text-light);">${item.name}</h4>
+                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">Tipo: ${item.type}</p>
+                 <p style="font-size:0.8rem; color:var(--gold);">Quantità: <strong>${item.quantity}</strong></p>
+               </div>
+             `;
+           });
+        }
+        invHtml += `</div>`;
+        
+        container.innerHTML = `
+           <h3 style="color:var(--gold); margin-bottom:15px;">Oggetti Posseduti</h3>
+           ${invHtml}
+           <h3 style="color:var(--gold); margin-top:30px; margin-bottom:15px;">Artefatti Attivi</h3>
+           <div style="display:flex; gap:10px;">
+             ${profile.activeArtifacts && profile.activeArtifacts.length > 0 ? profile.activeArtifacts.map(a => `<span style="background:rgba(212,175,55,0.2); border:1px solid var(--gold); padding:5px 10px; border-radius:20px; font-size:0.85rem; color:var(--gold);">${a}</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.85rem;">Nessun artefatto equipaggiato.</span>'}
+           </div>
+        `;
+
+      } else if (tab === 'miss') {
+        let missHtml = `<table class="game-table"><thead><tr><th>Titolo</th><th>Categoria</th><th>Area</th><th>Stato</th><th>Ricompensa Base</th></tr></thead><tbody>`;
+        missions.forEach(m => {
+           const isUnlocked = profile.unlockedAreas.includes(m.area) || m.unlockedBy === null; 
+           const isCompleted = window.EroiDB.getLogs().some(log => log.email === email && log.activity.includes(`Completata missione "${m.title}"`));
+           
+           let statusText = "<span style='color:var(--text-muted);'>Bloccata</span>";
+           if (isCompleted) statusText = "<span style='color:var(--success); font-weight:bold;'><i class='fa-solid fa-check'></i> Completata</span>";
+           else if (isUnlocked) statusText = "<span style='color:var(--gold); font-weight:bold;'>Disponibile</span>";
+
+           missHtml += `
+             <tr>
+               <td>${m.title}</td>
+               <td>${m.category}</td>
+               <td>${m.area}</td>
+               <td>${statusText}</td>
+               <td>${m.rewards.xp} XP / ${m.rewards.dracme} Dracme</td>
+             </tr>
+           `;
+        });
+        missHtml += `</tbody></table>`;
+        container.innerHTML = missHtml;
+
+      } else if (tab === 'stat') {
+        const statsHtml = `
+           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+             <div class="glass-panel" style="background:rgba(0,0,0,0.2);">
+               <h3 style="color:var(--gold); margin-bottom:15px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:5px;"><i class="fa-solid fa-star"></i> Progressione Primaria</h3>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Livello: <strong style="color:var(--gold);">${profile.level}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Esperienza: <strong style="color:var(--success);">${profile.xp} XP</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Dracme: <strong style="color:var(--gold);">${profile.dracme} <i class="fa-solid fa-coins"></i></strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Avatar Classe: <strong>${profile.avatarClass}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Aiutante Equipaggiato: <strong style="color:var(--info);">${profile.activeHelper || 'Nessuno'}</strong></p>
+             </div>
+             <div class="glass-panel" style="background:rgba(0,0,0,0.2);">
+               <h3 style="color:var(--gold); margin-bottom:15px; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:5px;"><i class="fa-solid fa-bolt"></i> Attributi Avatar</h3>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Coraggio: <strong>${profile.stats.coraggio}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Astuzia: <strong>${profile.stats.astuzia}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Sapienza: <strong>${profile.stats.sapienza}</strong></p>
+               <p style="font-size:1.1rem; margin-bottom:8px;">Onore: <strong>${profile.stats.onore}</strong></p>
+             </div>
+           </div>
+        `;
+        container.innerHTML = statsHtml;
       }
     },
 
@@ -4346,7 +4727,44 @@ window.finalizzaDocente = async function() {
       document.getElementById('admin-setting-appname').value = settings.appName;
       document.getElementById('admin-setting-copyright').value = settings.copyright;
       document.getElementById('admin-setting-contacts').value = settings.contacts;
-      document.getElementById('admin-setting-secondterm').checked = !!settings.secondTermActive;
+
+      this.renderPendingRequests();
+      this.renderAdminStaff();
+      
+      // Renderizza componenti spostati da Teacher a Admin
+      this.renderTeacherMissions();
+      this.renderTeacherShop();
+      this.renderTeacherHelpersAndArtifacts();
+      this.renderTeacherGuides();
+      this.renderTeacherLogs();
+
+      // Renderizza analytics shop
+      const shopLogs = window.EroiDB.getLogs().filter(l => l.action.includes("Acquistato"));
+      const analyticsBox = document.getElementById('shop-analytics-info');
+      
+      if (analyticsBox) {
+          if (shopLogs.length === 0) {
+            analyticsBox.innerHTML = `<p><i>Nessun acquisto ancora effettuato nello shop da parte degli studenti.</i></p>`;
+          } else {
+            const counts = {};
+            shopLogs.forEach(l => {
+              const match = l.action.match(/"([^"]+)"/);
+              if (match) {
+                const name = match[1];
+                counts[name] = (counts[name] || 0) + 1;
+              }
+            });
+            let listHtml = '<ul>';
+            Object.keys(counts).forEach(name => {
+              listHtml += `<li>🛍️ <strong>${name}</strong>: acquistato ${counts[name]} volte</li>`;
+            });
+            listHtml += '</ul>';
+            analyticsBox.innerHTML = `
+              <p style="margin-bottom: 10px;">Storico acquisti registrato. Prodotti popolari nel regno:</p>
+              ${listHtml}
+            `;
+          }
+      }
 
       // Documenti legali
       document.getElementById('legal-doc-privacy').value = settings.privacy || '';
@@ -4354,7 +4772,89 @@ window.finalizzaDocente = async function() {
       document.getElementById('legal-doc-cookies').value = settings.cookies || '';
       document.getElementById('legal-doc-gdpr').value = settings.gdpr || '';
 
+      this.renderPendingRequests();
       this.renderAdminStaff();
+    },
+
+    renderPendingRequests: async function() {
+      const tbody = document.querySelector('#admin-pending-table tbody');
+      tbody.innerHTML = '<tr><td colspan="5">Caricamento richieste in corso...</td></tr>';
+      
+      try {
+        const requests = await window.EroiDB.getTeacherRequests();
+        tbody.innerHTML = '';
+        
+        if (requests.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessuna richiesta in attesa</td></tr>';
+          return;
+        }
+        
+        requests.forEach(req => {
+          const tr = document.createElement('tr');
+          // Salviamo i dati completi codificati in base64 per sicurezza nei pulsanti
+          const reqStr = btoa(encodeURIComponent(JSON.stringify(req)));
+          tr.innerHTML = `
+            <td><strong>${req.name}</strong></td>
+            <td>${req.email}</td>
+            <td>${req.scuola}</td>
+            <td>${req.citta}</td>
+            <td style="display: flex; gap: 5px;">
+              <button class="btn" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.approveTeacher('${req.id}', '${reqStr}')">
+                <i class="fa-solid fa-check"></i> Approva
+              </button>
+              <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.rejectTeacher('${req.id}')">
+                <i class="fa-solid fa-times"></i> Rifiuta
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error("Errore recupero richieste:", e);
+        tbody.innerHTML = '<tr><td colspan="5" style="color:red;">Errore durante il caricamento</td></tr>';
+      }
+    },
+
+    approveTeacher: async function(requestId, encodedData) {
+      if (!confirm("Sei sicuro di voler approvare questo docente? Avrà pieno accesso al pannello docenti.")) return;
+      try {
+        const data = JSON.parse(decodeURIComponent(atob(encodedData)));
+        await window.EroiDB.approveTeacherRequest(requestId, data);
+        this.showToast("Docente approvato con successo!", "success");
+        this.renderPendingRequests();
+        this.renderAdminStaff();
+        
+        // Apertura client mail (mailto)
+        const email = data.email;
+        const nomeDocente = data.name || 'Docente';
+        const emailSubject = encodeURIComponent('✅ Benvenuto ne La Rotta degli Eroi!');
+        const emailBody = encodeURIComponent(
+            `Ciao ${nomeDocente}!\n\n` +
+            `La tua richiesta di iscrizione a La Rotta degli Eroi è stata APPROVATA. 🎉\n` +
+            `Da adesso puoi accedere alla piattaforma con la tua email: ${email}\n\n` +
+            `Potrai creare le tue squadre, consultare le missioni e gestire i tuoi studenti.\n\n` +
+            `Aiutaci a far crescere la community! Aggiungi SEMPRE il seguente invito a fine percorso:\n` +
+            `https://prof-memmo.github.io/games/condividi-esperienza.html\n\n` +
+            `Che l'epica sia con te!\n` +
+            `Il Team de La Rotta degli Eroi`
+        );
+        window.location.href = `mailto:${email}?subject=${emailSubject}&body=${emailBody}`;
+      } catch (e) {
+        console.error("Errore approvazione docente:", e);
+        alert("Errore durante l'approvazione: " + e.message);
+      }
+    },
+
+    rejectTeacher: async function(requestId) {
+      if (!confirm("Sei sicuro di voler rifiutare ed eliminare questa richiesta?")) return;
+      try {
+        await window.EroiDB.rejectTeacherRequest(requestId);
+        this.showToast("Richiesta rifiutata ed eliminata.", "success");
+        this.renderPendingRequests();
+      } catch (e) {
+        console.error("Errore rifiuto docente:", e);
+        alert("Errore durante l'operazione: " + e.message);
+      }
     },
 
     renderAdminStaff: function() {
@@ -4646,7 +5146,12 @@ window.finalizzaDocente = async function() {
     },
 
     renderDiario: function(studentEmail) {
-      const profile = window.EroiDB.getStudentProfile(studentEmail);
+      
+      const _u_profile = window.EroiDB.getUser(studentEmail);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(studentEmail) : window.EroiDB.getStudentProfile(studentEmail);
+      if (!profile) return;
+      
       const unlockedAreas = profile.unlockedAreas || [];
       const diaries = window.EroiDB.getDiaries();
 
@@ -4708,7 +5213,7 @@ window.finalizzaDocente = async function() {
       allAreas.forEach(area => {
         const areaDiaries = diaries.filter(d => d.studentEmail === studentEmail && d.area === area && !d.isSelfEval);
         const count = areaDiaries.length;
-        const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
+        const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser();
         const isTeacherUnlocked = activeDiaries.includes(area);
         const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area) || isTeacherUnlocked) && !isSecondTermLocked;
 
@@ -4783,7 +5288,7 @@ window.finalizzaDocente = async function() {
       const tasksContainer = document.getElementById('diario-tasks-container');
       tasksContainer.innerHTML = '';
 
-      const isSecondTermLocked = secondTermAreas.includes(area) && !settings.secondTermActive;
+      const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser();
       const isTeacherUnlocked = activeDiaries.includes(area);
       const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area) || isTeacherUnlocked) && !isSecondTermLocked;
 
@@ -5001,7 +5506,9 @@ window.finalizzaDocente = async function() {
         window.EroiDB.saveDiaryEntry(entry);
       });
 
-      const profile = window.EroiDB.getStudentProfile(studentEmail);
+      const _u_profile = window.EroiDB.getUser(studentEmail);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(studentEmail) : window.EroiDB.getStudentProfile(studentEmail);
       const profileName = profile ? profile.name : studentEmail;
       window.EroiDB.logActivity('student', `${profileName} ha inviato la scheda del Diario per ${area}.`);
       this.showToast('Scheda inviata al docente!', 'success');
@@ -5037,7 +5544,9 @@ window.finalizzaDocente = async function() {
         };
         
         window.EroiDB.saveDiaryEntry(entry);
-        const profile = window.EroiDB.getStudentProfile(studentEmail);
+        const _u_profile = window.EroiDB.getUser(studentEmail);
+      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(studentEmail) : window.EroiDB.getStudentProfile(studentEmail);
         const profileName = profile ? `${profile.firstName} ${profile.lastName}` : studentEmail;
         window.EroiDB.logActivity("student", `${profileName} ha inviato un compito del Diario per ${area}.`);
         this.showToast("Riflessione inviata al docente!", "success");
@@ -5364,7 +5873,9 @@ window.finalizzaDocente = async function() {
 
         // Se è la prima valutazione, assegna XP e Dracme al profilo dello studente
         if (isFirstEvaluation) {
-          const studProfile = window.EroiDB.getStudentProfile(existing.studentEmail);
+          const _u_studProfile = window.EroiDB.getUser(existing.studentEmail);
+      const _isT_studProfile = _u_studProfile && (_u_studProfile.role === "docente" || _u_studProfile.role === "admin");
+      const studProfile = _isT_studProfile ? window.EroiDB.getTeacherPlayerProfile(existing.studentEmail) : window.EroiDB.getStudentProfile(existing.studentEmail);
           if (studProfile) {
             window.EroiGame.addXP(existing.studentEmail, 30);
             window.EroiGame.addDracme(existing.studentEmail, 15);

@@ -35,6 +35,12 @@ const Auth = {
                 Auth._resolveReady();
             }, 3000);
 
+            // Gestione del ritorno dal redirect (se usato)
+            window.fbAuth.getRedirectResult().catch(e => {
+                console.error("Errore post-redirect Google:", e);
+                if (e.code) alert("Errore di accesso: " + e.code + " - " + e.message);
+            });
+
             window.fbAuth.onAuthStateChanged(async (user) => {
                 if (user) {
                     Auth._fbUser = user;
@@ -84,13 +90,9 @@ const Auth = {
                 await window.fbDb.collection('users').doc(fbUser.uid).set(Auth._user);
             }
             
-            // Controllo privilegi Admin per email specifiche
-            const ADMIN_EMAILS = ['prof.memmo@gmail.com'];
-            if (fbUser.email && ADMIN_EMAILS.includes(fbUser.email)) {
-                Auth._user.role = 'admin';
-                Auth._user.setupComplete = true; // Gli admin saltano l'onboarding se necessario o lo fanno una volta
-                await window.fbDb.collection('users').doc(fbUser.uid).set({ role: 'admin', setupComplete: true }, { merge: true });
-            }
+            // La verifica dell'amministratore è ora demandata unicamente 
+            // alla proprietà "role" salvata nel documento Firestore. 
+            // L'hardcoding di ADMIN_EMAILS è stato rimosso per maggiore sicurezza.
 
             localStorage.setItem('eroi_user', JSON.stringify(Auth._user));
             
@@ -221,11 +223,17 @@ const Auth = {
             }
         } catch (e) {
             console.error("Errore Google Login:", e);
-        if (window.EroiApp && window.EroiApp.showToast) {
-            window.EroiApp.showToast("Si è verificato un errore durante l'accesso con Google. Se stai usando un browser in-app (es. Instagram/Facebook), prova ad aprire il sito nel browser di sistema (Safari/Chrome).", "error");
-        } else {
-            alert("Si è verificato un errore durante l'accesso con Google. Se stai usando un browser in-app (es. Instagram/Facebook), prova ad aprire il sito nel browser di sistema (Safari/Chrome).");
-        }
+            if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
+                console.warn("Popup bloccato dal browser o chiuso dall'utente, fallback su redirect...");
+                window.fbAuth.signInWithRedirect(provider);
+            } else {
+                const errorMessage = "Si è verificato un errore durante l'accesso con Google: " + e.code + " - " + e.message;
+                if (window.EroiApp && window.EroiApp.showToast) {
+                    window.EroiApp.showToast(errorMessage, "error");
+                } else {
+                    alert(errorMessage);
+                }
+            }
         }
     },
 

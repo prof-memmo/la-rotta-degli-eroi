@@ -16,15 +16,15 @@ window.EroiMockData = {
   regolamenti: {
     studente: [
       { id: "s1", titolo: "Il Cammino dell'Eroe", testo: "Il tuo obiettivo è guadagnare XP per salire di livello ed ottenere Dracme da spendere nello Shop. Risolvi i quiz e partecipa alle missioni per progredire sulla mappa." },
-      { id: "s2", titolo: "Guadagno di Dracme", testo: "Ottieni Dracme completando attività quotidiane (5-15 Dracme), risolvendo quiz brevi (10-20 Dracme), completando intere missioni (30-80 Dracme) e superando le verifiche in classe (50-120 Dracme)." },
+      { id: "s2", titolo: "Economia e Progressione", testo: "L'economia degli studenti è completamente indipendente. Le quantità di oggetti nel Mercato (stock) diminuiscono solo quando un altro studente acquista l'oggetto." },
       { id: "s3", titolo: "L'Inventario e gli Equipaggiamenti", testo: "Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per l'avatar e Artefatti. Puoi tenere attivi fino a 2 Artefatti contemporaneamente." },
       { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus." }
     ],
     docente: [
-      { id: "d1", titolo: "Gestione di Classi e Studenti", testo: "Puoi creare classi personalizzate ed iscrivere o modificare gli studenti. Il docente ha il potere di assegnare Dracme, XP ed Artefatti direttamente dal pannello di gestione." },
-      { id: "d2", titolo: "Creazione di Missioni e Quiz", testo: "Puoi creare nuove missioni didattiche o modificare quelle esistenti, stabilendo le domande a risposta multipla e definendo le ricompense in XP e Dracme." },
-      { id: "d3", titolo: "Controllo dello Shop e Bilanciamento", testo: "Il docente può inserire nuovi oggetti nello shop, impostare i prezzi in Dracme, attivare/disattivare gli articoli e limitarne la quantità disponibile (stock)." },
-      { id: "d4", titolo: "Personalizzazione degli Aiutanti", testo: "Puoi personalizzare i bonus passivi, i poteri speciali e le immunità degli aiutanti a livello globale o per singoli studenti meritevoli." }
+      { id: "d1", titolo: "Due Mondi Separati (Universo Parallelo)", testo: "Il docente opera in un universo parallelo. Può giocare come un normale studente (accumulando XP e Dracme reali sul proprio profilo), ma senza MAI interferire con l'economia, lo stock o i log degli studenti." },
+      { id: "d2", titolo: "Isolamento Economico", testo: "Gli acquisti del docente nello Shop NON decrementano la giacenza (stock) degli oggetti disponibili per gli studenti, né influenzano le statistiche globali." },
+      { id: "d3", titolo: "Gestione Didattica", testo: "Dal Pannello Docente, l'insegnante gestisce le classi, attiva il 2° quadrimestre e monitora i progressi degli studenti, leggendo esclusivamente i dati del sistema didattico." },
+      { id: "d4", titolo: "Non Interferenza", testo: "Il gameplay personale del docente è isolato. Qualsiasi progresso nella storia o acquisto effettuato dal docente non ha alcun impatto sul bilanciamento della classe." }
     ]
   },
 
@@ -533,7 +533,7 @@ window.EroiMockData = {
       { q: "Chi uccide Hagen alla fine, decapitandolo con la spada di Sigfrido?", a: ["Gunther", "Etzel", "Crimilde stessa", "Alberico"], correct: 2 }
     ] },
 
-    { id: "quiz_videogiochi", category: "Primo Viaggio", title: "I Videogiochi", desc: "Metti alla prova la tua conoscenza sulla storia, tipologie e rimediazione legati al mondo dei videogiochi.", rewards: { xp: 100, dracme: 90 }, area: "Accademia", unlockedBy: "quiz_rimediazione", questions: [
+    { id: "quiz_videogiochi", category: "Primo Viaggio", title: "I Videogiochi", desc: "Metti alla prova la tua conoscenza sulla storia, tipologie e rimediazione legati al mondo dei videogiochi.", rewards: { xp: 100, dracme: 90 }, area: "Accademia", unlockedBy: "nib_vendetta", questions: [
       { q: "Cos'è un videogioco secondo la definizione dell'Enciclopedia Treccani?", a: ["Un gioco da tavolo elettronico con dadi cartacei", "Un dispositivo elettronico che consente di giocare interagendo con le immagini di uno schermo", "Un film interattivo proiettato al cinema", "Un'applicazione per smartphone adatta solo allo studio"], correct: 1 },
       { q: "In quale decennio sono apparsi i primi giochi elettronici?", a: ["Negli anni '20", "Negli anni '50", "Negli anni '70", "Negli anni '90"], correct: 1 },
       { q: "Quale innovazione tecnologica degli anni '90 ha provocato la forte espansione dell'industria del videogioco?", a: ["L'invenzione dello schermo LCD", "L'avvento di Internet e delle reti globali", "La nascita dei floppy disk ad alta capacità", "La diffusione delle sale giochi a gettoni"], correct: 1 },
@@ -544,18 +544,6 @@ window.EroiMockData = {
       { q: "Cosa si intende per 'gameplay' in un videogioco?", a: ["La grafica 3D", "L'insieme delle regole, delle meccaniche e dell'interattività che definiscono l'esperienza di gioco", "La colonna sonora", "Il manuale delle istruzioni"], correct: 1 },
       { q: "Chi è considerato il creatore di celebri brand di videogiochi come Super Mario e Zelda?", a: ["Hideo Kojima", "Shigeru Miyamoto", "Sid Meier", "John Carmack"], correct: 1 },
       { q: "Quale genere videoludico (sigla RPG) si basa sulla personalizzazione e crescita di un personaggio all'interno di una storia?", a: ["Sparatutto in prima persona", "Gioco di Ruolo (Role-Playing Game)", "Simulatore di volo", "Gioco di carte elettronico"], correct: 1 }
-    ] },
-    { id: "quiz_rimediazione", category: "Primo Viaggio", title: "La Rimediazione (Film e Libri)", desc: "Metti alla prova la tua conoscenza su come il mito e l'epica classica rivivono nel cinema e nei libri moderni.", rewards: { xp: 95, dracme: 80 }, area: "Biblioteca", unlockedBy: "nib_vendetta", questions: [
-      { q: "Cosa si intende per 'Rimediazione'?", a: ["La traduzione di un testo da una lingua antica a una moderna", "La presentazione di un medium all'interno di un altro medium", "La riscrittura di un'opera censurando le parti scandalose", "La spiegazione scientifica di un racconto mitologico"], correct: 1 },
-      { q: "Nel film 'Troy', come viene rimediata l'Iliade omerica?", a: ["Inserendo divinità aliene", "Eliminando l'intervento diretto degli dei per renderla più realistica", "Cambiando l'esito della guerra con la vittoria troiana", "Sostituendo il cavallo di legno con un toro"], correct: 1 },
-      { q: "Nelle avventure di 'Percy Jackson', come rivive la mitologia greca?", a: ["In un lontano futuro fantascientifico nello spazio", "Ambientandola nella società contemporanea americana", "Attraverso manoscritti medievali ritrovati in Inghilterra", "Sotto forma di geroglifici egizi parlanti"], correct: 1 },
-      { q: "Quale celebre romanzo moderno rimedia l'epica dell'Iliade concentrandosi sulla relazione intima tra due eroi?", a: ["Il Signore degli Anelli", "Il Canto di Achille di Madeline Miller", "L'Eneide di Virgilio", "Il romanzo di Alessandro"], correct: 1 },
-      { q: "Chi era la voce narrante che racconta le vicende nel romanzo 'Il Canto di Achille'?", a: ["Achille stesso", "Omero", "Patroclo", "Ulisse"], correct: 2 },
-      { q: "Quale poema epico inglese è stato rimediato da J.R.R. Tolkien nel 'Signore degli Anelli'?", a: ["Beowulf e le saghe norrene", "L'Eneide", "L'Orlando Furioso", "La Chanson de Roland"], correct: 0 },
-      { q: "Chi ha diretto il kolossal cinematografico del 2004 'Troy'?", a: ["Steven Spielberg", "Wolfgang Petersen", "Ridley Scott", "James Cameron"], correct: 1 },
-      { q: "Quale opera lirica in quattro parti di Richard Wagner rimedia il mito dei Nibelunghi?", a: ["L'Anello del Nibelungo", "Il Tristano e Isotta", "Il Parsifal", "La Valchiria"], correct: 0 },
-      { q: "Nel film 'O Brother, Where Art Thou?' dei fratelli Coen, quale poema classico viene rimediato in chiave moderna?", a: ["L'Iliade", "L'Odissea", "L'Eneide", "Il Canto dei Nibelunghi"], correct: 1 },
-      { q: "In quale celebre opera fantascientifica di George Lucas si ritrovano evidenti rimandi all'eroe classico e al viaggio dell'eroe?", a: ["Star Wars", "Blade Runner", "Star Trek", "Matrix"], correct: 0 }
     ] }
   ],
 
@@ -1038,35 +1026,6 @@ window.EroiMockData = {
     <span style="color: #16a34a; font-size: 1.05rem;">SINEDDOCHE:</span> LA SINEDDOCHE È UNA <span style="color: #2563eb;">FIGURA RETORICA</span> DI SIGNIFICATO. CONSISTE NEL DEFINIRE UN CONCETTO SERVENDOSI DI UN TERMINE IN RELAZIONE. PUÒ INDICARE UNA PARTE DI UN TUTTO, UN SINGOLARE PER UN PLURALE, UN GENERE PER UNA SPECIE, UNA MATERIA PER UN OGGETTO. ES. <span style="color: #2563eb;">È STATO TRAFITTO DAL BRONZO</span>; <span style="color: #2563eb;">SOTTO LO STESSO TETTO</span>.
   </p>
 </div>`
-    },    {
-      id: "ref_rimediazione_film_libri",
-      category: "L'inizio del viaggio",
-      title: "Film e Libri (La Rimediazione)",
-      summary: "SCOPRI COME LE STORIE DEGLI EROI ANTICHI RIVIVONO NEI FILM, NELLE SERIE TV E NEI ROMANZI MODERNI.",
-      image: "assets/images/pergamena_crest.png",
-      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-transform: uppercase; font-family: 'Outfit', sans-serif;">
-  <div style="background: linear-gradient(135deg, #2563eb22, #ea580c11); border: 2px solid #2563eb; border-radius: 10px; padding: 18px; margin-bottom: 20px; text-align: center;">
-    <div style="font-size: 1.6rem; margin-bottom: 6px;">🎬</div>
-    <div style="color: #2563eb; font-size: 1.2rem; letter-spacing: 1px; font-weight: 950;">LA RIMEDIAZIONE NELL'EPICA: FILM E LIBRI</div>
-  </div>
-  <div style="background: rgba(37,99,235,0.06); border-left: 4px solid #2563eb; padding: 14px; border-radius: 6px; margin-bottom: 16px; text-align: justify;">
-    QUANDO UN'OPERA LETTERARIA VIENE RAPPRESENTATA ATTRAVERSO UN ALTRO LINGUAGGIO, COME IL <span style="color: #2563eb;">CINEMA</span> O UN <span style="color: #ea580c;">NUOVO ROMANZO</span>, PARLIAMO DI <span style="color: #16a34a;">RIMEDIAZIONE</span>. GLI EROI CLASSICI NON MUOIONO MAI: CAMBIANO SOLO IL MEDIUM CON CUI SI PRESENTANO AL PUBBLICO.
-  </div>
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
-    <div style="background: rgba(220,38,38,0.07); border-left: 4px solid #dc2626; padding: 12px; border-radius: 6px;">
-      <div style="color: #dc2626; font-size: 0.88rem; margin-bottom: 8px; font-weight: 900;">🎬 IL CINEMA (TROY, PERCY JACKSON)</div>
-      <div style="font-size: 0.85rem; line-height: 1.6;">
-        NEI FILM COME <span style="color:#dc2626;">TROY</span> L'ILIADE VIENE RIMEDIATA ELIMINANDO GLI DEI PER RENDERE LA STORIA PIÙ REALISTICA. NELLE SERIE DI <span style="color:#dc2626;">PERCY JACKSON</span> IL MITO GRECO RIVIVE NELLA SOCIETÀ CONTEMPORANEA.
-      </div>
-    </div>
-    <div style="background: rgba(22,163,74,0.07); border-left: 4px solid #16a34a; padding: 12px; border-radius: 6px;">
-      <div style="color: #16a34a; font-size: 0.88rem; margin-bottom: 8px; font-weight: 900;">📚 I LIBRI (IL CANTO DI ACHILLE)</div>
-      <div style="font-size: 0.85rem; line-height: 1.6;">
-        ROMANZI MODERNI LIKE <span style="color:#16a34a;">IL CANTO DI ACHILLE</span> DI MADELINE MILLER RIMEDIANO L'EPICA CAMBIANDO IL PUNTO DI VISTA (NARRATO DA PATROCLO) PER ESPLORARE I SENTIMENTI PROFONDI DEGLI EROI.
-      </div>
-    </div>
-  </div>
-</div>`
     },
     {
       id: "ref_videogiochi",
@@ -1077,13 +1036,12 @@ window.EroiMockData = {
       content: `<div style="display: flex; flex-direction: column; gap: 30px; font-family: 'Outfit', sans-serif; text-transform: uppercase;">
   <!-- SLIDE 2 -->
   <div style="background: white; color: #1f2937; border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-    <div style="font-size: 1.2rem; font-weight: 900; color: #2563eb; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 8px; display: inline-block;">I VIDEOGIOCHI</div>
-    <div style="font-size: 1rem; line-height: 1.8; text-align: justify; margin-bottom: 20px; font-weight: bold;">
+        <div style="font-size: 1rem; line-height: 1.8; text-align: justify; margin-bottom: 20px; font-weight: bold;">
       DISPOSITIVO ELETTRONICO CHE CONSENTE DI GIOCARE INTERAGENDO CON LE <span style="color: #2563eb;">IMMAGINI DI UNO SCHERMO</span>.<br>
       <span style="font-size: 0.85rem; color: #6b7280; font-weight: normal;">(ENCICLOPEDIA TRECCANI)</span>
     </div>
     <div style="background: rgba(239,68,68,0.08); border-left: 5px solid #ef4444; padding: 15px; border-radius: 6px; font-size: 1.1rem; font-weight: 900; text-align: center; color: #dc2626; margin-bottom: 20px;">
-      È UN <span style="color: #2563eb;">MEDIUM</span> CHE RIMEDIA UN MESSAGGIO
+      È UN <span style="color: #2563eb;">MEDIUM</span> CHE VEICOLA UN MESSAGGIO
     </div>
     <div style="text-align: center; margin-top: 15px; font-size: 3rem;">
       🎮

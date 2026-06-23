@@ -20,13 +20,30 @@
           // Migrazione automatica per nuove schede, missioni, aiutanti, artefatti o allineamento contenuti
           let updated = false;
           
+          // Rimozione hardcoded delle vecchie lezioni rimosse
+          if (dbState.study_guides) {
+            const idx = dbState.study_guides.findIndex(g => g.id === "ref_rimediazione_film_libri");
+            if (idx > -1) { dbState.study_guides.splice(idx, 1); updated = true; }
+          }
+          if (dbState.missions) {
+            const idx = dbState.missions.findIndex(m => m.id === "quiz_rimediazione");
+            if (idx > -1) { dbState.missions.splice(idx, 1); updated = true; }
+            
+            const qV = dbState.missions.find(m => m.id === "quiz_videogiochi");
+            if (qV && qV.unlockedBy === "quiz_rimediazione") {
+              qV.unlockedBy = "nib_vendetta";
+              updated = true;
+            }
+          }
+          
           // 1. Migrazione per study_guides (aggiorna contenuti/immagini delle schede predefinite)
           if (dbState && dbState.study_guides && window.EroiMockData && window.EroiMockData.study_guides) {
             window.EroiMockData.study_guides.forEach(mockG => {
               const dbG = dbState.study_guides.find(g => g.id === mockG.id);
               if (dbG) {
-                if (dbG.content !== mockG.content || dbG.notes !== mockG.notes || dbG.image !== mockG.image || dbG.title !== mockG.title || dbG.summary !== mockG.summary || dbG.styleFilter !== mockG.styleFilter) {
+                if (dbG.content !== mockG.content || dbG.notes !== mockG.notes || dbG.image !== mockG.image || dbG.title !== mockG.title || dbG.summary !== mockG.summary || dbG.styleFilter !== mockG.styleFilter || dbG.category !== mockG.category) {
                   dbG.content = mockG.content;
+                  dbG.category = mockG.category;
                   dbG.notes = mockG.notes;
                   dbG.image = mockG.image;
                   dbG.title = mockG.title;
@@ -48,7 +65,7 @@
               if (dbM) {
                 const dbQStr = JSON.stringify(dbM.questions);
                 const mockQStr = JSON.stringify(mockM.questions);
-                if (dbQStr !== mockQStr || dbM.title !== mockM.title || dbM.desc !== mockM.desc || dbM.unlockedBy !== mockM.unlockedBy || dbM.area !== mockM.area) {
+                if (dbQStr !== mockQStr || dbM.title !== mockM.title || dbM.desc !== mockM.desc || dbM.unlockedBy !== mockM.unlockedBy || dbM.area !== mockM.area || dbM.category !== mockM.category) {
                   dbM.questions = JSON.parse(JSON.stringify(mockM.questions));
                   dbM.title = mockM.title;
                   dbM.desc = mockM.desc;
@@ -113,6 +130,12 @@
             updated = true;
           }
 
+          // Inizializzazione teacher_profiles
+          if (dbState && !dbState.teacher_profiles) {
+            dbState.teacher_profiles = {};
+            updated = true;
+          }
+
           // 6. Migrazione per settings (assicura la presenza di tutte le chiavi predefinite come activeDiaries)
           if (dbState && dbState.settings && window.EroiMockData && window.EroiMockData.settings) {
             Object.keys(window.EroiMockData.settings).forEach(key => {
@@ -121,6 +144,12 @@
                 updated = true;
               }
             });
+          }
+
+          // 7. Migrazione forzata Regolamenti (per isolamento economico)
+          if (dbState && window.EroiMockData && window.EroiMockData.regolamenti) {
+            dbState.regolamenti = JSON.parse(JSON.stringify(window.EroiMockData.regolamenti));
+            updated = true;
           }
 
           if (updated) {
@@ -196,9 +225,64 @@
       return Object.values(dbState.users);
     },
 
+    // --- RICHIESTE DOCENTI (Firestore) ---
+    saveTeacherRequest: async function(requestData) {
+      if (!window.fbDb) return;
+      await window.fbDb.collection("pending_requests").add({
+        ...requestData,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    },
+    getTeacherRequests: async function() {
+      if (!window.fbDb) return [];
+      const snapshot = await window.fbDb.collection("pending_requests").get();
+      return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    },
+    approveTeacherRequest: async function(requestId, requestData) {
+      if (!window.fbDb) return;
+      const uid = requestData.uid;
+      // Aggiorna ruolo in users (cloud)
+      await window.fbDb.collection('users').doc(uid).update({
+        role: 'docente',
+        setupComplete: true,
+        approved: true,
+        scuola: requestData.scuola,
+        citta: requestData.citta
+      });
+      // Elimina da pending_requests
+      await window.fbDb.collection("pending_requests").doc(requestId).delete();
+    },
+    rejectTeacherRequest: async function(requestId) {
+      if (!window.fbDb) return;
+      await window.fbDb.collection("pending_requests").doc(requestId).delete();
+    },
+
     // --- PROFILI STUDENTI ---
     getStudentProfile: function(email) {
       return dbState.students_profile[email.toLowerCase()] || null;
+    },
+
+    saveStudentProfile: function(email, profileData) {
+      const key = email.toLowerCase();
+      dbState.students_profile[key] = { ...dbState.students_profile[key], ...profileData };
+      this.save();
+    },
+
+    getAllStudents: function() {
+      return Object.values(dbState.students_profile);
+    },
+
+    // --- PROFILI PLAYER DOCENTE ---
+    getTeacherPlayerProfile: function(email) {
+      if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
+      return dbState.teacher_profiles[email.toLowerCase()] || null;
+    },
+
+    saveTeacherPlayerProfile: function(email, profileData) {
+      if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
+      const key = email.toLowerCase();
+      dbState.teacher_profiles[key] = { ...dbState.teacher_profiles[key], ...profileData };
+      this.save();
     },
 
     saveStudentProfile: function(email, profileData) {
@@ -455,22 +539,53 @@
       this.save();
     },
 
-    // --- SHOP ITEMS ---
-    getShopItems: function() {
+    // --- SHOP ---
+    getShopItems: function(email) {
+      if (email) {
+        const user = this.getUser(email);
+        if (user && (user.role === 'docente' || user.role === 'admin')) {
+          if (!dbState.teacher_shop_items) {
+            dbState.teacher_shop_items = JSON.parse(JSON.stringify(window.EroiMockData.shop_items));
+            this.save();
+          }
+          return dbState.teacher_shop_items;
+        }
+      }
       return dbState.shop_items;
     },
 
-    saveShopItem: function(itemId, itemData) {
-      const index = dbState.shop_items.findIndex(item => item.id === itemId);
+    saveShopItem: function(itemId, itemData, email) {
+      let targetArray = dbState.shop_items;
+      if (email) {
+        const user = this.getUser(email);
+        if (user && (user.role === 'docente' || user.role === 'admin')) {
+          if (!dbState.teacher_shop_items) {
+            dbState.teacher_shop_items = JSON.parse(JSON.stringify(window.EroiMockData.shop_items));
+          }
+          targetArray = dbState.teacher_shop_items;
+        }
+      }
+
+      const index = targetArray.findIndex(item => item.id === itemId);
       if (index !== -1) {
-        dbState.shop_items[index] = { ...dbState.shop_items[index], ...itemData };
+        targetArray[index] = { ...targetArray[index], ...itemData };
       } else {
-        dbState.shop_items.push({ id: itemId, ...itemData });
+        targetArray.push({ id: itemId, ...itemData });
       }
       this.save();
     },
 
-    deleteShopItem: function(itemId) {
+    deleteShopItem: function(itemId, email) {
+      if (email) {
+        const user = this.getUser(email);
+        if (user && (user.role === 'docente' || user.role === 'admin')) {
+          if (dbState.teacher_shop_items) {
+            dbState.teacher_shop_items = dbState.teacher_shop_items.filter(item => item.id !== itemId);
+            this.save();
+          }
+          return;
+        }
+      }
       dbState.shop_items = dbState.shop_items.filter(item => item.id !== itemId);
       this.save();
     },
@@ -594,17 +709,28 @@
       return dbState.activity_logs || [];
     },
 
-    logActivity: function(user, action) {
+    logActivity: function(userEmail, action) {
+      const u = typeof userEmail === 'string' ? this.getUser(userEmail) : null;
+      const isTeacher = u && (u.role === 'docente' || u.role === 'admin');
+
       const log = {
         timestamp: new Date().toISOString(),
-        user: user || "unknown",
+        user: userEmail || "unknown",
         action: action
       };
-      if (!dbState.activity_logs) dbState.activity_logs = [];
-      dbState.activity_logs.unshift(log); // Aggiunge all'inizio
-      // Limita a 200 logs per non saturare localStorage
-      if (dbState.activity_logs.length > 200) {
-        dbState.activity_logs = dbState.activity_logs.slice(0, 200);
+
+      if (isTeacher) {
+        if (!dbState.teacher_activity_logs) dbState.teacher_activity_logs = [];
+        dbState.teacher_activity_logs.unshift(log);
+        if (dbState.teacher_activity_logs.length > 200) {
+          dbState.teacher_activity_logs = dbState.teacher_activity_logs.slice(0, 200);
+        }
+      } else {
+        if (!dbState.activity_logs) dbState.activity_logs = [];
+        dbState.activity_logs.unshift(log);
+        if (dbState.activity_logs.length > 200) {
+          dbState.activity_logs = dbState.activity_logs.slice(0, 200);
+        }
       }
       this.save();
     },
