@@ -635,7 +635,7 @@ window.finalizzaDocente = async function() {
       const target = document.getElementById(viewId);
       if (target) {
         target.classList.add('active');
-        target.scrollTop = 0;
+        target.scrollTop = 0; window.scrollTo(0, 0);
       }
       this.updateImpersonationBanner();
     },
