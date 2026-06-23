@@ -4154,29 +4154,23 @@ table.game-table tr:hover td {
     padding-top: 0;
 }
 #view-admin-dashboard > .glass-panel {
-    flex: 1;
+    min-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
-    min-height: 0;
 }
 #view-admin-dashboard .tab-content {
     flex: 1;
-    min-height: 0;
     overflow-y: auto;
 }
 
 /* Regolamento */
 #view-regolamento {
     padding: 0 15px 15px 15px;
-    flex-direction: column;
-    min-height: 0;
 }
-#view-regolamento.active { display: flex; }
 #view-regolamento > .glass-panel {
-    flex: 1;
+    min-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
-    min-height: 0;
 }
 #view-regolamento .dashboard-grid {
     flex: 1;
