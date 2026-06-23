@@ -87,7 +87,12 @@ body {
 #app-container {
   display: flex;
   flex-direction: column;
-  height: 100dvh; /* Usa dvh per Safari mobile */
+  min-height: 100vh; /* OCCUPA SEMPRE TUTTO LO SCHERMO */
+  background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+  color: var(--text-light);
+  font-family: 'Cinzel', serif;
+  /* IMPORTANTE: Allinea in alto per evitare spazi vuoti su schermi alti */
+  justify-content: flex-start;
   position: relative;
   overflow: hidden;
 }
@@ -4152,11 +4157,13 @@ table.game-table tr:hover td {
 /* Admin Dashboard */
 #view-admin-dashboard {
     padding-top: 0;
+    justify-content: flex-start !important;
 }
 #view-admin-dashboard > .glass-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start !important;
     margin-top: 0 !important;
 }
 #view-admin-dashboard .tab-content {
@@ -4167,11 +4174,13 @@ table.game-table tr:hover td {
 /* Regolamento */
 #view-regolamento {
     padding: 0 15px 15px 15px;
+    justify-content: flex-start !important;
 }
 #view-regolamento > .glass-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start !important;
     margin-top: 0 !important;
 }
 #view-regolamento .dashboard-grid {
@@ -4340,6 +4349,7 @@ table.game-table tr:hover td {
    ========================================== */
 .view.active {
     display: flex;
+    justify-content: flex-start !important;
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 100%;
