@@ -1884,7 +1884,6 @@ window.finalizzaDocente = async function() {
         { name: "Ciclo Carolingio",        mapArea: "Aquisgrana",             term: 2, icon: "fa-chess-rook",         color: "#ec4899" },
         { name: "Ciclo Bretone",           mapArea: "Camelot",               term: 2, icon: "fa-wand-magic-sparkles", color: "#8b5cf6" },
         { name: "Ciclo dei Nibelunghi",    mapArea: "Worms",                  term: 2, icon: "fa-dragon",             color: "#ea580c" },
-        { name: "La Rimediazione",         mapArea: null,                    term: 2, icon: "fa-film",               color: "#f43f5e" },
         { name: "I Videogiochi",           mapArea: null,                    term: 2, icon: "fa-gamepad",            color: "#10b981" }
       ];
 
@@ -2781,7 +2780,6 @@ window.finalizzaDocente = async function() {
         "Schede Personaggio (Ciclo Bretone)",
         "Schede Personaggio (Ciclo dei Nibelunghi)",
         "Schede Tematiche",
-        "La Rimediazione",
         "I Videogiochi"
       ];
       let html = '';

@@ -708,6 +708,8 @@ window.EroiMockData = {
     // Schede Tematiche
     {
       id: "theme_eroe",
+      image: "assets/guides/theme_eroe.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "L'eroismo",
       summary: "L'EVOLUZIONE DEL CONCETTO DI EROE DAL MONDO GRECO AL MEDIOEVO IN MAIUSCOLO.",
@@ -717,6 +719,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_viaggio",
+      image: "assets/guides/theme_viaggio.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "Il viaggio",
       summary: "IL VIAGGIO COME METAFORA DI CRESCITA E CONOSCENZA IN MAIUSCOLO.",
@@ -726,6 +730,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_famiglia",
+      image: "assets/guides/theme_famiglia.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "La famiglia",
       summary: "IL RUOLO E IL VALORE DEI LEGAMI FAMILIARI NELL'EPICA ANTICA E MEDIEVALE IN MAIUSCOLO.",
@@ -735,6 +741,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_morte",
+      image: "assets/guides/theme_morte.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "La morte",
       summary: "IL DESTINO ULTIMO DEGLI EROI E IL SIGNIFICATO DEL PASSAGGIO ALL'ADE IN MAIUSCOLO.",
@@ -744,6 +752,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_pietas",
+      image: "assets/guides/theme_pietas.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "La pietas",
       summary: "IL SENSO DEL DOVERE E DEL RISPETTO VERSO GLI DEI E LA PATRIA IN MAIUSCOLO.",
@@ -753,6 +763,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_guerra",
+      image: "assets/guides/theme_guerra.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "L'arte della guerra",
       summary: "LA RAPPRESENTAZIONE DEI COMBATTIMENTI E DEL VALORE SUL CAMPO DI BATTAGLIA IN MAIUSCOLO.",
@@ -762,6 +774,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_pace",
+      image: "assets/guides/theme_pace.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "La pace",
       summary: "LA RICERCA DELL'ORDINE, DELLA CONCORDIA E DELLA FINE DEI CONFLITTI IN MAIUSCOLO.",
@@ -771,6 +785,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_amicizia",
+      image: "assets/guides/theme_amicizia.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "L'amicizia",
       summary: "IL VALORE DEL SACRIFICIO E DEI LEGAMI FRATERNI TRA GLI EROI IN MAIUSCOLO.",
@@ -780,6 +796,8 @@ window.EroiMockData = {
     },
     {
       id: "theme_destino",
+      image: "assets/guides/theme_destino.png",
+      horizontal: true,
       category: "Schede Tematiche",
       title: "Il destino",
       summary: "IL FATO SUPREMO COME FORZA INELUTTABILE CHE GOVERNA LE GESTA UMANE IN MAIUSCOLO.",
