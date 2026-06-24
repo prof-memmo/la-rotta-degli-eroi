@@ -4154,41 +4154,7 @@ table.game-table tr:hover td {
     font-size: 0.65rem;
 }
 
-/* Admin Dashboard */
-#view-admin-dashboard {
-    padding-top: 0 !important;
-    justify-content: flex-start !important;
-}
-#view-admin-dashboard > .glass-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-#view-admin-dashboard .tab-content {
-    flex: 1;
-    overflow-y: auto;
-}
 
-/* Regolamento */
-#view-regolamento {
-    padding: 0 15px 15px 15px !important;
-    justify-content: flex-start !important;
-}
-#view-regolamento > .glass-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-#view-regolamento .dashboard-grid {
-    flex: 1;
-    padding-bottom: 10px;
-}
 
 /* Missioni */
 #view-missions {
