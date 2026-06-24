@@ -947,118 +947,6 @@
             </div>
           </div>
 
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB MISSIONI -->
-          <div id="a-tab-missioni" class="tab-content">
-            <div class="glass-panel">
-              <h3 class="panel-title">Crea Nuova Missione / Quiz</h3>
-              <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 16px;">
-                Crea missioni personalizzate per le tue classi. Le missioni predefinite (🔒 preset) possono essere modificate o nascoste — ma non eliminate definitivamente: sono sempre ripristinabili.
-              </p>
-              <form id="form-create-mission" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                <div class="form-group">
-                  <label for="new-mission-id">ID Missione (Univoco)</label>
-                  <input type="text" id="new-mission-id" class="form-control" placeholder="es: ili_patroclo" required>
-                </div>
-                <div class="form-group">
-                  <label for="new-mission-title">Titolo</label>
-                  <input type="text" id="new-mission-title" class="form-control" placeholder="La morte di Patroclo" required>
-                </div>
-                <div class="form-group">
-                  <label for="new-mission-category">Categoria Epica</label>
-                  <select id="new-mission-category" class="form-control" required>
-                    <option value="Mitologia">Mitologia</option>
-                    <option value="Iliade">Iliade</option>
-                    <option value="Odissea">Odissea</option>
-                    <option value="Eneide">Eneide</option>
-                    <option value="Ciclo Carolingio">Ciclo Carolingio</option>
-                    <option value="Ciclo Bretone">Ciclo Bretone</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="new-mission-area">Area Mappa Sbloccata</label>
-                  <select id="new-mission-area" class="form-control" required>
-                    <option value="Olimpo">Olimpo</option>
-                    <option value="Creta">Creta</option>
-                    <option value="Troia">Troia</option>
-                    <option value="Itaca">Itaca</option>
-                    <option value="Lazio">Lazio</option>
-                    <option value="Aquisgrana">Aquisgrana</option>
-                    <option value="Roncisvalle">Roncisvalle</option>
-                    <option value="Camelot">Camelot</option>
-                    <option value="Foresta di Brocelandia">Foresta di Brocelandia</option>
-                    <option value="Castello del Graal">Castello del Graal</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="new-mission-gametype">Tipologia Gioco</label>
-                  <select id="new-mission-gametype" class="form-control" required onchange="EroiApp.onGameTypeChange()">
-                    <option value="quiz">Quiz (Risposta Multipla)</option>
-                    <option value="puzzle">Puzzle (Riordina Frase)</option>
-                    <option value="cloze">Cloze (Completa Testo)</option>
-                    <option value="cantami_o_diva">Cantami o Diva (Spiegazione Orale 10s)</option>
-                    <option value="impiccato">Impiccato (Parola Segreta)</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="new-mission-xp">XP Premio</label>
-                  <input type="number" id="new-mission-xp" class="form-control" value="50" required>
-                </div>
-                <div class="form-group">
-                  <label for="new-mission-dracme">Dracme Premio</label>
-                  <input type="number" id="new-mission-dracme" class="form-control" value="30" required>
-                </div>
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label for="new-mission-desc">Descrizione/Trama Introduzione</label>
-                  <textarea id="new-mission-desc" class="form-control" rows="2" placeholder="Narra lo scontro fatale tra Patroclo ed Ettore..." required></textarea>
-                </div>
-                
-                <!-- Struttura della prima domanda per facilitare la creazione -->
-                <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 0; border: 1px dashed var(--gold);">
-                  <h4 id="new-mission-editor-header" style="font-family: var(--font-heading); color: var(--gold); margin-bottom: 10px;">Domanda di Esempio (Modificabile in seguito nel DB)</h4>
-                  <div class="form-group">
-                    <label id="new-mission-q-label" for="new-mission-q">Testo Domanda</label>
-                    <input type="text" id="new-mission-q" class="form-control" placeholder="Chi uccide Patroclo in battaglia?" value="Chi uccide Patroclo in battaglia?">
-                    <p id="new-mission-editor-hint" style="color:var(--text-muted); font-size:0.78rem; margin-top:5px; display:none;"></p>
-                  </div>
-                  <div id="new-mission-options-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div class="form-group"><label>Opzione 0 (Corretta)</label><input type="text" id="new-mission-opt0" class="form-control" value="Ettore"></div>
-                    <div class="form-group"><label>Opzione 1</label><input type="text" id="new-mission-opt1" class="form-control" value="Achille"></div>
-                    <div class="form-group"><label>Opzione 2</label><input type="text" id="new-mission-opt2" class="form-control" value="Agamennone"></div>
-                    <div class="form-group"><label>Opzione 3</label><input type="text" id="new-mission-opt3" class="form-control" value="Paride"></div>
-                  </div>
-                </div>
-                
-                <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-mission">Crea e Pubblica Missione</button>
-              </form>
-            </div>
-
-            <div class="glass-panel">
-              <h3 class="panel-title">Elenco Missioni Disponibili</h3>
-              <div class="table-responsive">
-                <table class="game-table" id="teacher-missions-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Titolo</th>
-                      <th>Categoria</th>
-                      <th>Area Mappa</th>
-                      <th>Premi</th>
-                      <th>Domande</th>
-                      <th>Azione</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          
-
-
           <!-- TAB SHOP E BILANCIAMENTO -->
           
 
@@ -1164,7 +1052,6 @@
               </form>
             </div>
           </div>
-        </div>
       </section>
 
       <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
@@ -1280,9 +1167,6 @@
             </div>
           </div>
 
-              </div>
-            </div>
-          </div>
 
           <!-- TAB MISSIONI -->
           <div id="a-tab-missioni" class="tab-content">
