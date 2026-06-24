@@ -4156,7 +4156,7 @@ table.game-table tr:hover td {
 
 /* Admin Dashboard */
 #view-admin-dashboard {
-    padding-top: 0;
+    padding-top: 0 !important;
     justify-content: flex-start !important;
 }
 #view-admin-dashboard > .glass-panel {
@@ -4165,6 +4165,7 @@ table.game-table tr:hover td {
     flex-direction: column;
     justify-content: flex-start !important;
     margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 #view-admin-dashboard .tab-content {
     flex: 1;
@@ -4173,7 +4174,7 @@ table.game-table tr:hover td {
 
 /* Regolamento */
 #view-regolamento {
-    padding: 0 15px 15px 15px;
+    padding: 0 15px 15px 15px !important;
     justify-content: flex-start !important;
 }
 #view-regolamento > .glass-panel {
@@ -4182,6 +4183,7 @@ table.game-table tr:hover td {
     flex-direction: column;
     justify-content: flex-start !important;
     margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 #view-regolamento .dashboard-grid {
     flex: 1;
