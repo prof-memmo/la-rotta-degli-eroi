@@ -1406,6 +1406,7 @@ window.EroiMockData = {
     { id: "char_mordred", category: "Schede Personaggio (Ciclo Bretone)", title: "Sir Mordred", image: "assets/images/tempio/mordred_portrait.png", summary: "Il cavaliere ribelle che distrusse Camelot.", content: "Descrizione: Figlio o nipote traditore di Re Artù. Approfittando dell'assenza del re, usurpa il trono e affronta il sovrano nella tragica battaglia di Camlann, in cui ferisce a morte il padre prima di essere trafitto.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"IL REGNO DI BRITANNIA DEVE CADERE, E CON ESSO ANCHE L'ILLUSIONE DEL REGNO DI ARTÙ.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— SIR THOMAS MALORY, LA MORTE DI ARTÙ</span></div>" },
     {
       id: "god_muse",
+      image: "assets/images/tempio/muses_portrait.png",
       category: "Divinità",
       title: "Le Muse",
       summary: "LE NOVE CUSTODI DELLE ARTI E DELLA POESIA IN MAIUSCOLO.",
@@ -1439,6 +1440,7 @@ window.EroiMockData = {
     { id: "god_dioniso", category: "Divinità", title: "Dioniso / Bacco", image: "assets/images/tempio/dioniso_portrait.png", summary: "Dio del vino, della festa e del teatro.", content: "Descrizione: Dioniso, in latino Bacco, è il dio del vino, dell'ebbrezza, della festa, del teatro and della liberazione dei sensi. Rappresenta l'impulso vitale, il caos creativo e la forza rigeneratrice della natura. Presente come divinità di contorno nei poemi epici arcaici, il suo culto misterico ispira cerimonie di pacificazione e di ebbrezza rituale che simboleggiano la purificazione interiore dell'eroe dopo le dure fatiche della guerra.<div style=\"font-style: italic; border-left: 3px solid var(--gold); padding-left: 10px; margin-top: 15px; color: #78350f;\">\"DIONISO CORONATO DI EDERA, DIO DEL VINO E DELLA GIOIA SFRENATA, CHE LIBERI GLI ANIMI DAGLI AFFANNI DEL GIORNO CON IL TUO DOLCE NETTARE.\"<br><span style=\"font-size: 0.8rem; font-weight: bold; font-style: normal;\">— INNI OMERICI</span></div>" },
     {
       id: "god_odino",
+      image: "assets/images/tempio/odino_portrait.png",
       category: "Divinità",
       title: "Odino",
       image: "assets/images/tempio/odino_portrait.png",
@@ -1447,6 +1449,7 @@ window.EroiMockData = {
     },
     {
       id: "god_thor",
+      image: "assets/images/tempio/thor_portrait.png",
       category: "Divinità",
       title: "Thor",
       image: "assets/images/tempio/thor_portrait.png",
@@ -1455,6 +1458,7 @@ window.EroiMockData = {
     },
     {
       id: "god_frigg",
+      image: "assets/images/tempio/frigg_portrait.png",
       category: "Divinità",
       title: "Frigg",
       image: "assets/images/tempio/frigg_portrait.png",
@@ -1463,6 +1467,7 @@ window.EroiMockData = {
     },
     {
       id: "god_freya",
+      image: "assets/images/tempio/freya_portrait.png",
       category: "Divinità",
       title: "Freya",
       image: "assets/images/tempio/freya_portrait.png",
@@ -1471,6 +1476,7 @@ window.EroiMockData = {
     },
     {
       id: "god_loki",
+      image: "assets/images/tempio/loki_portrait.png",
       category: "Divinità",
       title: "Loki",
       image: "assets/images/tempio/loki_portrait.png",
@@ -1479,6 +1485,7 @@ window.EroiMockData = {
     },
     {
       id: "god_tyr",
+      image: "assets/images/tempio/tyr_portrait.png",
       category: "Divinità",
       title: "Tyr",
       image: "assets/images/tempio/tyr_portrait.png",
