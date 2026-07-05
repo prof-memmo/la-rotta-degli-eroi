@@ -84,6 +84,12 @@ window.showContattiModal = function() {
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <input type="text" id="contact-modal-name" placeholder="Il tuo nome" class="form-control" style="padding: 8px 12px;">
             <input type="email" id="contact-modal-email" placeholder="La tua email" class="form-control" style="padding: 8px 12px;">
+            <select id="contact-modal-topic" class="form-control" style="padding: 8px 12px; background-color: rgba(255,255,255,0.1); color: var(--text-color, #fff); border: 1px solid rgba(212,175,55,0.3); border-radius: 4px;">
+                <option value="" disabled selected style="color: black;">Tipologia della comunicazione...</option>
+                <option value="Richiesta di informazioni" style="color: black;">Richiesta di informazioni</option>
+                <option value="Opinioni" style="color: black;">Opinioni</option>
+                <option value="Altro" style="color: black;">Altro</option>
+            </select>
             <textarea id="contact-modal-message" placeholder="Come posso aiutarti?" class="form-control" style="height: 80px; resize: none; padding: 8px 12px;"></textarea>
             <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">
               <input type="checkbox" id="contact-modal-check" style="margin-top: 2px;">
@@ -105,9 +111,10 @@ window.showContattiModal = function() {
 window.submitContattiModal = function() {
     const name = document.getElementById('contact-modal-name')?.value.trim();
     const email = document.getElementById('contact-modal-email')?.value.trim();
+    const topic = document.getElementById('contact-modal-topic')?.value;
     const message = document.getElementById('contact-modal-message')?.value.trim();
     const check = document.getElementById('contact-modal-check')?.checked;
-    if (!name || !email || !message) { alert('Compila tutti i campi.'); return; }
+    if (!name || !email || !topic || !message) { alert('Compila tutti i campi, compresa la tipologia.'); return; }
     if (!check) { alert('Devi accettare la Privacy Policy e i Termini.'); return; }
     if (window.EroiApp) window.EroiApp.showToast('Messaggio inviato! Ti risponderemo presto.', 'success');
     window.EroiApp.closeLegalModal();
