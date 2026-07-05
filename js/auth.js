@@ -47,8 +47,12 @@ const Auth = {
                     await Auth._handleFirebaseUser(user);
                 } else {
                     Auth._fbUser = null;
-                    Auth._user = null;
-                    localStorage.removeItem('eroi_user');
+                    // Mantieni la sessione se l'utente è guest o ha effettuato l'accesso con codice classe (uid inizia con 'std_')
+                    const isLocalOnly = Auth._user && (Auth._user.isGuest || (Auth._user.uid && String(Auth._user.uid).startsWith('std_')));
+                    if (!isLocalOnly) {
+                        Auth._user = null;
+                        localStorage.removeItem('eroi_user');
+                    }
                     Auth._resolveReady();
                 }
             });

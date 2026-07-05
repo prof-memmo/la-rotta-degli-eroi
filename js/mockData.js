@@ -805,6 +805,72 @@ window.EroiMockData = {
   IL DESTINO (O FATO, <span style="color: #16a34a;">FATUM</span> IN LATINO) È LA FORZA SUPREMA E INELUTTABILE CHE GOVERNA LE AZIONI DEGLI UOMINI E DEGLI DEI. NELL'EPICA GRECA IL FATO (<span style="color: #2563eb;">MOIRA</span>) DETERMINA LA MORTE PREMATURA DI ACHILLE E LE PEREGRINAZIONI DI ULISSE, MENTRE LE DIVINITÀ POSSONO SOLO RALLENTARE O AGEVOLARE IL COMPIMENTO DEI SUOI DECRETI. NELL'ENEIDE IL DESTINO SUPERA LA VOLONTÀ DEI SINGOLI E IMPOSTA LA FONDAZIONE DI <span style="color: #ea580c;">ROMA</span> COMO UN MANDATO DIVINO A CUI ENEA DEVE SOTTOMETTERSI SACRIFICANDO IL PROPRIO AMORE E LA PROPRIA FELICITÀ. LA TRAGEDIA DEL SACRIFICIO È SPESSO IL MEZZO ATTRAVERSO CUI SI REALIZZA IL DISEGNO FATALE.
 </div>`
     },
+    {
+      id: "theme_amore",
+      image: "assets/guides/theme_amore.png",
+      horizontal: true,
+      category: "Schede Tematiche",
+      title: "L'amore",
+      summary: "L'AMORE COME FORZA TRAVOLGENTE E DISTRUTTRICE NELL'EPICA ANTICA E MEDIEVALE IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  L'AMORE È SPESSO RAPPRESENTATO COME UNA FORZA TRAVOLGENTE CHE SFUGGE AL CONTROLLO DELLA RAGIONE. NELL'ILIADE IL RAPIMENTO DI ELENA DA PARTE DI PARIDE SCATENA LA GUERRA CHE DISTRUGGERÀ TROIA. NELL'ENEIDE LA PASSIONE DELLA REGINA <span style="color: #2563eb;">DIDONE</span> PER ENEA SI TRASFORMA IN FOLLIA E MORTE QUANDO EGLI L'ABBANDONA PER SEGUIRE IL FATUM. NEI CICLI BRETONI L'AMORE CORTESE TRA <span style="color: #ea580c;">LANCILLOTTO E GINEVRA</span> DIVENTA IL MOTIVO DELLA FRATTURA DELLA TAVOLA ROTONDA E DELLA ROVINA DEL REGNO DI ARTÙ, MOSTRANDO COME IL SENTIMENTO PERSONALE POSSA ENTRARE IN CONFLITTO CON IL DOVERE E LA LEALTÀ VERSO LO STATO.
+</div>`
+    },
+    {
+      id: "theme_conoscenza",
+      image: "assets/guides/theme_conoscenza.png",
+      horizontal: true,
+      category: "Schede Tematiche",
+      title: "La conoscenza",
+      summary: "LA RICERCA DEL SAPERE E IL SUPERAMENTO DEI LIMITI UMANI NELL'EPICA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  IL DESIDERIO DI <span style="color: #16a34a;">CONOSCENZA</span> È UNO DEI MOTORI FONDAMENTALI DELL'AGIRE UMANO, BEN INCARNATO DALLA FIGURA DI <span style="color: #2563eb;">ULISSE</span>, CHE AFFRONTA MOSTRI E SFIDE PER SODDISFARE LA SUA CURIOSITÀ INTELLETTUALE. LA METIS, L'INTELLIGENZA ASTUTA, DIVENTA L'ARMA PRINCIPALE PER SOPRAVVIVERE IN UN MONDO GOVERNATO DA FORZE DIVINE. TUTTAVIA, LA CONOSCENZA COMPORTA ANCHE IL RISCHIO DI SUPERARE I LIMITI IMPOSTI AGLI UOMINI (LA HYBRIS), COME QUANDO L'EROE DECIDE DI ASCOLTARE IL CANTO DELLE SIRENE O VARCARE LE COLONNE D'ERCOLE, SFIDANDO L'IGNOTO E TALVOLTA LA MORTE STESSA.
+</div>`
+    },
+    {
+      id: "theme_fedelta",
+      image: "assets/guides/theme_fedelta.png",
+      horizontal: true,
+      category: "Schede Tematiche",
+      title: "La fedeltà",
+      summary: "LA LEALTÀ ASSOLUTA VERSO IL SIGNORE, LA FAMIGLIA E I COMPAGNI NELL'EPICA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  LA <span style="color: #ea580c;">FEDELTÀ</span> È UN VINCOLO SACRO CHE TIENE UNITA LA SOCIETÀ EROICA. NELL'ODISSEA ESSA È RAPPRESENTATA DA <span style="color: #2563eb;">PENELOPE</span>, CHE ATTENDE IL MARITO PER VENT'ANNI, E DAL CANE ARGO, CHE LO RICONOSCE E MUORE. NELL'EPICA MEDIEVALE IL CONCETTO SI EVOLVE NEL VASSALLAGGIO FEUDALE: IL PALADINO <span style="color: #16a34a;">ORLANDO</span> È DISPOSTO A SACRIFICARE LA VITA E I SUOI UOMINI A RONCISVALLE PUR DI NON VENIR MENO ALL'ONORE E ALLA LEALTÀ VERSO L'IMPERATORE CARLO MAGNO, INCARNANDO IL PERFETTO CAVALIERE CRISTIANO CHE NON CEDE MAI AL COMPROMESSO.
+</div>`
+    },
+    {
+      id: "theme_patria",
+      image: "assets/guides/theme_patria.png",
+      horizontal: true,
+      category: "Schede Tematiche",
+      title: "La patria",
+      summary: "IL LEGAME SACRO CON LA PROPRIA TERRA E IL DOVERE DI DIFENDERLA O FONDARE UNA NUOVA CITTÀ IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  IL LEGAME CON LA <span style="color: #2563eb;">PATRIA</span> È UN SENTIMENTO DOMINANTE IN TUTTI I POEMI. PER ETTORE, LA DIFESA DI TROIA È IL VALORE SUPREMO PER CUI SACRIFICARE LA VITA. PER ULISSE, LA PATRIA ITACA È IL SIMBOLO DELLE PROPRIE RADICI E LA META FONDAMENTALE DI TUTTO IL VIAGGIO (<span style="color: #16a34a;">NOSTOS</span>). PER ENEA, LA PATRIA È UN PROGETTO FUTURO: LA NECESSITÀ DI FONDARE <span style="color: #ea580c;">ROMA</span>, UBBIDENDO AL FATO E TRASFERENDO I PENATI (GLI DEI PROTETTORI DELLA CASA) IN UNA NUOVA TERRA, RAPPRESENTA IL DOVERE CIVILE CHE FONDA L'IDENTITÀ DI UN INTERO POPOLO.
+</div>`
+    },
+    {
+      id: "theme_tradimento",
+      image: "assets/guides/theme_tradimento.png",
+      horizontal: true,
+      category: "Schede Tematiche",
+      title: "Il tradimento",
+      summary: "L'INGANNO E LA VIOLAZIONE DEI PATTI COME CAUSA DI ROVINA NELL'EPICA ANTICA E MEDIEVALE IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  IL <span style="color: #ea580c;">TRADIMENTO</span> È CONSIDERATO UNO DEI CRIMINI PIÙ GRAVI POICHÉ DISTRUGGE LA FIDUCIA CHE REGGE LA SOCIETÀ. L'INGANNO DEL CAVALLO DI LEGNO, IDEATO DA ULISSE, È L'ATTO ASTUTO MA SPIETATO CHE PORTA ALLA CADUTA DI TROIA. NEL CICLO CAROLINGIO, LA FIGURA DI <span style="color: #2563eb;">GANO DI MAGANZA</span> INCARNA IL TRADITORE PER ECCELLENZA, MOSSO DALL'ODIO PERSONALE E DALL'INVIDIA, CHE VENDE I PROPRI COMPAGNI AI SARACENI CAUSANDO LA STRAGE DI RONCISVALLE. IL TRADIMENTO ROMPE IL PATTO DI LEALTÀ E PORTA INEVITABILMENTE A UNA PUNIZIONE ESEMPLARE O A GUERRE FRATRICIDE.
+</div>`
+    },
+    {
+      id: "theme_vendetta",
+      image: "assets/guides/theme_vendetta.png",
+      horizontal: true,
+      category: "Schede Tematiche",
+      title: "La vendetta",
+      summary: "LA VENDETTA COME DOVERE D'ONORE E CATENA DISTRUTTIVA DI VIOLENZA IN MAIUSCOLO.",
+      content: `<div style="font-weight: bold; line-height: 1.8; font-size: 0.95rem; color: #1f2937; text-align: justify; text-transform: uppercase;">
+  NELLA MENTALITÀ EROICA E MEDIEVALE, LA <span style="color: #ea580c;">VENDETTA</span> È UN DIRITTO E UN DOVERE MORALE PER RIPARARE A UN'OFFESA O ALLA MORTE DI UN FAMILIARE, COME PREVISTO DALLA LEGGE DEL TAGLIONE O DEL GUIDRIGILDO. L'IRA DI ACHILLE SCATURISCE DAL BISOGNO DI VENDICARE L'AMICO PATROCLO. LA STRAGE DEI PROCI È L'ATTO DI GIUSTIZIA CON CUI ULISSE RIPRISTINA IL PROPRIO ONORE. NEL CANTO DEI NIBELUNGHI, LA VENDETTA DI <span style="color: #2563eb;">CRIMILDE</span> PER L'UCCISIONE DI SIGFRIDO DIVENTA UN'OSSESSIONE DISTRUTTIVA CHE LA PORTA A SPOSARE ATTILA AL SOLO SCOPO DI ANNIENTARE I PROPRI FRATELLI, CAUSANDO UNA CARNEFICINA IN CUI PERISCE LEI STESSA.
+</div>`
+    },
 
     // L'inizio del viaggio (Lezioni Palestra di Riflessione)
     // L'inizio del viaggio (Lezioni Palestra di Riflessione)
