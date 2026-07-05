@@ -14,6 +14,12 @@ try {
     firebase.initializeApp(firebaseConfig);
     // Esponi auth e db globalmente per usarli negli altri script
     window.fbAuth = firebase.auth();
+    
+    // Forza la persistenza locale in modo esplicito
+    window.fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(error) {
+        console.error("Errore impostazione persistenza:", error);
+    });
+
     window.fbDb = firebase.firestore();
     console.log("🔥 Firebase inizializzato correttamente");
 } catch (e) {
