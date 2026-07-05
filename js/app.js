@@ -78,6 +78,12 @@ window.showContattiModal = function() {
           <div style="display: flex; align-items: center; gap: 10px; color: var(--gold); font-weight: bold;">
             <i class="fa-solid fa-envelope"></i> <span>prof.memmo@gmail.com</span>
           </div>
+          <div style="margin-top: 1rem; display: flex; align-items: center; gap: 10px;">
+            <span style="font-weight: 600; color: white;">Seguimi sui social:</span>
+            <a href="https://www.instagram.com/prof.memmo_games?igsh=MW5pNHY3dHBxMHEyag%3D%3D&utm_source=qr" target="_blank" style="color: #E1306C; font-size: 2.2rem; display: inline-flex; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+          </div>
         </div>
         <div style="padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px;">
           <h4 style="color: var(--text-light); margin-bottom: 12px; font-family: var(--font-heading); font-size: 0.95rem;">Invia un Messaggio</h4>
