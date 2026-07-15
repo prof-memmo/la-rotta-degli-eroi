@@ -95,6 +95,7 @@ const MusicPlayer = {
         const titleEl = document.getElementById('music-track-title');
         const playBtnEl = document.getElementById('music-play-btn');
         const playBtnSidebarEl = document.getElementById('music-play-btn-sidebar');
+        const playBtnHeaderEl = document.getElementById('music-play-btn-header');
         if (titleEl) {
             let title = this.tracks[this.currentTrackIndex].replace(" (freetouse.com).mp3", "");
             titleEl.textContent = title;
@@ -107,6 +108,9 @@ const MusicPlayer = {
         }
         if (playBtnSidebarEl) {
             playBtnSidebarEl.innerHTML = iconHtml;
+        }
+        if (playBtnHeaderEl) {
+            playBtnHeaderEl.innerHTML = iconHtml;
         }
     }
 };
