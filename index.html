@@ -733,7 +733,6 @@
           
           <div class="tabs-header">
             <button class="tab-btn active" onclick="EroiApp.switchTeacherTab('panoramica')">Panoramica</button>
-            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('nodi')">Gestione Nodi</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('missioni')">Missioni & Quiz</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('shop')">Shop & Economia</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('aiutanti')">Aiutanti & Artefatti</button>
@@ -741,20 +740,6 @@
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('registro')">Registro Attività</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('tornei')">Tornei Interni</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('diario')">Valutazione Diari</button>
-            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('impostazioni')"><i class="fa-solid fa-gear"></i> Impostazioni</button>
-          </div>
-
-          <!-- TAB GESTIONE NODI -->
-          <div id="t-tab-nodi" class="tab-content">
-            <h3 class="panel-title"><i class="fa-solid fa-map-location-dot" style="color: var(--gold);"></i> Attivazione Nodi Mappa</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">Sblocca o blocca le tappe della Mappa per una specifica classe. Tutti gli studenti di quella classe riceveranno l'aggiornamento.</p>
-            <div class="form-group-contact">
-                <label>Seleziona Classe</label>
-                <select id="teacher-nodi-class-select" class="input-field" onchange="window.EroiApp.renderTeacherMapNodes()"></select>
-            </div>
-            <div id="teacher-nodi-list" class="dashboard-grid" style="margin-top: 20px;">
-                <!-- Popolato da JS -->
-            </div>
           </div>
 
           <!-- TAB PANORAMICA -->
@@ -943,23 +928,6 @@
                     </table>
                   </div>
                 </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- TAB SHOP E BILANCIAMENTO -->
-          
-
-          <!-- TAB AIUTANTI E ARTEFATTI -->
-          
-
-          <!-- TAB GUIDE DIDATTICHE -->
-          
-
-          <!-- TAB REGISTRO ATTIVITÀ -->
-          
-
           <!-- TAB MISSIONI -->
           <div id="t-tab-missioni" class="tab-content">
             <div class="glass-panel">
@@ -1065,11 +1033,8 @@
               </div>
             </div>
           </div>
-          
 
-
-          
-<!-- TAB SHOP -->
+          <!-- TAB SHOP E BILANCIAMENTO -->
           <div id="t-tab-shop" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Aggiungi/Modifica Oggetti dello Shop</h3>
@@ -1140,11 +1105,8 @@
               </div>
             </div>
           </div>
-          
 
-
-          
-<!-- TAB AIUTANTI -->
+          <!-- TAB AIUTANTI E ARTEFATTI -->
           <div id="t-tab-aiutanti" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Personalizza Effetti Aiutanti (Secondo Quadrimestre)</h3>
@@ -1220,11 +1182,8 @@
               </div>
             </div>
           </div>
-          
 
-
-          
-<!-- TAB GUIDE -->
+          <!-- TAB GUIDE DIDATTICHE -->
           <div id="t-tab-guide" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Crea/Modifica Schede Studio</h3>
@@ -1278,11 +1237,8 @@
               </div>
             </div>
           </div>
-          
 
-
-          
-<!-- TAB REGISTRO -->
+          <!-- TAB REGISTRO ATTIVITÀ -->
           <div id="t-tab-registro" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Storico delle Operazioni (Audit Log)</h3>
@@ -1300,12 +1256,8 @@
               </div>
             </div>
           </div>
-          
 
-          
-        </div>
-      
-<!-- TAB TORNEI -->
+          <!-- TAB TORNEI -->
           <div id="t-tab-tornei" class="tab-content">
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
               <!-- Crea Torneo -->
@@ -1375,29 +1327,6 @@
             </div>
           </div>
         </div>
-      
-          <!-- TAB IMPOSTAZIONI -->
-          <div id="t-tab-impostazioni" class="tab-content">
-            <div class="glass-panel">
-              <h3 class="panel-title"><i class="fa-solid fa-gear" style="color: var(--gold);"></i> Impostazioni Classe</h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Gestisci le funzionalità attive per le tue classi.</p>
-              <form id="form-teacher-settings" onsubmit="return false;">
-                <div class="form-group" style="margin-bottom: 15px;">
-                  <label for="teacher-settings-class-select">Seleziona Classe</label>
-                  <select id="teacher-settings-class-select" class="form-control" onchange="EroiApp.onTeacherClassSelectSettings()">
-                     <!-- Popolato da JS -->
-                  </select>
-                </div>
-                <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
-                  <input type="checkbox" id="teacher-setting-secondterm" style="width: 20px; height: 20px; cursor: pointer;">
-                  <label for="teacher-setting-secondterm" style="margin-bottom: 0; cursor: pointer; font-weight: bold; color: var(--gold);">
-                    Attiva 2° Quadrimestre (Aiutanti & Ciclo Carolingio/Bretone)
-                  </label>
-                </div>
-                <button type="submit" class="btn" style="margin-top: 15px;" id="btn-save-teacher-settings">Salva Impostazioni Classe</button>
-              </form>
-            </div>
-          </div>
       </section>
 
       <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
@@ -1405,111 +1334,129 @@
         <div class="glass-panel">
           <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Admin Principale</h2>
           
-          <div class="tabs-header" style="margin-bottom: 20px;">
-            <button class="tab-btn active" onclick="EroiApp.switchAdminTab('sistema')">Sistema & DB</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti & Iscritti</button>
-          </div>
+          <div class="dashboard-grid">
+            
+            <!-- Impostazioni Globali -->
+            <div class="glass-panel" style="margin-bottom: 0;">
+              <h3 class="panel-title">Configurazioni di Campagna</h3>
+              <form id="form-admin-settings" onsubmit="return false;" style="margin-top: 15px;">
+                <div class="form-group">
+                  <label for="admin-setting-appname">Nome Piattaforma</label>
+                  <input type="text" id="admin-setting-appname" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="admin-setting-copyright">Copyright Footer</label>
+                  <input type="text" id="admin-setting-copyright" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="admin-setting-contacts">Contatti Globali</label>
+                  <input type="text" id="admin-setting-contacts" class="form-control" required>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
+                  <input type="checkbox" id="admin-setting-secondterm" style="width: 20px; height: 20px; cursor: pointer;">
+                  <label for="admin-setting-secondterm" style="margin-bottom: 0; cursor: pointer; font-weight: bold; color: var(--gold);">
+                    Attiva 2° Quadrimestre (Aiutanti & Ciclo Carolingio/Bretone)
+                  </label>
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;" id="btn-save-admin-settings">Applica Modifiche Globali</button>
+              </form>
+            </div>
 
-          <!-- TAB SISTEMA -->
-          <div id="a-tab-sistema" class="tab-content active">
-            <div class="dashboard-grid">
-              <!-- Manutenzione Database & Backup -->
-              <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <h3 class="panel-title">Backup, Ripristino & Esportazione</h3>
-                  <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
-                    Salva l'intero stato del gioco in locale come file JSON oppure esporta le anagrafiche dei tuoi studenti in foglio di calcolo.
-                  </p>
-                  <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <button class="btn btn-secondary" onclick="EroiApp.triggerBackupExport()">
-                      <i class="fa-solid fa-download"></i> Esporta Database JSON
-                    </button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('import-db-file').click()">
-                      <i class="fa-solid fa-upload"></i> Ripristina Database JSON
-                    </button>
-                    <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
-                    <button class="btn btn-secondary" onclick="EroiApp.triggerCSVExport()">
-                      <i class="fa-solid fa-file-csv"></i> Esporta Studenti CSV
-                    </button>
-                  </div>
-                </div>
-                <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                  <button class="btn text-danger" style="width: 100%; background: transparent; border: 1px solid var(--danger-color);" onclick="EroiApp.archiviaAnnoCorrente()">
-                    <i class="fa-solid fa-box-archive"></i> Esegui Archiviazione Anno
-                  </button>
-                  <button class="btn btn-danger" style="width: 100%;" onclick="EroiApp.triggerDatabaseReset()">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Ripristina Valori Fabbrica
-                  </button>
-                </div>
-              </div>
-              
-              <!-- Richieste Docenti in Attesa -->
-              <div class="glass-panel" style="grid-column: 1 / -1; border: 2px solid var(--gold);">
-                <h3 class="panel-title" style="color: var(--gold);"><i class="fa-solid fa-user-clock"></i> Richieste Docenti in Attesa</h3>
+            <!-- Manutenzione Database & Backup -->
+            <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 class="panel-title">Backup, Ripristino & Esportazione</h3>
                 <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
-                  I docenti elencati qui hanno completato la registrazione ma non possono ancora accedere alle loro dashboard. Approva le loro richieste per attivarli nel gioco.
+                  Salva l'intero stato del gioco in locale come file JSON oppure esporta le anagrafiche dei tuoi studenti in foglio di calcolo.
                 </p>
-                <div class="table-responsive">
-                  <table class="game-table" id="admin-pending-table">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Scuola</th>
-                        <th>Città</th>
-                        <th>Azioni</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <button class="btn btn-secondary" onclick="EroiApp.triggerBackupExport()">
+                    <i class="fa-solid fa-download"></i> Esporta Database JSON
+                  </button>
+                  <button class="btn btn-secondary" onclick="document.getElementById('import-db-file').click()">
+                    <i class="fa-solid fa-upload"></i> Ripristina Database JSON
+                  </button>
+                  <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
+                  <button class="btn btn-secondary" onclick="EroiApp.triggerCSVExport()">
+                    <i class="fa-solid fa-file-csv"></i> Esporta Studenti CSV
+                  </button>
                 </div>
               </div>
-              
-              <!-- Gestione Amministratori e Docenti Secondari -->
-              <div class="glass-panel" style="grid-column: 1 / -1;">
-                <h3 class="panel-title">Gestione Personale (Docenti e Amministratori Secondari)</h3>
-                <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 20px;">
-                  <div class="form-group" style="margin-bottom: 0;">
-                    <label for="staff-name">Nome Completo</label>
-                    <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0;">
-                    <label for="staff-email">Indirizzo Email</label>
-                    <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0;">
-                    <label for="staff-password">Password Temporanea</label>
-                    <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0;">
-                    <label for="staff-role">Ruolo Autorizzato</label>
-                    <select id="staff-role" class="form-control" required>
-                      <option value="teacher">Docente</option>
-                      <option value="admin">Amministratore Secondario</option>
-                    </select>
-                  </div>
-                  <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
-                </form>
-
-                <div class="table-responsive">
-                  <table class="game-table" id="admin-staff-table">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Ruolo</th>
-                        <th>Azione</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
+              <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
+                <button class="btn btn-danger" style="width: 100%;" onclick="EroiApp.triggerDatabaseReset()">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Ripristina Valori Fabbrica
+                </button>
               </div>
             </div>
+            
+            <!-- Gestione Amministratori e Docenti Secondari -->
+            <div class="glass-panel" style="grid-column: 1 / -1;">
+              <h3 class="panel-title">Gestione Personale (Docenti e Amministratori Secondari)</h3>
+              <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="staff-name">Nome Completo</label>
+                  <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="staff-email">Indirizzo Email</label>
+                  <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="staff-password">Password Temporanea</label>
+                  <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="staff-role">Ruolo Autorizzato</label>
+                  <select id="staff-role" class="form-control" required>
+                    <option value="teacher">Docente</option>
+                    <option value="admin">Amministratore Secondario</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
+              </form>
+
+              <div class="table-responsive">
+                <table class="game-table" id="admin-staff-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Email</th>
+                      <th>Ruolo</th>
+                      <th>Azione</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Modifica Documenti Legali -->
+            <div class="glass-panel" style="grid-column: 1 / -1;">
+              <h3 class="panel-title">Modifica Documentazione Legale</h3>
+              <form id="form-legal-docs" onsubmit="return false;">
+                <div class="form-group">
+                  <label for="legal-doc-privacy">Informativa sulla Privacy</label>
+                  <textarea id="legal-doc-privacy" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="legal-doc-terms">Termini e Condizioni</label>
+                  <textarea id="legal-doc-terms" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="legal-doc-cookies">Informativa sui Cookie</label>
+                  <textarea id="legal-doc-cookies" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="legal-doc-gdpr">GDPR</label>
+                  <textarea id="legal-doc-gdpr" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn" id="btn-save-legal-docs">Aggiorna Testi Legali</button>
+              </form>
+            </div>
+
           </div>
-
-
-          </section>
+        </div>
+      </section>
 
       <!-- REGOLAMENTO POPUP VIEW -->
       <section id="view-regolamento" class="view">
