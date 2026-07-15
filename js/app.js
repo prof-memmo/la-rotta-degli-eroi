@@ -783,11 +783,20 @@ window.finalizzaDocente = async function() {
             </button>
           </div>
           
-          <!-- Link dashboard visibile solo su mobile -->
-          <div class="dropdown-dashboard-link">
-            <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${(user.role === 'docente' || user.role === 'teacher') ? 'view-teacher-dashboard' : user.role === 'admin' ? 'view-admin-dashboard' : 'view-student-dashboard'}')">
-              <i class="fa-solid fa-gauge"></i> Dashboard
-            </button>
+          <!-- Link dashboard visibile solo su mobile / Profilo -->
+          <div class="dropdown-dashboard-link" style="display: flex; flex-direction: column; gap: 8px;">
+            ${user.role === 'admin' ? `
+              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('view-teacher-dashboard')">
+                <i class="fa-solid fa-chalkboard-user"></i> Pannello Docente
+              </button>
+              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('view-admin-dashboard')">
+                <i class="fa-solid fa-screwdriver-wrench"></i> Pannello Admin
+              </button>
+            ` : `
+              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${(user.role === 'docente' || user.role === 'teacher') ? 'view-teacher-dashboard' : 'view-student-dashboard'}')">
+                <i class="fa-solid fa-gauge"></i> Dashboard
+              </button>
+            `}
           </div>
           
           <div class="dropdown-actions">

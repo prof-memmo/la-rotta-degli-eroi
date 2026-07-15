@@ -72,7 +72,10 @@ const Auth = {
 
             if (doc.exists) {
                 Auth._user = doc.data();
-                if (Auth._user.status === 'archived' && Auth._user.role === 'studente') {
+                
+                if (Auth._user.role === 'admin') {
+                    window.EroiApp.navigateTo('view-teacher-dashboard');
+                } else if (Auth._user.status === 'archived' && Auth._user.role === 'studente') {
                     const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
                     if (newClassCode) {
                         // Assuming window.EroiDB.getClassByCode is available or we just accept it and let the app handle it
