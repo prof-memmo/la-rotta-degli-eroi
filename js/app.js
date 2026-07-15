@@ -756,6 +756,20 @@ window.finalizzaDocente = async function() {
           
           ${timerHtml}
           
+          <div style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 0.65rem; color: #ccc; font-weight: bold;"><i class="fa-solid fa-music"></i> SOTTOFONDO</span>
+                  <a href="https://freetouse.com/music" target="_blank" style="font-size: 0.5rem; color: var(--gold); text-decoration: none;">freetouse.com/music</a>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 5px 8px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.3);">
+                  <div id="music-track-title" style="font-size: 0.65rem; color: white; white-space: nowrap; max-width: 90px; overflow: hidden; text-overflow: ellipsis;">Traccia...</div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                      <button onclick="MusicPlayer.prevTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-backward-step"></i></button>
+                      <button id="music-play-btn" onclick="MusicPlayer.togglePlay()" style="background: var(--gold); border: none; color: #1a1a2e; cursor: pointer; font-size: 0.7rem; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-play"></i></button>
+                      <button onclick="MusicPlayer.nextTrack()" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-forward-step"></i></button>
+                  </div>
+              </div>
+          </div>
 
           <div class="dropdown-legal-btns">
             <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('privacy')">
