@@ -1,0 +1,193 @@
+{
+  "total_count": 3,
+  "jobs": [
+    {
+      "id": 85256680326,
+      "run_id": 28753563783,
+      "workflow_name": "pages build and deployment",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/actions/runs/28753563783",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOS6R8gM8AAAAT2bGzhg",
+      "head_sha": "3a5aa31e17fef87cef71ef8812844dc235e8561d",
+      "url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/actions/jobs/85256680326",
+      "html_url": "https://github.com/prof-memmo/la-rotta-degli-eroi/actions/runs/28753563783/job/85256680326",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-07-05T20:16:49Z",
+      "started_at": "2026-07-05T20:16:51Z",
+      "completed_at": "2026-07-05T20:17:26Z",
+      "name": "build",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-07-05T20:16:51Z",
+          "completed_at": "2026-07-05T20:16:53Z"
+        },
+        {
+          "name": "Pull ghcr.io/actions/jekyll-build-pages:v1.0.13",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-07-05T20:16:53Z",
+          "completed_at": "2026-07-05T20:17:04Z"
+        },
+        {
+          "name": "Checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-07-05T20:17:04Z",
+          "completed_at": "2026-07-05T20:17:12Z"
+        },
+        {
+          "name": "Build with Jekyll",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-07-05T20:17:12Z",
+          "completed_at": "2026-07-05T20:17:15Z"
+        },
+        {
+          "name": "Upload artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-07-05T20:17:15Z",
+          "completed_at": "2026-07-05T20:17:25Z"
+        },
+        {
+          "name": "Post Checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-07-05T20:17:25Z",
+          "completed_at": "2026-07-05T20:17:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-07-05T20:17:25Z",
+          "completed_at": "2026-07-05T20:17:25Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/check-runs/85256680326",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000001703,
+      "runner_name": "GitHub Actions 1000001703",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 85256722505,
+      "run_id": 28753563783,
+      "workflow_name": "pages build and deployment",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/actions/runs/28753563783",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOS6R8gM8AAAAT2bJYSQ",
+      "head_sha": "3a5aa31e17fef87cef71ef8812844dc235e8561d",
+      "url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/actions/jobs/85256722505",
+      "html_url": "https://github.com/prof-memmo/la-rotta-degli-eroi/actions/runs/28753563783/job/85256722505",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-07-05T20:17:26Z",
+      "started_at": "2026-07-05T20:17:30Z",
+      "completed_at": "2026-07-05T20:17:51Z",
+      "name": "deploy",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-07-05T20:17:31Z",
+          "completed_at": "2026-07-05T20:17:32Z"
+        },
+        {
+          "name": "Deploy to GitHub Pages",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 2,
+          "started_at": "2026-07-05T20:17:32Z",
+          "completed_at": "2026-07-05T20:17:49Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-07-05T20:17:49Z",
+          "completed_at": "2026-07-05T20:17:49Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/check-runs/85256722505",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000001705,
+      "runner_name": "GitHub Actions 1000001705",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 85256722510,
+      "run_id": 28753563783,
+      "workflow_name": "pages build and deployment",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/actions/runs/28753563783",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOS6R8gM8AAAAT2bJYTg",
+      "head_sha": "3a5aa31e17fef87cef71ef8812844dc235e8561d",
+      "url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/actions/jobs/85256722510",
+      "html_url": "https://github.com/prof-memmo/la-rotta-degli-eroi/actions/runs/28753563783/job/85256722510",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-07-05T20:17:26Z",
+      "started_at": "2026-07-05T20:17:28Z",
+      "completed_at": "2026-07-05T20:17:31Z",
+      "name": "report-build-status",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-07-05T20:17:29Z",
+          "completed_at": "2026-07-05T20:17:29Z"
+        },
+        {
+          "name": "Report Build Status",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-07-05T20:17:29Z",
+          "completed_at": "2026-07-05T20:17:30Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-07-05T20:17:30Z",
+          "completed_at": "2026-07-05T20:17:30Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/prof-memmo/la-rotta-degli-eroi/check-runs/85256722510",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000001704,
+      "runner_name": "GitHub Actions 1000001704",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

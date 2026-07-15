@@ -107,11 +107,12 @@
           <span class="user-badge-name" id="user-display-name">Nome Utente</span>
           <span class="user-badge-role" id="user-display-role">Ruolo</span>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center;">
-          <button id="btn-toggle-audio" title="Disattiva Audio" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 6px; font-size: 1.05rem; transition: var(--transition-smooth);">
-            <i class="fa-solid fa-volume-high"></i>
-          </button>
-          <button class="btn-logout-small" id="btn-logout" title="Disconnettiti">
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 5px;">
+          <button onclick="if(window.MusicPlayer) window.MusicPlayer.prevTrack()" title="Traccia Precedente" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 0.9rem;"><i class="fa-solid fa-backward-step"></i></button>
+          <button id="music-play-btn-sidebar" onclick="if(window.MusicPlayer) window.MusicPlayer.togglePlay()" title="Play/Pausa" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 1.05rem;"><i class="fa-solid fa-play"></i></button>
+          <button onclick="if(window.MusicPlayer) window.MusicPlayer.nextTrack()" title="Traccia Successiva" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 0.9rem;"><i class="fa-solid fa-forward-step"></i></button>
+          <button id="btn-toggle-audio" title="Attiva/Disattiva Effetti" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 1.05rem; transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-volume-high"></i></button>
+          <button class="btn-logout-small" id="btn-logout" title="Disconnettiti" style="margin-left: 5px;">
             <i class="fa-solid fa-power-off"></i>
           </button>
         </div>

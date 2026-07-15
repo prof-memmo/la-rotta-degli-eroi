@@ -94,14 +94,19 @@ const MusicPlayer = {
     updateUI: function() {
         const titleEl = document.getElementById('music-track-title');
         const playBtnEl = document.getElementById('music-play-btn');
+        const playBtnSidebarEl = document.getElementById('music-play-btn-sidebar');
         if (titleEl) {
             let title = this.tracks[this.currentTrackIndex].replace(" (freetouse.com).mp3", "");
             titleEl.textContent = title;
         }
+        const iconHtml = this.isPlaying
+            ? '<i class="fa-solid fa-pause"></i>'
+            : '<i class="fa-solid fa-play"></i>';
         if (playBtnEl) {
-            playBtnEl.innerHTML = this.isPlaying
-                ? '<i class="fa-solid fa-pause"></i>'
-                : '<i class="fa-solid fa-play"></i>';
+            playBtnEl.innerHTML = iconHtml;
+        }
+        if (playBtnSidebarEl) {
+            playBtnSidebarEl.innerHTML = iconHtml;
         }
     }
 };

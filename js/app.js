@@ -444,7 +444,7 @@ window.finalizzaDocente = async function() {
       if (!user) return false;
       
       if (user.role === 'admin') return true;
-      if (user.role === 'docente') return true; // Un docente ha la vista globale sbloccata
+      if ((user.role === 'docente' || user.role === 'teacher')) return true; // Un docente ha la vista globale sbloccata
       
       if (user.classId) {
         const c = window.EroiDB.getClasses()[user.classId];
@@ -596,11 +596,11 @@ window.finalizzaDocente = async function() {
       // Se autenticato e chiede login, reindirizza
       if (publicViews.includes(viewId)) {
          // Lascia passare se è in onboarding
-         if (!user.setupComplete || (user.role === 'docente' && user.approved === false)) {
+         if (!user.setupComplete || ((user.role === 'docente' || user.role === 'teacher') && user.approved === false)) {
              // pass
          } else {
-            if (user.role === 'studente' || user.role === 'forestiero') viewId = 'view-student-dashboard';
-            else if (user.role === 'docente') viewId = 'view-teacher-dashboard';
+            if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') viewId = 'view-student-dashboard';
+            else if ((user.role === 'docente' || user.role === 'teacher')) viewId = 'view-teacher-dashboard';
             else if (user.role === 'admin') viewId = 'view-admin-dashboard';
          }
       }
@@ -615,10 +615,10 @@ window.finalizzaDocente = async function() {
         document.getElementById('main-layout').style.marginLeft = '0';
       } else {
         // Controllo permessi ruoli per le view principali
-        if ((user.role === 'studente' || user.role === 'forestiero') && !studentViews.includes(viewId)) {
+        if (((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') && !studentViews.includes(viewId)) {
           this.showToast("Accesso negato.", "danger");
           viewId = 'view-student-dashboard';
-        } else if (user.role === 'docente' && !teacherViews.includes(viewId) && viewId !== 'view-student-dashboard') {
+        } else if ((user.role === 'docente' || user.role === 'teacher') && !teacherViews.includes(viewId) && viewId !== 'view-student-dashboard') {
           // I docenti non possono accedere alla dashboard amministrativa globale o alle viste di gioco studente
           if (adminViews.includes(viewId) && viewId !== 'view-teacher-dashboard' && viewId !== 'view-guides' && viewId !== 'view-regolamento') {
             this.showToast("Accesso negato: Sezione riservata all'Amministratore.", "danger");
@@ -635,7 +635,7 @@ window.finalizzaDocente = async function() {
       this.renderViewData(viewId, user);
       
       // Video Intro per studenti (una volta per sessione di login)
-      if (viewId === 'view-student-dashboard' && user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed')) {
+      if (viewId === 'view-student-dashboard' && (user.role === 'studente' || user.role === 'student') && !sessionStorage.getItem('introVideoPlayed')) {
           sessionStorage.setItem('introVideoPlayed', 'true');
           this.playIntroVideo();
       }
@@ -696,7 +696,7 @@ window.finalizzaDocente = async function() {
         let levelText = '';
         let dropdownHtml = '';
         
-        if (user.role === 'studente' || user.role === 'forestiero') {
+        if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
           const _u_profile = window.EroiDB.getUser(user.email);
       const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
       const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(user.email) : window.EroiDB.getStudentProfile(user.email);
@@ -745,7 +745,7 @@ window.finalizzaDocente = async function() {
         }
         
         // Aggiungi azioni comuni in fondo al dropdown (con timer per studente, privacy/contatti per tutti)
-        const isStudente = user.role === 'studente' || user.role === 'forestiero';
+        const isStudente = (user.role === 'studente' || user.role === 'student') || user.role === 'forestiero';
         const timerHtml = isStudente ? `
           <div id="dropdown-timer-container" style="display: none; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; margin-bottom: 10px; text-align: center;">
             <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;"><i class="fa-regular fa-clock"></i> TEMPO SESSIONE</div>
@@ -771,7 +771,7 @@ window.finalizzaDocente = async function() {
           
           <!-- Link dashboard visibile solo su mobile -->
           <div class="dropdown-dashboard-link">
-            <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${user.role === 'docente' ? 'view-teacher-dashboard' : user.role === 'admin' ? 'view-admin-dashboard' : 'view-student-dashboard'}')">
+            <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${(user.role === 'docente' || user.role === 'teacher') ? 'view-teacher-dashboard' : user.role === 'admin' ? 'view-admin-dashboard' : 'view-student-dashboard'}')">
               <i class="fa-solid fa-gauge"></i> Dashboard
             </button>
           </div>
@@ -807,7 +807,7 @@ window.finalizzaDocente = async function() {
           userInfoClick.addEventListener('click', (e) => {
             e.stopPropagation();
             let dashboardView = 'view-student-dashboard';
-            if (user.role === 'docente') dashboardView = 'view-teacher-dashboard';
+            if ((user.role === 'docente' || user.role === 'teacher')) dashboardView = 'view-teacher-dashboard';
             else if (user.role === 'admin') dashboardView = 'view-admin-dashboard';
             this.navigateTo(dashboardView);
           });
@@ -846,7 +846,7 @@ window.finalizzaDocente = async function() {
           { view: 'disabled', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'disabled', label: 'Tempio', icon: 'fa-book-open' }
         ];
-      } else if (user.role === 'studente' || user.role === 'forestiero') {
+      } else if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
         links = [
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
@@ -855,7 +855,7 @@ window.finalizzaDocente = async function() {
           { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
         ];
-      } else if (user.role === 'docente') {
+      } else if ((user.role === 'docente' || user.role === 'teacher')) {
         links = [
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
@@ -941,8 +941,8 @@ window.finalizzaDocente = async function() {
         headerLogo.addEventListener('click', function() {
           const user = Auth.getUser();
           if (user) {
-            if (user.role === 'studente' || user.role === 'forestiero') self.navigateTo('view-student-dashboard');
-            else if (user.role === 'docente') self.navigateTo('view-teacher-dashboard');
+            if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') self.navigateTo('view-student-dashboard');
+            else if ((user.role === 'docente' || user.role === 'teacher')) self.navigateTo('view-teacher-dashboard');
             else if (user.role === 'admin') self.navigateTo('view-admin-dashboard');
           }
         });
@@ -1431,14 +1431,14 @@ window.finalizzaDocente = async function() {
       const user = Auth.getUser();
       if (user) {
         // Handle auto-play on session restoration
-        const needsVideo = user.role === 'studente' && !sessionStorage.getItem('introVideoPlayed');
+        const needsVideo = (user.role === 'studente' || user.role === 'student') && !sessionStorage.getItem('introVideoPlayed');
         if (window.MusicPlayer && !window.MusicPlayer.isPlaying && !needsVideo) {
             // Musica: parte subito dopo login
             window.MusicPlayer.togglePlay();
         }
         
         document.getElementById('user-display-name').textContent = user.name;
-        document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : (user.role === 'docente' ? 'Docente' : (user.role === 'forestiero' ? 'Forestiero' : 'Studente'));
+        document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : ((user.role === 'docente' || user.role === 'teacher') ? 'Docente' : (user.role === 'forestiero' ? 'Forestiero' : 'Studente'));
         
         // Controlla se l'onboarding è completo
         if (!user.setupComplete) {
@@ -1446,24 +1446,24 @@ window.finalizzaDocente = async function() {
                 this.navigateTo('view-onboarding');
                 return;
             }
-            if (user.role === 'docente') {
+            if ((user.role === 'docente' || user.role === 'teacher')) {
                 this.navigateTo('view-iscrizione');
                 return;
             }
-            if (user.role === 'studente') {
+            if ((user.role === 'studente' || user.role === 'student')) {
                 this.navigateTo('view-selezione-profilo');
                 return;
             }
         }
         
         // Docente in attesa di approvazione
-        if (user.role === 'docente' && user.setupComplete && user.approved === false) {
+        if ((user.role === 'docente' || user.role === 'teacher') && user.setupComplete && user.approved === false) {
             this.navigateTo('view-pending-docente');
             return;
         }
 
         // Inizializza profilo Player Docente/Admin se non esiste
-        if (user.role === 'docente' || user.role === 'admin') {
+        if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') {
             let tProfile = window.EroiDB.getTeacherPlayerProfile(user.email);
             if (!tProfile) {
                 tProfile = {
@@ -1489,8 +1489,8 @@ window.finalizzaDocente = async function() {
         const currentView = this.getCurrentViewId();
         const authViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
         if (authViews.includes(currentView)) {
-          if (user.role === 'studente' || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
-          else if (user.role === 'docente') this.navigateTo('view-teacher-dashboard');
+          if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
+          else if ((user.role === 'docente' || user.role === 'teacher')) this.navigateTo('view-teacher-dashboard');
           else if (user.role === 'admin') this.navigateTo('view-admin-dashboard');
         } else {
           this.navigateTo(currentView);
@@ -4952,7 +4952,7 @@ window.finalizzaDocente = async function() {
       `).join('');
 
       // Mostra sezione docenti solo a docenti e amministratori
-      if (user.role === 'docente' || user.role === 'admin') {
+      if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') {
         teachSection.style.display = 'block';
         teachBox.innerHTML = rules.docente.map(r => `
           <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02); border-left:3px solid var(--gold); border-radius:4px;">

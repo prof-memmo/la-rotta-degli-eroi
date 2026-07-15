@@ -10,7 +10,7 @@ const SessionTimer = {
     init: async function() {
         if (!window.Auth || !window.Auth.getUser) return;
         const user = window.Auth.getUser();
-        if (!user || user.role !== 'studente') return;
+        if (!user || (user.role !== 'studente' && user.role !== 'student')) return;
 
         await this.loadSessionData(user);
         this.startEngine(user);
