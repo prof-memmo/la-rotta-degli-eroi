@@ -1,0 +1,744 @@
+<section id='view-teacher-dashboard' class='view'>
+  <div id='' class='glass-panel'>
+    <h2 id='' class='section-title'>
+      <i id='' class='fa-solid fa-graduation-cap'>
+      </i>
+    </h2>
+    <div id='' class='tabs-header'>
+      <button id='' class='tab-btn active'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+      <button id='' class='tab-btn'>
+      </button>
+    </div>
+    <div id='t-tab-panoramica' class='tab-content active'>
+      <div id='' class=''>
+        <div id='card-stats-teachers' class='glass-panel stat-card-interactive'>
+          <span id='' class=''>
+          </span>
+          <h4 id='teacher-stats-teachers' class=''>
+          </h4>
+        </div>
+        <div id='card-stats-students' class='glass-panel stat-card-interactive active'>
+          <span id='' class=''>
+          </span>
+          <h4 id='teacher-stats-students' class=''>
+          </h4>
+        </div>
+        <div id='card-stats-classes' class='glass-panel stat-card-interactive'>
+          <span id='' class=''>
+          </span>
+          <h4 id='teacher-stats-classes' class=''>
+          </h4>
+        </div>
+        <div id='card-stats-schools' class='glass-panel stat-card-interactive'>
+          <span id='' class=''>
+          </span>
+          <h4 id='teacher-stats-schools' class=''>
+          </h4>
+        </div>
+        <div id='card-stats-forestieri' class='glass-panel stat-card-interactive'>
+          <span id='' class=''>
+          </span>
+          <h4 id='teacher-stats-forestieri' class=''>
+          </h4>
+        </div>
+      </div>
+      <div id='panoramica-panels-container' class=''>
+        <div id='panel-stats-teachers' class='panoramica-sub-panel'>
+          <div id='' class='glass-panel'>
+            <h3 id='' class='panel-title'>
+              <i id='' class='fa-solid fa-user-tie'>
+              </i>
+            </h3>
+            <p id='' class=''>
+            </p>
+            <div id='' class='table-responsive'>
+              <table id='teacher-docenti-table' class='game-table'>
+                <thead id='' class=''>
+                  <tr id='' class=''>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id='' class=''>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id='panel-stats-classes' class='panoramica-sub-panel'>
+          <div id='' class=''>
+            <div id='' class='glass-panel'>
+              <h3 id='' class='panel-title'>
+              </h3>
+              <form id='form-create-class' class=''>
+                <div id='' class='form-group'>
+                  <label id='' class=''>
+                  </label>
+                </div>
+                <div id='' class='form-group'>
+                  <label id='' class=''>
+                  </label>
+                </div>
+                <div id='' class='form-group'>
+                  <label id='' class=''>
+                  </label>
+                </div>
+                <div id='' class='form-group'>
+                  <label id='' class=''>
+                  </label>
+                </div>
+                <button id='btn-save-new-class' class='btn'>
+                </button>
+              </form>
+              <div id='' class=''>
+                <h4 id='' class=''>
+                </h4>
+                <p id='' class=''>
+                </p>
+                <form id='form-join-collaborator' class=''>
+                  <button id='btn-join-collaborator' class='btn'>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id='' class='glass-panel'>
+              <h3 id='' class='panel-title'>
+              </h3>
+              <div id='' class='table-responsive'>
+                <table id='teacher-classes-table' class='game-table'>
+                  <thead id='' class=''>
+                    <tr id='' class=''>
+                      <th id='' class=''>
+                      </th>
+                      <th id='' class=''>
+                      </th>
+                      <th id='' class=''>
+                      </th>
+                      <th id='' class=''>
+                      </th>
+                      <th id='' class=''>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id='' class=''>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='panel-stats-schools' class='panoramica-sub-panel'>
+          <div id='' class='glass-panel'>
+            <h3 id='' class='panel-title'>
+              <i id='' class='fa-solid fa-school'>
+              </i>
+            </h3>
+            <p id='' class=''>
+            </p>
+            <div id='' class='table-responsive'>
+              <table id='teacher-schools-table' class='game-table'>
+                <thead id='' class=''>
+                  <tr id='' class=''>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id='' class=''>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id='panel-stats-students' class='panoramica-sub-panel'>
+          <div id='' class='glass-panel'>
+            <h3 id='' class='panel-title'>
+            </h3>
+            <form id='form-create-student' class=''>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+              </div>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+              </div>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+                <select id='new-student-class' class='form-control'>
+                </select>
+              </div>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+                <select id='new-student-avatar' class='form-control'>
+                  <option id='' class=''>
+                  </option>
+                  <option id='' class=''>
+                  </option>
+                  <option id='' class=''>
+                  </option>
+                  <option id='' class=''>
+                  </option>
+                  <option id='' class=''>
+                  </option>
+                </select>
+              </div>
+              <button id='btn-save-new-student' class='btn'>
+              </button>
+            </form>
+          </div>
+          <div id='teacher-students-section' class='glass-panel'>
+            <div id='' class=''>
+              <h3 id='students-panel-title-text' class='panel-title'>
+              </h3>
+              <div id='' class=''>
+                <select id='filter-class-teacher' class='form-control'>
+                  <option id='' class=''>
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div id='' class='table-responsive'>
+              <table id='teacher-students-table' class='game-table'>
+                <thead id='' class=''>
+                  <tr id='' class=''>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                    <th id='' class=''>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id='' class=''>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-missioni' class='tab-content'>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <p id='' class=''>
+        </p>
+        <form id='form-create-mission' class=''>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='new-mission-category' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='new-mission-area' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='new-mission-gametype' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <textarea id='new-mission-desc' class='form-control'>
+            </textarea>
+          </div>
+          <div id='' class='glass-panel'>
+            <h4 id='new-mission-editor-header' class=''>
+            </h4>
+            <div id='' class='form-group'>
+              <label id='new-mission-q-label' class=''>
+              </label>
+              <p id='new-mission-editor-hint' class=''>
+              </p>
+            </div>
+            <div id='new-mission-options-container' class=''>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+              </div>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+              </div>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+              </div>
+              <div id='' class='form-group'>
+                <label id='' class=''>
+                </label>
+              </div>
+            </div>
+          </div>
+          <button id='btn-save-mission' class='btn'>
+          </button>
+        </form>
+      </div>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <div id='' class='table-responsive'>
+          <table id='teacher-missions-table' class='game-table'>
+            <thead id='' class=''>
+              <tr id='' class=''>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+              </tr>
+            </thead>
+            <tbody id='' class=''>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-shop' class='tab-content'>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <form id='form-create-shop-item' class=''>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='new-item-rarity' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='new-item-type' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <button id='btn-save-shop-item' class='btn'>
+          </button>
+        </form>
+      </div>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <div id='' class='table-responsive'>
+          <table id='teacher-shop-table' class='game-table'>
+            <thead id='' class=''>
+              <tr id='' class=''>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+              </tr>
+            </thead>
+            <tbody id='' class=''>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+          <i id='' class='fa-solid fa-chart-bar'>
+          </i>
+        </h3>
+        <div id='shop-analytics-info' class=''>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-aiutanti' class='tab-content'>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <p id='' class=''>
+        </p>
+        <div id='' class='table-responsive'>
+          <table id='teacher-helpers-table' class='game-table'>
+            <thead id='' class=''>
+              <tr id='' class=''>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+              </tr>
+            </thead>
+            <tbody id='' class=''>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <form id='form-create-artifact' class=''>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='new-art-rarity' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <textarea id='new-art-desc' class='form-control'>
+            </textarea>
+          </div>
+          <button id='btn-save-artifact' class='btn'>
+          </button>
+        </form>
+        <div id='' class='table-responsive'>
+          <table id='teacher-artifacts-table' class='game-table'>
+            <thead id='' class=''>
+              <tr id='' class=''>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+              </tr>
+            </thead>
+            <tbody id='' class=''>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-guide' class='tab-content'>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <form id='form-create-guide' class=''>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <select id='guide-category' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+          </div>
+          <div id='' class='form-group'>
+            <label id='' class=''>
+            </label>
+            <textarea id='guide-content' class='form-control'>
+            </textarea>
+          </div>
+          <button id='btn-save-guide' class='btn'>
+          </button>
+        </form>
+        <div id='' class='table-responsive'>
+          <table id='teacher-guides-table' class='game-table'>
+            <thead id='' class=''>
+              <tr id='' class=''>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+              </tr>
+            </thead>
+            <tbody id='' class=''>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-registro' class='tab-content'>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+        </h3>
+        <div id='' class='table-responsive'>
+          <table id='teacher-logs-table' class='game-table'>
+            <thead id='' class=''>
+              <tr id='' class=''>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+                <th id='' class=''>
+                </th>
+              </tr>
+            </thead>
+            <tbody id='' class=''>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-tornei' class='tab-content'>
+      <div id='' class=''>
+        <div id='' class='glass-panel'>
+          <h3 id='' class='panel-title'>
+            <i id='' class='fa-solid fa-trophy'>
+            </i>
+          </h3>
+          <form id='form-create-tournament' class=''>
+            <div id='' class='form-group'>
+              <label id='' class=''>
+              </label>
+            </div>
+            <div id='' class='form-group'>
+              <label id='' class=''>
+              </label>
+              <div id='tournament-classes-checkboxes' class=''>
+              </div>
+            </div>
+            <button id='btn-save-tournament' class='btn'>
+            </button>
+          </form>
+        </div>
+        <div id='' class='glass-panel'>
+          <h3 id='' class='panel-title'>
+            <i id='' class='fa-solid fa-ranking-star'>
+            </i>
+          </h3>
+          <div id='tournaments-list-container' class=''>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id='t-tab-diario' class='tab-content'>
+      <div id='' class='glass-panel'>
+        <h3 id='' class='panel-title'>
+          <i id='' class='fa-solid fa-toggle-on'>
+          </i>
+        </h3>
+        <p id='' class=''>
+        </p>
+        <div id='teacher-diario-toggles' class=''>
+        </div>
+      </div>
+      <div id='' class='glass-panel'>
+        <div id='' class=''>
+          <h3 id='' class='panel-title'>
+            <i id='' class='fa-solid fa-graduation-cap'>
+            </i>
+          </h3>
+          <div id='' class=''>
+            <select id='teacher-diario-filter-status' class='form-control'>
+              <option id='' class=''>
+              </option>
+              <option id='' class=''>
+              </option>
+            </select>
+            <select id='teacher-diario-filter-class' class='form-control'>
+              <option id='' class=''>
+              </option>
+            </select>
+          </div>
+        </div>
+        <div id='teacher-diaries-list' class=''>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

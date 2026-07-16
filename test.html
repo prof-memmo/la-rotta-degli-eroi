@@ -107,12 +107,11 @@
           <span class="user-badge-name" id="user-display-name">Nome Utente</span>
           <span class="user-badge-role" id="user-display-role">Ruolo</span>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 5px;">
-          <button onclick="if(window.MusicPlayer) window.MusicPlayer.prevTrack()" title="Traccia Precedente" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 0.9rem;"><i class="fa-solid fa-backward-step"></i></button>
-          <button id="music-play-btn-sidebar" onclick="if(window.MusicPlayer) window.MusicPlayer.togglePlay()" title="Play/Pausa" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 1.05rem;"><i class="fa-solid fa-play"></i></button>
-          <button onclick="if(window.MusicPlayer) window.MusicPlayer.nextTrack()" title="Traccia Successiva" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 0.9rem;"><i class="fa-solid fa-forward-step"></i></button>
-          <button id="btn-toggle-audio" title="Attiva/Disattiva Effetti" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 1.05rem; transition: var(--transition-smooth); display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-volume-high"></i></button>
-          <button class="btn-logout-small" id="btn-logout" title="Disconnettiti" style="margin-left: 5px;">
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button id="btn-toggle-audio" title="Disattiva Audio" style="background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 6px; font-size: 1.05rem; transition: var(--transition-smooth);">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <button class="btn-logout-small" id="btn-logout" title="Disconnettiti">
             <i class="fa-solid fa-power-off"></i>
           </button>
         </div>
@@ -733,6 +732,7 @@
           
           <div class="tabs-header">
             <button class="tab-btn active" onclick="EroiApp.switchTeacherTab('panoramica')">Panoramica</button>
+            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('nodi')">Gestione Nodi</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('missioni')">Missioni & Quiz</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('shop')">Shop & Economia</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('aiutanti')">Aiutanti & Artefatti</button>
@@ -741,6 +741,19 @@
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('tornei')">Tornei Interni</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('diario')">Valutazione Diari</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('impostazioni')"><i class="fa-solid fa-gear"></i> Impostazioni</button>
+          </div>
+
+          <!-- TAB GESTIONE NODI -->
+          <div id="t-tab-nodi" class="tab-content">
+            <h3 class="panel-title"><i class="fa-solid fa-map-location-dot" style="color: var(--gold);"></i> Attivazione Nodi Mappa</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">Sblocca o blocca le tappe della Mappa per una specifica classe. Tutti gli studenti di quella classe riceveranno l'aggiornamento.</p>
+            <div class="form-group-contact">
+                <label>Seleziona Classe</label>
+                <select id="teacher-nodi-class-select" class="input-field" onchange="window.EroiApp.renderTeacherMapNodes()"></select>
+            </div>
+            <div id="teacher-nodi-list" class="dashboard-grid" style="margin-top: 20px;">
+                <!-- Popolato da JS -->
+            </div>
           </div>
 
           <!-- TAB PANORAMICA -->
@@ -832,8 +845,7 @@
 
                   <div class="glass-panel">
                     <h3 class="panel-title">Classi Attive</h3>
-                  <div style="margin-bottom: 15px;"><input type="text" placeholder="Cerca in questo elenco..." class="form-control" style="width: 100%; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);"></div>
-                  <div class="table-responsive">
+                    <div class="table-responsive">
                       <table class="game-table" id="teacher-classes-table">
                         <thead>
                           <tr>
@@ -935,8 +947,229 @@
             </div>
           </div>
 
+          <!-- TAB SHOP E BILANCIAMENTO -->
+          
+
+          <!-- TAB AIUTANTI E ARTEFATTI -->
+          
+
+          <!-- TAB GUIDE DIDATTICHE -->
+          
+
+          <!-- TAB REGISTRO ATTIVITÀ -->
+          
+
+          <!-- TAB TORNEI -->
+          <div id="t-tab-tornei" class="tab-content">
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
+              <!-- Crea Torneo -->
+              <div class="glass-panel">
+                <h3 class="panel-title"><i class="fa-solid fa-trophy" style="color: var(--gold);"></i> Crea Torneo Interno</h3>
+                <form id="form-create-tournament" onsubmit="return false;" style="margin-top: 15px;">
+                  <div class="form-group">
+                    <label for="new-tournament-name">Nome del Torneo</label>
+                    <input type="text" id="new-tournament-name" class="form-control" placeholder="Es: Torneo di Primavera" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Classi Partecipanti</label>
+                    <div id="tournament-classes-checkboxes" style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                      <!-- Popolato via JS -->
+                    </div>
+                  </div>
+                  <button type="submit" class="btn" style="width: 100%; margin-top: 15px;" id="btn-save-tournament">Crea Torneo</button>
+                </form>
+              </div>
+
+              <!-- Elenco Tornei e Classifica -->
+              <div class="glass-panel">
+                <h3 class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--gold);"></i> Tornei Attivi</h3>
+                <div id="tournaments-list-container" style="margin-top: 15px;">
+                  <!-- Popolato via JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB DIARIO -->
+          <div id="t-tab-diario" class="tab-content">
+            <!-- Pannello Attivazione Nodi Diario -->
+            <div class="glass-panel" style="margin-bottom: 20px;">
+              <h3 class="panel-title" style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-toggle-on" style="color: var(--gold);"></i> Attivazione Nodi del Diario
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
+                Seleziona i nodi per i quali abilitare la scrittura del Diario di Bordo per gli studenti. I nodi disattivati resteranno visibili ma in sola lettura.
+              </p>
+              <div id="teacher-diario-toggles" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+                <!-- Popolato via JS -->
+              </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold-dark); padding-bottom: 8px; margin-bottom: 20px;">
+                <h3 class="panel-title" style="margin: 0; padding: 0;">
+                  <i class="fa-solid fa-graduation-cap" style="color: var(--gold);"></i> Valutazione del Diario di Bordo
+                </h3>
+                <!-- Filtri -->
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <select id="teacher-diario-filter-status" class="form-control" style="width: 180px; padding: 4px 8px; height: 32px;" onchange="EroiApp.renderTeacherDiaries()">
+                    <option value="pending">In attesa di voto</option>
+                    <option value="graded">Già valutati</option>
+                  </select>
+                  <select id="teacher-diario-filter-class" class="form-control" style="width: 140px; padding: 4px 8px; height: 32px;" onchange="EroiApp.renderTeacherDiaries()">
+                    <option value="ALL">Tutte le Classi</option>
+                    <!-- Popolato da JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div id="teacher-diaries-list" style="display: flex; flex-direction: column; gap: 15px; max-height: 600px; overflow-y: auto; padding-right: 5px;">
+                <!-- Popolato da JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      
+          <!-- TAB IMPOSTAZIONI -->
+          <div id="t-tab-impostazioni" class="tab-content">
+            <div class="glass-panel">
+              <h3 class="panel-title"><i class="fa-solid fa-gear" style="color: var(--gold);"></i> Impostazioni Classe</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Gestisci le funzionalità attive per le tue classi.</p>
+              <form id="form-teacher-settings" onsubmit="return false;">
+                <div class="form-group" style="margin-bottom: 15px;">
+                  <label for="teacher-settings-class-select">Seleziona Classe</label>
+                  <select id="teacher-settings-class-select" class="form-control" onchange="EroiApp.onTeacherClassSelectSettings()">
+                     <!-- Popolato da JS -->
+                  </select>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
+                  <input type="checkbox" id="teacher-setting-secondterm" style="width: 20px; height: 20px; cursor: pointer;">
+                  <label for="teacher-setting-secondterm" style="margin-bottom: 0; cursor: pointer; font-weight: bold; color: var(--gold);">
+                    Attiva 2° Quadrimestre (Aiutanti & Ciclo Carolingio/Bretone)
+                  </label>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 15px;" id="btn-save-teacher-settings">Salva Impostazioni Classe</button>
+              </form>
+            </div>
+          </div>
+      </section>
+
+      <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
+      <section id="view-admin-dashboard" class="view">
+        <div class="glass-panel">
+          <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Admin Principale</h2>
+          
+          <div class="tabs-header" style="margin-bottom: 20px;">
+            <button class="tab-btn active" onclick="EroiApp.switchAdminTab('sistema')">Sistema & DB</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('missioni')">Missioni & Quiz</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('shop')">Shop & Economia</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('aiutanti')">Aiutanti & Artefatti</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti & Iscritti</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('guide')">Guide Didattiche</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('registro')">Registro Attività</button>
+          </div>
+
+          <!-- TAB SISTEMA -->
+          <div id="a-tab-sistema" class="tab-content active">
+            <div class="dashboard-grid">
+              <!-- Manutenzione Database & Backup -->
+              <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <h3 class="panel-title">Backup, Ripristino & Esportazione</h3>
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
+                    Salva l'intero stato del gioco in locale come file JSON oppure esporta le anagrafiche dei tuoi studenti in foglio di calcolo.
+                  </p>
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="EroiApp.triggerBackupExport()">
+                      <i class="fa-solid fa-download"></i> Esporta Database JSON
+                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('import-db-file').click()">
+                      <i class="fa-solid fa-upload"></i> Ripristina Database JSON
+                    </button>
+                    <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
+                    <button class="btn btn-secondary" onclick="EroiApp.triggerCSVExport()">
+                      <i class="fa-solid fa-file-csv"></i> Esporta Studenti CSV
+                    </button>
+                  </div>
+                </div>
+                <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                  <button class="btn text-danger" style="width: 100%; background: transparent; border: 1px solid var(--danger-color);" onclick="EroiApp.archiviaAnnoCorrente()">
+                    <i class="fa-solid fa-box-archive"></i> Esegui Archiviazione Anno
+                  </button>
+                  <button class="btn btn-danger" style="width: 100%;" onclick="EroiApp.triggerDatabaseReset()">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Ripristina Valori Fabbrica
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Richieste Docenti in Attesa -->
+              <div class="glass-panel" style="grid-column: 1 / -1; border: 2px solid var(--gold);">
+                <h3 class="panel-title" style="color: var(--gold);"><i class="fa-solid fa-user-clock"></i> Richieste Docenti in Attesa</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
+                  I docenti elencati qui hanno completato la registrazione ma non possono ancora accedere alle loro dashboard. Approva le loro richieste per attivarli nel gioco.
+                </p>
+                <div class="table-responsive">
+                  <table class="game-table" id="admin-pending-table">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Scuola</th>
+                        <th>Città</th>
+                        <th>Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+              
+              <!-- Gestione Amministratori e Docenti Secondari -->
+              <div class="glass-panel" style="grid-column: 1 / -1;">
+                <h3 class="panel-title">Gestione Personale (Docenti e Amministratori Secondari)</h3>
+                <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 20px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-name">Nome Completo</label>
+                    <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-email">Indirizzo Email</label>
+                    <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-password">Password Temporanea</label>
+                    <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-role">Ruolo Autorizzato</label>
+                    <select id="staff-role" class="form-control" required>
+                      <option value="teacher">Docente</option>
+                      <option value="admin">Amministratore Secondario</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
+                </form>
+
+                <div class="table-responsive">
+                  <table class="game-table" id="admin-staff-table">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Ruolo</th>
+                        <th>Azione</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
           <!-- TAB MISSIONI -->
-          <div id="t-tab-missioni" class="tab-content">
+          <div id="a-tab-missioni" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Crea Nuova Missione / Quiz</h3>
               <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 16px;">
@@ -1040,9 +1273,11 @@
               </div>
             </div>
           </div>
+          
 
-          <!-- TAB SHOP E BILANCIAMENTO -->
-          <div id="t-tab-shop" class="tab-content">
+
+          <!-- TAB SHOP -->
+          <div id="a-tab-shop" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Aggiungi/Modifica Oggetti dello Shop</h3>
               <form id="form-create-shop-item" onsubmit="return false;" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
@@ -1112,9 +1347,11 @@
               </div>
             </div>
           </div>
+          
 
-          <!-- TAB AIUTANTI E ARTEFATTI -->
-          <div id="t-tab-aiutanti" class="tab-content">
+
+          <!-- TAB AIUTANTI -->
+          <div id="a-tab-aiutanti" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Personalizza Effetti Aiutanti (Secondo Quadrimestre)</h3>
               <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
@@ -1189,9 +1426,11 @@
               </div>
             </div>
           </div>
+          
 
-          <!-- TAB GUIDE DIDATTICHE -->
-          <div id="t-tab-guide" class="tab-content">
+
+          <!-- TAB GUIDE -->
+          <div id="a-tab-guide" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Crea/Modifica Schede Studio</h3>
               <form id="form-create-guide" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
@@ -1244,9 +1483,11 @@
               </div>
             </div>
           </div>
+          
 
-          <!-- TAB REGISTRO ATTIVITÀ -->
-          <div id="t-tab-registro" class="tab-content">
+
+          <!-- TAB REGISTRO -->
+          <div id="a-tab-registro" class="tab-content">
             <div class="glass-panel">
               <h3 class="panel-title">Storico delle Operazioni (Audit Log)</h3>
               <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
@@ -1263,206 +1504,9 @@
               </div>
             </div>
           </div>
-
-          <!-- TAB TORNEI -->
-          <div id="t-tab-tornei" class="tab-content">
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
-              <!-- Crea Torneo -->
-              <div class="glass-panel">
-                <h3 class="panel-title"><i class="fa-solid fa-trophy" style="color: var(--gold);"></i> Crea Torneo Interno</h3>
-                <form id="form-create-tournament" onsubmit="return false;" style="margin-top: 15px;">
-                  <div class="form-group">
-                    <label for="new-tournament-name">Nome del Torneo</label>
-                    <input type="text" id="new-tournament-name" class="form-control" placeholder="Es: Torneo di Primavera" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Classi Partecipanti</label>
-                    <div id="tournament-classes-checkboxes" style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
-                      <!-- Popolato via JS -->
-                    </div>
-                  </div>
-                  <button type="submit" class="btn" style="width: 100%; margin-top: 15px;" id="btn-save-tournament">Crea Torneo</button>
-                </form>
-              </div>
-
-              <!-- Elenco Tornei e Classifica -->
-              <div class="glass-panel">
-                <h3 class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--gold);"></i> Tornei Attivi</h3>
-                <div id="tournaments-list-container" style="margin-top: 15px;">
-                  <!-- Popolato via JS -->
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB DIARIO -->
-          <div id="t-tab-diario" class="tab-content">
-            <!-- Pannello Attivazione Nodi Diario -->
-            <div class="glass-panel" style="margin-bottom: 20px;">
-              <h3 class="panel-title" style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-toggle-on" style="color: var(--gold);"></i> Attivazione Nodi del Diario
-              </h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
-                Seleziona i nodi per i quali abilitare la scrittura del Diario di Bordo per gli studenti. I nodi disattivati resteranno visibili ma in sola lettura.
-              </p>
-              <div id="teacher-diario-toggles" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
-                <!-- Popolato via JS -->
-              </div>
-            </div>
-
-            <div class="glass-panel" style="margin-bottom: 0;">
-              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold-dark); padding-bottom: 8px; margin-bottom: 20px;">
-                <h3 class="panel-title" style="margin: 0; padding: 0;">
-                  <i class="fa-solid fa-graduation-cap" style="color: var(--gold);"></i> Valutazione del Diario di Bordo
-                </h3>
-                <!-- Filtri -->
-                <div style="display: flex; gap: 10px; align-items: center;">
-                  <select id="teacher-diario-filter-status" class="form-control" style="width: 180px; padding: 4px 8px; height: 32px;" onchange="EroiApp.renderTeacherDiaries()">
-                    <option value="pending">In attesa di voto</option>
-                    <option value="graded">Già valutati</option>
-                  </select>
-                  <select id="teacher-diario-filter-class" class="form-control" style="width: 140px; padding: 4px 8px; height: 32px;" onchange="EroiApp.renderTeacherDiaries()">
-                    <option value="ALL">Tutte le Classi</option>
-                    <!-- Popolato da JS -->
-                  </select>
-                </div>
-              </div>
-
-              <div id="teacher-diaries-list" style="display: flex; flex-direction: column; gap: 15px; max-height: 600px; overflow-y: auto; padding-right: 5px;">
-                <!-- Popolato da JS -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
-      <section id="view-admin-dashboard" class="view">
-        <div class="glass-panel">
-          <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Admin Principale</h2>
           
-          <div class="dashboard-grid">
-            
-            <!-- Impostazioni Globali -->
-            <div class="glass-panel" style="margin-bottom: 0;">
-              <h3 class="panel-title">Configurazioni di Campagna</h3>
-              <form id="form-admin-settings" onsubmit="return false;" style="margin-top: 15px;">
-                <div class="form-group">
-                  <label for="admin-setting-appname">Nome Piattaforma</label>
-                  <input type="text" id="admin-setting-appname" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="admin-setting-copyright">Copyright Footer</label>
-                  <input type="text" id="admin-setting-copyright" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="admin-setting-contacts">Contatti Globali</label>
-                  <input type="text" id="admin-setting-contacts" class="form-control" required>
-                </div>
-                <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
-                  <input type="checkbox" id="admin-setting-secondterm" style="width: 20px; height: 20px; cursor: pointer;">
-                  <label for="admin-setting-secondterm" style="margin-bottom: 0; cursor: pointer; font-weight: bold; color: var(--gold);">
-                    Attiva 2° Quadrimestre (Aiutanti & Ciclo Carolingio/Bretone)
-                  </label>
-                </div>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;" id="btn-save-admin-settings">Applica Modifiche Globali</button>
-              </form>
-            </div>
 
-            <!-- Manutenzione Database & Backup -->
-            <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <h3 class="panel-title">Backup, Ripristino & Esportazione</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
-                  Salva l'intero stato del gioco in locale come file JSON oppure esporta le anagrafiche dei tuoi studenti in foglio di calcolo.
-                </p>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                  <button class="btn btn-secondary" onclick="EroiApp.triggerBackupExport()">
-                    <i class="fa-solid fa-download"></i> Esporta Database JSON
-                  </button>
-                  <button class="btn btn-secondary" onclick="document.getElementById('import-db-file').click()">
-                    <i class="fa-solid fa-upload"></i> Ripristina Database JSON
-                  </button>
-                  <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
-                  <button class="btn btn-secondary" onclick="EroiApp.triggerCSVExport()">
-                    <i class="fa-solid fa-file-csv"></i> Esporta Studenti CSV
-                  </button>
-                </div>
-              </div>
-              <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
-                <button class="btn btn-danger" style="width: 100%;" onclick="EroiApp.triggerDatabaseReset()">
-                  <i class="fa-solid fa-triangle-exclamation"></i> Ripristina Valori Fabbrica
-                </button>
-              </div>
-            </div>
-            
-            <!-- Gestione Amministratori e Docenti Secondari -->
-            <div class="glass-panel" style="grid-column: 1 / -1;">
-              <h3 class="panel-title">Gestione Personale (Docenti e Amministratori Secondari)</h3>
-              <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 20px;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-name">Nome Completo</label>
-                  <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-email">Indirizzo Email</label>
-                  <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-password">Password Temporanea</label>
-                  <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-role">Ruolo Autorizzato</label>
-                  <select id="staff-role" class="form-control" required>
-                    <option value="teacher">Docente</option>
-                    <option value="admin">Amministratore Secondario</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
-              </form>
-
-              <div style="margin-bottom: 15px;"><input type="text" placeholder="Cerca in questo elenco..." class="form-control" style="width: 100%; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);"></div>
-              <div class="table-responsive">
-                <table class="game-table" id="admin-staff-table">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>Email</th>
-                      <th>Ruolo</th>
-                      <th>Azione</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Modifica Documenti Legali -->
-            <div class="glass-panel" style="grid-column: 1 / -1;">
-              <h3 class="panel-title">Modifica Documentazione Legale</h3>
-              <form id="form-legal-docs" onsubmit="return false;">
-                <div class="form-group">
-                  <label for="legal-doc-privacy">Informativa sulla Privacy</label>
-                  <textarea id="legal-doc-privacy" class="form-control" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="legal-doc-terms">Termini e Condizioni</label>
-                  <textarea id="legal-doc-terms" class="form-control" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="legal-doc-cookies">Informativa sui Cookie</label>
-                  <textarea id="legal-doc-cookies" class="form-control" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="legal-doc-gdpr">GDPR</label>
-                  <textarea id="legal-doc-gdpr" class="form-control" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn" id="btn-save-legal-docs">Aggiorna Testi Legali</button>
-              </form>
-            </div>
-
-          </div>
+          
         </div>
       </section>
 
