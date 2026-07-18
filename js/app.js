@@ -446,10 +446,10 @@ window.finalizzaDocente = async function() {
       if (user.role === 'admin') return true;
       if ((user.role === 'docente' || user.role === 'teacher')) return true; // Un docente ha la vista globale sbloccata
       
-      if (user.classId) {
-        const c = window.EroiDB.getClasses()[user.classId];
-        if (c && c.secondTermActive) return true;
-      }
+      const now = new Date();
+      const month = now.getMonth();
+      // Mesi 1-7 corrispondono a Febbraio - Agosto
+      if (month >= 1 && month <= 7) return true;
       return false;
     },
     toggleAudio: function() {
@@ -1357,12 +1357,9 @@ window.finalizzaDocente = async function() {
             e.preventDefault();
             const classId = document.getElementById('teacher-settings-class-select').value;
             if (!classId) return;
-            const secondTerm = document.getElementById('teacher-setting-secondterm').checked;
-            
-            window.EroiDB.saveClass(classId, { secondTermActive: secondTerm });
-            
+            // Logica del secondo quadrimestre automatizzata
             const teacher = Auth.getUser();
-            window.EroiDB.logActivity(teacher.email, `Aggiornato 2° Quadrimestre a ${secondTerm} per la classe ${classId}`);
+            window.EroiDB.logActivity(teacher.email, `Salvate impostazioni per la classe ${classId}`);
             self.showToast("Impostazioni classe salvate!", "success");
           });
       }
@@ -3034,11 +3031,7 @@ window.finalizzaDocente = async function() {
     onTeacherClassSelectSettings: function() {
         const classId = document.getElementById('teacher-settings-class-select').value;
         const classes = window.EroiDB.getClasses();
-        if (classId && classes[classId]) {
-            document.getElementById('teacher-setting-secondterm').checked = !!classes[classId].secondTermActive;
-        } else {
-            document.getElementById('teacher-setting-secondterm').checked = false;
-        }
+        // Niente da aggiornare, la UI per il secondo quadrimestre è stata rimossa
     },
 
     selectStatsCategory: function(category) {

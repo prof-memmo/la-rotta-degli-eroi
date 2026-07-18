@@ -18,7 +18,7 @@ window.EroiMockData = {
       { id: "s1", titolo: "Il Cammino dell'Eroe", testo: "Il tuo obiettivo è guadagnare XP per salire di livello ed ottenere Dracme da spendere nello Shop. Risolvi i quiz e partecipa alle missioni per progredire sulla mappa." },
       { id: "s2", titolo: "Guadagno di Dracme", testo: "Ottieni Dracme completando attività quotidiane (5-15 Dracme), risolvendo quiz brevi (10-20 Dracme), completando intere missioni (30-80 Dracme) e superando le verifiche in classe (50-120 Dracme)." },
       { id: "s3", titolo: "L'Inventario e gli Equipaggiamenti", testo: "Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per l'avatar e Artefatti. Puoi tenere attivi fino a 2 Artefatti contemporaneamente." },
-      { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus." }
+      { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus. Questa funzione si attiva automaticamente a partire dal 1° febbraio di ogni anno scolastico." }
     ],
     docente: [
       { id: "d1", titolo: "Gestione di Classi e Studenti", testo: "Puoi creare classi personalizzate ed iscrivere o modificare gli studenti. Il docente ha il potere di assegnare Dracme, XP ed Artefatti direttamente dal pannello di gestione." },

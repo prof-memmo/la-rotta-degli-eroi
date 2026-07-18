@@ -18,7 +18,7 @@ window.EroiMockData = {
       { id: "s1", titolo: "Il Cammino dell'Eroe", testo: "Il tuo obiettivo è guadagnare XP per salire di livello ed ottenere Dracme da spendere nello Shop. Risolvi i quiz e partecipa alle missioni per progredire sulla mappa." },
       { id: "s2", titolo: "Economia e Progressione", testo: "L'economia degli studenti è completamente indipendente. Le quantità di oggetti nel Mercato (stock) diminuiscono solo quando un altro studente acquista l'oggetto." },
       { id: "s3", titolo: "L'Inventario e gli Equipaggiamenti", testo: "Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per l'avatar e Artefatti. Puoi tenere attivi fino a 2 Artefatti contemporaneamente." },
-      { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus." }
+      { id: "s4", titolo: "Gli Aiutanti (Secondo Quadrimestre)", testo: "Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus. Questa funzione si attiva automaticamente a partire dal 1° febbraio di ogni anno scolastico." }
     ],
     docente: [
       { id: "d1", titolo: "Due Mondi Separati (Universo Parallelo)", testo: "Il docente opera in un universo parallelo. Può giocare come un normale studente (accumulando XP e Dracme reali sul proprio profilo), ma senza MAI interferire con l'economia, lo stock o i log degli studenti." },
