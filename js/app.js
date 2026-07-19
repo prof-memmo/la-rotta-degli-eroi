@@ -4846,8 +4846,9 @@ window.finalizzaDocente = async function() {
       }
     },
 
-    renderAdminStaff: function() {
-      const users = window.EroiDB.getAllUsers().filter(u => u.role === 'teacher' || u.role === 'admin');
+    renderAdminStaff: async function() {
+      await window.EroiDB.syncCloudUsers();
+      const users = window.EroiDB.getAllUsers().filter(u => u.role === 'teacher' || u.role === 'admin' || u.role === 'docente');
       const tbody = document.querySelector('#admin-staff-table tbody');
       tbody.innerHTML = '';
 
@@ -4878,7 +4879,8 @@ window.finalizzaDocente = async function() {
       }
     },
 
-    renderAdminAllUsers: function() {
+    renderAdminAllUsers: async function() {
+      await window.EroiDB.syncCloudUsers();
       const users = window.EroiDB.getAllUsers();
       const tbody = document.querySelector('#admin-all-users-table tbody');
       if(!tbody) return;

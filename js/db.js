@@ -225,7 +225,7 @@
       }
     },
 
-    deleteUser: function(email) {
+    deleteUser: async function(email) {
       const key = email.toLowerCase();
       if (dbState.users[key]) {
         delete dbState.users[key];
@@ -237,10 +237,45 @@
         }
         this.save();
       }
+      // Elimina anche da Firestore per mantenere la sincronia
+      if (window.fbDb) {
+        try {
+          const q = await window.fbDb.collection('users').where('email', '==', email).get();
+          if (!q.empty) {
+            const batch = window.fbDb.batch();
+            q.docs.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+          }
+        } catch (e) { console.error("Firestore delete user error:", e); }
+      }
     },
 
     getAllUsers: function() {
       return Object.values(dbState.users);
+    },
+
+    syncCloudUsers: async function() {
+      if (!window.fbDb) return;
+      try {
+        const snap = await window.fbDb.collection('users').get();
+        let changed = false;
+        snap.docs.forEach(doc => {
+          const d = doc.data();
+          if (!d.email || d.role === 'pending' || d.status === 'pending') return; // I pending si gestiscono a parte
+          const key = d.email.toLowerCase();
+          if (!dbState.users[key]) {
+            dbState.users[key] = d;
+            changed = true;
+          } else {
+            // Aggiorna se i ruoli non coincidono
+            if (dbState.users[key].role !== d.role) {
+              dbState.users[key].role = d.role;
+              changed = true;
+            }
+          }
+        });
+        if (changed) this.save();
+      } catch(e) { console.warn("Sync cloud users error:", e); }
     },
 
     // --- RICHIESTE DOCENTI (Firestore) ---
