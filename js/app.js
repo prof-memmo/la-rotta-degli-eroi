@@ -4822,6 +4822,8 @@ window.finalizzaDocente = async function() {
             `La tua richiesta di iscrizione a La Rotta degli Eroi è stata APPROVATA. 🎉\n` +
             `Da adesso puoi accedere alla piattaforma con la tua email: ${email}\n\n` +
             `Potrai creare le tue squadre, consultare le missioni e gestire i tuoi studenti.\n\n` +
+            `Aiutaci a far crescere la community condividendo la tua esperienza:\n` +
+            `https://prof-memmo.github.io/games/condividi-esperienza.html\n\n` +
             `Che l'epica sia con te!\n` +
             `Il Team de La Rotta degli Eroi`
         );
