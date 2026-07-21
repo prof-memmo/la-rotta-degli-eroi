@@ -3205,7 +3205,7 @@ window.finalizzaDocente = async function() {
     },
 
     selectStatsCategory: function(category) {
-      ['students', 'classes', 'schools'].forEach(cat => {
+      ['teachers', 'students', 'classes', 'schools'].forEach(cat => {
         const card = document.getElementById(`card-stats-${cat}`);
         if (card) card.classList.remove('active');
       });
@@ -3243,12 +3243,49 @@ window.finalizzaDocente = async function() {
       } else if (category === 'classes') {
         this.renderTeacherClasses();
         this.populateClassSelects();
+      } else if (category === 'teachers') {
+        this.renderTeacherDocenti();
       } else if (category === 'schools') {
         this.renderTeacherSchoolsList();
       }
     },
 
+    renderTeacherDocenti: function() {
+      const user = Auth.getUser();
+      const isAdmin = user.role === 'admin';
+      const myClasses = window.EroiDB.getClasses().filter(c => isAdmin || c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email)));
+      
+      const colleagueEmails = new Set();
+      myClasses.forEach(c => {
+        if (c.teacher && c.teacher !== user.email) colleagueEmails.add(c.teacher);
+        if (c.collaborators) {
+          c.collaborators.forEach(email => {
+            if (email !== user.email) colleagueEmails.add(email);
+          });
+        }
+      });
 
+      const allUsers = window.EroiDB.getAllUsers();
+      const docenti = allUsers.filter(u => colleagueEmails.has(u.email));
+      
+      const tbody = document.querySelector('#teacher-docenti-table tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (docenti.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;"><i>Nessun collega associato alle tue classi.</i></td></tr>`;
+        return;
+      }
+
+      docenti.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${u.name || u.email.split('@')[0]}</strong></td>
+          <td><span style="color: var(--text-muted); font-size: 0.85rem;">${u.email}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    },
 
     renderTeacherSchoolsList: function() {
       const classes = window.EroiDB.getClasses();
@@ -3353,6 +3390,17 @@ window.finalizzaDocente = async function() {
       const students = allUsers.filter(u => u.role === 'student' && (isAdmin || myClassIds.includes(u.classId)));
       const schools = new Set(myClasses.map(c => c.school).filter(Boolean));
 
+      const colleagueEmails = new Set();
+      myClasses.forEach(c => {
+        if (c.teacher && c.teacher !== user.email) colleagueEmails.add(c.teacher);
+        if (c.collaborators) {
+          c.collaborators.forEach(email => {
+            if (email !== user.email) colleagueEmails.add(email);
+          });
+        }
+      });
+
+      document.getElementById('teacher-stats-teachers').textContent = colleagueEmails.size;
       document.getElementById('teacher-stats-students').textContent = students.length;
       document.getElementById('teacher-stats-classes').textContent = myClasses.length;
       document.getElementById('teacher-stats-schools').textContent = schools.size;
