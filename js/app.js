@@ -3507,7 +3507,7 @@ window.finalizzaDocente = async function() {
         if (filterClass === 'all') {
           matchesClass = (user.role === 'admin' || (u && u.classId && myClassIds.includes(u.classId)));
         } else if (filterClass === 'forestieri') {
-          matchesClass = (!u || !u.classId || u.role === 'amico');
+          matchesClass = (!u || !u.classId || u.role === 'amico' || u.role === 'forestiero');
         } else {
           matchesClass = (u && u.classId === filterClass);
         }
