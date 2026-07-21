@@ -348,10 +348,10 @@
       const profiles = Object.values(dbState.students_profile);
       const allUsers = Object.values(dbState.users || {});
       
-      // Fallback per gli studenti/forestieri registrati su Firebase che non hanno ancora il profilo locale sincronizzato
+      // Fallback per gli studenti registrati su Firebase che non hanno ancora il profilo locale sincronizzato
       allUsers.forEach(u => {
         const key = (u.email || '').toLowerCase();
-        if (key && (u.role === 'student' || u.role === 'forestiero' || u.role === 'amico') && !dbState.students_profile[key]) {
+        if (key && u.role === 'student' && !dbState.students_profile[key]) {
            profiles.push({
              name: u.name || u.email.split('@')[0],
              email: u.email,

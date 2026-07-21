@@ -3206,7 +3206,7 @@ window.finalizzaDocente = async function() {
 
     selectStatsCategory: function(category) {
       // Rimuovi active da tutte le card
-      ['teachers', 'students', 'classes', 'schools', 'forestieri'].forEach(cat => {
+      ['teachers', 'students', 'classes', 'schools'].forEach(cat => {
         const card = document.getElementById(`card-stats-${cat}`);
         if (card) card.classList.remove('active');
       });
@@ -3220,9 +3220,7 @@ window.finalizzaDocente = async function() {
         p.style.display = 'none';
       });
 
-      // Forestieri ricicla il pannello studenti con filtro dedicato
-      const panelId = category === 'forestieri' ? 'panel-stats-students' : `panel-stats-${category}`;
-      const panel = document.getElementById(panelId);
+      const panel = document.getElementById(`panel-stats-${category}`);
       if (panel) {
         panel.style.display = 'block';
         panel.style.animation = 'none';
@@ -3230,17 +3228,17 @@ window.finalizzaDocente = async function() {
         panel.style.animation = 'fadeInUp 0.3s ease forwards';
       }
 
-      // Aggiorna titolo panel studenti per Forestieri
+      // Aggiorna titolo panel studenti
       const titleEl = document.getElementById('students-panel-title-text');
       if (titleEl) {
-        titleEl.textContent = category === 'forestieri' ? 'Forestieri (Senza Classe)' : 'Studenti Iscritti';
+        titleEl.textContent = 'Studenti Iscritti';
       }
 
       // Renderizza dati specifici del pannello
-      if (category === 'students' || category === 'forestieri') {
+      if (category === 'students') {
         const filterEl = document.getElementById('filter-class-teacher');
         if (filterEl) {
-          filterEl.value = category === 'forestieri' ? 'forestieri' : 'all';
+          filterEl.value = 'all';
         }
         this.renderTeacherStudents();
       } else if (category === 'classes') {
@@ -3319,8 +3317,7 @@ window.finalizzaDocente = async function() {
 
       // Determina la categoria in base all'ID sezione
       if (sectionId === 'teacher-students-section' || sectionId === 'panel-stats-students') {
-        const cat = (filterValue === 'forestieri') ? 'forestieri' : 'students';
-        this.selectStatsCategory(cat);
+        this.selectStatsCategory('students');
         // Scrolla alla sezione
         setTimeout(() => {
           const el = document.getElementById('panel-stats-students');
@@ -3382,7 +3379,6 @@ window.finalizzaDocente = async function() {
 
       const students = allUsers.filter(u => u.role === 'student' && (isAdmin || myClassIds.includes(u.classId)));
       const teachers = allUsers.filter(u => u.role === 'teacher' || u.role === 'admin');
-      const forestieri = allUsers.filter(u => u.role === 'amico' || (u.role === 'student' && !u.classId));
       
       const schools = new Set(myClasses.map(c => c.school).filter(Boolean));
 
@@ -3390,7 +3386,6 @@ window.finalizzaDocente = async function() {
       document.getElementById('teacher-stats-students').textContent = students.length;
       document.getElementById('teacher-stats-classes').textContent = myClasses.length;
       document.getElementById('teacher-stats-schools').textContent = schools.size;
-      document.getElementById('teacher-stats-forestieri').textContent = forestieri.length;
     },
 
     populateClassSelects: function() {
@@ -3410,9 +3405,7 @@ window.finalizzaDocente = async function() {
       `).join('');
 
       if (studentClassSelect) studentClassSelect.innerHTML = optionsHtml;
-      if (filterClassSelect) filterClassSelect.innerHTML = `<option value="all">Tutte le Classi</option>` +
-                                     `<option value="forestieri">Forestieri (Senza classe)</option>` +
-                                     optionsHtml;
+      if (filterClassSelect) filterClassSelect.innerHTML = `<option value="all">Tutte le Classi</option>` + optionsHtml;
       if (settingsClassSelect) {
           settingsClassSelect.innerHTML = optionsHtml;
           this.onTeacherClassSelectSettings();
@@ -3506,8 +3499,6 @@ window.finalizzaDocente = async function() {
         let matchesClass = false;
         if (filterClass === 'all') {
           matchesClass = (user.role === 'admin' || (u && u.classId && myClassIds.includes(u.classId)));
-        } else if (filterClass === 'forestieri') {
-          matchesClass = (!u || !u.classId || u.role === 'amico' || u.role === 'forestiero');
         } else {
           matchesClass = (u && u.classId === filterClass);
         }
