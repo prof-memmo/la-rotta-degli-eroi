@@ -3528,7 +3528,7 @@ window.finalizzaDocente = async function() {
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:1.4rem;">${this.getAvatarEmoji(s.avatarClass)}</span>
               <div>
-                <strong>${s.name}</strong><br>
+                <strong>${s.name}</strong> <a href="mailto:${s.email}" title="Scrivi a ${s.name}" style="color:var(--gold); margin-left:6px; text-decoration:none;"><i class="fa-solid fa-envelope"></i></a><br>
                 <span style="font-size:0.75rem; color:var(--text-muted);">${s.email}</span>
               </div>
             </div>
@@ -5076,7 +5076,7 @@ window.finalizzaDocente = async function() {
         const isDocente = u.role === 'docente' || u.role === 'admin' || u.role === 'teacher';
         
         tr.innerHTML = `
-          <td><strong>${u.name || 'Sconosciuto'}</strong></td>
+          <td><strong>${u.name || 'Sconosciuto'}</strong> <a href="mailto:${u.email}" title="Scrivi a ${u.name || 'Sconosciuto'}" style="color:var(--gold); margin-left:6px; text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>${u.email}</td>
           <td>
             <select class="input-field" style="padding: 4px; font-size: 0.75rem; width: auto;" onchange="EroiApp.changeUserRole('${u.email}', this.value)" ${u.email === 'prof.memmo@gmail.com' ? 'disabled' : ''}>
