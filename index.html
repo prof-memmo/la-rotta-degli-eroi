@@ -769,10 +769,6 @@
           <!-- TAB PANORAMICA -->
           <div id="t-tab-panoramica" class="tab-content active">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 24px;">
-              <div id="card-stats-teachers" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('teachers')">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Docenti</span>
-                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-teachers">0</h4>
-              </div>
               <div id="card-stats-students" class="glass-panel stat-card-interactive active" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('students')">
                 <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Studenti</span>
                 <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-students">0</h4>
@@ -792,25 +788,6 @@
             <div id="panoramica-panels-container">
               
               <!-- PANNELLO: DOCENTI -->
-              <div id="panel-stats-teachers" class="panoramica-sub-panel" style="display: none;">
-                <div class="glass-panel">
-                  <h3 class="panel-title"><i class="fa-solid fa-user-tie" style="color: var(--gold);"></i> Registro Docenti e Collaboratori</h3>
-                  <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco di tutti i docenti e amministratori registrati nella piattaforma.</p>
-                  <div class="table-responsive">
-                    <table class="game-table" id="teacher-docenti-table">
-                      <thead>
-                        <tr>
-                          <th>Nome</th>
-                          <th>Email</th>
-                          <th>Ruolo</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
               <!-- PANNELLO: CLASSI -->
               <div id="panel-stats-classes" class="panoramica-sub-panel" style="display: none;">
                 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
