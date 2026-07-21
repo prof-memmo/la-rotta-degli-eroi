@@ -205,7 +205,39 @@ window.selectOnboardingRole = async function(role) {
         // Forestiero completa subito
         user.role = 'forestiero';
         user.setupComplete = true;
-        await window.fbDb.collection('users').doc(user.uid).update({ role: 'forestiero', setupComplete: true });
+        
+        try {
+            if (window.fbDb) {
+                await window.fbDb.collection('users').doc(user.uid).update({ role: 'forestiero', setupComplete: true });
+            }
+        } catch (e) {
+            console.warn("Could not update role in cloud:", e);
+        }
+        
+        // Save user locally so it appears in Admin and Teacher dashboards correctly
+        window.EroiDB.saveUser(user.email, user);
+        
+        let profile = window.EroiDB.getStudentProfile(user.email);
+        if (!profile) {
+            profile = {
+                email: user.email,
+                name: user.name || "Forestiero",
+                level: 1,
+                xp: 0,
+                dracme: 100,
+                avatarClass: "Esploratore",
+                inventory: [],
+                stats: { missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+                visitedRegions: [],
+                discoveredNodes: [],
+                completedMissions: [],
+                activeMissions: [],
+                diario: [],
+                unlockedAreas: ["Accademia"]
+            };
+            window.EroiDB.saveStudentProfile(user.email, profile);
+        }
+
         localStorage.setItem('eroi_user', JSON.stringify(user));
         window.EroiApp.checkSession();
     }
@@ -228,12 +260,21 @@ window.finalizzaStudente = async function() {
     user.classId = classe;
     user.name = nickname; // Use nickname instead of full Google name if they want
     
-    await window.fbDb.collection('users').doc(user.uid).update({ 
-        role: 'studente', 
-        setupComplete: true,
-        classId: classe,
-        name: nickname
-    });
+    try {
+        if (window.fbDb) {
+            await window.fbDb.collection('users').doc(user.uid).update({ 
+                role: 'studente', 
+                setupComplete: true,
+                classId: classe,
+                name: nickname
+            });
+        }
+    } catch(e) {
+        console.warn("Could not update role in cloud:", e);
+    }
+    
+    // Save user locally so it appears in Admin and Teacher dashboards correctly
+    window.EroiDB.saveUser(user.email, user);
     
     // Create student profile in game DB
     const _u_profile = window.EroiDB.getUser(user.email);
@@ -255,7 +296,7 @@ window.finalizzaStudente = async function() {
             activeMissions: [],
             diario: []
         };
-        window.EroiDB.saveStudentProfile(profile);
+        window.EroiDB.saveStudentProfile(user.email, profile);
     }
     
     localStorage.setItem('eroi_user', JSON.stringify(user));
@@ -437,6 +478,77 @@ window.finalizzaDocente = async function() {
   };
 
   window.EroiApp = {
+    openEditProfileModal: function() {
+      const user = Auth.getUser();
+      if (!user) return;
+      const modal = document.getElementById('edit-profile-modal');
+      const nameInput = document.getElementById('edit-profile-name');
+      const schoolGroup = document.getElementById('edit-profile-school-group');
+      const schoolInput = document.getElementById('edit-profile-school');
+      
+      const isTeacher = (user.role === 'docente' || user.role === 'teacher' || user.role === 'admin');
+      
+      let profile;
+      if (isTeacher) {
+        profile = window.EroiDB.getTeacherPlayerProfile(user.email);
+        schoolGroup.classList.remove('hidden');
+        schoolInput.value = user.school || ''; 
+      } else {
+        profile = window.EroiDB.getStudentProfile(user.email);
+        schoolGroup.classList.add('hidden');
+      }
+      
+      nameInput.value = profile ? profile.name : (user.name || '');
+      modal.classList.remove('hidden');
+      if (this.closeMobileDropdown) this.closeMobileDropdown();
+      const dropdown = document.getElementById('profile-dropdown-card');
+      if (dropdown) dropdown.style.display = 'none';
+    },
+
+    saveProfileData: async function() {
+      const user = Auth.getUser();
+      if (!user) return;
+      const nameInput = document.getElementById('edit-profile-name').value.trim();
+      const schoolInput = document.getElementById('edit-profile-school').value.trim();
+      
+      if (!nameInput) {
+        this.showToast('Il nome non può essere vuoto.', 'danger');
+        return;
+      }
+      
+      const isTeacher = (user.role === 'docente' || user.role === 'teacher' || user.role === 'admin');
+      
+      try {
+        const updateData = { name: nameInput };
+        if (isTeacher) {
+          updateData.school = schoolInput;
+        }
+        await window.fbDb.collection('users').doc(user.uid).update(updateData);
+        
+        // Update local auth cache
+        user.name = nameInput;
+        if (isTeacher) user.school = schoolInput;
+        Auth._user = user;
+        
+        this.showToast('Profilo aggiornato con successo!', 'success');
+        document.getElementById('edit-profile-modal').classList.add('hidden');
+        
+        // Force refresh local data and UI
+        await window.EroiDB.loadAllData(false);
+        this.generateNavbarLinks(user);
+        
+        // Update specific view labels if needed
+        const badgeName = document.getElementById('user-display-name');
+        if (badgeName) badgeName.textContent = nameInput;
+        
+        const studDashName = document.getElementById('stud-dashboard-name');
+        if (studDashName && !isTeacher) studDashName.textContent = nameInput;
+        
+      } catch (err) {
+        console.error(err);
+        this.showToast('Errore durante il salvataggio.', 'danger');
+      }
+    },
     isSecondTermActiveForUser: function(userEmail) {
       const email = userEmail || (Auth.getUser() ? Auth.getUser().email : null);
       if (!email) return false;
@@ -771,14 +883,19 @@ window.finalizzaDocente = async function() {
               </div>
           </div>
 
-          <div class="dropdown-legal-btns">
-            <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('privacy')">
-              <i class="fa-solid fa-shield"></i> Privacy
+          <div class="dropdown-legal-btns" style="display: flex; flex-direction: column; gap: 5px;">
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openEditProfileModal()" style="width: 100%;">
+              <i class="fa-solid fa-user-edit"></i> Modifica Profilo
             </button>
-            <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('terms')">
-              <i class="fa-solid fa-scroll"></i> Termini
-            </button>
-            <button class="btn btn-secondary dropdown-sm-btn" onclick="window.showContattiModal()">
+            <div style="display: flex; gap: 5px; width: 100%;">
+              <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('privacy')" style="flex: 1;">
+                <i class="fa-solid fa-shield"></i> Privacy
+              </button>
+              <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('terms')" style="flex: 1;">
+                <i class="fa-solid fa-scroll"></i> Termini
+              </button>
+            </div>
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="window.showContattiModal()" style="width: 100%;">
               <i class="fa-solid fa-envelope"></i> Contatti
             </button>
           </div>
@@ -1330,6 +1447,11 @@ window.finalizzaDocente = async function() {
       // Filtro ricerca e classe nella dashboard docente
       document.getElementById('search-student-teacher').addEventListener('input', function() { self.renderTeacherStudents(); });
       document.getElementById('filter-class-teacher').addEventListener('change', function() { self.renderTeacherStudents(); });
+      
+      const searchClassTeacher = document.getElementById('search-class-teacher');
+      if (searchClassTeacher) {
+          searchClassTeacher.addEventListener('input', function() { self.renderTeacherClasses(); });
+      }
 
       // --- ADMIN SUBMISSIONS ---
       // Salva Impostazioni Globali
@@ -1626,6 +1748,15 @@ window.finalizzaDocente = async function() {
               </button>
             </div>
           `;
+        } else if (u && u.role === 'forestiero') {
+          studentClassContent.innerHTML = `
+            <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.02); border: 1.5px solid var(--gold); border-radius: 8px;">
+              <p style="font-size: 0.9rem; color: var(--gold); margin-bottom: 5px; font-weight: bold;">Sei un Viaggiatore Libero!</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                Esplora la mappa, raccogli Dracme e scopri i segreti del mondo classico senza i vincoli di una classe.
+              </p>
+            </div>
+          `;
         } else {
           studentClassContent.innerHTML = `
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
@@ -1786,8 +1917,27 @@ window.finalizzaDocente = async function() {
       
       const _u_profile = window.EroiDB.getUser(email);
       const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
-      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
-      if (!profile) return;
+      let profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
+      if (!profile) {
+          profile = {
+              email: email,
+              name: Auth.getUser() ? Auth.getUser().name : "Utente",
+              level: 1,
+              xp: 0,
+              dracme: 100,
+              avatarClass: "Esploratore",
+              inventory: [],
+              stats: { missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+              visitedRegions: [],
+              discoveredNodes: [],
+              completedMissions: [],
+              activeMissions: [],
+              diario: [],
+              unlockedAreas: ["Accademia"]
+          };
+          if (_isT_profile) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+          else window.EroiDB.saveStudentProfile(email, profile);
+      }
 
       const unlocked = profile.unlockedAreas || ["Accademia"];
       const settings = window.EroiDB.getSettings();
@@ -1884,7 +2034,27 @@ window.finalizzaDocente = async function() {
     renderMissionsList: function(email) {
       const _u_profile = window.EroiDB.getUser(email);
       const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
-      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
+      let profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
+      if (!profile) {
+          profile = {
+              email: email,
+              name: Auth.getUser() ? Auth.getUser().name : "Utente",
+              level: 1,
+              xp: 0,
+              dracme: 100,
+              avatarClass: "Esploratore",
+              inventory: [],
+              stats: { missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+              visitedRegions: [],
+              discoveredNodes: [],
+              completedMissions: [],
+              activeMissions: [],
+              diario: [],
+              unlockedAreas: ["Accademia"]
+          };
+          if (_isT_profile) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+          else window.EroiDB.saveStudentProfile(email, profile);
+      }
       const allMissions = window.EroiDB.getMissions();
       const settings = window.EroiDB.getSettings();
       const container = document.getElementById('missions-categories-container');
@@ -3253,11 +3423,21 @@ window.finalizzaDocente = async function() {
       const classes = window.EroiDB.getClasses();
       const tbody = document.querySelector('#teacher-classes-table tbody');
       tbody.innerHTML = '';
+      
+      const searchInput = document.getElementById('search-class-teacher');
+      const search = searchInput ? searchInput.value.toLowerCase() : '';
 
       const user = Auth.getUser();
       const filtered = Object.values(classes).filter(c => {
-        if (user.role === 'admin') return true;
-        return c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
+        const hasAccess = user.role === 'admin' || c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
+        if (!hasAccess) return false;
+        
+        if (search) {
+            return (c.name && c.name.toLowerCase().includes(search)) || 
+                   (c.id && c.id.toLowerCase().includes(search)) || 
+                   (c.code && c.code.toLowerCase().includes(search));
+        }
+        return true;
       });
 
       filtered.forEach(c => {
@@ -6165,7 +6345,7 @@ window.finalizzaDocente = async function() {
                 } else if (!unlock && profile.unlockedAreas.includes(nodeId)) {
                     profile.unlockedAreas = profile.unlockedAreas.filter(id => id !== nodeId);
                 }
-                window.EroiDB.saveStudentProfile(profile);
+                window.EroiDB.saveStudentProfile(student.email, profile);
             }
         });
         

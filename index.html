@@ -58,6 +58,25 @@
           </div>
       </div>
   </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="edit-profile-modal" class="legal-modal hidden">
+      <div class="legal-modal-content glass-panel" style="max-width: 450px;">
+          <span class="close-legal" onclick="document.getElementById('edit-profile-modal').classList.add('hidden')">&times;</span>
+          <h2 style="color: var(--gold); margin-bottom: 20px;"><i class="fa-solid fa-user-edit"></i> Modifica Profilo</h2>
+          <form id="form-edit-profile" onsubmit="event.preventDefault(); if(window.EroiApp) window.EroiApp.saveProfileData();">
+              <div style="margin-bottom: 1.5rem;">
+                  <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Nome e Cognome / Nickname:</label>
+                  <input type="text" id="edit-profile-name" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;">
+              </div>
+              <div style="margin-bottom: 1.5rem;" id="edit-profile-school-group" class="hidden">
+                  <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; font-size: 0.9rem;">Scuola:</label>
+                  <input type="text" id="edit-profile-school" style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;">
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; border-radius: 30px; font-weight: 800;">Salva Modifiche</button>
+          </form>
+      </div>
+  </div>
   <!-- Toast Container per Feedback Micro-Animazioni -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -836,7 +855,7 @@
 
                   <div class="glass-panel">
                     <h3 class="panel-title">Classi Attive</h3>
-                  <div style="margin-bottom: 15px;"><input type="text" placeholder="Cerca in questo elenco..." class="form-control" style="width: 100%; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);"></div>
+                  <div style="margin-bottom: 15px;"><input type="text" id="search-class-teacher" placeholder="Cerca in questo elenco..." class="form-control" style="width: 100%; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);"></div>
                   <div class="table-responsive">
                       <table class="game-table" id="teacher-classes-table">
                         <thead>
