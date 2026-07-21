@@ -5060,10 +5060,17 @@ window.finalizzaDocente = async function() {
     },
 
     renderAdminAllUsers: async function() {
-      await window.EroiDB.syncCloudUsers();
-      const users = window.EroiDB.getAllUsers();
       const tbody = document.querySelector('#admin-all-users-table tbody');
       if(!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Sincronizzazione utenti in corso dal cloud...</td></tr>';
+
+      try {
+        await window.EroiDB.syncCloudUsers();
+      } catch (e) {
+        console.warn("Errore durante syncCloudUsers in renderAdminAllUsers:", e);
+      }
+      
+      const users = window.EroiDB.getAllUsers();
       tbody.innerHTML = '';
 
       if (users.length === 0) {
