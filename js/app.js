@@ -478,6 +478,18 @@ window.finalizzaDocente = async function() {
   };
 
   window.EroiApp = {
+    sortState: {
+        teacherStudents: { col: 'name', asc: true },
+        adminStaff: { col: 'name', asc: true },
+        adminAll: { col: 'name', asc: true }
+    },
+    getDateValue: function(u) {
+        if (!u || !u.createdAt) return 0;
+        if (typeof u.createdAt === 'string') return new Date(u.createdAt).getTime();
+        if (u.createdAt.toMillis) return u.createdAt.toMillis();
+        if (u.createdAt.toDate) return u.createdAt.toDate().getTime();
+        return 0;
+    },
     openEditProfileModal: function() {
       const user = Auth.getUser();
       if (!user) return;
@@ -3510,7 +3522,7 @@ window.finalizzaDocente = async function() {
         .map(c => c.id);
 
       const filtered = students.filter(s => {
-        const matchesSearch = s.name.toLowerCase().includes(search) || s.email.toLowerCase().includes(search);
+        const matchesSearch = (s.name || '').toLowerCase().includes(search) || (s.email || '').toLowerCase().includes(search);
         
         const u = window.EroiDB.getUser(s.email);
         let matchesClass = false;
@@ -3536,7 +3548,7 @@ window.finalizzaDocente = async function() {
           const uB = window.EroiDB.getUser(b.email);
           
           if (state.col === 'name') {
-              valA = a.name.toLowerCase(); valB = b.name.toLowerCase();
+              valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase();
           } else if (state.col === 'class') {
               valA = (uA && uA.classId) ? uA.classId.toLowerCase() : '';
               valB = (uB && uB.classId) ? uB.classId.toLowerCase() : '';
@@ -3545,7 +3557,7 @@ window.finalizzaDocente = async function() {
           } else if (state.col === 'date') {
               valA = this.getDateValue(uA); valB = this.getDateValue(uB);
           } else {
-              valA = a.name.toLowerCase(); valB = b.name.toLowerCase();
+              valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase();
           }
 
           if (valA < valB) return state.asc ? -1 : 1;
@@ -3561,8 +3573,8 @@ window.finalizzaDocente = async function() {
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:1.4rem;">${this.getAvatarEmoji(s.avatarClass)}</span>
               <div>
-                <strong>${s.name}</strong><br>
-                <span style="font-size:0.75rem; color:var(--text-muted);">${s.email}</span>
+                <strong>${s.name || 'Utente Sconosciuto'}</strong><br>
+                <span style="font-size:0.75rem; color:var(--text-muted);">${s.email || 'Email non fornita'}</span>
               </div>
             </div>
           </td>
