@@ -4657,18 +4657,27 @@ table.game-table tr:hover td {
     
     /* SPAZIO TITOLO: riduce padding-top della view su schermi ridotti */
     .view.active {
-        padding-top: 0px !important;
-        padding-bottom: 5px !important;
+        padding-top: 10px !important;
+        padding-bottom: 20px !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
     }
     .view h2, .view h1 {
         margin-top: 0 !important;
     }
+    
+    /* Su smartphone non usiamo "card", ma un layout piatto fluido come le app native */
     .glass-panel {
-        padding: 10px !important;
-        padding-top: 5px !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        padding: 5px 0 !important;
+        margin-bottom: 15px !important;
     }
     #view-map .glass-panel {
-        padding: 0 10px 5px 10px !important;
+        padding: 0 !important;
         margin-bottom: 20px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
