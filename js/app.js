@@ -3524,9 +3524,34 @@ window.finalizzaDocente = async function() {
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Nessuno studente trovato.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nessuno studente trovato.</td></tr>`;
         return;
       }
+
+      // Sort logic
+      const state = this.sortState.teacherStudents;
+      filtered.sort((a, b) => {
+          let valA, valB;
+          const uA = window.EroiDB.getUser(a.email);
+          const uB = window.EroiDB.getUser(b.email);
+          
+          if (state.col === 'name') {
+              valA = a.name.toLowerCase(); valB = b.name.toLowerCase();
+          } else if (state.col === 'class') {
+              valA = (uA && uA.classId) ? uA.classId.toLowerCase() : '';
+              valB = (uB && uB.classId) ? uB.classId.toLowerCase() : '';
+          } else if (state.col === 'level') {
+              valA = a.level || 0; valB = b.level || 0;
+          } else if (state.col === 'date') {
+              valA = this.getDateValue(uA); valB = this.getDateValue(uB);
+          } else {
+              valA = a.name.toLowerCase(); valB = b.name.toLowerCase();
+          }
+
+          if (valA < valB) return state.asc ? -1 : 1;
+          if (valA > valB) return state.asc ? 1 : -1;
+          return 0;
+      });
 
       filtered.forEach(s => {
         const u = window.EroiDB.getUser(s.email);
@@ -3543,6 +3568,7 @@ window.finalizzaDocente = async function() {
           </td>
           <td>${u ? u.classId : 'Senza classe'}</td>
           <td><span style="color:var(--gold); font-weight:bold;">${s.level}</span></td>
+          <td style="font-size:0.85rem; color:var(--text-muted);">${u && this.getDateValue(u) > 0 ? new Date(this.getDateValue(u)).toLocaleDateString('it-IT') : 'N/D'}</td>
           <td>${s.xp} XP / ${s.dracme} Dracme</td>
           <td style="text-align:center;"><a href="mailto:${s.email}" title="Scrivi a ${s.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>
@@ -5043,12 +5069,33 @@ window.finalizzaDocente = async function() {
       const tbody = document.querySelector('#admin-staff-table tbody');
       tbody.innerHTML = '';
 
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessuno staff trovato</td></tr>';
+        return;
+      }
+
+      // Sort logic
+      const state = this.sortState.adminStaff;
+      users.sort((a, b) => {
+          let valA, valB;
+          if (state.col === 'name') { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
+          else if (state.col === 'email') { valA = (a.email || '').toLowerCase(); valB = (b.email || '').toLowerCase(); }
+          else if (state.col === 'role') { valA = (a.role || '').toLowerCase(); valB = (b.role || '').toLowerCase(); }
+          else if (state.col === 'date') { valA = this.getDateValue(a); valB = this.getDateValue(b); }
+          else { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
+          
+          if (valA < valB) return state.asc ? -1 : 1;
+          if (valA > valB) return state.asc ? 1 : -1;
+          return 0;
+      });
+
       users.forEach(u => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${u.name}</strong></td>
           <td>${u.email}</td>
           <td><span style="text-transform:uppercase; font-size:0.75rem; font-weight:bold; color:var(--gold);">${u.role}</span></td>
+          <td style="font-size:0.85rem; color:var(--text-muted);">${this.getDateValue(u) > 0 ? new Date(this.getDateValue(u)).toLocaleDateString('it-IT') : 'N/D'}</td>
           <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>
             ${u.email !== 'prof.memmo@gmail.com' ? `
@@ -5086,9 +5133,24 @@ window.finalizzaDocente = async function() {
       tbody.innerHTML = '';
 
       if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Nessun utente trovato</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessun utente trovato</td></tr>';
         return;
       }
+
+      // Sort logic
+      const state = this.sortState.adminAll;
+      users.sort((a, b) => {
+          let valA, valB;
+          if (state.col === 'name') { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
+          else if (state.col === 'email') { valA = (a.email || '').toLowerCase(); valB = (b.email || '').toLowerCase(); }
+          else if (state.col === 'role') { valA = (a.role || '').toLowerCase(); valB = (b.role || '').toLowerCase(); }
+          else if (state.col === 'date') { valA = this.getDateValue(a); valB = this.getDateValue(b); }
+          else { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
+          
+          if (valA < valB) return state.asc ? -1 : 1;
+          if (valA > valB) return state.asc ? 1 : -1;
+          return 0;
+      });
 
       users.forEach(u => {
         const tr = document.createElement('tr');
@@ -5104,6 +5166,7 @@ window.finalizzaDocente = async function() {
               <option value="forestiero" ${u.role === 'forestiero' ? 'selected' : ''}>Forestiero</option>
             </select>
           </td>
+          <td style="font-size:0.85rem; color:var(--text-muted);">${this.getDateValue(u) > 0 ? new Date(this.getDateValue(u)).toLocaleDateString('it-IT') : 'N/D'}</td>
           <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name || 'Sconosciuto'}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>
             ${u.email !== 'prof.memmo@gmail.com' ? `
