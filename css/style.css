@@ -1605,16 +1605,24 @@ table.game-table tr:hover td {
   border-radius: 0;
   z-index: 99;
   box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 5px;
+}
+
+.mobile-bottom-nav::-webkit-scrollbar {
+  display: none;
 }
 
 /* Bottom nav visibile su TUTTI gli schermi (desktop e mobile)
    Il JS controlla la visibilità con style.display */
 
 .mobile-nav-item {
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 auto;
+  min-width: 75px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1623,7 +1631,10 @@ table.game-table tr:hover td {
   text-decoration: none;
   font-size: 0.58rem;
   text-transform: lowercase;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.1;
+  word-break: break-word;
   gap: 4px;
   transition: var(--transition-smooth);
   border-radius: 20px;
@@ -1708,14 +1719,18 @@ table.game-table tr:hover td {
     display: none;
   }
 
-  /* Mobile: main-content già corretto con margin-top/bottom dalla regola base */
+  /* Mobile: main-content con margin-top corretto per header 60px */
   .main-content {
     margin-left: 0;
   }
+  
+  body.logged-in .main-content {
+    margin-top: 60px !important;
+  }
 
-  /* View mobile: padding ridotto */
+  /* View mobile: padding ridotto per avvicinare i titoli e il fondo */
   .view {
-    padding: 10px 12px 20px 12px !important;
+    padding: 5px 12px 5px 12px !important;
     overflow: visible;
   }
 
@@ -4316,7 +4331,9 @@ table.game-table tr:hover td {
    STUDENT DASHBOARD: su mobile scrolla internamente
    ========================================== */
 @media (max-width: 768px) {
-    #view-student-dashboard {
+    #view-student-dashboard,
+    #view-teacher-dashboard,
+    #view-admin-dashboard {
         overflow-y: auto;
     }
 }

@@ -2122,7 +2122,7 @@ window.finalizzaDocente = async function() {
             <span style="font-size: 0.95rem; font-weight: bold; color: var(--gold); display: flex; align-items: center; gap: 8px;">
               <i class="fa-solid fa-map-location-dot"></i> Missioni dell'area: <strong style="color:var(--text-light); text-transform:uppercase;">${displayAreaName}</strong>
             </span>
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="EroiApp.clearMissionsFilter()">
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; width: auto !important; min-width: 0; white-space: nowrap; flex-shrink: 0;" onclick="EroiApp.clearMissionsFilter()">
               <i class="fa-solid fa-globe"></i> Mostra Tutte
             </button>
           </div>
@@ -2172,7 +2172,7 @@ window.finalizzaDocente = async function() {
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 6px; min-width: 130px;">
                   ${isPlayable
-                    ? `<button class="btn" style="padding: 9px 16px; font-size: 0.85rem;" onclick="EroiApp.startQuiz('${m.id}')">
+                    ? `<button class="btn" style="padding: 9px 16px; font-size: 0.85rem; width: auto !important;" onclick="EroiApp.startQuiz('${m.id}')">
                          <i class="fa-solid ${
                            m.gameType === 'puzzle' ? 'fa-puzzle-piece' :
                            m.gameType === 'cloze' ? 'fa-pen-to-square' :
@@ -2185,7 +2185,7 @@ window.finalizzaDocente = async function() {
                            'Svolgi Quiz'
                          }
                        </button>`
-                    : `<button class="btn" disabled style="background: rgba(255,255,255,0.05); color: var(--text-muted); padding: 9px 16px; font-size: 0.85rem;">
+                    : `<button class="btn" disabled style="background: rgba(255,255,255,0.05); color: var(--text-muted); padding: 9px 16px; font-size: 0.85rem; width: auto !important;">
                          <i class="fa-solid fa-lock"></i> Bloccata
                        </button>`
                   }
