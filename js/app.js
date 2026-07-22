@@ -3205,7 +3205,7 @@ window.finalizzaDocente = async function() {
     },
 
     selectStatsCategory: function(category) {
-      ['teachers', 'students', 'classes', 'schools'].forEach(cat => {
+      ['teachers', 'students', 'classes'].forEach(cat => {
         const card = document.getElementById(`card-stats-${cat}`);
         if (card) card.classList.remove('active');
       });
@@ -3245,8 +3245,6 @@ window.finalizzaDocente = async function() {
         this.populateClassSelects();
       } else if (category === 'teachers') {
         this.renderTeacherDocenti();
-      } else if (category === 'schools') {
-        this.renderTeacherSchoolsList();
       }
     },
 
@@ -3282,6 +3280,7 @@ window.finalizzaDocente = async function() {
         tr.innerHTML = `
           <td><strong>${u.name || u.email.split('@')[0]}</strong></td>
           <td><span style="color: var(--text-muted); font-size: 0.85rem;">${u.email}</span></td>
+          <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name || u.email.split('@')[0]}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
         `;
         tbody.appendChild(tr);
       });
@@ -3537,7 +3536,7 @@ window.finalizzaDocente = async function() {
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:1.4rem;">${this.getAvatarEmoji(s.avatarClass)}</span>
               <div>
-                <strong>${s.name}</strong> <a href="mailto:${s.email}" title="Scrivi a ${s.name}" style="color:var(--gold); margin-left:6px; text-decoration:none;"><i class="fa-solid fa-envelope"></i></a><br>
+                <strong>${s.name}</strong><br>
                 <span style="font-size:0.75rem; color:var(--text-muted);">${s.email}</span>
               </div>
             </div>
@@ -3545,6 +3544,7 @@ window.finalizzaDocente = async function() {
           <td>${u ? u.classId : 'Senza classe'}</td>
           <td><span style="color:var(--gold); font-weight:bold;">${s.level}</span></td>
           <td>${s.xp} XP / ${s.dracme} Dracme</td>
+          <td style="text-align:center;"><a href="mailto:${s.email}" title="Scrivi a ${s.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>
             <div style="display:flex; gap:6px;">
               <button class="btn" style="padding:4px 8px; font-size:0.72rem; border: 1px solid var(--gold); color: var(--gold); background: transparent;" onclick="EroiApp.openStudentPreviewAll('${s.email}')" title="Preview Didattica">
@@ -4952,6 +4952,7 @@ window.finalizzaDocente = async function() {
       this.renderPendingRequests();
       this.renderAdminStaff();
       this.renderAdminAllUsers();
+      this.renderAdminSchoolsList();
     },
 
     renderPendingRequests: async function() {
@@ -4976,6 +4977,7 @@ window.finalizzaDocente = async function() {
             <td>${req.email}</td>
             <td>${req.scuola}</td>
             <td>${req.citta}</td>
+            <td style="text-align:center;"><a href="mailto:${req.email}" title="Scrivi a ${req.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
             <td style="display: flex; gap: 5px;">
               <button class="btn" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.approveTeacher('${req.id}', '${reqStr}')">
                 <i class="fa-solid fa-check"></i> Approva
@@ -5047,6 +5049,7 @@ window.finalizzaDocente = async function() {
           <td><strong>${u.name}</strong></td>
           <td>${u.email}</td>
           <td><span style="text-transform:uppercase; font-size:0.75rem; font-weight:bold; color:var(--gold);">${u.role}</span></td>
+          <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>
             ${u.email !== 'prof.memmo@gmail.com' ? `
               <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteStaff('${u.email}')">
@@ -5092,14 +5095,16 @@ window.finalizzaDocente = async function() {
         const isDocente = u.role === 'docente' || u.role === 'admin' || u.role === 'teacher';
         
         tr.innerHTML = `
-          <td><strong>${u.name || 'Sconosciuto'}</strong> <a href="mailto:${u.email}" title="Scrivi a ${u.name || 'Sconosciuto'}" style="color:var(--gold); margin-left:6px; text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
+          <td><strong>${u.name || 'Sconosciuto'}</strong></td>
           <td>${u.email}</td>
           <td>
             <select class="input-field" style="padding: 4px; font-size: 0.75rem; width: auto;" onchange="EroiApp.changeUserRole('${u.email}', this.value)" ${u.email === 'prof.memmo@gmail.com' ? 'disabled' : ''}>
-              <option value="student" ${!isDocente ? 'selected' : ''}>Studente</option>
-              <option value="docente" ${isDocente ? 'selected' : ''}>Docente</option>
+              <option value="student" ${u.role !== 'docente' && u.role !== 'admin' && u.role !== 'teacher' && u.role !== 'forestiero' ? 'selected' : ''}>Studente</option>
+              <option value="docente" ${u.role === 'docente' || u.role === 'admin' || u.role === 'teacher' ? 'selected' : ''}>Docente</option>
+              <option value="forestiero" ${u.role === 'forestiero' ? 'selected' : ''}>Forestiero</option>
             </select>
           </td>
+          <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name || 'Sconosciuto'}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
           <td>
             ${u.email !== 'prof.memmo@gmail.com' ? `
               <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteUserAdmin('${u.email}')">
@@ -5139,6 +5144,40 @@ window.finalizzaDocente = async function() {
         console.error("Errore eliminazione utente:", e);
         alert("Errore durante l'operazione: " + e.message);
       }
+    },
+
+    renderAdminSchoolsList: function() {
+      const classes = window.EroiDB.getClasses();
+      const tbody = document.querySelector('#admin-schools-table tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      // Raggruppa per scuola (tutte le classi presenti nel DB)
+      const schoolMap = {};
+      Object.values(classes).forEach(c => {
+        if (!c.school) return;
+        if (!schoolMap[c.school]) {
+          schoolMap[c.school] = { city: c.city || '—', classes: [] };
+        }
+        schoolMap[c.school].classes.push(c.name || c.id);
+      });
+
+      const schools = Object.keys(schoolMap);
+      if (schools.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;"><i>Nessuna scuola registrata nel sistema.</i></td></tr>`;
+        return;
+      }
+
+      schools.forEach(school => {
+        const { city, classes: classList } = schoolMap[school];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${school}</strong></td>
+          <td>${city}</td>
+          <td>${classList.map(cn => `<span style="background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-right: 4px;">${cn}</span>`).join('')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     },
 
     // --- REGOLAMENTO ---

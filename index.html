@@ -781,10 +781,6 @@
                 <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Classi</span>
                 <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-classes">0</h4>
               </div>
-              <div id="card-stats-schools" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('schools')">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Scuole</span>
-                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-schools">0</h4>
-              </div>
             </div>
             
 
@@ -802,6 +798,7 @@
                         <tr>
                           <th>Nome</th>
                           <th>Email</th>
+                          <th><i class="fa-solid fa-envelope"></i></th>
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -869,26 +866,6 @@
                 </div>
               </div>
 
-              <!-- PANNELLO: SCUOLE -->
-              <div id="panel-stats-schools" class="panoramica-sub-panel" style="display: none;">
-                <div class="glass-panel">
-                  <h3 class="panel-title"><i class="fa-solid fa-school" style="color: var(--gold);"></i> Istituti Scolastici Associati</h3>
-                  <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco delle scuole inserite con le rispettive classi attive.</p>
-                  <div class="table-responsive">
-                    <table class="game-table" id="teacher-schools-table">
-                      <thead>
-                        <tr>
-                          <th>Nome Istituto</th>
-                          <th>Città</th>
-                          <th>Classi Associate</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
               <!-- PANNELLO: STUDENTI -->
               <div id="panel-stats-students" class="panoramica-sub-panel" style="display: none;">
                 <!-- Nuovo Studente -->
@@ -941,6 +918,7 @@
                           <th>Classe</th>
                           <th>Livello</th>
                           <th>XP / Dracme</th>
+                          <th><i class="fa-solid fa-envelope"></i></th>
                           <th>Azioni e Assegnazioni</th>
                         </tr>
                       </thead>
@@ -1364,6 +1342,7 @@
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('richieste')">Richieste in Attesa</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('personale')">Personale</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('scuole')">Scuole</button>
           </div>
 
           <div id="a-tab-impostazioni" class="tab-content active">
@@ -1431,17 +1410,16 @@
                 <table class="game-table" id="admin-pending-table">
                   <thead>
                     <tr>
+                      <th>Nome</th>
                       <th>Email</th>
-                      <th>Ruolo Richiesto</th>
-                      <th>Classe Richiesta</th>
-                      <th>Data</th>
+                      <th>Scuola</th>
+                      <th>Città</th>
+                      <th><i class="fa-solid fa-envelope"></i></th>
                       <th>Azioni</th>
                     </tr>
                   </thead>
-                  <tbody></tbody>
+                  </tbody>
                 </table>
-              </div>
-            </div>
               </div>
             </div>
           </div>
@@ -1482,13 +1460,12 @@
                       <th>Nome</th>
                       <th>Email</th>
                       <th>Ruolo</th>
+                      <th><i class="fa-solid fa-envelope"></i></th>
                       <th>Azione</th>
                     </tr>
                   </thead>
-                  <tbody></tbody>
+                  </tbody>
                 </table>
-              </div>
-            </div>
               </div>
             </div>
           </div>
@@ -1504,6 +1481,7 @@
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Ruolo</th>
+                        <th><i class="fa-solid fa-envelope"></i></th>
                         <th>Azione</th>
                       </tr>
                     </thead>
@@ -1537,7 +1515,31 @@
             </div>
 
             </div>
+            </div>
           </div>
+
+          <!-- TAB SCUOLE (ADMIN) -->
+          <div id="a-tab-scuole" class="tab-content">
+            <div class="dashboard-grid">
+              <div class="glass-panel" style="grid-column: 1 / -1;">
+                <h3 class="panel-title"><i class="fa-solid fa-school" style="color: var(--gold);"></i> Istituti Scolastici Associati</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco globale di tutte le scuole inserite dai docenti con le rispettive classi attive.</p>
+                <div class="table-responsive">
+                  <table class="game-table" id="admin-schools-table">
+                    <thead>
+                      <tr>
+                        <th>Nome Istituto</th>
+                        <th>Città</th>
+                        <th>Classi Associate</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
       <!-- REGOLAMENTO POPUP VIEW -->
