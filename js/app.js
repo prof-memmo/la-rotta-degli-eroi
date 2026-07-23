@@ -5056,6 +5056,34 @@ window.finalizzaDocente = async function() {
             `Che l'epica sia con te!\n` +
             `Il Team de La Rotta degli Eroi`
         );
+        
+        // --- INTEGRAZIONE HUB ---
+        try {
+            const configHub = {
+                apiKey: "AIzaSyD-n2m-kYEuzGXPMKclZTggf4Y5Zm8_cdM",
+                authDomain: "prof-memmo-hub.firebaseapp.com",
+                projectId: "prof-memmo-hub",
+                storageBucket: "prof-memmo-hub.firebasestorage.app",
+                messagingSenderId: "839149485689",
+                appId: "1:839149485689:web:531776ce3cf495a6f23697"
+            };
+            let hubApp;
+            if (!firebase.apps.find(a => a.name === 'Hub')) {
+                hubApp = firebase.initializeApp(configHub, 'Hub');
+            } else {
+                hubApp = firebase.app('Hub');
+            }
+            await hubApp.firestore().collection("hub_posta_inviata").add({
+                destinatarioEmail: email,
+                destinatarioNome: nomeDocente,
+                gioco: 'La Rotta degli Eroi',
+                oggetto: '✅ Benvenuto ne La Rotta degli Eroi!',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch(errHub) {
+            console.warn("Errore salvataggio log nell'Hub:", errHub);
+        }
+
         window.location.href = `mailto:${email}?subject=${emailSubject}&body=${emailBody}`;
       } catch (e) {
         console.error("Errore approvazione docente:", e);
