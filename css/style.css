@@ -4724,3 +4724,36 @@ table.game-table tr:hover td {
         padding: 7px 10px !important;
     }
 }
+
+/* Teacher Dashboard Responsiveness */
+.form-create-student-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 15px;
+    align-items: flex-end;
+}
+.teacher-students-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .form-create-student-grid {
+        grid-template-columns: 1fr;
+    }
+    .teacher-students-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .teacher-students-header > div {
+        width: 100%;
+        flex-direction: column;
+    }
+    .teacher-students-header > div > input,
+    .teacher-students-header > div > select {
+        width: 100% !important;
+    }
+}

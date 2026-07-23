@@ -871,7 +871,7 @@
                 <!-- Nuovo Studente -->
                 <div class="glass-panel" style="margin-bottom: 24px;">
                   <h3 class="panel-title">Nuovo Studente</h3>
-                  <form id="form-create-student" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end;">
+                  <form id="form-create-student" class="form-create-student-grid" onsubmit="return false;">
                     <div class="form-group" style="margin-bottom: 0;">
                       <label for="new-student-name">Nome e Cognome</label>
                       <input type="text" id="new-student-name" class="form-control" required placeholder="Ettore Priamo">
@@ -901,7 +901,7 @@
                 </div>
 
                 <div class="glass-panel" id="teacher-students-section">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                  <div class="teacher-students-header">
                     <h3 class="panel-title" id="students-panel-title-text">Studenti Iscritti</h3>
                     <div style="display: flex; gap: 10px;">
                       <input type="text" id="search-student-teacher" class="form-control" placeholder="Cerca studente..." style="padding: 6px 12px; font-size: 0.85rem; width: 180px;">
