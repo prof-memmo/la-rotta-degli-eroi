@@ -1341,8 +1341,7 @@
           <div class="tabs-header">
             <button class="tab-btn active" onclick="EroiApp.switchAdminTab('impostazioni')">Impostazioni & DB</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('richieste')">Richieste in Attesa</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('personale')">Personale</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Tutti gli Utenti</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('scuole')">Scuole</button>
           </div>
 
@@ -1426,57 +1425,66 @@
           </div>
           </div>
 
-          <div id="a-tab-personale" class="tab-content">
-            <div class="dashboard-grid">
-              <!-- Gestione Amministratori e Docenti Secondari -->
-              <div class="glass-panel" style="grid-column: 1 / -1;">
-              <h3 class="panel-title">Gestione Personale (Docenti e Amministratori Secondari)</h3>
-              <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 20px;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-name">Nome Completo</label>
-                  <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-email">Indirizzo Email</label>
-                  <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-password">Password Temporanea</label>
-                  <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label for="staff-role">Ruolo Autorizzato</label>
-                  <select id="staff-role" class="form-control" required>
-                    <option value="teacher">Docente</option>
-                    <option value="admin">Amministratore Secondario</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
-              </form>
-
-              <div style="margin-bottom: 15px;"><input type="text" placeholder="Cerca in questo elenco..." class="form-control" style="width: 100%; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);"></div>
-              <div class="table-responsive">
-                <table class="game-table" id="admin-staff-table">
-                  <thead>
-                    <tr>
-                      <th style="cursor:pointer;" onclick="EroiApp.sortList('adminStaff', 'name')"><div style="display: flex; align-items: center; white-space: nowrap;">Nome <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                      <th style="cursor:pointer;" onclick="EroiApp.sortList('adminStaff', 'email')"><div style="display: flex; align-items: center; white-space: nowrap;">Email <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                      <th style="cursor:pointer;" onclick="EroiApp.sortList('adminStaff', 'role')"><div style="display: flex; align-items: center; white-space: nowrap;">Ruolo <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                      <th style="cursor:pointer;" onclick="EroiApp.sortList('adminStaff', 'date')"><div style="display: flex; align-items: center; white-space: nowrap;">Data Iscrizione <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                      <th><i class="fa-solid fa-envelope"></i></th>
-                      <th>Azione</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
           <div id="a-tab-utenti" class="tab-content">
             <div class="dashboard-grid">
+              
+              <!-- Card Riassuntive -->
+              <div style="grid-column: 1 / -1; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
+                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">👥 Totale</h4>
+                  <h2 id="admin-count-total" style="font-size: 2rem; color:var(--text-main); margin: 5px 0;">--</h2>
+                </div>
+                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🎓 Studenti</h4>
+                  <h2 id="admin-count-students" style="font-size: 2rem; color:#3b82f6; margin: 5px 0;">--</h2>
+                </div>
+                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🏛️ Docenti</h4>
+                  <h2 id="admin-count-teachers" style="font-size: 2rem; color:#ef4444; margin: 5px 0;">--</h2>
+                </div>
+                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🌲 Forestieri</h4>
+                  <h2 id="admin-count-forestieri" style="font-size: 2rem; color:#22c55e; margin: 5px 0;">--</h2>
+                </div>
+                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
+                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🏫 Scuole</h4>
+                  <h2 id="admin-count-schools" style="font-size: 2rem; color:#a855f7; margin: 5px 0;">--</h2>
+                </div>
+              </div>
+
+              <!-- Creazione Manuale Personale -->
+              <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 10px;">
+                <h3 class="panel-title" style="font-size:1.1rem;"><i class="fa-solid fa-user-plus"></i> Crea Nuovo Utente Staff (Opzionale)</h3>
+                <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 5px; margin-top:15px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-name">Nome Completo</label>
+                    <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-email">Indirizzo Email</label>
+                    <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-password">Password Temporanea</label>
+                    <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="staff-role">Ruolo Autorizzato</label>
+                    <select id="staff-role" class="form-control" required>
+                      <option value="teacher">Docente</option>
+                      <option value="admin">Amministratore Secondario</option>
+                      <option value="forestiero">Forestiero</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
+                </form>
+              </div>
+
               <div class="glass-panel" style="grid-column: 1 / -1;">
-                <h3 class="panel-title">Tutti gli Utenti (Gestione Avanzata)</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                  <h3 class="panel-title" style="margin: 0;">Tutti gli Utenti (Gestione Avanzata)</h3>
+                  <input type="text" id="admin-search-users" placeholder="Cerca nome o email..." class="form-control" style="width: 250px; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);" onkeyup="EroiApp.filterAdminUsers()">
+                </div>
                 <div class="table-responsive">
                   <table class="game-table" id="admin-all-users-table">
                     <thead>

@@ -1527,7 +1527,7 @@ window.finalizzaDocente = async function() {
           document.getElementById('staff-name').value = '';
           document.getElementById('staff-email').value = '';
           document.getElementById('staff-password').value = '';
-          self.renderAdminStaff();
+          self.renderAdminAllUsers();
         } catch (err) {
           alert("Errore: " + err.message);
         }
@@ -4944,8 +4944,6 @@ window.finalizzaDocente = async function() {
       document.getElementById('admin-setting-contacts').value = settings.contacts;
 
       this.renderPendingRequests();
-      this.renderAdminStaff();
-      
       // Renderizza componenti spostati da Teacher a Admin
       this.renderTeacherMissions();
       this.renderTeacherShop();
@@ -4988,7 +4986,6 @@ window.finalizzaDocente = async function() {
       document.getElementById('legal-doc-gdpr').value = settings.gdpr || '';
 
       this.renderPendingRequests();
-      this.renderAdminStaff();
       this.renderAdminAllUsers();
       this.renderAdminSchoolsList();
     },
@@ -5040,7 +5037,7 @@ window.finalizzaDocente = async function() {
         await window.EroiDB.approveTeacherRequest(requestId, data);
         this.showToast("Docente approvato con successo!", "success");
         this.renderPendingRequests();
-        this.renderAdminStaff();
+        this.renderAdminAllUsers();
         
         // Apertura client mail (mailto)
         const email = data.email;
@@ -5103,58 +5100,11 @@ window.finalizzaDocente = async function() {
       }
     },
 
-    renderAdminStaff: async function() {
-      await window.EroiDB.syncCloudUsers();
-      const users = window.EroiDB.getAllUsers().filter(u => u.role === 'teacher' || u.role === 'admin' || u.role === 'docente');
-      const tbody = document.querySelector('#admin-staff-table tbody');
-      tbody.innerHTML = '';
-
-      if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessuno staff trovato</td></tr>';
-        return;
-      }
-
-      // Sort logic
-      const state = this.sortState.adminStaff;
-      users.sort((a, b) => {
-          let valA, valB;
-          if (state.col === 'name') { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
-          else if (state.col === 'email') { valA = (a.email || '').toLowerCase(); valB = (b.email || '').toLowerCase(); }
-          else if (state.col === 'role') { valA = (a.role || '').toLowerCase(); valB = (b.role || '').toLowerCase(); }
-          else if (state.col === 'date') { valA = this.getDateValue(a); valB = this.getDateValue(b); }
-          else { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
-          
-          if (valA < valB) return state.asc ? -1 : 1;
-          if (valA > valB) return state.asc ? 1 : -1;
-          return 0;
-      });
-
-      users.forEach(u => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${u.name}</strong></td>
-          <td>${u.email}</td>
-          <td><span style="text-transform:uppercase; font-size:0.75rem; font-weight:bold; color:var(--gold);">${u.role}</span></td>
-          <td style="font-size:0.85rem; color:var(--text-muted);">${this.getDateValue(u) > 0 ? new Date(this.getDateValue(u)).toLocaleDateString('it-IT') : 'N/D'}</td>
-          <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
-          <td>
-            ${u.email !== 'prof.memmo@gmail.com' ? `
-              <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteStaff('${u.email}')">
-                <i class="fa-solid fa-trash"></i> Rimuovi
-              </button>
-            ` : '<i>Admin Principale</i>'}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    },
-
-    deleteStaff: function(email) {
-      if (confirm(`Eliminare definitivamente l'account staff ${email}? Non potrà più accedere.`)) {
+      if (confirm(`Eliminare definitivamente l'account ${email}? Non potrà più accedere.`)) {
         window.EroiDB.deleteUser(email);
-        window.EroiDB.logActivity("admin", `Eliminato l'account staff: ${email}`);
+        window.EroiDB.logActivity("admin", `Eliminato l'account: ${email}`);
         this.showToast("Membro dello staff rimosso.", "success");
-        this.renderAdminStaff();
+        this.renderAdminAllUsers();
       }
     },
 
@@ -5170,6 +5120,32 @@ window.finalizzaDocente = async function() {
       }
       
       const users = window.EroiDB.getAllUsers();
+      
+      // Update Summary Cards
+      const counts = { totale: users.length, docenti: 0, studenti: 0, forestieri: 0, scuole: 0 };
+      const scuoleSet = new Set();
+      
+      users.forEach(u => {
+          if (u.role === 'admin' || u.role === 'teacher' || u.role === 'docente') counts.docenti++;
+          else if (u.role === 'forestiero') counts.forestieri++;
+          else counts.studenti++;
+          
+          if (u.scuola && u.scuola.trim() !== '') scuoleSet.add(u.scuola.trim().toLowerCase());
+      });
+      counts.scuole = scuoleSet.size;
+      
+      const elTotal = document.getElementById('admin-count-total');
+      const elStudents = document.getElementById('admin-count-students');
+      const elTeachers = document.getElementById('admin-count-teachers');
+      const elForestieri = document.getElementById('admin-count-forestieri');
+      const elSchools = document.getElementById('admin-count-schools');
+      
+      if (elTotal) elTotal.innerText = counts.totale;
+      if (elStudents) elStudents.innerText = counts.studenti;
+      if (elTeachers) elTeachers.innerText = counts.docenti;
+      if (elForestieri) elForestieri.innerText = counts.forestieri;
+      if (elSchools) elSchools.innerText = counts.scuole;
+
       tbody.innerHTML = '';
 
       if (users.length === 0) {
@@ -5228,7 +5204,6 @@ window.finalizzaDocente = async function() {
       try {
         await window.EroiDB.updateUserRole(email, newRole);
         this.showToast(`Ruolo di ${email} aggiornato a ${newRole}.`, "success");
-        this.renderAdminStaff();
         this.renderAdminAllUsers();
       } catch (e) {
         console.error("Errore cambio ruolo:", e);
@@ -5240,13 +5215,28 @@ window.finalizzaDocente = async function() {
       if (!confirm(`Sei ASSOLUTAMENTE sicuro di voler eliminare DEFINITIVAMENTE l'utente ${email}? L'azione è irreversibile e cancellerà anche i suoi progressi se è studente.`)) return;
       try {
         await window.EroiDB.deleteUser(email);
-        this.showToast(`Utente ${email} eliminato.`, "success");
-        this.renderAdminStaff();
+        this.showToast(`Utente ${email} eliminato definitivamente.`, "success");
         this.renderAdminAllUsers();
       } catch (e) {
         console.error("Errore eliminazione utente:", e);
-        alert("Errore durante l'operazione: " + e.message);
+        alert("Errore durante l'eliminazione: " + e.message);
       }
+    },
+    
+    filterAdminUsers: function() {
+      const query = document.getElementById('admin-search-users').value.toLowerCase();
+      const trs = document.querySelectorAll('#admin-all-users-table tbody tr');
+      trs.forEach(tr => {
+        if (tr.children.length > 1) {
+          const name = tr.children[0].innerText.toLowerCase();
+          const email = tr.children[1].innerText.toLowerCase();
+          if (name.includes(query) || email.includes(query)) {
+            tr.style.display = '';
+          } else {
+            tr.style.display = 'none';
+          }
+        }
+      });
     },
 
     renderAdminSchoolsList: function() {
