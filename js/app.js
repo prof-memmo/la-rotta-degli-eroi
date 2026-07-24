@@ -5100,14 +5100,6 @@ window.finalizzaDocente = async function() {
       }
     },
 
-      if (confirm(`Eliminare definitivamente l'account ${email}? Non potrà più accedere.`)) {
-        window.EroiDB.deleteUser(email);
-        window.EroiDB.logActivity("admin", `Eliminato l'account: ${email}`);
-        this.showToast("Membro dello staff rimosso.", "success");
-        this.renderAdminAllUsers();
-      }
-    },
-
     renderAdminAllUsers: async function() {
       const tbody = document.querySelector('#admin-all-users-table tbody');
       if(!tbody) return;
