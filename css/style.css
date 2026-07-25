@@ -4197,6 +4197,40 @@ table.game-table tr:hover td {
     flex-direction: column;
     overflow: hidden;
 }
+
+#active-quiz-container[style*="display: block"],
+#active-quiz-container[style*="display: flex"] {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.quiz-actions-row {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    flex-wrap: wrap; /* Fix horizontal overflow */
+}
+
+@media (max-width: 768px) {
+    #active-quiz-container {
+        padding: 15px 10px !important;
+        margin-top: 10px !important;
+    }
+    .quiz-actions-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .quiz-actions-row .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 #missions-categories-container {
     flex: 1;
     min-height: 0;
