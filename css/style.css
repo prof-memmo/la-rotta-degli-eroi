@@ -4441,7 +4441,7 @@ table.game-table tr:hover td {
     }
     /* Su schermi < 768px (bottom nav attiva):
        main-content = 100dvh - header(60px) - bottom-nav(64px) */
-    .app-main-content {
+    .main-content {
         margin-top: 60px;
         height: calc(100dvh - 60px - 64px);
         max-height: calc(100dvh - 60px - 64px);
@@ -4789,5 +4789,32 @@ table.game-table tr:hover td {
     .teacher-students-header > div > input,
     .teacher-students-header > div > select {
         width: 100% !important;
+    }
+}
+@media (max-width: 768px) {
+    /* Rimuovi completamente i gap attorno alle view per sfruttare tutto lo spazio */
+    .view, .view.active, #view-missions {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .glass-panel {
+        padding: 10px !important;
+        margin-bottom: 0 !important;
+        border-radius: 0 !important;
+        /* Per assicurarsi che copra tutto se mostriamo un background */
+        height: 100% !important;
+    }
+
+    #view-missions > div {
+        margin: 0 !important;
+        padding: 10px !important;
+    }
+
+    /* Assicura che main-content parta esattamente da sotto l'header e arrivi al bottom nav */
+    .main-content, body.logged-in .main-content {
+        margin-top: 60px !important;
+        height: calc(100dvh - 60px - 64px) !important;
+        padding: 0 !important;
     }
 }
