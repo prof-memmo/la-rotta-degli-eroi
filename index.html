@@ -1429,31 +1429,22 @@
             <div class="dashboard-grid">
               
               <!-- Card Riassuntive -->
-              <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; overflow-x: auto; width: 100%;">
-                <div class="glass-panel admin-stat-card" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px; cursor: pointer;" onclick="EroiApp.setAdminUserFilter('all')">
-                  <div style="font-size: 1.5rem; margin-bottom: 5px;">👥</div>
-                  <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 2px;">Totale</div>
-                  <h2 id="admin-count-total" style="font-size: 1.4rem; color:var(--text-main); margin: 0;">--</h2>
+              <div id="admin-filters-container" style="grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 15px; margin-bottom: 25px; overflow-x: auto; width: 100%;">
+                <div class="admin-stat-card filter-card active" data-filter="all" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid #5D5FEF; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('all')">
+                  <h2 id="admin-count-total" style="font-size: 2rem; font-weight: 900; color: #5D5FEF; margin: 0 0 5px 0;">--</h2>
+                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Tutti</div>
                 </div>
-                <div class="glass-panel admin-stat-card" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px; cursor: pointer;" onclick="EroiApp.setAdminUserFilter('student')">
-                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🎓</div>
-                  <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 2px;">Studenti</div>
-                  <h2 id="admin-count-students" style="font-size: 1.4rem; color:#3b82f6; margin: 0;">--</h2>
+                <div class="admin-stat-card filter-card" data-filter="teacher" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('teacher')">
+                  <h2 id="admin-count-teachers" style="font-size: 2rem; font-weight: 900; color: #2980b9; margin: 0 0 5px 0;">--</h2>
+                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Docenti</div>
                 </div>
-                <div class="glass-panel admin-stat-card" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px; cursor: pointer;" onclick="EroiApp.setAdminUserFilter('teacher')">
-                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🏛️</div>
-                  <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 2px;">Docenti</div>
-                  <h2 id="admin-count-teachers" style="font-size: 1.4rem; color:#ef4444; margin: 0;">--</h2>
+                <div class="admin-stat-card filter-card" data-filter="student" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('student')">
+                  <h2 id="admin-count-students" style="font-size: 2rem; font-weight: 900; color: #27ae60; margin: 0 0 5px 0;">--</h2>
+                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Studenti</div>
                 </div>
-                <div class="glass-panel admin-stat-card" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px; cursor: pointer;" onclick="EroiApp.setAdminUserFilter('forestiero')">
-                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🌲</div>
-                  <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 2px;">Forestieri</div>
-                  <h2 id="admin-count-forestieri" style="font-size: 1.4rem; color:#22c55e; margin: 0;">--</h2>
-                </div>
-                <div class="glass-panel admin-stat-card" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px; cursor: default;">
-                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🏫</div>
-                  <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 2px;">Scuole</div>
-                  <h2 id="admin-count-schools" style="font-size: 1.4rem; color:#a855f7; margin: 0;">--</h2>
+                <div class="admin-stat-card filter-card" data-filter="forestiero" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('forestiero')">
+                  <h2 id="admin-count-forestieri" style="font-size: 2rem; font-weight: 900; color: #8e44ad; margin: 0 0 5px 0;">--</h2>
+                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Forestieri</div>
                 </div>
               </div>
 

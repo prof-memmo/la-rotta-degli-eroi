@@ -5114,6 +5114,17 @@ window.finalizzaDocente = async function() {
 
     setAdminUserFilter: function(filter) {
         this.adminUserFilter = filter;
+        
+        // Update UI for active filter
+        const cards = document.querySelectorAll('.filter-card');
+        cards.forEach(card => {
+            if (card.dataset.filter === filter) {
+                card.style.border = '2px solid #5D5FEF';
+            } else {
+                card.style.border = '2px solid transparent';
+            }
+        });
+        
         this.renderAdminAllUsers();
     },
 
