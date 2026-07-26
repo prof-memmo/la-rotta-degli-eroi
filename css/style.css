@@ -4853,6 +4853,10 @@ table.game-table tr:hover td {
 
 /* Tooltips per la Navbar */
 @media screen and (min-width: 1024px) {
+    .mobile-bottom-nav {
+        overflow: visible !important;
+    }
+
     .mobile-nav-item {
         position: relative;
     }
