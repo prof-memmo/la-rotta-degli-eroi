@@ -1655,8 +1655,8 @@ table.game-table tr:hover td {
    Il JS controlla la visibilità con style.display */
 
 .mobile-nav-item {
-  flex: 0 0 auto;
-  min-width: 85px;
+  flex: 0 0 calc(28% - 10px);
+  max-width: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
