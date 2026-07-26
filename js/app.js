@@ -5112,6 +5112,11 @@ window.finalizzaDocente = async function() {
       }
     },
 
+    setAdminUserFilter: function(filter) {
+        this.adminUserFilter = filter;
+        this.renderAdminAllUsers();
+    },
+
     renderAdminAllUsers: async function() {
       const tbody = document.querySelector('#admin-all-users-table tbody');
       if(!tbody) return;
@@ -5152,14 +5157,25 @@ window.finalizzaDocente = async function() {
 
       tbody.innerHTML = '';
 
-      if (users.length === 0) {
+      // Applica filtro
+      const filter = this.adminUserFilter || 'all';
+      let filteredUsers = users;
+      if (filter === 'student') {
+          filteredUsers = users.filter(u => u.role !== 'docente' && u.role !== 'admin' && u.role !== 'teacher' && u.role !== 'forestiero');
+      } else if (filter === 'teacher') {
+          filteredUsers = users.filter(u => u.role === 'docente' || u.role === 'admin' || u.role === 'teacher');
+      } else if (filter === 'forestiero') {
+          filteredUsers = users.filter(u => u.role === 'forestiero');
+      }
+
+      if (filteredUsers.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessun utente trovato</td></tr>';
         return;
       }
 
       // Sort logic
       const state = this.sortState.adminAll;
-      users.sort((a, b) => {
+      filteredUsers.sort((a, b) => {
           let valA, valB;
           if (state.col === 'name') { valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase(); }
           else if (state.col === 'email') { valA = (a.email || '').toLowerCase(); valB = (b.email || '').toLowerCase(); }
@@ -5172,7 +5188,7 @@ window.finalizzaDocente = async function() {
           return 0;
       });
 
-      users.forEach(u => {
+      filteredUsers.forEach(u => {
         const tr = document.createElement('tr');
         const isDocente = u.role === 'docente' || u.role === 'admin' || u.role === 'teacher';
         
