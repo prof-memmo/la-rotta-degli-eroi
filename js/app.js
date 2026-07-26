@@ -2118,11 +2118,11 @@ window.finalizzaDocente = async function() {
                                 currentMissionsFilterArea === 'Biblioteca' ? "Gli Autori" :
                                 currentMissionsFilterArea === 'Archivio' ? "Le Opere" : currentMissionsFilterArea;
         html += `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gold); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-            <span style="font-size: 0.95rem; font-weight: bold; color: var(--gold); display: flex; align-items: center; gap: 8px;">
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; padding: 12px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gold); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); gap: 10px; text-align: center;">
+            <span style="font-size: 0.95rem; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
               <i class="fa-solid fa-map-location-dot"></i> Missioni dell'area: <strong style="color:var(--text-light); text-transform:uppercase;">${displayAreaName}</strong>
             </span>
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; width: auto !important; min-width: 0; white-space: nowrap; flex-shrink: 0;" onclick="EroiApp.clearMissionsFilter()">
+            <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem; width: auto !important; min-width: 0; flex-shrink: 0;" onclick="EroiApp.clearMissionsFilter()">
               <i class="fa-solid fa-globe"></i> Mostra Tutte
             </button>
           </div>

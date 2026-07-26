@@ -761,6 +761,8 @@ h3.panel-title {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 24px;
+  align-content: start;
+  align-items: start;
 }
 
 .stat-row {
@@ -815,6 +817,36 @@ h3.panel-title {
 }
 
 /* Cards (Unified Glass Card) */
+.admin-stat-card {
+  position: relative;
+  cursor: pointer;
+}
+.admin-stat-card::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(13, 19, 38, 0.95);
+  color: var(--gold);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 100;
+  border: 1px solid var(--gold);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  margin-bottom: 5px;
+}
+.admin-stat-card:hover::after,
+.admin-stat-card:active::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

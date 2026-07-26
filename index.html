@@ -1429,33 +1429,33 @@
             <div class="dashboard-grid">
               
               <!-- Card Riassuntive -->
-              <div style="grid-column: 1 / -1; display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
-                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
-                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">👥 Totale</h4>
-                  <h2 id="admin-count-total" style="font-size: 2rem; color:var(--text-main); margin: 5px 0;">--</h2>
+              <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; overflow-x: auto; width: 100%;">
+                <div class="glass-panel admin-stat-card" data-title="Utenti Totali" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px;">
+                  <div style="font-size: 1.5rem; margin-bottom: 5px;">👥</div>
+                  <h2 id="admin-count-total" style="font-size: 1.4rem; color:var(--text-main); margin: 0;">--</h2>
                 </div>
-                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
-                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🎓 Studenti</h4>
-                  <h2 id="admin-count-students" style="font-size: 2rem; color:#3b82f6; margin: 5px 0;">--</h2>
+                <div class="glass-panel admin-stat-card" data-title="Studenti" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px;">
+                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🎓</div>
+                  <h2 id="admin-count-students" style="font-size: 1.4rem; color:#3b82f6; margin: 0;">--</h2>
                 </div>
-                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
-                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🏛️ Docenti</h4>
-                  <h2 id="admin-count-teachers" style="font-size: 2rem; color:#ef4444; margin: 5px 0;">--</h2>
+                <div class="glass-panel admin-stat-card" data-title="Docenti" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px;">
+                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🏛️</div>
+                  <h2 id="admin-count-teachers" style="font-size: 1.4rem; color:#ef4444; margin: 0;">--</h2>
                 </div>
-                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
-                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🌲 Forestieri</h4>
-                  <h2 id="admin-count-forestieri" style="font-size: 2rem; color:#22c55e; margin: 5px 0;">--</h2>
+                <div class="glass-panel admin-stat-card" data-title="Forestieri" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px;">
+                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🌲</div>
+                  <h2 id="admin-count-forestieri" style="font-size: 1.4rem; color:#22c55e; margin: 0;">--</h2>
                 </div>
-                <div class="glass-panel" style="flex: 1; min-width: 150px; text-align: center; margin-bottom: 0;">
-                  <h4 style="color:var(--text-muted); margin-top:0; font-size:0.9rem;">🏫 Scuole</h4>
-                  <h2 id="admin-count-schools" style="font-size: 2rem; color:#a855f7; margin: 5px 0;">--</h2>
+                <div class="glass-panel admin-stat-card" data-title="Scuole" style="flex: 1; min-width: 50px; text-align: center; margin-bottom: 0; padding: 12px 5px;">
+                  <div style="font-size: 1.5rem; margin-bottom: 5px;">🏫</div>
+                  <h2 id="admin-count-schools" style="font-size: 1.4rem; color:#a855f7; margin: 0;">--</h2>
                 </div>
               </div>
 
               <!-- Creazione Manuale Personale -->
               <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 10px;">
                 <h3 class="panel-title" style="font-size:1.1rem;"><i class="fa-solid fa-user-plus"></i> Crea Nuovo Utente Staff (Opzionale)</h3>
-                <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 5px; margin-top:15px;">
+                <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: flex-end; margin-bottom: 5px; margin-top:15px;">
                   <div class="form-group" style="margin-bottom: 0;">
                     <label for="staff-name">Nome Completo</label>
                     <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
