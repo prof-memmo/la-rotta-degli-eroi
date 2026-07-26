@@ -985,12 +985,14 @@ window.finalizzaDocente = async function() {
 
       if (!user) {
         links = [
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'disabled', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'disabled', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'disabled', label: 'Tempio', icon: 'fa-book-open' }
         ];
       } else if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
         links = [
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
@@ -1000,6 +1002,7 @@ window.finalizzaDocente = async function() {
         ];
       } else if ((user.role === 'docente' || user.role === 'teacher')) {
         links = [
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
@@ -1009,6 +1012,7 @@ window.finalizzaDocente = async function() {
         ];
       } else if (user.role === 'admin') {
         links = [
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-admin-dashboard', label: 'Pannello Admin', icon: 'fa-screwdriver-wrench' },
           { view: 'view-teacher-dashboard', label: 'Pannello Docente', icon: 'fa-chalkboard-user' },
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
@@ -1024,14 +1028,22 @@ window.finalizzaDocente = async function() {
       mobileMenu.innerHTML = links.map(l => {
         if (l.view === 'disabled') {
             return `
-            <a href="#" class="mobile-nav-item" style="opacity: 0.5; cursor: not-allowed;">
+            <a href="#" class="mobile-nav-item" style="opacity: 0.5; cursor: not-allowed;" data-tooltip="${l.label}">
+              <i class="fa-solid ${l.icon}"></i>
+              <span>${l.label}</span>
+            </a>
+            `;
+        }
+        if (l.action) {
+            return `
+            <a href="#" class="mobile-nav-item" onclick="${l.action}; return false;" data-tooltip="${l.label}">
               <i class="fa-solid ${l.icon}"></i>
               <span>${l.label}</span>
             </a>
             `;
         }
         return `
-        <a href="#${l.view}" class="mobile-nav-item" data-view="${l.view}">
+        <a href="#${l.view}" class="mobile-nav-item" data-view="${l.view}" data-tooltip="${l.label}">
           <i class="fa-solid ${l.icon}"></i>
           <span>${l.label}</span>
         </a>
