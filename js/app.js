@@ -1029,23 +1029,20 @@ window.finalizzaDocente = async function() {
         if (l.view === 'disabled') {
             return `
             <a href="#" class="mobile-nav-item" style="opacity: 0.5; cursor: not-allowed;" data-tooltip="${l.label}">
-              <i class="fa-solid ${l.icon}"></i>
-              <span>${l.label}</span>
+              <i class="fa-solid ${l.icon}" style="font-size: 1.5rem; margin: 0 auto;"></i>
             </a>
             `;
         }
         if (l.action) {
             return `
             <a href="#" class="mobile-nav-item" onclick="${l.action}; return false;" data-tooltip="${l.label}">
-              <i class="fa-solid ${l.icon}"></i>
-              <span>${l.label}</span>
+              <i class="fa-solid ${l.icon}" style="font-size: 1.5rem; margin: 0 auto;"></i>
             </a>
             `;
         }
         return `
         <a href="#${l.view}" class="mobile-nav-item" data-view="${l.view}" data-tooltip="${l.label}">
-          <i class="fa-solid ${l.icon}"></i>
-          <span>${l.label}</span>
+          <i class="fa-solid ${l.icon}" style="font-size: 1.5rem; margin: 0 auto;"></i>
         </a>
         `;
       }).join('');
