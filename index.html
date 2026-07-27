@@ -1429,24 +1429,24 @@
             <div class="dashboard-grid">
               
               <!-- Card Riassuntive -->
-              <div id="admin-filters-container" style="grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 15px; margin-bottom: 25px; overflow-x: auto; width: 100%;">
-                <div class="admin-stat-card filter-card active" data-filter="all" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid #5D5FEF; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('all')">
+              <div id="admin-filters-container" style="grid-column: 1 / -1; display: flex; justify-content: flex-start; gap: 15px; margin-bottom: 25px; overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 10px; flex-wrap: nowrap;">
+                <div class="admin-stat-card filter-card active" data-filter="all" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid #5D5FEF; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('all')">
                   <h2 id="admin-count-total" style="font-size: 2rem; font-weight: 900; color: #5D5FEF; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Tutti</div>
                 </div>
-                <div class="admin-stat-card filter-card" data-filter="teacher" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('teacher')">
+                <div class="admin-stat-card filter-card" data-filter="teacher" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('teacher')">
                   <h2 id="admin-count-teachers" style="font-size: 2rem; font-weight: 900; color: #2980b9; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Docenti</div>
                 </div>
-                <div class="admin-stat-card filter-card" data-filter="student" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('student')">
+                <div class="admin-stat-card filter-card" data-filter="student" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('student')">
                   <h2 id="admin-count-students" style="font-size: 2rem; font-weight: 900; color: #27ae60; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Studenti</div>
                 </div>
-                <div class="admin-stat-card filter-card" data-filter="forestiero" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('forestiero')">
+                <div class="admin-stat-card filter-card" data-filter="forestiero" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('forestiero')">
                   <h2 id="admin-count-forestieri" style="font-size: 2rem; font-weight: 900; color: #8e44ad; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Forestieri</div>
                 </div>
-                <div class="admin-stat-card" style="flex: 1; min-width: 80px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: default; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <div class="admin-stat-card" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: default; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                   <h2 id="admin-count-schools" style="font-size: 2rem; font-weight: 900; color: #a855f7; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Scuole</div>
                 </div>
@@ -1455,20 +1455,20 @@
               <!-- Creazione Manuale Personale -->
               <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 10px;">
                 <h3 class="panel-title" style="font-size:1.1rem;"><i class="fa-solid fa-user-plus"></i> Crea Nuovo Utente Staff (Opzionale)</h3>
-                <form id="form-create-staff" onsubmit="return false;" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: flex-end; margin-bottom: 5px; margin-top:15px;">
-                  <div class="form-group" style="margin-bottom: 0;">
+                <form id="form-create-staff" onsubmit="return false;" style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 5px; margin-top:15px; align-items: flex-end;">
+                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
                     <label for="staff-name">Nome Completo</label>
                     <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
                   </div>
-                  <div class="form-group" style="margin-bottom: 0;">
+                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
                     <label for="staff-email">Indirizzo Email</label>
                     <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
                   </div>
-                  <div class="form-group" style="margin-bottom: 0;">
+                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
                     <label for="staff-password">Password Temporanea</label>
                     <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
                   </div>
-                  <div class="form-group" style="margin-bottom: 0;">
+                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
                     <label for="staff-role">Ruolo Autorizzato</label>
                     <select id="staff-role" class="form-control" required>
                       <option value="teacher">Docente</option>
