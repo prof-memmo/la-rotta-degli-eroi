@@ -5115,6 +5115,19 @@ window.finalizzaDocente = async function() {
     setAdminUserFilter: function(filter) {
         this.adminUserFilter = filter;
         
+        const usersWrapper = document.getElementById('admin-users-table-wrapper');
+        const schoolsWrapper = document.getElementById('admin-schools-table-wrapper');
+        
+        if (filter === 'schools') {
+            if (usersWrapper) usersWrapper.style.display = 'none';
+            if (schoolsWrapper) schoolsWrapper.style.display = 'block';
+            this.renderAdminSchoolsList();
+        } else {
+            if (usersWrapper) usersWrapper.style.display = 'block';
+            if (schoolsWrapper) schoolsWrapper.style.display = 'none';
+            this.renderAdminAllUsers();
+        }
+        
         // Update UI for active filter
         const cards = document.querySelectorAll('.filter-card');
         cards.forEach(card => {
@@ -5124,8 +5137,6 @@ window.finalizzaDocente = async function() {
                 card.style.border = '2px solid transparent';
             }
         });
-        
-        this.renderAdminAllUsers();
     },
 
     renderAdminAllUsers: async function() {

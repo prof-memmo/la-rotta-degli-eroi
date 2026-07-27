@@ -1341,8 +1341,7 @@
           <div class="tabs-header">
             <button class="tab-btn active" onclick="EroiApp.switchAdminTab('impostazioni')">Impostazioni & DB</button>
             <button class="tab-btn" onclick="EroiApp.switchAdminTab('richieste')">Richieste in Attesa</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Tutti gli Utenti</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('scuole')">Scuole</button>
+            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti & Scuole</button>
           </div>
 
           <div id="a-tab-impostazioni" class="tab-content active">
@@ -1446,7 +1445,7 @@
                   <h2 id="admin-count-forestieri" style="font-size: 2rem; font-weight: 900; color: #8e44ad; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Forestieri</div>
                 </div>
-                <div class="admin-stat-card" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: default; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <div class="admin-stat-card filter-card" data-filter="schools" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('schools')">
                   <h2 id="admin-count-schools" style="font-size: 2rem; font-weight: 900; color: #a855f7; margin: 0 0 5px 0;">--</h2>
                   <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Scuole</div>
                 </div>
@@ -1480,7 +1479,7 @@
                 </form>
               </div>
 
-              <div class="glass-panel" style="grid-column: 1 / -1; max-width: 100vw; overflow: hidden; box-sizing: border-box;">
+              <div id="admin-users-table-wrapper" class="glass-panel" style="grid-column: 1 / -1; max-width: 100vw; overflow: hidden; box-sizing: border-box;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                   <h3 class="panel-title" style="margin: 0;">Tutti gli Utenti (Gestione Avanzata)</h3>
                   <input type="text" id="admin-search-users" placeholder="Cerca nome o email..." class="form-control" style="width: 250px; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);" onkeyup="EroiApp.filterAdminUsers()">
@@ -1495,6 +1494,23 @@
                         <th style="cursor:pointer;" onclick="EroiApp.sortList('adminAll', 'date')"><div style="display: flex; align-items: center; white-space: nowrap;">Data Iscrizione <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
                         <th><i class="fa-solid fa-envelope"></i></th>
                         <th>Azione</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="admin-schools-table-wrapper" class="glass-panel" style="grid-column: 1 / -1; max-width: 100vw; overflow: hidden; box-sizing: border-box; display: none;">
+                <h3 class="panel-title"><i class="fa-solid fa-school" style="color: var(--gold);"></i> Istituti Scolastici Associati</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco globale di tutte le scuole inserite dai docenti con le rispettive classi attive.</p>
+                <div class="table-responsive">
+                  <table class="game-table" id="admin-schools-table">
+                    <thead>
+                      <tr>
+                        <th>Nome Istituto</th>
+                        <th>Città</th>
+                        <th>Classi Associate</th>
                       </tr>
                     </thead>
                     <tbody></tbody>
@@ -1529,27 +1545,7 @@
             </div>
           </div>
 
-          <!-- TAB SCUOLE (ADMIN) -->
-          <div id="a-tab-scuole" class="tab-content">
-            <div class="dashboard-grid">
-              <div class="glass-panel" style="grid-column: 1 / -1;">
-                <h3 class="panel-title"><i class="fa-solid fa-school" style="color: var(--gold);"></i> Istituti Scolastici Associati</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco globale di tutte le scuole inserite dai docenti con le rispettive classi attive.</p>
-                <div class="table-responsive">
-                  <table class="game-table" id="admin-schools-table">
-                    <thead>
-                      <tr>
-                        <th>Nome Istituto</th>
-                        <th>Città</th>
-                        <th>Classi Associate</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- FINE TAB UTENTI (ADMIN) -->
 
         </div>
       </section>
