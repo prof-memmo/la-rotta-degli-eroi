@@ -4894,3 +4894,11 @@ table.game-table tr:hover td {
         color: var(--primary-color, #3b82f6);
     }
 }
+
+
+/* Nascondi testo navbar su PC */
+@media (min-width: 769px) {
+  .mobile-nav-item span {
+    display: none !important;
+  }
+}

@@ -1453,10 +1453,10 @@
               </div>
 
               <!-- Creazione Manuale Personale -->
-              <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 10px;">
+              <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 25px; padding-bottom: 10px; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
                 <h3 class="panel-title" style="font-size:1.1rem;"><i class="fa-solid fa-user-plus"></i> Crea Nuovo Utente Staff (Opzionale)</h3>
-                <form id="form-create-staff" onsubmit="return false;" style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 5px; margin-top:15px; align-items: flex-end;">
-                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+                <form id="form-create-staff" onsubmit="return false;" style="display: flex; flex-wrap: nowrap; gap: 15px; margin-bottom: 5px; margin-top:15px; align-items: flex-end; width: max-content;">
+                  <div class="form-group" style="margin-bottom: 0; flex: 0 0 200px;">
                     <label for="staff-name">Nome Completo</label>
                     <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
                   </div>
@@ -1480,8 +1480,8 @@
                 </form>
               </div>
 
-              <div class="glass-panel" style="grid-column: 1 / -1;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+              <div class="glass-panel" style="grid-column: 1 / -1; max-width: 100vw; overflow: hidden; box-sizing: border-box;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                   <h3 class="panel-title" style="margin: 0;">Tutti gli Utenti (Gestione Avanzata)</h3>
                   <input type="text" id="admin-search-users" placeholder="Cerca nome o email..." class="form-control" style="width: 250px; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);" onkeyup="EroiApp.filterAdminUsers()">
                 </div>
