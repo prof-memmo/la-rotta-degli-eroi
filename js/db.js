@@ -2,9 +2,9 @@
 // Eroi in Viaggio - Local Database Module (localStorage Wrapper)
 (function() {
   const STORAGE_KEY = 'eroi_viaggio_state_v23';
-  let dbState = null;
+  let dbState = null; Object.defineProperty(window, "dbState", { get: () => dbState, set: (val) => dbState = val });
 
-  window.EroiDB = {
+  window.EroiDB = Object.assign(window.EroiDB || {}, {
     init: function() {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -196,45 +196,7 @@
       this.save();
     },
 
-    // --- UTENTI ED AUTENTICAZIONE ---
-
-
-      if (window.fbDb) {
-        try {
-          const q = await window.fbDb.collection('users').where('email', '==', email).get();
-          if (!q.empty) {
-            await window.fbDb.collection('users').doc(q.docs[0].id).update({ role: newRole });
-          }
-        } catch (e) {
-          console.error("Firestore update role error:", e);
-        }
-      }
-    },
-
-        if (dbState.inventories[key]) {
-          delete dbState.inventories[key];
-        }
-        this.save();
-      }
-      // Elimina anche da Firestore per mantenere la sincronia
-      if (window.fbDb) {
-        try {
-          const q = await window.fbDb.collection('users').where('email', '==', email).get();
-          if (!q.empty) {
-            const batch = window.fbDb.batch();
-            q.docs.forEach(doc => batch.delete(doc.ref));
-            await batch.commit();
-          }
-        } catch (e) { console.error("Firestore delete user error:", e); }
-      }
-    },
-
-
-          }
-        });
-        if (changed) this.save();
-      } catch(e) { console.warn("Sync cloud users error:", e); }
-    },
+    // --- UTENTI ED AUTENTICAZIONE ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 
     // --- RICHIESTE DOCENTI (Firestore) ---
     saveTeacherRequest: async function(requestData) {
@@ -291,15 +253,9 @@
       try { await window.fbDb.collection("users").doc(requestId).delete(); } catch(e){}
     },
 
-    // --- PROFILI STUDENTI ---
+    // --- PROFILI STUDENTI ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
-
-      });
-      return profiles;
-    },
-
-    // --- PROFILI PLAYER DOCENTE ---
-
+    // --- PROFILI PLAYER DOCENTE ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
     saveStudentProfile: function(email, profileData) {
       const key = email.toLowerCase();
@@ -311,24 +267,32 @@
       return Object.values(dbState.students_profile);
     },
 
-    // --- CLASSI ---
+    // --- CLASSI ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 
-      if (!classData.collaborators) {
-        classData.collaborators = [];
-      }
-      dbState.classes[classId] = { ...dbState.classes[classId], ...classData };
-      this.save();
+    getClassByCode: function(code) {
+      const cleanCode = code.trim().toUpperCase();
+      return Object.values(dbState.classes).find(c => c.code && c.code.toUpperCase() === cleanCode) || null;
     },
 
-        });
+    joinClassAsCollaborator: function(classId, email) {
+      const c = dbState.classes[classId];
+      if (c) {
+        if (!c.collaborators) c.collaborators = [];
+        const cleanEmail = email.toLowerCase();
+        if (!c.collaborators.includes(cleanEmail)) {
+          c.collaborators.push(cleanEmail);
+          this.save();
+        }
+      }
+    },
+
+    leaveClassAsCollaborator: function(classId, email) {
+      const c = dbState.classes[classId];
+      if (c && c.collaborators) {
+        const cleanEmail = email.toLowerCase();
+        c.collaborators = c.collaborators.filter(e => e !== cleanEmail);
         this.save();
       }
-    },
-
-
-      }
-    },
-
     },
 
     // --- MISSIONI ---
@@ -341,12 +305,23 @@
       return this.getPresetMissionIds().includes(missionId);
     },
 
+    getMissions: function() {
+      // Restituisce solo le missioni non nascoste
+      return dbState.missions.filter(m => !m.hidden);
+    },
 
     getHiddenMissions: function() {
       // Restituisce le missioni nasconate (solo le preset)
       return dbState.missions.filter(m => m.hidden);
     },
 
+    saveMission: function(missionId, missionData) {
+      const index = dbState.missions.findIndex(m => m.id === missionId);
+      if (index !== -1) {
+        dbState.missions[index] = { ...dbState.missions[index], ...missionData, hidden: false };
+      } else {
+        dbState.missions.push({ id: missionId, ...missionData, hidden: false });
+      }
       this.save();
     },
 
@@ -359,6 +334,11 @@
       }
     },
 
+    deleteMission: function(missionId) {
+      // Elimina definitivamente (solo per missioni custom)
+      dbState.missions = dbState.missions.filter(m => m.id !== missionId);
+      this.save();
+    },
 
     restoreMission: function(missionId) {
       // Ripristina una preset dal mockData originale
@@ -778,7 +758,7 @@
 
       return rows.join("\n");
     }
-  };
+  });
 
   // Inizializza automaticamente all'importazione del file
   window.EroiDB.init();
