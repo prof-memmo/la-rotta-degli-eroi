@@ -1,9 +1,10 @@
-window.Auth = window.Auth || {};\nwindow.Auth.logout =) => {
+Object.assign(window.Auth = window.Auth || {}, {
+    logout: async () => {
         try {
             if (window.fbAuth) await window.fbAuth.signOut();
         } catch(e) {}
         
-        Auth._user = null;
+        window.Auth._user = null;
         localStorage.removeItem('eroi_user');
         sessionStorage.removeItem('introVideoPlayed');
         window.dispatchEvent(new CustomEvent('authChange'));
@@ -11,4 +12,5 @@ window.Auth = window.Auth || {};\nwindow.Auth.logout =) => {
         setTimeout(() => {
             window.location.reload();
         }, 100);
-    };\n
+    }
+});

@@ -1,4 +1,4 @@
-const Auth = {
+Object.assign(window.Auth = window.Auth || {}, {
     _user: null,
     _fbUser: null,
     _isReady: false,
@@ -6,36 +6,32 @@ const Auth = {
     _resolveReady: null,
     init: () => {
         let fallbackTimeoutId;
-        // Inizializza la promise di ready
-        Auth._readyPromise = new Promise((resolve) => {
-            Auth._resolveReady = () => {
+        window.Auth._readyPromise = new Promise((resolve) => {
+            window.Auth._resolveReady = () => {
                 if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId);
-                if (!Auth._isReady) {
-                    Auth._isReady = true;
+                if (!window.Auth._isReady) {
+                    window.Auth._isReady = true;
                     resolve();
                 }
             };
         });
 
-        // Fallback locale per utenti già esistenti (caricamento sincrono iniziale)
         const savedUser = localStorage.getItem('eroi_user');
         if (savedUser) {
             try {
-                Auth._user = JSON.parse(savedUser);
+                window.Auth._user = JSON.parse(savedUser);
             } catch(e) {
-                Auth._user = null;
+                window.Auth._user = null;
                 localStorage.removeItem('eroi_user');
             }
         }
 
-        // Inizializza listener Firebase
         if (window.fbAuth) {
             fallbackTimeoutId = setTimeout(() => {
                 console.warn("Timeout Firebase Auth/Firestore: forzo il completamento del caricamento.");
-                Auth._resolveReady();
+                window.Auth._resolveReady();
             }, 3000);
 
-            // Gestione del ritorno dal redirect (se usato)
             window.fbAuth.getRedirectResult().catch(e => {
                 console.error("Errore post-redirect Google:", e);
                 if (e.code) alert("Errore di accesso: " + e.code + " - " + e.message);
@@ -43,26 +39,25 @@ const Auth = {
 
             window.fbAuth.onAuthStateChanged(async (user) => {
                 if (user) {
-                    Auth._fbUser = user;
-                    await Auth._handleFirebaseUser(user);
+                    window.Auth._fbUser = user;
+                    await window.Auth._handleFirebaseUser(user);
                 } else {
-                    Auth._fbUser = null;
-                    // Mantieni la sessione se l'utente è guest o ha effettuato l'accesso con codice classe (uid inizia con 'std_')
-                    const isLocalOnly = Auth._user && (Auth._user.isGuest || (Auth._user.uid && String(Auth._user.uid).startsWith('std_')));
+                    window.Auth._fbUser = null;
+                    const isLocalOnly = window.Auth._user && (window.Auth._user.isGuest || (window.Auth._user.uid && String(window.Auth._user.uid).startsWith('std_')));
                     if (!isLocalOnly) {
-                        Auth._user = null;
+                        window.Auth._user = null;
                         localStorage.removeItem('eroi_user');
                     }
-                    Auth._resolveReady();
+                    window.Auth._resolveReady();
                 }
             });
         } else {
-            Auth._resolveReady();
+            window.Auth._resolveReady();
         }
     },
 
     whenReady: () => {
-        return Auth._readyPromise;
+        return window.Auth._readyPromise;
     },
 
     _handleFirebaseUser: async (fbUser) => {
@@ -71,15 +66,14 @@ const Auth = {
             const pendingRole = localStorage.getItem('pending_role');
 
             if (doc.exists) {
-                Auth._user = doc.data();
-                if (Auth._user.status === 'archived' && Auth._user.role === 'studente') {
+                window.Auth._user = doc.data();
+                if (window.Auth._user.status === 'archived' && window.Auth._user.role === 'studente') {
                     const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
                     if (newClassCode) {
-                        // Assuming window.EroiDB.getClassByCode is available or we just accept it and let the app handle it
                         const targetClass = window.EroiDB ? window.EroiDB.getClassByCode(newClassCode) : null;
                         if (targetClass) {
-                            Auth._user.status = 'active';
-                            Auth._user.classId = targetClass.id;
+                            window.Auth._user.status = 'active';
+                            window.Auth._user.classId = targetClass.id;
                             await window.fbDb.collection('users').doc(fbUser.uid).update({
                                 status: 'active',
                                 classId: targetClass.id
@@ -87,9 +81,8 @@ const Auth = {
                             alert("Bentornato! Sei stato riattivato.");
                         } else {
                             alert("Codice classe non trovato in locale. Riprova dalla dashboard.");
-                            // Let them in anyway but without a class, or logout?
-                            Auth._user.status = 'active';
-                            Auth._user.classId = null;
+                            window.Auth._user.status = 'active';
+                            window.Auth._user.classId = null;
                             await window.fbDb.collection('users').doc(fbUser.uid).update({
                                 status: 'active',
                                 classId: null
@@ -97,153 +90,54 @@ const Auth = {
                         }
                     } else {
                         alert("Codice necessario per riattivare l'account in una classe.");
-                        Auth._user.status = 'active';
-                        Auth._user.classId = null;
+                        window.Auth._user.status = 'active';
+                        window.Auth._user.classId = null;
                         await window.fbDb.collection('users').doc(fbUser.uid).update({
                             status: 'active',
                             classId: null
                         });
                     }
                 }
-                // Ensure email is always present and updated from Firebase Auth
-                if (!Auth._user.email && fbUser.email) {
-                    Auth._user.email = fbUser.email;
+                if (!window.Auth._user.email && fbUser.email) {
+                    window.Auth._user.email = fbUser.email;
                     await window.fbDb.collection('users').doc(fbUser.uid).update({ email: fbUser.email });
                 }
             } else {
-                // Se l'utente non esiste nel database (es. primo accesso Google), creiamo un profilo base non completato
-                Auth._user = {
+                window.Auth._user = {
                     uid: fbUser.uid,
                     name: fbUser.displayName || '',
                     avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: 'pending', // Ruolo da scegliere nell'onboarding
+                    role: 'pending',
                     points: 0,
                     isGuest: false,
                     email: fbUser.email,
-                    setupComplete: false, // Richiede onboarding
+                    setupComplete: false,
                     createdAt: new Date().toISOString()
                 };
-                // Salvataggio iniziale nel DB per persistere il profilo
-                await window.fbDb.collection('users').doc(fbUser.uid).set(Auth._user);
+                await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
             }
-            
-            // La verifica dell'amministratore è ora demandata unicamente 
-            // alla proprietà "role" salvata nel documento Firestore. 
-            // L'hardcoding di ADMIN_EMAILS è stato rimosso per maggiore sicurezza.
 
-            localStorage.setItem('eroi_user', JSON.stringify(Auth._user));
+            localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
             
-            // 1. Risolviamo la promise di ready PRIMA di dispatchare l'evento
-            Auth._resolveReady();
+            window.Auth._resolveReady();
             
-            // 2. Nascondi l'overlay
             if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
             
-            // 3. Carica progressi
             if (window.Progress && typeof window.Progress.load === 'function') {
                 await window.Progress.load();
             }
 
-            // 4. Notifica il cambio di stato
             window.dispatchEvent(new CustomEvent('authChange'));
         } catch (e) {
             console.error("Errore recupero/creazione dati cloud:", e);
-            Auth._resolveReady(); // Risolviamo comunque per non bloccare l'app
+            window.Auth._resolveReady();
             if (e.code === 'permission-denied') {
                 alert("Errore di sincronizzazione: Permessi insufficienti sul database Firebase. Contatta l'amministratore per verificare le Security Rules.");
             }
         }
-    },
-
-
-
-
-        /* if (!name) {
-            alert("Inserisci il tuo nome.");
-            return;
-        } */
-
-        try {
-            let fbUser;
-            try {
-                // Prova prima ad accedere (utente esistente)
-                const result = await window.fbAuth.signInWithEmailAndPassword(email, password);
-                fbUser = result.user;
-            } catch (signInError) {
-                if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') {
-                    // Utente non trovato: registrazione
-                    const result = await window.fbAuth.createUserWithEmailAndPassword(email, password);
-                    fbUser = result.user;
-                    const finalName = name || email.split('@')[0];
-                    await fbUser.updateProfile({ displayName: finalName });
-                } else {
-                    throw signInError;
-                }
-            }
-
-            // Salva il nome scelto come pending per _handleFirebaseUser
-            localStorage.setItem('pending_display_name', name || email.split('@')[0]);
-            Auth._handleFirebaseUser(fbUser);
-            if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
-        } catch (e) {
-            console.error("Errore Email Login:", e);
-            if (e.code === 'auth/wrong-password') alert("Password errata. Riprova.");
-            else if (e.code === 'auth/invalid-email') alert("Email non valida.");
-            else if (e.code === 'auth/weak-password') alert("Password troppo corta (minimo 6 caratteri).");
-            else alert("Errore di accesso: " + e.message);
-        }
-    },
-
-            
-            const classData = q.docs[0].data();
-            const classId = q.docs[0].id;
-
-            Auth._user = {
-                uid: 'std_' + Math.random().toString(36).substr(2, 9),
-                name: studentName || 'Studente',
-                avatar: 'assets/avatar.png',
-                role: 'studente',
-                classId: classId,
-                teacherId: classData.teacherId,
-                className: classData.name,
-                points: 0,
-                isGuest: false,
-                setupComplete: true
-            };
-
-            localStorage.setItem('eroi_user', JSON.stringify(Auth._user));
-            window.dispatchEvent(new CustomEvent('authChange'));
-            return true;
-        } catch (e) {
-            console.error("Errore login con codice:", e);
-            alert("Si è verificato un errore durante l'accesso.");
-            return false;
-        }
-    },
-
-        } catch (e) {
-            console.error("Errore Google Login:", e);
-            if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
-                console.warn("Popup bloccato dal browser o chiuso dall'utente, fallback su redirect...");
-                window.fbAuth.signInWithRedirect(provider);
-            } else {
-                const errorMessage = "Si è verificato un errore durante l'accesso con Google: " + e.code + " - " + e.message;
-                if (window.EroiApp && window.EroiApp.showToast) {
-                    window.EroiApp.showToast(errorMessage, "error");
-                } else {
-                    alert(errorMessage);
-                }
-            }
-        }
-    },
-
-
-
-        }
-        
-        window.dispatchEvent(new CustomEvent('authChange'));
     }
-};
+});
 
-Auth.init();
-window.Auth = Auth;
+// We must call init after it's defined, but wait till it's all loaded.
+// It's safer to do this at the end of the modules, or just call it here:
+setTimeout(() => { if (window.Auth.init) window.Auth.init(); }, 0);
