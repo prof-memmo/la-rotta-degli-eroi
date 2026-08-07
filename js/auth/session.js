@@ -155,26 +155,9 @@ const Auth = {
         }
     },
 
-    isLoggedIn: () => {
-        return !!Auth._user;
-    },
 
-    getUser: () => {
-        return Auth._user || { name: 'Atleta Anonimo', avatar: '👤', role: 'studente', isGuest: true };
-    },
 
-    login: async (name, avatar = 'assets/avatar.png', role = 'studente') => {
-        // Questo metodo ora richiede l'autenticazione email/Google
-        // Non creiamo più profili anonimi
-        console.warn("Metodo login() deprecato. Usa loginWithEmail() o loginWithGoogle().");
-    },
 
-    loginWithEmail: async (name, email, password) => {
-        if (!window.fbAuth) return;
-        if (!email || !password) {
-            alert("Inserisci email e password per continuare.");
-            return;
-        }
         /* if (!name) {
             alert("Inserisci il tuo nome.");
             return;
@@ -211,15 +194,6 @@ const Auth = {
         }
     },
 
-    loginWithClassCode: async (code, studentName) => {
-        if (!window.fbDb) return false;
-        
-        try {
-            const q = await window.fbDb.collection('classes').where('code', '==', code.toUpperCase()).get();
-            if (q.empty) {
-                alert("Codice classe non valido. Chiedi al tuo docente!");
-                return false;
-            }
             
             const classData = q.docs[0].data();
             const classId = q.docs[0].id;
@@ -247,17 +221,6 @@ const Auth = {
         }
     },
 
-    loginWithGoogle: async () => {
-        if (!window.fbAuth) return;
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        
-        try {
-            const result = await window.fbAuth.signInWithPopup(provider);
-            if (result && result.user) {
-                await Auth._handleFirebaseUser(result.user);
-                if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
-            }
         } catch (e) {
             console.error("Errore Google Login:", e);
             if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
@@ -274,48 +237,8 @@ const Auth = {
         }
     },
 
-    continueAsGuest: () => {
-        Auth._user = {
-            name: 'Atleta Anonimo',
-            avatar: '👤',
-            role: 'studente',
-            isGuest: true,
-            setupComplete: false,
-            joinedAt: new Date().toISOString()
-        };
-        window.dispatchEvent(new CustomEvent('authChange'));
-        if (typeof hideLoginOverlay === 'function') hideLoginOverlay(); // Assicura che l'overlay scompaia
-    },
 
-    logout: async () => {
-        try {
-            if (window.fbAuth) await window.fbAuth.signOut();
-        } catch(e) {}
-        
-        Auth._user = null;
-        localStorage.removeItem('eroi_user');
-        sessionStorage.removeItem('introVideoPlayed');
-        window.dispatchEvent(new CustomEvent('authChange'));
-        window.location.hash = 'home';
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    },
 
-    updateProfile: async (name, avatar) => {
-        if (!Auth._user) return;
-        
-        Auth._user.name = name;
-        Auth._user.avatar = avatar;
-        
-        localStorage.setItem('eroi_user', JSON.stringify(Auth._user));
-        
-        if (window.fbAuth && window.fbAuth.currentUser) {
-            try {
-                await window.fbDb.collection('users').doc(window.fbAuth.currentUser.uid).set(Auth._user, { merge: true });
-            } catch (e) {
-                console.error("Errore aggiornamento cloud profilo:", e);
-            }
         }
         
         window.dispatchEvent(new CustomEvent('authChange'));

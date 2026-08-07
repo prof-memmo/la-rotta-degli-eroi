@@ -197,22 +197,8 @@
     },
 
     // --- UTENTI ED AUTENTICAZIONE ---
-    getUser: function(email) {
-      return dbState.users[email.toLowerCase()] || null;
-    },
 
-    saveUser: function(email, userData) {
-      const key = email.toLowerCase();
-      dbState.users[key] = { ...dbState.users[key], ...userData };
-      this.save();
-    },
 
-    updateUserRole: async function(email, newRole) {
-      const key = email.toLowerCase();
-      if (dbState.users[key]) {
-        dbState.users[key].role = newRole;
-        this.save();
-      }
       if (window.fbDb) {
         try {
           const q = await window.fbDb.collection('users').where('email', '==', email).get();
@@ -225,13 +211,6 @@
       }
     },
 
-    deleteUser: async function(email) {
-      const key = email.toLowerCase();
-      if (dbState.users[key]) {
-        delete dbState.users[key];
-        if (dbState.students_profile[key]) {
-          delete dbState.students_profile[key];
-        }
         if (dbState.inventories[key]) {
           delete dbState.inventories[key];
         }
@@ -250,28 +229,7 @@
       }
     },
 
-    getAllUsers: function() {
-      return Object.values(dbState.users);
-    },
 
-    syncCloudUsers: async function() {
-      if (!window.fbDb) return;
-      try {
-        const snap = await window.fbDb.collection('users').get();
-        let changed = false;
-        snap.docs.forEach(doc => {
-          const d = doc.data();
-          if (!d.email || d.role === 'pending' || d.status === 'pending') return; // I pending si gestiscono a parte
-          const key = d.email.toLowerCase();
-          if (!dbState.users[key]) {
-            dbState.users[key] = d;
-            changed = true;
-          } else {
-            // Aggiorna se i ruoli non coincidono
-            if (dbState.users[key].role !== d.role) {
-              dbState.users[key].role = d.role;
-              changed = true;
-            }
           }
         });
         if (changed) this.save();
@@ -334,51 +292,14 @@
     },
 
     // --- PROFILI STUDENTI ---
-    getStudentProfile: function(email) {
-      return dbState.students_profile[email.toLowerCase()] || null;
-    },
 
-    saveStudentProfile: function(email, profileData) {
-      const key = email.toLowerCase();
-      dbState.students_profile[key] = { ...dbState.students_profile[key], ...profileData };
-      this.save();
-    },
 
-    getAllStudents: function() {
-      const profiles = Object.values(dbState.students_profile);
-      const allUsers = Object.values(dbState.users || {});
-      
-      // Fallback per gli studenti registrati su Firebase che non hanno ancora il profilo locale sincronizzato
-      allUsers.forEach(u => {
-        const key = (u.email || '').toLowerCase();
-        if (key && u.role === 'student' && !dbState.students_profile[key]) {
-           profiles.push({
-             name: u.name || u.email.split('@')[0],
-             email: u.email,
-             avatarClass: 'viandante',
-             xp: 0,
-             dracme: 10,
-             items: [],
-             completedMissions: [],
-             citta: ''
-           });
-        }
       });
       return profiles;
     },
 
     // --- PROFILI PLAYER DOCENTE ---
-    getTeacherPlayerProfile: function(email) {
-      if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
-      return dbState.teacher_profiles[email.toLowerCase()] || null;
-    },
 
-    saveTeacherPlayerProfile: function(email, profileData) {
-      if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
-      const key = email.toLowerCase();
-      dbState.teacher_profiles[key] = { ...dbState.teacher_profiles[key], ...profileData };
-      this.save();
-    },
 
     saveStudentProfile: function(email, profileData) {
       const key = email.toLowerCase();
@@ -391,14 +312,7 @@
     },
 
     // --- CLASSI ---
-    getClasses: function() {
-      return dbState.classes;
-    },
 
-    saveClass: function(classId, classData) {
-      if (!classData.code) {
-        classData.code = "ER-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-      }
       if (!classData.collaborators) {
         classData.collaborators = [];
       }
@@ -406,43 +320,15 @@
       this.save();
     },
 
-    deleteClass: function(classId) {
-      if (dbState.classes[classId]) {
-        delete dbState.classes[classId];
-        // Sgancia gli studenti associati a questa classe rimettendoli in classe null
-        Object.keys(dbState.users).forEach(email => {
-          if (dbState.users[email].classId === classId) {
-            dbState.users[email].classId = "";
-          }
         });
         this.save();
       }
     },
 
-    getClassByCode: function(code) {
-      const cleanCode = code.trim().toUpperCase();
-      return Object.values(dbState.classes).find(c => c.code && c.code.toUpperCase() === cleanCode) || null;
-    },
 
-    joinClassAsCollaborator: function(classId, email) {
-      const c = dbState.classes[classId];
-      if (c) {
-        if (!c.collaborators) c.collaborators = [];
-        const cleanEmail = email.toLowerCase();
-        if (!c.collaborators.includes(cleanEmail)) {
-          c.collaborators.push(cleanEmail);
-          this.save();
-        }
       }
     },
 
-    leaveClassAsCollaborator: function(classId, email) {
-      const c = dbState.classes[classId];
-      if (c && c.collaborators) {
-        const cleanEmail = email.toLowerCase();
-        c.collaborators = c.collaborators.filter(e => e !== cleanEmail);
-        this.save();
-      }
     },
 
     // --- MISSIONI ---
@@ -455,23 +341,12 @@
       return this.getPresetMissionIds().includes(missionId);
     },
 
-    getMissions: function() {
-      // Restituisce solo le missioni non nascoste
-      return dbState.missions.filter(m => !m.hidden);
-    },
 
     getHiddenMissions: function() {
       // Restituisce le missioni nasconate (solo le preset)
       return dbState.missions.filter(m => m.hidden);
     },
 
-    saveMission: function(missionId, missionData) {
-      const index = dbState.missions.findIndex(m => m.id === missionId);
-      if (index !== -1) {
-        dbState.missions[index] = { ...dbState.missions[index], ...missionData, hidden: false };
-      } else {
-        dbState.missions.push({ id: missionId, ...missionData, hidden: false });
-      }
       this.save();
     },
 
@@ -484,11 +359,6 @@
       }
     },
 
-    deleteMission: function(missionId) {
-      // Elimina definitivamente (solo per missioni custom)
-      dbState.missions = dbState.missions.filter(m => m.id !== missionId);
-      this.save();
-    },
 
     restoreMission: function(missionId) {
       // Ripristina una preset dal mockData originale
