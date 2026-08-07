@@ -1,0 +1,1 @@
+window.Auth = window.Auth || {};\n// Roles logic\n
