@@ -1,0 +1,20 @@
+{
+  "name": "La Rotta degli Eroi",
+  "short_name": "Eroi",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b192c",
+  "theme_color": "#eab308",
+  "icons": [
+    {
+      "src": "favicon-eroi.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon-eroi.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
