@@ -65,12 +65,10 @@ const LEGAL_TEXTS = {
 
 // --- Funzione contatti (stile Palestra di Riflessione) ---
 window.showContattiModal = function() {
-    const modal = document.getElementById('modal-legal');
-    const title = document.getElementById('modal-legal-title');
-    const body = document.getElementById('modal-legal-body');
-    if (!modal || !title || !body) return;
-    title.textContent = '📧 Contatti';
-    body.innerHTML = `
+    if (typeof openSharedModal === 'function') {
+        openSharedModal('contatti');
+    }
+};
       <div style="display: flex; flex-direction: column; gap: 20px;">
         <div style="padding: 16px; background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold); border-radius: 8px;">
           <h4 style="color: var(--gold); margin-bottom: 8px; font-family: var(--font-heading);">Scopri il mondo Prof. Memmo</h4>
