@@ -5325,16 +5325,15 @@ window.finalizzaDocente = async function() {
 
     // --- LEGAL POPUPS ---
     openLegalModal: function(docKey) {
-      // Contatti: usa il modal personalizzato stile palestra
-      if (docKey === 'contacts') {
-        window.showContattiModal();
+      if (typeof openSharedModal === 'function') {
+        const mapped = docKey === 'terms' ? 'termini' : docKey === 'contacts' ? 'contatti' : docKey;
+        openSharedModal(mapped);
         return;
       }
       
       const title = document.getElementById('modal-legal-title');
       const body = document.getElementById('modal-legal-body');
 
-      // Privacy e Termini: usa il testo ricco di LEGAL_TEXTS (formattato con h3/p)
       if (docKey === 'privacy' || docKey === 'terms') {
         title.textContent = docKey === 'privacy' ? 'Privacy Policy' : 'Termini e Condizioni';
         body.innerHTML = LEGAL_TEXTS[docKey] || 'Contenuto non disponibile.';
