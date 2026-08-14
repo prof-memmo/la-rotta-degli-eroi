@@ -63,44 +63,56 @@ Object.assign(window.Auth = window.Auth || {}, {
     _handleFirebaseUser: async (fbUser) => {
         try {
             const email = fbUser.email ? fbUser.email.toLowerCase() : '';
-            const isSuperAdmin = (email === 'prof.memmo@gmail.com');
+            let isSuperAdmin = (email === 'prof.memmo@gmail.com');
+            let hubRole = 'studente';
+            let hubName = fbUser.displayName || 'Eroe';
 
             // 1. Verifica sull'Hub Centrale (Single Sign-On Auth)
-            if (!isSuperAdmin) {
-                try {
-                    const hubDoc = await window.fbDb.collection('hub_users').doc(fbUser.uid).get();
-                    if (!hubDoc.exists) {
-                        alert("Profilo Hub non trovato. Completa l'onboarding nell'Hub.");
-                        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html?redirect=rotta_degli_eroi';
-                        return;
-                    }
+            try {
+                const hubDoc = await window.fbDb.collection('hub_users').doc(fbUser.uid).get();
+                if (hubDoc.exists) {
                     const hubData = hubDoc.data();
-                    if (hubData.statusAccount !== 'active') {
-                        alert("Accesso negato: L'account non è attivo nell'Hub (potrebbe essere sospeso o in attesa di approvazione).");
+                    if (hubData.role === 'admin' || email === 'prof.memmo@gmail.com') {
+                        isSuperAdmin = true;
+                        hubRole = 'docente';
+                    } else if (hubData.role === 'docente') {
+                        hubRole = 'docente';
+                    } else if (hubData.role === 'viandante' || hubData.role === 'forestiero') {
+                        hubRole = 'forestiero';
+                    } else {
+                        hubRole = 'studente';
+                    }
+                    if (hubData.anagrafica && hubData.anagrafica.nome) {
+                        hubName = hubData.anagrafica.nome;
+                    }
+                    if (!isSuperAdmin && hubData.statusAccount && hubData.statusAccount !== 'active') {
+                        alert("Accesso negato: L'account non è ancora attivo o è in attesa di approvazione nell'Hub.");
                         window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
                         return;
                     }
-                    if (!hubData.platforms || !hubData.platforms.rotta_degli_eroi || !hubData.platforms.rotta_degli_eroi.enabled) {
-                        alert("Accesso negato: Piattaforma La Rotta degli Eroi non abilitata per il tuo profilo.");
-                        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
-                        return;
-                    }
-                } catch (err) {
-                    console.error("Errore verifica Hub:", err);
-                    alert("Errore di sicurezza Hub. Riprova.");
-                    window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+                } else if (!isSuperAdmin) {
+                    console.warn("Profilo Hub non trovato: redirect all'onboarding centrale.");
+                    window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html?redirect=rotta_degli_eroi';
                     return;
                 }
+            } catch (err) {
+                console.error("Verifica Hub:", err);
             }
 
             const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
-            const pendingRole = localStorage.getItem('pending_role');
 
             if (doc.exists) {
                 window.Auth._user = doc.data();
                 if (isSuperAdmin) {
                     window.Auth._user.role = 'docente';
+                } else if (hubRole) {
+                    window.Auth._user.role = hubRole;
                 }
+                if (!window.Auth._user.name && hubName) {
+                    window.Auth._user.name = hubName;
+                }
+                window.Auth._user.setupComplete = true;
+
                 if (window.Auth._user.status === 'archived' && window.Auth._user.role === 'studente') {
                     const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
                     if (newClassCode) {
@@ -123,7 +135,6 @@ Object.assign(window.Auth = window.Auth || {}, {
                             });
                         }
                     } else {
-                        alert("Codice necessario per riattivare l'account in una classe.");
                         window.Auth._user.status = 'active';
                         window.Auth._user.classId = null;
                         await window.fbDb.collection('users').doc(fbUser.uid).update({
@@ -139,13 +150,13 @@ Object.assign(window.Auth = window.Auth || {}, {
             } else {
                 window.Auth._user = {
                     uid: fbUser.uid,
-                    name: fbUser.displayName || '',
+                    name: hubName,
                     avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: isSuperAdmin ? 'docente' : (pendingRole || 'pending'),
+                    role: isSuperAdmin ? 'docente' : hubRole,
                     points: 0,
                     isGuest: false,
                     email: fbUser.email,
-                    setupComplete: isSuperAdmin ? true : false,
+                    setupComplete: true,
                     createdAt: new Date().toISOString()
                 };
                 await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
@@ -162,6 +173,7 @@ Object.assign(window.Auth = window.Auth || {}, {
             }
 
             window.dispatchEvent(new CustomEvent('authChange'));
+
         } catch (e) {
             console.error("Errore recupero/creazione dati cloud:", e);
             window.Auth._resolveReady();
