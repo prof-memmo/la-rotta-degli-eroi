@@ -179,32 +179,13 @@
           <div class="glass" style="padding: 15px; margin-top: 5px; max-width: 450px; margin-left: auto; margin-right: auto;" id="login-section">
               <p class="text-center" style="font-size: 0.85rem; color: #fff; margin-bottom: 10px;">Accedi per iniziare a giocare.</p>
               
-              <div class="consent-group mb-2" style="margin-bottom: 20px; text-align: left;">
-                  <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; margin-bottom: 10px; cursor: pointer;">
-                      <input type="checkbox" id="welcome-check-age">
-                      <span class="checkmark"></span>
-                      Ho almeno 16 anni o supervisione di un adulto
-                  </label>
-                  <label class="checkbox-container" style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #ddd; cursor: pointer;">
-                      <input type="checkbox" id="welcome-check-privacy">
-                      <span class="checkmark"></span>
-                      Accetto <a href="#" onclick="event.preventDefault(); if(window.EroiApp) EroiApp.openLegalModal('privacy'); else showLegal('privacy')" style="color:var(--gold); text-decoration: underline; font-weight: bold;">Privacy</a> e <a href="#" onclick="event.preventDefault(); if(window.EroiApp) EroiApp.openLegalModal('terms'); else showLegal('terms')" style="color:var(--gold); text-decoration: underline; font-weight: bold;">Termini</a>
-                  </label>
-              </div>
-
-              <button type="button" class="btn" style="background: #fff; color: #444; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s; margin-bottom: 15px;" onclick="window.handleGoogleLogin()">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24" height="24"> Accedi con Google
-              </button>
-
-              <div style="text-align: center; color: #ddd; margin-bottom: 15px; font-size: 0.85rem; font-weight: bold;">— OPPURE —</div>
-
-              <div id="login-email-form" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
-                  <input type="email" id="login-email" placeholder="Email (es: prof.memmo@gmail.com)" style="padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1rem;">
-                  <input type="password" id="login-password" placeholder="Password (es: password123)" style="padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: rgba(255,255,255,0.9); font-size: 1rem;">
-                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-weight: bold; border-radius: 8px; padding: 12px; font-size: 1.1rem;" onclick="window.handleEmailLogin()">Accedi con Email</button>
+              <div style="text-align: center; margin: 25px 0;">
+                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-size: 1.2rem; font-weight: 800; padding: 15px 30px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: none; cursor: pointer;" onclick="window.location.href='https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html?redirect=rotta_degli_eroi'">
+                      <i class="fa-solid fa-right-to-bracket" style="margin-right: 10px;"></i> Accedi tramite Hub
+                  </button>
               </div>
               
-              <p class="text-center mt-2" style="font-size: 0.85rem; color: #f3f4f6; margin-top: 12px; line-height: 1.4;">Se è il tuo primo accesso, verrai guidato alla selezione del profilo.</p>
+              <p class="text-center mt-2" style="font-size: 0.85rem; color: #ccc;">Verrai reindirizzato al Portale Unico del Prof. Memmo per l'accesso sicuro.</p>
           </div>
       </section>
 
