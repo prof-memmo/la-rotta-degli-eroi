@@ -1,17 +1,18 @@
-// Configurazione Firebase: LA ROTTA DEGLI EROI
-// INSERISCI QUI LE CHIAVI DEL TUO NUOVO PROGETTO FIREBASE QUANDO LO CREERAI
+// Configurazione Firebase: LA ROTTA DEGLI EROI (PUNTA ALL'HUB CENTRALE)
 const firebaseConfig = {
-    apiKey: "AIzaSyCVCg9G6RbDDYMoQ0oWCs2Z9-1iFBSZZ5A",
-    authDomain: "la-rotta-degli-eroi.firebaseapp.com",
-    projectId: "la-rotta-degli-eroi",
-    storageBucket: "la-rotta-degli-eroi.firebasestorage.app",
-    messagingSenderId: "947694535022",
-    appId: "1:947694535022:web:905d6739ebe61fe27f417f"
+  apiKey: "AIzaSyD-n2m-kYEuzGXPMKclZTggf4Y5Zm8_cdM",
+  authDomain: "prof-memmo-hub.firebaseapp.com",
+  projectId: "prof-memmo-hub",
+  storageBucket: "prof-memmo-hub.firebasestorage.app",
+  messagingSenderId: "839149485689",
+  appId: "1:839149485689:web:04ee4fa6237d94d0b71ea8"
 };
 
 // Inizializza Firebase
 try {
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     // Esponi auth e db globalmente per usarli negli altri script
     window.fbAuth = firebase.auth();
     
@@ -21,9 +22,27 @@ try {
     });
 
     window.fbDb = firebase.firestore();
-    console.log("🔥 Firebase inizializzato correttamente");
+    window.db = window.fbDb;
+
+    // =========================================================
+    // WRAPPER "ZERO REFACTORING" PER LE COLLEZIONI HUB
+    // =========================================================
+    // Aggiunge automaticamente il prefisso 'eroi_' a tutte le 
+    // chiamate db.collection() effettuate dal codice esistente.
+    const originalCollection = window.fbDb.collection.bind(window.fbDb);
+    window.fbDb.collection = function(path) {
+        // Eccezioni per le collezioni globali dell'Hub
+        if (path.startsWith('hub_') || path === 'games_status' || path === 'vetrina' || path.startsWith('fanta_')) {
+            return originalCollection(path);
+        }
+        // Se il path ha già il prefisso, non lo ri-aggiunge
+        if (path.startsWith('eroi_')) return originalCollection(path);
+        return originalCollection('eroi_' + path);
+    };
+
+    console.log("🔥 Firebase Rotta degli Eroi inizializzato correttamente con Hub SSO.");
 } catch (e) {
-    console.error("Errore inizializzazione Firebase (API keys mancanti o errate?):", e);
+    console.error("Errore inizializzazione Firebase Hub:", e);
     window.fbAuth = null;
     window.fbDb = null;
 }

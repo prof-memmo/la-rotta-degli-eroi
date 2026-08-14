@@ -62,11 +62,45 @@ Object.assign(window.Auth = window.Auth || {}, {
 
     _handleFirebaseUser: async (fbUser) => {
         try {
+            const email = fbUser.email ? fbUser.email.toLowerCase() : '';
+            const isSuperAdmin = (email === 'prof.memmo@gmail.com');
+
+            // 1. Verifica sull'Hub Centrale (Single Sign-On Auth)
+            if (!isSuperAdmin) {
+                try {
+                    const hubDoc = await window.fbDb.collection('hub_users').doc(fbUser.uid).get();
+                    if (!hubDoc.exists) {
+                        alert("Profilo Hub non trovato. Completa l'onboarding nell'Hub.");
+                        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html?redirect=rotta_degli_eroi';
+                        return;
+                    }
+                    const hubData = hubDoc.data();
+                    if (hubData.statusAccount !== 'active') {
+                        alert("Accesso negato: L'account non è attivo nell'Hub (potrebbe essere sospeso o in attesa di approvazione).");
+                        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+                        return;
+                    }
+                    if (!hubData.platforms || !hubData.platforms.rotta_degli_eroi || !hubData.platforms.rotta_degli_eroi.enabled) {
+                        alert("Accesso negato: Piattaforma La Rotta degli Eroi non abilitata per il tuo profilo.");
+                        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+                        return;
+                    }
+                } catch (err) {
+                    console.error("Errore verifica Hub:", err);
+                    alert("Errore di sicurezza Hub. Riprova.");
+                    window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+                    return;
+                }
+            }
+
             const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
             const pendingRole = localStorage.getItem('pending_role');
 
             if (doc.exists) {
                 window.Auth._user = doc.data();
+                if (isSuperAdmin) {
+                    window.Auth._user.role = 'docente';
+                }
                 if (window.Auth._user.status === 'archived' && window.Auth._user.role === 'studente') {
                     const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
                     if (newClassCode) {
@@ -107,11 +141,11 @@ Object.assign(window.Auth = window.Auth || {}, {
                     uid: fbUser.uid,
                     name: fbUser.displayName || '',
                     avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: 'pending',
+                    role: isSuperAdmin ? 'docente' : (pendingRole || 'pending'),
                     points: 0,
                     isGuest: false,
                     email: fbUser.email,
-                    setupComplete: false,
+                    setupComplete: isSuperAdmin ? true : false,
                     createdAt: new Date().toISOString()
                 };
                 await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
