@@ -1316,46 +1316,23 @@
       </section>
 
       <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
+      <!-- VIEW: PANNELLO ADMIN (Backup & Hub) -->
       <section id="view-admin-dashboard" class="view">
         <div class="glass-panel">
-          <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Admin Principale</h2>
-          
-          <div class="tabs-header">
-            <button class="tab-btn active" onclick="EroiApp.switchAdminTab('impostazioni')">Impostazioni & DB</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('richieste')">Richieste in Attesa</button>
-            <button class="tab-btn" onclick="EroiApp.switchAdminTab('utenti')">Utenti & Scuole</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+            <h2 class="section-title" style="margin: 0;"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Tecnico di Gioco</h2>
+            <a href="https://prof-memmo.github.io/prof-memmo-gestione-siti/" target="_blank" class="btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-gauge-high"></i> Vai all'Hub Amministrazione
+            </a>
           </div>
 
-          <div id="a-tab-impostazioni" class="tab-content active">
-            <div class="dashboard-grid">
-            
-            <!-- Impostazioni Globali -->
-            <div class="glass-panel" style="margin-bottom: 0;">
-              <h3 class="panel-title">Configurazioni di Campagna</h3>
-              <form id="form-admin-settings" onsubmit="return false;" style="margin-top: 15px;">
-                <div class="form-group">
-                  <label for="admin-setting-appname">Nome Piattaforma</label>
-                  <input type="text" id="admin-setting-appname" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="admin-setting-copyright">Copyright Footer</label>
-                  <input type="text" id="admin-setting-copyright" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="admin-setting-contacts">Contatti Globali</label>
-                  <input type="text" id="admin-setting-contacts" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;" id="btn-save-admin-settings">Applica Modifiche Globali</button>
-              </form>
-            </div>
-
-            <!-- Manutenzione Database & Backup -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <!-- Manutenzione Database & Backup Gioco -->
             <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
               <div>
-                <h3 class="panel-title">Backup, Ripristino & Esportazione</h3>
+                <h3 class="panel-title"><i class="fa-solid fa-database" style="color: var(--gold);"></i> Backup &amp; Salvataggi Eroi</h3>
                 <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
-                  Salva l'intero stato del gioco in locale come file JSON oppure esporta le anagrafiche dei tuoi studenti in foglio di calcolo.
+                  Salva lo stato del gioco (dracme, progressi, isole e squadre) come file JSON locale o esporta gli studenti.
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                   <button class="btn btn-secondary" onclick="EroiApp.triggerBackupExport()">
@@ -1376,142 +1353,28 @@
                 </button>
               </div>
             </div>
-            </div>
-          </div>
 
-          <div id="a-tab-richieste" class="tab-content">
-            <div class="dashboard-grid">
-              <!-- Richieste in Attesa -->
-              <div class="glass-panel" style="grid-column: 1 / -1;">
-              <h3 class="panel-title">Richieste di Registrazione in Attesa</h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
-                Utenti che hanno completato la registrazione e attendono di essere approvati come Studenti o Docenti.
-              </p>
-              <div class="table-responsive">
-                <table class="game-table" id="admin-pending-table">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>Email</th>
-                      <th>Scuola</th>
-                      <th>Città</th>
-                      <th><i class="fa-solid fa-envelope"></i></th>
-                      <th>Azioni</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          </div>
-
-          <div id="a-tab-utenti" class="tab-content">
-            <div class="dashboard-grid">
-              
-              <!-- Card Riassuntive -->
-              <div id="admin-filters-container" style="grid-column: 1 / -1; display: flex; justify-content: flex-start; gap: 15px; margin-bottom: 25px; overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 10px; flex-wrap: nowrap;">
-                <div class="admin-stat-card filter-card active" data-filter="all" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid #5D5FEF; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('all')">
-                  <h2 id="admin-count-total" style="font-size: 2rem; font-weight: 900; color: #5D5FEF; margin: 0 0 5px 0;">--</h2>
-                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Tutti</div>
-                </div>
-                <div class="admin-stat-card filter-card" data-filter="teacher" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('teacher')">
-                  <h2 id="admin-count-teachers" style="font-size: 2rem; font-weight: 900; color: #2980b9; margin: 0 0 5px 0;">--</h2>
-                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Docenti</div>
-                </div>
-                <div class="admin-stat-card filter-card" data-filter="student" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('student')">
-                  <h2 id="admin-count-students" style="font-size: 2rem; font-weight: 900; color: #27ae60; margin: 0 0 5px 0;">--</h2>
-                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Studenti</div>
-                </div>
-                <div class="admin-stat-card filter-card" data-filter="forestiero" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('forestiero')">
-                  <h2 id="admin-count-forestieri" style="font-size: 2rem; font-weight: 900; color: #8e44ad; margin: 0 0 5px 0;">--</h2>
-                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Forestieri</div>
-                </div>
-                <div class="admin-stat-card filter-card" data-filter="schools" style="flex: 0 0 auto; min-width: 100px; text-align: center; margin-bottom: 0; padding: 15px 10px; cursor: pointer; background: white; border-radius: 16px; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onclick="EroiApp.setAdminUserFilter('schools')">
-                  <h2 id="admin-count-schools" style="font-size: 2rem; font-weight: 900; color: #a855f7; margin: 0 0 5px 0;">--</h2>
-                  <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Scuole</div>
-                </div>
-              </div>
-
-              <!-- Creazione Manuale Personale -->
-              <div class="glass-panel" style="grid-column: 1 / -1; margin-bottom: 25px; padding-bottom: 10px; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                <h3 class="panel-title" style="font-size:1.1rem;"><i class="fa-solid fa-user-plus"></i> Crea Nuovo Utente Staff (Opzionale)</h3>
-                <form id="form-create-staff" onsubmit="return false;" style="display: flex; flex-wrap: nowrap; gap: 15px; margin-bottom: 5px; margin-top:15px; align-items: flex-end; width: max-content;">
-                  <div class="form-group" style="margin-bottom: 0; flex: 0 0 200px;">
-                    <label for="staff-name">Nome Completo</label>
-                    <input type="text" id="staff-name" class="form-control" required placeholder="Prof. Franco">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
-                    <label for="staff-email">Indirizzo Email</label>
-                    <input type="email" id="staff-email" class="form-control" required placeholder="docente@scuola.it">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
-                    <label for="staff-password">Password Temporanea</label>
-                    <input type="text" id="staff-password" class="form-control" required placeholder="storia456">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
-                    <label for="staff-role">Ruolo Autorizzato</label>
-                    <select id="staff-role" class="form-control" required>
-                      <option value="teacher">Docente</option>
-                      <option value="admin">Amministratore Secondario</option>
-                      <option value="forestiero">Forestiero</option>
-                    </select>
-                  </div>
-                  <button type="submit" class="btn" style="height: 44px;" id="btn-save-staff">Registra</button>
-                </form>
-              </div>
-
-              <div id="admin-users-table-wrapper" class="glass-panel" style="grid-column: 1 / -1; max-width: 100vw; overflow: hidden; box-sizing: border-box;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                  <h3 class="panel-title" style="margin: 0;">Tutti gli Utenti (Gestione Avanzata)</h3>
-                  <input type="text" id="admin-search-users" placeholder="Cerca nome o email..." class="form-control" style="width: 250px; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);" onkeyup="EroiApp.filterAdminUsers()">
-                </div>
-                <div class="table-responsive">
-                  <table class="game-table" id="admin-all-users-table">
-                    <thead>
-                      <tr>
-                        <th style="cursor:pointer;" onclick="EroiApp.sortList('adminAll', 'name')"><div style="display: flex; align-items: center; white-space: nowrap;">Nome <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                        <th style="cursor:pointer;" onclick="EroiApp.sortList('adminAll', 'email')"><div style="display: flex; align-items: center; white-space: nowrap;">Email <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                        <th style="cursor:pointer;" onclick="EroiApp.sortList('adminAll', 'role')"><div style="display: flex; align-items: center; white-space: nowrap;">Ruolo <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                        <th style="cursor:pointer;" onclick="EroiApp.sortList('adminAll', 'date')"><div style="display: flex; align-items: center; white-space: nowrap;">Data Iscrizione <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                        <th><i class="fa-solid fa-envelope"></i></th>
-                        <th>Azione</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div id="admin-schools-table-wrapper" class="glass-panel" style="grid-column: 1 / -1; max-width: 100vw; overflow: hidden; box-sizing: border-box; display: none;">
-                <h3 class="panel-title"><i class="fa-solid fa-school" style="color: var(--gold);"></i> Istituti Scolastici Associati</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco globale di tutte le scuole inserite dai docenti con le rispettive classi attive.</p>
-                <div class="table-responsive">
-                  <table class="game-table" id="admin-schools-table">
-                    <thead>
-                      <tr>
-                        <th>Nome Istituto</th>
-                        <th>Città</th>
-                        <th>Classi Associate</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- Modifica Documenti Legali -->
-              <div class="glass-panel" style="grid-column: 1 / -1;">
-                <h3 class="panel-title">⚖️ Documentazione Legale Ecosistema</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">
-                  La documentazione legale (Privacy Policy, Termini e Condizioni, Dati Fiscali e Copyright) è ora gestita in modo unificato per tutto l'Ecosistema Prof. Memmo dall'<b>Hub Centrale Didattico</b>.<br>
-                  Per modificare i testi o aggiornare l'informativa, fai riferimento al pannello <i>"Legali & Branding"</i> dell'Hub Didattico.
+            <!-- Box Hub Centralizzato -->
+            <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 class="panel-title"><i class="fa-solid fa-users-gear" style="color: #60a5fa;"></i> Gestione Utenti &amp; Ecosistema</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 15px;">
+                  La gestione di tutti gli iscritti, l'approvazione delle richieste docenti, i piani di abbonamento e i documenti legali sono ora centralizzati nell'<b>Hub Didattico Ecosistema Prof. Memmo</b>.
                 </p>
-                <a href="https://prof-memmo.github.io/prof-memmo-gestione-siti/" target="_blank" class="btn" style="width: auto; padding: 10px 20px; font-weight: bold; background: var(--accent);">Gestisci nell'Hub Didattico →</a>
+                <ul style="color: var(--text-muted); font-size: 0.85rem; padding-left: 20px; line-height: 1.6; margin-bottom: 15px;">
+                  <li>Anagrafica unificata e ruoli globali</li>
+                  <li>Analytics e statistiche sull'ecosistema</li>
+                  <li>Newsletter didattica ed email template</li>
+                  <li>Configurazioni legali e informative privacy</li>
+                </ul>
               </div>
-
+              <a href="https://prof-memmo.github.io/prof-memmo-gestione-siti/" target="_blank" class="btn" style="width: 100%; text-align: center; font-weight: bold; background: rgba(99,102,241,0.2); color: #818cf8; border: 1px solid #6366f1;">
+                Apri Hub Amministrazione &rarr;
+              </a>
             </div>
           </div>
+        </div>
+      </section>
 
           <!-- FINE TAB UTENTI (ADMIN) -->
 
