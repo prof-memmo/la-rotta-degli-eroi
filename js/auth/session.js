@@ -85,18 +85,22 @@ Object.assign(window.Auth = window.Auth || {}, {
                     if (hubData.anagrafica && hubData.anagrafica.nome) {
                         hubName = hubData.anagrafica.nome;
                     }
-                    if (!isSuperAdmin && hubData.statusAccount && hubData.statusAccount !== 'active') {
-                        alert("Accesso negato: L'account non è ancora attivo o è in attesa di approvazione nell'Hub.");
+                    if (!isSuperAdmin && hubData.statusAccount && (hubData.statusAccount === 'rejected' || hubData.statusAccount === 'suspended')) {
+                        alert("Accesso negato: L'account è stato sospeso nell'Hub.");
                         window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
                         return;
                     }
-                } else if (!isSuperAdmin) {
-                    console.warn("Profilo Hub non trovato: redirect all'onboarding centrale.");
-                    window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html?redirect=rotta_degli_eroi';
-                    return;
+                } else {
+                    // Profilo non ancora presente su Hub: assegniamo ruolo iniziale
+                    if (isSuperAdmin) {
+                        hubRole = 'docente';
+                    } else {
+                        hubRole = 'studente';
+                    }
                 }
             } catch (err) {
-                console.error("Verifica Hub:", err);
+                console.warn("Verifica Hub (fallback locale):", err);
+                if (isSuperAdmin) hubRole = 'docente';
             }
 
             const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();

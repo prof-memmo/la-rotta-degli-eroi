@@ -10,19 +10,22 @@ const firebaseConfig = {
 
 // Inizializza Firebase
 try {
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+    let app = (firebase.apps || []).find(a => a.name === '[DEFAULT]');
+    if (!app) {
+        app = firebase.initializeApp(firebaseConfig);
     }
+    
     // Esponi auth e db globalmente per usarli negli altri script
-    window.fbAuth = firebase.auth();
+    window.fbAuth = app.auth();
     
     // Forza la persistenza locale in modo esplicito
     window.fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(error) {
         console.error("Errore impostazione persistenza:", error);
     });
 
-    window.fbDb = firebase.firestore();
+    window.fbDb = app.firestore();
     window.db = window.fbDb;
+    window.auth = window.fbAuth;
 
     // =========================================================
     // WRAPPER "ZERO REFACTORING" PER LE COLLEZIONI HUB
@@ -32,7 +35,7 @@ try {
     const originalCollection = window.fbDb.collection.bind(window.fbDb);
     window.fbDb.collection = function(path) {
         // Eccezioni per le collezioni globali dell'Hub
-        if (path.startsWith('hub_') || path === 'games_status' || path === 'vetrina' || path.startsWith('fanta_')) {
+        if (path.startsWith('hub_') || path === 'games_status' || path === 'vetrina' || path.startsWith('fanta_') || path.startsWith('palestra_') || path.startsWith('corte_')) {
             return originalCollection(path);
         }
         // Se il path ha già il prefisso, non lo ri-aggiunge
