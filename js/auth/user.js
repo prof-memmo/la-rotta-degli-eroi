@@ -4,7 +4,7 @@ Object.assign(window.Auth = window.Auth || {}, {
     },
     
     getUser: () => {
-        return window.Auth._user || { name: 'Atleta Anonimo', avatar: '👤', role: 'studente', isGuest: true };
+        return window.Auth._user || null;
     },
     
     updateProfile: async (name, avatar) => {
