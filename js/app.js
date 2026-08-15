@@ -2257,19 +2257,28 @@ window.finalizzaDocente = async function() {
       const listContainer = document.getElementById('quiz-questions-list');
 
       if (gameType === 'quiz') {
-        listContainer.innerHTML = m.questions.map((q, qIndex) => `
-          <div class="quiz-question-box" data-correct="${q.correct}">
-            <p class="quiz-question-text">${qIndex + 1}. ${q.q}</p>
-            <div class="quiz-options">
-              ${q.a.map((opt, optIndex) => `
-                <div class="quiz-option" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${optIndex})">
-                  <span class="quiz-radio"></span>
-                  <span>${opt}</span>
-                </div>
-              `).join('')}
+        listContainer.innerHTML = m.questions.map((q, qIndex) => {
+          let qData = q;
+          if (window.LiveEditor && typeof window.LiveEditor.apply === 'function') {
+            qData = window.LiveEditor.apply(`mission_${missionId}_q${qIndex}`, q);
+          }
+          const editBtn = (window.LiveEditor && typeof window.LiveEditor.renderBtn === 'function')
+            ? window.LiveEditor.renderBtn(`mission_${missionId}_q${qIndex}`, { q: qData.q })
+            : '';
+          return `
+            <div class="quiz-question-box" data-correct="${qData.correct}">
+              <p class="quiz-question-text">${qIndex + 1}. ${qData.q} ${editBtn}</p>
+              <div class="quiz-options">
+                ${qData.a.map((opt, optIndex) => `
+                  <div class="quiz-option" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${optIndex})">
+                    <span class="quiz-radio"></span>
+                    <span>${opt}</span>
+                  </div>
+                `).join('')}
+              </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
         // Aggancia trigger al bottone "Indizio"
         if (hintBtn) {
