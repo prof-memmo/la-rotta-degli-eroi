@@ -722,8 +722,7 @@ window.finalizzaDocente = async function() {
              // pass
          } else {
             if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') viewId = 'view-student-dashboard';
-            else if ((user.role === 'docente' || user.role === 'teacher')) viewId = 'view-teacher-dashboard';
-            else if (user.role === 'admin') viewId = 'view-admin-dashboard';
+            else if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') viewId = 'view-teacher-dashboard';
          }
       }
 
@@ -1645,8 +1644,7 @@ window.finalizzaDocente = async function() {
         const authViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
         if (authViews.includes(currentView)) {
           if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
-          else if ((user.role === 'docente' || user.role === 'teacher')) this.navigateTo('view-teacher-dashboard');
-          else if (user.role === 'admin') this.navigateTo('view-admin-dashboard');
+          else if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') this.navigateTo('view-teacher-dashboard');
         } else {
           this.navigateTo(currentView);
         }

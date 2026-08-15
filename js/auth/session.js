@@ -30,17 +30,20 @@ Object.assign(window.Auth = window.Auth || {}, {
             fallbackTimeoutId = setTimeout(() => {
                 console.warn("Timeout Firebase Auth/Firestore: forzo il completamento del caricamento.");
                 window.Auth._resolveReady();
-            }, 3000);
+            }, 4000);
 
             window.fbAuth.getRedirectResult().catch(e => {
                 console.error("Errore post-redirect Google:", e);
-                if (e.code) alert("Errore di accesso: " + e.code + " - " + e.message);
             });
 
             window.fbAuth.onAuthStateChanged(async (user) => {
                 if (user) {
                     window.Auth._fbUser = user;
-                    await window.Auth._handleFirebaseUser(user);
+                    try {
+                        await window.Auth._handleFirebaseUser(user);
+                    } finally {
+                        window.Auth._resolveReady();
+                    }
                 } else {
                     window.Auth._fbUser = null;
                     const isLocalOnly = window.Auth._user && (window.Auth._user.isGuest || (window.Auth._user.uid && String(window.Auth._user.uid).startsWith('std_')));
@@ -49,6 +52,7 @@ Object.assign(window.Auth = window.Auth || {}, {
                         localStorage.removeItem('eroi_user');
                     }
                     window.Auth._resolveReady();
+                    window.dispatchEvent(new CustomEvent('authChange'));
                 }
             });
         } else {
@@ -74,7 +78,7 @@ Object.assign(window.Auth = window.Auth || {}, {
                     const hubData = hubDoc.data();
                     if (hubData.role === 'admin' || email === 'prof.memmo@gmail.com') {
                         isSuperAdmin = true;
-                        hubRole = 'docente';
+                        hubRole = 'admin';
                     } else if (hubData.role === 'docente') {
                         hubRole = 'docente';
                     } else if (hubData.role === 'viandante' || hubData.role === 'forestiero') {
@@ -93,14 +97,14 @@ Object.assign(window.Auth = window.Auth || {}, {
                 } else {
                     // Profilo non ancora presente su Hub: assegniamo ruolo iniziale
                     if (isSuperAdmin) {
-                        hubRole = 'docente';
+                        hubRole = 'admin';
                     } else {
                         hubRole = 'studente';
                     }
                 }
             } catch (err) {
                 console.warn("Verifica Hub (fallback locale):", err);
-                if (isSuperAdmin) hubRole = 'docente';
+                if (isSuperAdmin) hubRole = 'admin';
             }
 
             const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
@@ -108,7 +112,7 @@ Object.assign(window.Auth = window.Auth || {}, {
             if (doc.exists) {
                 window.Auth._user = doc.data();
                 if (isSuperAdmin) {
-                    window.Auth._user.role = 'docente';
+                    window.Auth._user.role = 'admin';
                 } else if (hubRole) {
                     window.Auth._user.role = hubRole;
                 }
@@ -116,6 +120,7 @@ Object.assign(window.Auth = window.Auth || {}, {
                     window.Auth._user.name = hubName;
                 }
                 window.Auth._user.setupComplete = true;
+                window.Auth._user.approved = true;
 
                 if (window.Auth._user.status === 'archived' && window.Auth._user.role === 'studente') {
                     const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
@@ -156,11 +161,12 @@ Object.assign(window.Auth = window.Auth || {}, {
                     uid: fbUser.uid,
                     name: hubName,
                     avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: isSuperAdmin ? 'docente' : hubRole,
+                    role: isSuperAdmin ? 'admin' : hubRole,
                     points: 0,
                     isGuest: false,
                     email: fbUser.email,
                     setupComplete: true,
+                    approved: true,
                     createdAt: new Date().toISOString()
                 };
                 await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
