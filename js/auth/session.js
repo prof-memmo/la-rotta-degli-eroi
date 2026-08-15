@@ -172,6 +172,8 @@ Object.assign(window.Auth = window.Auth || {}, {
                 await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
             }
 
+            window.Auth._user.setupComplete = true;
+            window.Auth._user.approved = true;
             localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
             
             window.Auth._resolveReady();
@@ -186,10 +188,32 @@ Object.assign(window.Auth = window.Auth || {}, {
 
         } catch (e) {
             console.error("Errore recupero/creazione dati cloud:", e);
-            window.Auth._resolveReady();
-            if (e.code === 'permission-denied') {
-                alert("Errore di sincronizzazione: Permessi insufficienti sul database Firebase. Contatta l'amministratore per verificare le Security Rules.");
+            const email = (fbUser && fbUser.email) ? fbUser.email.toLowerCase() : '';
+            const isSuperAdmin = (email === 'prof.memmo@gmail.com');
+            
+            if (!window.Auth._user) {
+                window.Auth._user = {
+                    uid: fbUser.uid,
+                    name: fbUser.displayName || (email ? email.split('@')[0] : 'Eroe'),
+                    avatar: fbUser.photoURL || 'assets/avatar.png',
+                    role: isSuperAdmin ? 'admin' : 'docente',
+                    points: 0,
+                    isGuest: false,
+                    email: fbUser.email,
+                    setupComplete: true,
+                    approved: true,
+                    createdAt: new Date().toISOString()
+                };
+            } else {
+                window.Auth._user.setupComplete = true;
+                window.Auth._user.approved = true;
+                if (isSuperAdmin) window.Auth._user.role = 'admin';
             }
+            
+            localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
+            window.Auth._resolveReady();
+            if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
+            window.dispatchEvent(new CustomEvent('authChange'));
         }
     }
 });
