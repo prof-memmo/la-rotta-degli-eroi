@@ -67,8 +67,14 @@ const LEGAL_TEXTS = {
 window.showContattiModal = function() {
     if (typeof openSharedModal === 'function') {
         openSharedModal('contatti');
+        return;
     }
-};
+    const modal = document.getElementById('modal-legal');
+    const title = document.getElementById('legal-modal-title');
+    const body = document.getElementById('legal-modal-body');
+    if (!modal || !title || !body) return;
+    title.textContent = 'Contatti & Feedback';
+    body.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 20px;">
         <div style="padding: 16px; background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold); border-radius: 8px;">
           <h4 style="color: var(--gold); margin-bottom: 8px; font-family: var(--font-heading);">Scopri il mondo Prof. Memmo</h4>
