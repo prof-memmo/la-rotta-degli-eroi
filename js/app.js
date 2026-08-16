@@ -715,14 +715,12 @@ window.finalizzaDocente = async function() {
       // Se autenticato, nascondi l'overlay
       hideLoginOverlay();
 
-      // Se autenticato e chiede login, reindirizza
+      // Se autenticato e chiede login/welcome, reindirizza subito alla dashboard appropriata
       if (publicViews.includes(viewId)) {
-         // Lascia passare se è in onboarding
-         if (!user.setupComplete || ((user.role === 'docente' || user.role === 'teacher') && user.approved === false)) {
-             // pass
-         } else {
-            if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') viewId = 'view-student-dashboard';
-            else if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') viewId = 'view-teacher-dashboard';
+         if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
+             viewId = 'view-student-dashboard';
+         } else if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') {
+             viewId = 'view-teacher-dashboard';
          }
       }
 
@@ -1594,28 +1592,6 @@ window.finalizzaDocente = async function() {
         document.getElementById('user-display-name').textContent = user.name;
         document.getElementById('user-display-role').textContent = user.role === 'admin' ? 'Amministratore' : ((user.role === 'docente' || user.role === 'teacher') ? 'Docente' : (user.role === 'forestiero' ? 'Forestiero' : 'Studente'));
         
-        // Controlla se l'onboarding è completo
-        if (!user.setupComplete) {
-            if (user.role === 'pending') {
-                this.navigateTo('view-onboarding');
-                return;
-            }
-            if ((user.role === 'docente' || user.role === 'teacher')) {
-                this.navigateTo('view-iscrizione');
-                return;
-            }
-            if ((user.role === 'studente' || user.role === 'student')) {
-                this.navigateTo('view-selezione-profilo');
-                return;
-            }
-        }
-        
-        // Docente in attesa di approvazione
-        if ((user.role === 'docente' || user.role === 'teacher') && user.setupComplete && user.approved === false) {
-            this.navigateTo('view-pending-docente');
-            return;
-        }
-
         // Inizializza profilo Player Docente/Admin se non esiste
         if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') {
             let tProfile = window.EroiDB.getTeacherPlayerProfile(user.email);

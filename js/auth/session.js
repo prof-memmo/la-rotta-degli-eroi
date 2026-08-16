@@ -85,10 +85,12 @@ Object.assign(window.Auth = window.Auth || {}, {
                 createdAt: new Date().toISOString()
             };
 
+            let hubDocExists = false;
             // 1. Verifica sull'Hub Centrale (Single Sign-On Auth)
             try {
                 const hubDoc = await window.fbDb.collection('hub_users').doc(fbUser.uid).get();
                 if (hubDoc.exists) {
+                    hubDocExists = true;
                     const hubData = hubDoc.data();
                     if (hubData.role === 'admin' || isSuperAdmin) {
                         hubRole = 'admin';
@@ -112,31 +114,23 @@ Object.assign(window.Auth = window.Auth || {}, {
                 console.warn("Verifica Hub (fallback locale):", err);
             }
 
-            // 2. Lettura/scrittura documento utente gioco
-            let docExists = false;
+            // 2. Impostazione profilo utente sincronizzato
+            window.Auth._user.role = isSuperAdmin ? 'admin' : (hubRole || 'studente');
+            window.Auth._user.name = isSuperAdmin ? 'Prof. Memmo' : hubName;
+            window.Auth._user.setupComplete = (hubDocExists || isSuperAdmin);
+            window.Auth._user.approved = true;
+
+            // 3. Lettura/scrittura documento users gioco per salvare XP/Dobloni
             try {
                 const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
                 if (doc.exists) {
-                    docExists = true;
                     const cloudData = doc.data();
-                    window.Auth._user = { ...window.Auth._user, ...cloudData };
+                    window.Auth._user = { ...cloudData, ...window.Auth._user };
+                } else {
+                    await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user, { merge: true });
                 }
             } catch (dbErr) {
                 console.warn("Recupero documento users gioco:", dbErr);
-            }
-
-            if (isSuperAdmin) {
-                window.Auth._user.role = 'admin';
-                window.Auth._user.setupComplete = true;
-                window.Auth._user.approved = true;
-            } else {
-                window.Auth._user.role = hubRole || 'studente';
-                window.Auth._user.setupComplete = docExists ? (window.Auth._user.setupComplete || false) : false;
-                window.Auth._user.approved = docExists ? (window.Auth._user.approved !== false) : false;
-            }
-
-            if (hubName && !isSuperAdmin) {
-                window.Auth._user.name = hubName;
             }
 
             localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
