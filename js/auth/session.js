@@ -67,17 +67,30 @@ Object.assign(window.Auth = window.Auth || {}, {
     _handleFirebaseUser: async (fbUser) => {
         try {
             const email = fbUser.email ? fbUser.email.toLowerCase() : '';
-            let isSuperAdmin = (email === 'prof.memmo@gmail.com');
-            let hubRole = 'studente';
-            let hubName = fbUser.displayName || 'Eroe';
+            const isSuperAdmin = (email === 'prof.memmo@gmail.com');
+            let hubRole = isSuperAdmin ? 'admin' : 'studente';
+            let hubName = isSuperAdmin ? 'Prof. Memmo' : (fbUser.displayName || 'Eroe');
+
+            // Impostazione immediata dell'utente per evitare race condition
+            window.Auth._user = {
+                uid: fbUser.uid,
+                name: hubName,
+                avatar: fbUser.photoURL || 'assets/avatar.png',
+                role: isSuperAdmin ? 'admin' : 'docente',
+                points: 0,
+                isGuest: false,
+                email: fbUser.email,
+                setupComplete: true,
+                approved: true,
+                createdAt: new Date().toISOString()
+            };
 
             // 1. Verifica sull'Hub Centrale (Single Sign-On Auth)
             try {
                 const hubDoc = await window.fbDb.collection('hub_users').doc(fbUser.uid).get();
                 if (hubDoc.exists) {
                     const hubData = hubDoc.data();
-                    if (hubData.role === 'admin' || email === 'prof.memmo@gmail.com') {
-                        isSuperAdmin = true;
+                    if (hubData.role === 'admin' || isSuperAdmin) {
                         hubRole = 'admin';
                     } else if (hubData.role === 'docente') {
                         hubRole = 'docente';
@@ -94,87 +107,42 @@ Object.assign(window.Auth = window.Auth || {}, {
                         window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
                         return;
                     }
-                } else {
-                    // Profilo non ancora presente su Hub: assegniamo ruolo iniziale
-                    if (isSuperAdmin) {
-                        hubRole = 'admin';
-                    } else {
-                        hubRole = 'studente';
-                    }
                 }
             } catch (err) {
                 console.warn("Verifica Hub (fallback locale):", err);
-                if (isSuperAdmin) hubRole = 'admin';
             }
 
-            const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
+            // 2. Lettura/scrittura documento utente gioco
+            try {
+                const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
+                if (doc.exists) {
+                    const cloudData = doc.data();
+                    window.Auth._user = { ...window.Auth._user, ...cloudData };
+                } else {
+                    await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
+                }
+            } catch (dbErr) {
+                console.warn("Recupero documento users gioco:", dbErr);
+            }
 
-            if (doc.exists) {
-                window.Auth._user = doc.data();
-                if (isSuperAdmin) {
-                    window.Auth._user.role = 'admin';
-                } else if (hubRole) {
-                    window.Auth._user.role = hubRole;
-                }
-                if (!window.Auth._user.name && hubName) {
-                    window.Auth._user.name = hubName;
-                }
+            if (isSuperAdmin) {
+                window.Auth._user.role = 'admin';
                 window.Auth._user.setupComplete = true;
                 window.Auth._user.approved = true;
-
-                if (window.Auth._user.status === 'archived' && window.Auth._user.role === 'studente') {
-                    const newClassCode = prompt("Il tuo account è archiviato. Inserisci il nuovo Codice Classe per riattivarti:");
-                    if (newClassCode) {
-                        const targetClass = window.EroiDB ? window.EroiDB.getClassByCode(newClassCode) : null;
-                        if (targetClass) {
-                            window.Auth._user.status = 'active';
-                            window.Auth._user.classId = targetClass.id;
-                            await window.fbDb.collection('users').doc(fbUser.uid).update({
-                                status: 'active',
-                                classId: targetClass.id
-                            });
-                            alert("Bentornato! Sei stato riattivato.");
-                        } else {
-                            alert("Codice classe non trovato in locale. Riprova dalla dashboard.");
-                            window.Auth._user.status = 'active';
-                            window.Auth._user.classId = null;
-                            await window.fbDb.collection('users').doc(fbUser.uid).update({
-                                status: 'active',
-                                classId: null
-                            });
-                        }
-                    } else {
-                        window.Auth._user.status = 'active';
-                        window.Auth._user.classId = null;
-                        await window.fbDb.collection('users').doc(fbUser.uid).update({
-                            status: 'active',
-                            classId: null
-                        });
-                    }
-                }
-                if (!window.Auth._user.email && fbUser.email) {
-                    window.Auth._user.email = fbUser.email;
-                    await window.fbDb.collection('users').doc(fbUser.uid).update({ email: fbUser.email });
-                }
-            } else {
-                window.Auth._user = {
-                    uid: fbUser.uid,
-                    name: hubName,
-                    avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: isSuperAdmin ? 'admin' : hubRole,
-                    points: 0,
-                    isGuest: false,
-                    email: fbUser.email,
-                    setupComplete: true,
-                    approved: true,
-                    createdAt: new Date().toISOString()
-                };
-                await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
+            } else if (hubRole) {
+                window.Auth._user.role = hubRole;
+                window.Auth._user.setupComplete = true;
+                window.Auth._user.approved = true;
             }
 
-            window.Auth._user.setupComplete = true;
-            window.Auth._user.approved = true;
+            if (hubName && !isSuperAdmin) {
+                window.Auth._user.name = hubName;
+            }
+
             localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
+            if (window.EroiDB && typeof window.EroiDB.saveUser === 'function') {
+                window.EroiDB.saveUser(window.Auth._user.email, window.Auth._user);
+            }
             
             window.Auth._resolveReady();
             
@@ -191,26 +159,23 @@ Object.assign(window.Auth = window.Auth || {}, {
             const email = (fbUser && fbUser.email) ? fbUser.email.toLowerCase() : '';
             const isSuperAdmin = (email === 'prof.memmo@gmail.com');
             
-            if (!window.Auth._user) {
-                window.Auth._user = {
-                    uid: fbUser.uid,
-                    name: fbUser.displayName || (email ? email.split('@')[0] : 'Eroe'),
-                    avatar: fbUser.photoURL || 'assets/avatar.png',
-                    role: isSuperAdmin ? 'admin' : 'docente',
-                    points: 0,
-                    isGuest: false,
-                    email: fbUser.email,
-                    setupComplete: true,
-                    approved: true,
-                    createdAt: new Date().toISOString()
-                };
-            } else {
-                window.Auth._user.setupComplete = true;
-                window.Auth._user.approved = true;
-                if (isSuperAdmin) window.Auth._user.role = 'admin';
-            }
+            window.Auth._user = {
+                uid: fbUser.uid,
+                name: isSuperAdmin ? 'Prof. Memmo' : (fbUser.displayName || (email ? email.split('@')[0] : 'Eroe')),
+                avatar: fbUser.photoURL || 'assets/avatar.png',
+                role: isSuperAdmin ? 'admin' : 'docente',
+                points: 0,
+                isGuest: false,
+                email: fbUser.email,
+                setupComplete: true,
+                approved: true,
+                createdAt: new Date().toISOString()
+            };
             
             localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
+            if (window.EroiDB && typeof window.EroiDB.saveUser === 'function') {
+                window.EroiDB.saveUser(window.Auth._user.email, window.Auth._user);
+            }
             window.Auth._resolveReady();
             if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
             window.dispatchEvent(new CustomEvent('authChange'));
