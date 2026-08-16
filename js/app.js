@@ -1151,133 +1151,150 @@ window.finalizzaDocente = async function() {
 
 
       // Pulsante Logout
-      document.getElementById('btn-logout').addEventListener('click', function() {
-        if (confirm("Sei sicuro di voler uscire dal gioco?")) {
-          Auth.logout();
-          self.showToast("Disconnessione effettuata.", "success");
-          self.checkSession();
-        }
-      });
+      const btnLogout = document.getElementById('btn-logout');
+      if (btnLogout) {
+        btnLogout.addEventListener('click', function() {
+          if (confirm("Sei sicuro di voler uscire dal gioco?")) {
+            Auth.logout();
+            self.showToast("Disconnessione effettuata.", "success");
+            self.checkSession();
+          }
+        });
+      }
 
       // Abbandona Quiz
-      document.getElementById('btn-abort-quiz').addEventListener('click', function() {
-        if (confirm("Vuoi abbandonare la missione? Tutti i progressi del quiz andranno persi.")) {
-          document.getElementById('active-quiz-container').style.display = 'none';
-          document.getElementById('missions-categories-container').style.display = 'block';
-        }
-      });
+      const btnAbortQuiz = document.getElementById('btn-abort-quiz');
+      if (btnAbortQuiz) {
+        btnAbortQuiz.addEventListener('click', function() {
+          if (confirm("Vuoi abbandonare la missione? Tutti i progressi del quiz andranno persi.")) {
+            const activeQuiz = document.getElementById('active-quiz-container');
+            const missCat = document.getElementById('missions-categories-container');
+            if (activeQuiz) activeQuiz.style.display = 'none';
+            if (missCat) missCat.style.display = 'block';
+          }
+        });
+      }
 
       // Cambio Tab dell'Inventario Studente
-      document.getElementById('inv-tab-consumables').addEventListener('click', function() { self.switchInventoryTab('consumables'); });
-      document.getElementById('inv-tab-artifacts').addEventListener('click', function() { self.switchInventoryTab('artifacts'); });
-      document.getElementById('inv-tab-helpers').addEventListener('click', function() { self.switchInventoryTab('helpers'); });
+      const tabCons = document.getElementById('inv-tab-consumables');
+      if (tabCons) tabCons.addEventListener('click', function() { self.switchInventoryTab('consumables'); });
+      const tabArt = document.getElementById('inv-tab-artifacts');
+      if (tabArt) tabArt.addEventListener('click', function() { self.switchInventoryTab('artifacts'); });
+      const tabHelp = document.getElementById('inv-tab-helpers');
+      if (tabHelp) tabHelp.addEventListener('click', function() { self.switchInventoryTab('helpers'); });
 
       // --- DOCENTE SUBMISSIONS ---
       // Aggiungi Studente
-      document.getElementById('form-create-student').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const name = document.getElementById('new-student-name').value;
-        const email = document.getElementById('new-student-email').value;
-        const classId = document.getElementById('new-student-class').value;
-        const avatar = document.getElementById('new-student-avatar').value;
-        
-        try {
-          const userExists = window.EroiDB.getUser(email);
-          if (userExists) {
-            alert("Email già registrata.");
+      const formCreateStudent = document.getElementById('form-create-student');
+      if (formCreateStudent) {
+        formCreateStudent.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const name = document.getElementById('new-student-name').value;
+          const email = document.getElementById('new-student-email').value;
+          const classId = document.getElementById('new-student-class').value;
+          const avatar = document.getElementById('new-student-avatar').value;
+          
+          try {
+            const userExists = window.EroiDB.getUser(email);
+            if (userExists) {
+              alert("Email già registrata.");
+              return;
+            }
+
+            // Genera password predefinita basata sul nome in minuscolo senza spazi
+            const defaultPassword = name.toLowerCase().replace(/\s+/g, '') + "123";
+            const hash = await window.EroiAuth.hashPassword(defaultPassword);
+
+            window.EroiDB.saveUser(email, {
+              email: email,
+              name: name,
+              role: "student",
+              classId: classId,
+              passwordHash: hash
+            });
+
+            const _su = window.EroiDB.getUser(email);
+          if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, {
+              email: email,
+              name: name,
+              avatarClass: avatar,
+              level: "Viaggiatore",
+              xp: 0,
+              dracme: 15, // Dracme di partenza
+              stats: { ...window.EroiMockData.avatars[avatar].baseStats },
+              activeHelper: null,
+              activeArtifacts: [],
+              unlockedAreas: ["Olimpo"]
+            });
+          else window.EroiDB.saveStudentProfile(email, {
+              email: email,
+              name: name,
+              avatarClass: avatar,
+              level: "Viaggiatore",
+              xp: 0,
+              dracme: 15, // Dracme di partenza
+              stats: { ...window.EroiMockData.avatars[avatar].baseStats },
+              activeHelper: null,
+              activeArtifacts: [],
+              unlockedAreas: ["Olimpo"]
+            });
+
+            const teacher = Auth.getUser();
+            window.EroiDB.logActivity(teacher.email, `Iscritto lo studente: ${name} (Email: ${email}) nella classe ${classId}. Password temporanea: ${defaultPassword}`);
+            self.showToast("Studente iscritto con successo!", "success");
+            
+            document.getElementById('new-student-name').value = '';
+            document.getElementById('new-student-email').value = '';
+            self.renderTeacherStudents();
+            self.renderTeacherStats();
+          } catch (err) {
+            alert("Errore: " + err.message);
+          }
+        });
+      }
+
+      // Crea Classe
+      const formCreateClass = document.getElementById('form-create-class');
+      if (formCreateClass) {
+        formCreateClass.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const id = document.getElementById('new-class-id').value.toUpperCase().trim();
+          const name = document.getElementById('new-class-name').value;
+          const school = document.getElementById('new-class-school').value.trim();
+          const city = document.getElementById('new-class-city').value.trim();
+          
+          const teacher = Auth.getUser();
+          
+          if (window.EroiDB.getClasses()[id]) {
+            alert("Una classe con questo codice ID esiste già.");
             return;
           }
 
-          // Genera password predefinita basata sul nome in minuscolo senza spazi
-          const defaultPassword = name.toLowerCase().replace(/\s+/g, '') + "123";
-          const hash = await window.EroiAuth.hashPassword(defaultPassword);
+          const code = "ER-" + Math.random().toString(36).substring(2, 6).toUpperCase();
 
-          window.EroiDB.saveUser(email, {
-            email: email,
-            name: name,
-            role: "student",
-            classId: classId,
-            passwordHash: hash
+          window.EroiDB.saveClass(id, { 
+            id: id, 
+            name: name, 
+            code: code, 
+            teacher: teacher.email, 
+            collaborators: [],
+            school: school || null,
+            city: city || null
           });
 
-          const _su = window.EroiDB.getUser(email);
-        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, {
-            email: email,
-            name: name,
-            avatarClass: avatar,
-            level: "Viaggiatore",
-            xp: 0,
-            dracme: 15, // Dracme di partenza
-            stats: { ...window.EroiMockData.avatars[avatar].baseStats },
-            activeHelper: null,
-            activeArtifacts: [],
-            unlockedAreas: ["Olimpo"]
-          });
-        else window.EroiDB.saveStudentProfile(email, {
-            email: email,
-            name: name,
-            avatarClass: avatar,
-            level: "Viaggiatore",
-            xp: 0,
-            dracme: 15, // Dracme di partenza
-            stats: { ...window.EroiMockData.avatars[avatar].baseStats },
-            activeHelper: null,
-            activeArtifacts: [],
-            unlockedAreas: ["Olimpo"]
-          });
-
-          const teacher = Auth.getUser();
-          window.EroiDB.logActivity(teacher.email, `Iscritto lo studente: ${name} (Email: ${email}) nella classe ${classId}. Password temporanea: ${defaultPassword}`);
-          self.showToast("Studente iscritto con successo!", "success");
+          window.EroiDB.logActivity(teacher.email, `Creata nuova classe ${id} - ${name} con codice ${code}`);
+          self.showToast(`Classe creata! Codice: ${code}`, "success");
           
-          document.getElementById('new-student-name').value = '';
-          document.getElementById('new-student-email').value = '';
-          self.renderTeacherStudents();
+          document.getElementById('new-class-id').value = '';
+          document.getElementById('new-class-name').value = '';
+          document.getElementById('new-class-school').value = '';
+          document.getElementById('new-class-city').value = '';
+
+          self.renderTeacherClasses();
+          self.populateClassSelects();
           self.renderTeacherStats();
-        } catch (err) {
-          alert("Errore: " + err.message);
-        }
-      });
-
-      // Crea Classe
-      document.getElementById('form-create-class').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const id = document.getElementById('new-class-id').value.toUpperCase().trim();
-        const name = document.getElementById('new-class-name').value;
-        const school = document.getElementById('new-class-school').value.trim();
-        const city = document.getElementById('new-class-city').value.trim();
-        
-        const teacher = Auth.getUser();
-        
-        if (window.EroiDB.getClasses()[id]) {
-          alert("Una classe con questo codice ID esiste già.");
-          return;
-        }
-
-        const code = "ER-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-
-        window.EroiDB.saveClass(id, { 
-          id: id, 
-          name: name, 
-          code: code, 
-          teacher: teacher.email, 
-          collaborators: [],
-          school: school || null,
-          city: city || null
         });
-
-        window.EroiDB.logActivity(teacher.email, `Creata nuova classe ${id} - ${name} con codice ${code}`);
-        self.showToast(`Classe creata! Codice: ${code}`, "success");
-        
-        document.getElementById('new-class-id').value = '';
-        document.getElementById('new-class-name').value = '';
-        document.getElementById('new-class-school').value = '';
-        document.getElementById('new-class-city').value = '';
-
-        self.renderTeacherClasses();
-        self.populateClassSelects();
-        self.renderTeacherStats();
-      });
+      }
 
       // Unisciti come collaboratore ad una classe
       const formJoinCollaborator = document.getElementById('form-join-collaborator');
@@ -1330,148 +1347,162 @@ window.finalizzaDocente = async function() {
       }
 
       // Crea Missione
-      document.getElementById('form-create-mission').addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Se il bottone è in modalità edit, non fare nulla (gestisce saveEditedMission via onclick)
-        const btn = document.getElementById('btn-save-mission');
-        if (btn && btn.getAttribute('data-edit-id')) return;
+      const formCreateMission = document.getElementById('form-create-mission');
+      if (formCreateMission) {
+        formCreateMission.addEventListener('submit', function(e) {
+          e.preventDefault();
+          // Se il bottone è in modalità edit, non fare nulla (gestisce saveEditedMission via onclick)
+          const btn = document.getElementById('btn-save-mission');
+          if (btn && btn.getAttribute('data-edit-id')) return;
 
-        const id = document.getElementById('new-mission-id').value.trim();
-        const title = document.getElementById('new-mission-title').value;
-        const category = document.getElementById('new-mission-category').value;
-        const area = document.getElementById('new-mission-area').value;
-        const gameType = document.getElementById('new-mission-gametype').value;
-        const xp = Number(document.getElementById('new-mission-xp').value);
-        const dracme = Number(document.getElementById('new-mission-dracme').value);
-        const desc = document.getElementById('new-mission-desc').value;
-        
-        // Prima domanda
-        const qText = document.getElementById('new-mission-q').value;
-        const opt0 = document.getElementById('new-mission-opt0').value;
-        const opt1 = document.getElementById('new-mission-opt1').value;
-        const opt2 = document.getElementById('new-mission-opt2').value;
-        const opt3 = document.getElementById('new-mission-opt3').value;
+          const id = document.getElementById('new-mission-id').value.trim();
+          const title = document.getElementById('new-mission-title').value;
+          const category = document.getElementById('new-mission-category').value;
+          const area = document.getElementById('new-mission-area').value;
+          const gameType = document.getElementById('new-mission-gametype').value;
+          const xp = Number(document.getElementById('new-mission-xp').value);
+          const dracme = Number(document.getElementById('new-mission-dracme').value);
+          const desc = document.getElementById('new-mission-desc').value;
+          
+          // Prima domanda
+          const qText = document.getElementById('new-mission-q').value;
+          const opt0 = document.getElementById('new-mission-opt0').value;
+          const opt1 = document.getElementById('new-mission-opt1').value;
+          const opt2 = document.getElementById('new-mission-opt2').value;
+          const opt3 = document.getElementById('new-mission-opt3').value;
 
-        const missionObj = {
-          id: id,
-          category: category,
-          title: title,
-          desc: desc,
-          area: area,
-          gameType: gameType,
-          rewards: { xp: xp, dracme: dracme },
-          questions: [
-            { q: qText, a: [opt0, opt1, opt2, opt3], correct: 0 }
-          ]
-        };
+          const missionObj = {
+            id: id,
+            category: category,
+            title: title,
+            desc: desc,
+            area: area,
+            gameType: gameType,
+            rewards: { xp: xp, dracme: dracme },
+            questions: [
+              { q: qText, a: [opt0, opt1, opt2, opt3], correct: 0 }
+            ]
+          };
 
-        const teacher = Auth.getUser();
-        window.EroiDB.saveMission(id, missionObj);
-        window.EroiDB.logActivity(teacher.email, `Creata/Modificata missione ${id}: ${title}`);
-        self.showToast("Missione salvata!", "success");
+          const teacher = Auth.getUser();
+          window.EroiDB.saveMission(id, missionObj);
+          window.EroiDB.logActivity(teacher.email, `Creata/Modificata missione ${id}: ${title}`);
+          self.showToast("Missione salvata!", "success");
 
-        document.getElementById('new-mission-id').value = '';
-        document.getElementById('new-mission-title').value = '';
-        document.getElementById('new-mission-desc').value = '';
-        self.resetMissionForm();
-        self.renderTeacherMissions();
-      });
+          document.getElementById('new-mission-id').value = '';
+          document.getElementById('new-mission-title').value = '';
+          document.getElementById('new-mission-desc').value = '';
+          self.resetMissionForm();
+          self.renderTeacherMissions();
+        });
+      }
 
       // Crea Oggetto Shop
-      document.getElementById('form-create-shop-item').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const id = document.getElementById('new-item-id').value.trim();
-        const name = document.getElementById('new-item-name').value;
-        const price = Number(document.getElementById('new-item-price').value);
-        const rarity = document.getElementById('new-item-rarity').value;
-        const type = document.getElementById('new-item-type').value;
-        const stock = Number(document.getElementById('new-item-stock').value);
-        const desc = document.getElementById('new-item-desc').value;
+      const formCreateShopItem = document.getElementById('form-create-shop-item');
+      if (formCreateShopItem) {
+        formCreateShopItem.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const id = document.getElementById('new-item-id').value.trim();
+          const name = document.getElementById('new-item-name').value;
+          const price = Number(document.getElementById('new-item-price').value);
+          const rarity = document.getElementById('new-item-rarity').value;
+          const type = document.getElementById('new-item-type').value;
+          const stock = Number(document.getElementById('new-item-stock').value);
+          const desc = document.getElementById('new-item-desc').value;
 
-        const itemObj = {
-          id: id,
-          name: name,
-          price: price,
-          rarity: rarity,
-          type: type,
-          stock: stock,
-          desc: desc,
-          active: true
-        };
+          const itemObj = {
+            id: id,
+            name: name,
+            price: price,
+            rarity: rarity,
+            type: type,
+            stock: stock,
+            desc: desc,
+            active: true
+          };
 
-        const teacher = Auth.getUser();
-        window.EroiDB.saveShopItem(id, itemObj);
-        window.EroiDB.logActivity(teacher.email, `Salvato oggetto shop: ${name} (Prezzo: ${price} Dracme)`);
-        self.showToast("Prodotto salvato nello shop!", "success");
+          const teacher = Auth.getUser();
+          window.EroiDB.saveShopItem(id, itemObj);
+          window.EroiDB.logActivity(teacher.email, `Salvato oggetto shop: ${name} (Prezzo: ${price} Dracme)`);
+          self.showToast("Prodotto salvato nello shop!", "success");
 
-        document.getElementById('new-item-id').value = '';
-        document.getElementById('new-item-name').value = '';
-        document.getElementById('new-item-desc').value = '';
-        self.renderTeacherShop();
-      });
+          document.getElementById('new-item-id').value = '';
+          document.getElementById('new-item-name').value = '';
+          document.getElementById('new-item-desc').value = '';
+          self.renderTeacherShop();
+        });
+      }
 
       // Crea Artefatto
-      document.getElementById('form-create-artifact').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const id = document.getElementById('new-art-id').value.trim();
-        const name = document.getElementById('new-art-name').value;
-        const rarity = document.getElementById('new-art-rarity').value;
-        const icon = document.getElementById('new-art-icon').value;
-        const bonus = document.getElementById('new-art-bonus').value;
-        const desc = document.getElementById('new-art-desc').value;
+      const formCreateArtifact = document.getElementById('form-create-artifact');
+      if (formCreateArtifact) {
+        formCreateArtifact.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const id = document.getElementById('new-art-id').value.trim();
+          const name = document.getElementById('new-art-name').value;
+          const rarity = document.getElementById('new-art-rarity').value;
+          const icon = document.getElementById('new-art-icon').value;
+          const bonus = document.getElementById('new-art-bonus').value;
+          const desc = document.getElementById('new-art-desc').value;
 
-        const artObj = {
-          id: id,
-          name: name,
-          rarity: rarity,
-          image: icon,
-          bonus: bonus,
-          desc: desc
-        };
+          const artObj = {
+            id: id,
+            name: name,
+            rarity: rarity,
+            image: icon,
+            bonus: bonus,
+            desc: desc
+          };
 
-        const teacher = Auth.getUser();
-        window.EroiDB.saveArtifact(id, artObj);
-        window.EroiDB.logActivity(teacher.email, `Creato/Modificato artefatto leggendario/speciale: ${name}`);
-        self.showToast("Artefatto salvato con successo!", "success");
+          const teacher = Auth.getUser();
+          window.EroiDB.saveArtifact(id, artObj);
+          window.EroiDB.logActivity(teacher.email, `Creato/Modificato artefatto leggendario/speciale: ${name}`);
+          self.showToast("Artefatto salvato con successo!", "success");
 
-        document.getElementById('new-art-id').value = '';
-        document.getElementById('new-art-name').value = '';
-        document.getElementById('new-art-desc').value = '';
-        self.renderTeacherHelpersAndArtifacts();
-      });
+          document.getElementById('new-art-id').value = '';
+          document.getElementById('new-art-name').value = '';
+          document.getElementById('new-art-desc').value = '';
+          self.renderTeacherHelpersAndArtifacts();
+        });
+      }
 
       // Crea Guida Didattica
-      document.getElementById('form-create-guide').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const id = document.getElementById('guide-id').value.trim();
-        const title = document.getElementById('guide-title').value;
-        const category = document.getElementById('guide-category').value;
-        const summary = document.getElementById('guide-summary').value;
-        const content = document.getElementById('guide-content').value;
+      const formCreateGuide = document.getElementById('form-create-guide');
+      if (formCreateGuide) {
+        formCreateGuide.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const id = document.getElementById('guide-id').value.trim();
+          const title = document.getElementById('guide-title').value;
+          const category = document.getElementById('guide-category').value;
+          const summary = document.getElementById('guide-summary').value;
+          const content = document.getElementById('guide-content').value;
 
-        const guideObj = {
-          id: id,
-          title: title,
-          category: category,
-          summary: summary,
-          content: content
-        };
+          const guideObj = {
+            id: id,
+            title: title,
+            category: category,
+            summary: summary,
+            content: content
+          };
 
-        const teacher = Auth.getUser();
-        window.EroiDB.saveStudyGuide(id, guideObj);
-        window.EroiDB.logActivity(teacher.email, `Pubblicata guida di studio: ${title}`);
-        self.showToast("Guida didattica pubblicata!", "success");
+          const teacher = Auth.getUser();
+          window.EroiDB.saveStudyGuide(id, guideObj);
+          window.EroiDB.logActivity(teacher.email, `Pubblicata guida di studio: ${title}`);
+          self.showToast("Guida didattica pubblicata!", "success");
 
-        document.getElementById('guide-id').value = '';
-        document.getElementById('guide-title').value = '';
-        document.getElementById('guide-summary').value = '';
-        document.getElementById('guide-content').value = '';
-        self.renderTeacherGuides();
-      });
+          document.getElementById('guide-id').value = '';
+          document.getElementById('guide-title').value = '';
+          document.getElementById('guide-summary').value = '';
+          document.getElementById('guide-content').value = '';
+          self.renderTeacherGuides();
+        });
+      }
 
       // Filtro ricerca e classe nella dashboard docente
-      document.getElementById('search-student-teacher').addEventListener('input', function() { self.renderTeacherStudents(); });
-      document.getElementById('filter-class-teacher').addEventListener('change', function() { self.renderTeacherStudents(); });
+      const searchStudentTeacher = document.getElementById('search-student-teacher');
+      if (searchStudentTeacher) searchStudentTeacher.addEventListener('input', function() { self.renderTeacherStudents(); });
+      const filterClassTeacher = document.getElementById('filter-class-teacher');
+      if (filterClassTeacher) filterClassTeacher.addEventListener('change', function() { self.renderTeacherStudents(); });
       
       const searchClassTeacher = document.getElementById('search-class-teacher');
       if (searchClassTeacher) {
@@ -1480,22 +1511,25 @@ window.finalizzaDocente = async function() {
 
       // --- ADMIN SUBMISSIONS ---
       // Salva Impostazioni Globali
-      document.getElementById('form-admin-settings').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('admin-setting-appname').value;
-        const copy = document.getElementById('admin-setting-copyright').value;
-        const cont = document.getElementById('admin-setting-contacts').value;
+      const formAdminSettings = document.getElementById('form-admin-settings');
+      if (formAdminSettings) {
+        formAdminSettings.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const name = document.getElementById('admin-setting-appname').value;
+          const copy = document.getElementById('admin-setting-copyright').value;
+          const cont = document.getElementById('admin-setting-contacts').value;
 
-        window.EroiDB.saveSettings({
-          appName: name,
-          copyright: copy,
-          contacts: cont
+          window.EroiDB.saveSettings({
+            appName: name,
+            copyright: copy,
+            contacts: cont
+          });
+
+          window.EroiDB.logActivity("admin", "Aggiornate le impostazioni globali");
+          self.showToast("Configurazione globale salvata!", "success");
+          self.renderFooterDetails();
         });
-
-        window.EroiDB.logActivity("admin", "Aggiornate le impostazioni globali");
-        self.showToast("Configurazione globale salvata!", "success");
-        self.renderFooterDetails();
-      });
+      }
 
       // Salva Impostazioni Docente (Classe)
       const formTeacherSettings = document.getElementById('form-teacher-settings');
@@ -1512,64 +1546,70 @@ window.finalizzaDocente = async function() {
       }
 
       // Registra Staff
-      document.getElementById('form-create-staff').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const name = document.getElementById('staff-name').value;
-        const email = document.getElementById('staff-email').value;
-        const pass = document.getElementById('staff-password').value;
-        const role = document.getElementById('staff-role').value;
+      const formCreateStaff = document.getElementById('form-create-staff');
+      if (formCreateStaff) {
+        formCreateStaff.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const name = document.getElementById('staff-name').value;
+          const email = document.getElementById('staff-email').value;
+          const pass = document.getElementById('staff-password').value;
+          const role = document.getElementById('staff-role').value;
 
-        try {
-          const exists = window.EroiDB.getUser(email);
-          if (exists) {
-            alert("Questo account email esiste già.");
-            return;
+          try {
+            const exists = window.EroiDB.getUser(email);
+            if (exists) {
+              alert("Questo account email esiste già.");
+              return;
+            }
+
+            const hash = await window.EroiAuth.hashPassword(pass);
+            window.EroiDB.saveUser(email, {
+              email: email,
+              name: name,
+              role: role,
+              passwordHash: hash
+            });
+
+            window.EroiDB.logActivity("admin", `Registrato un nuovo membro dello staff: ${name} (Ruolo: ${role})`);
+            self.showToast("Account dello staff registrato!", "success");
+
+            document.getElementById('staff-name').value = '';
+            document.getElementById('staff-email').value = '';
+            document.getElementById('staff-password').value = '';
+            self.renderAdminAllUsers();
+          } catch (err) {
+            alert("Errore: " + err.message);
           }
-
-          const hash = await window.EroiAuth.hashPassword(pass);
-          window.EroiDB.saveUser(email, {
-            email: email,
-            name: name,
-            role: role,
-            passwordHash: hash
-          });
-
-          window.EroiDB.logActivity("admin", `Registrato un nuovo membro dello staff: ${name} (Ruolo: ${role})`);
-          self.showToast("Account dello staff registrato!", "success");
-
-          document.getElementById('staff-name').value = '';
-          document.getElementById('staff-email').value = '';
-          document.getElementById('staff-password').value = '';
-          self.renderAdminAllUsers();
-        } catch (err) {
-          alert("Errore: " + err.message);
-        }
-      });
+        });
+      }
 
       // Salva Informative Legali
-      document.getElementById('form-legal-docs').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const privacy = document.getElementById('legal-doc-privacy').value;
-        const terms = document.getElementById('legal-doc-terms').value;
-        const cookies = document.getElementById('legal-doc-cookies').value;
-        const gdpr = document.getElementById('legal-doc-gdpr').value;
+      const formLegalDocs = document.getElementById('form-legal-docs');
+      if (formLegalDocs) {
+        formLegalDocs.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const privacy = document.getElementById('legal-doc-privacy').value;
+          const terms = document.getElementById('legal-doc-terms').value;
+          const cookies = document.getElementById('legal-doc-cookies').value;
+          const gdpr = document.getElementById('legal-doc-gdpr').value;
 
-        window.EroiDB.saveRegolamenti({
-          studente: window.EroiDB.getRegolamenti().studente,
-          docente: window.EroiDB.getRegolamenti().docente
+          window.EroiDB.saveRegolamenti({
+            studente: window.EroiDB.getRegolamenti().studente,
+            docente: window.EroiDB.getRegolamenti().docente
+          });
+          
+          // Salva nelle impostazioni legali del database
+          const settings = window.EroiDB.getSettings();
+          settings.privacy = privacy;
+          settings.terms = terms;
+          settings.cookies = cookies;
+          settings.gdpr = gdpr;
+          window.EroiDB.saveSettings(settings);
+
+          window.EroiDB.logActivity("admin", "Aggiornata la documentazione legale della piattaforma.");
+          self.showToast("Documenti legali aggiornati!", "success");
         });
-        
-        // Salva nelle impostazioni legali del database
-        const settings = window.EroiDB.getSettings();
-        settings.privacy = privacy;
-        settings.terms = terms;
-        settings.cookies = cookies;
-        settings.gdpr = gdpr;
-        window.EroiDB.saveSettings(settings);
-
-        window.EroiDB.logActivity("admin", "Aggiornata la documentazione legale della piattaforma.");
-        self.showToast("Documenti legali aggiornati!", "success");
-      });
+      }
 
       // Gestione ridimensionamento per ridisegnare la barra navigazione
       window.addEventListener('resize', function() {
