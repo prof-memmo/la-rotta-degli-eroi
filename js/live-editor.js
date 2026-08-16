@@ -152,10 +152,35 @@
                 this.overrides[itemKey] = { docId: docId, ...overridePayload };
                 document.getElementById('live-editor-modal').style.display = 'none';
                 alert("✅ Modifica salvata con successo!");
+                this.renderFloatingBadge();
             } catch (e) {
                 console.error("Errore salvataggio override Rotta:", e);
                 alert("Errore durante il salvataggio: " + e.message);
             }
+        },
+
+        renderFloatingBadge: function() {
+            if (!this.isAdmin()) {
+                const existing = document.getElementById('live-editor-floating-badge');
+                if (existing) existing.remove();
+                return;
+            }
+            if (document.getElementById('live-editor-floating-badge')) return;
+
+            const badge = document.createElement('div');
+            badge.id = 'live-editor-floating-badge';
+            badge.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 99999; background: #0f172a; color: #f5c53c; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1.5px solid #f5c53c; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: transform 0.2s;';
+            badge.innerHTML = `<span>✏️ Live Editor [${Object.keys(this.overrides).length} attivi]</span>`;
+            badge.title = "Fai click per visualizzare o inserire correzioni al volo nei quiz e missioni";
+            
+            badge.onmouseenter = () => badge.style.transform = 'scale(1.05)';
+            badge.onmouseleave = () => badge.style.transform = 'scale(1)';
+            badge.onclick = () => {
+                const key = prompt("✏️ Inserisci l'ID della missione o domanda da modificare:", "");
+                if (key) this.openModal(key.trim(), '');
+            };
+
+            document.body.appendChild(badge);
         },
 
         remove: async function(itemKey) {
@@ -166,6 +191,7 @@
                 delete this.overrides[itemKey];
                 document.getElementById('live-editor-modal').style.display = 'none';
                 alert("✅ Ripristinato il testo originale!");
+                this.renderFloatingBadge();
             } catch (e) {
                 console.error("Errore ripristino override:", e);
                 alert("Errore: " + e.message);
@@ -200,6 +226,15 @@
     document.head.appendChild(style);
 
     document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => window.LiveEditor.init(), 100);
+        setTimeout(async () => {
+            await window.LiveEditor.init();
+            window.LiveEditor.renderFloatingBadge();
+        }, 500);
     });
+
+    setInterval(() => {
+        if (window.LiveEditor && typeof window.LiveEditor.renderFloatingBadge === 'function') {
+            window.LiveEditor.renderFloatingBadge();
+        }
+    }, 2000);
 })();
