@@ -2998,8 +2998,12 @@ window.finalizzaDocente = async function() {
       if (element) element.classList.add('active');
 
       const guides = window.EroiDB.getStudyGuides();
-      const g = guides.find(x => x.id === guideId);
+      let g = guides.find(x => x.id === guideId);
       if (!g) return;
+
+      if (window.LiveEditor && typeof window.LiveEditor.apply === 'function') {
+        g = window.LiveEditor.apply(`guide_${g.id}`, g);
+      }
 
       document.getElementById('guide-placeholder-text').style.display = 'none';
       const box = document.getElementById('guide-content-box');
@@ -3015,7 +3019,11 @@ window.finalizzaDocente = async function() {
         displayCategory = g.category.substring("Schede Personaggio (".length, g.category.length - 1);
       }
       document.getElementById('guide-display-category').textContent = displayCategory;
-      document.getElementById('guide-display-title').textContent = g.title;
+
+      const editBtn = (window.LiveEditor && typeof window.LiveEditor.renderBtn === 'function')
+        ? window.LiveEditor.renderBtn(`guide_${g.id}`, { q: g.content, title: g.title })
+        : '';
+      document.getElementById('guide-display-title').innerHTML = `${g.title} ${editBtn}`;
       
       const imgEl = document.getElementById('guide-display-image');
       if (imgEl) {

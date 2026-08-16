@@ -130,26 +130,43 @@
                 }
             });
 
-            // Inietta matite su schede missioni
-            document.querySelectorAll('.mission-card, .mission-preview-box').forEach(card => {
-                const titleEl = card.querySelector('.mission-card-title, h3, h4');
+            // Inietta matite su schede missioni e minigiochi
+            document.querySelectorAll('.mission-card, .mission-preview-box, .minigame-card, .puzzle-question-text, .challenge-card').forEach(card => {
+                const titleEl = card.querySelector('.mission-card-title, .minigame-title, h3, h4');
                 if (titleEl && !titleEl.querySelector('.live-edit-quick-btn')) {
-                    const mId = card.getAttribute('data-mission-id') || card.getAttribute('data-id');
-                    if (mId) {
-                        const key = `mission_${mId}_info`;
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.className = 'live-edit-quick-btn';
-                        btn.innerHTML = '✏️';
-                        btn.title = 'Modifica testo di questa missione';
-                        btn.onclick = (e) => {
-                            e.stopPropagation();
-                            window.LiveEditor.openModal(key, '');
-                        };
-                        titleEl.appendChild(btn);
-                    }
+                    const mId = card.getAttribute('data-mission-id') || card.getAttribute('data-id') || 'active_mission';
+                    const key = `mission_${mId}_info`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'live-edit-quick-btn';
+                    btn.innerHTML = '✏️';
+                    btn.title = 'Modifica testo di questa missione/minigioco';
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        window.LiveEditor.openModal(key, '');
+                    };
+                    titleEl.appendChild(btn);
                 }
             });
+
+            // Inietta matite su schede e biografie del Tempio
+            const guideTitleEl = document.getElementById('guide-display-title');
+            if (guideTitleEl && !guideTitleEl.querySelector('.live-edit-quick-btn')) {
+                const activeItem = document.querySelector('.guide-list-item.active');
+                if (activeItem) {
+                    const guideText = guideTitleEl.textContent.trim();
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'live-edit-quick-btn';
+                    btn.innerHTML = '✏️';
+                    btn.title = 'Modifica scheda di questo personaggio/guida del Tempio';
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        window.LiveEditor.openModal(`guide_${guideText.toLowerCase().replace(/[^a-z0-9]/g, '_')}`, '');
+                    };
+                    guideTitleEl.appendChild(btn);
+                }
+            }
         },
 
         renderBtn: function(itemKey, rawItemJson) {
