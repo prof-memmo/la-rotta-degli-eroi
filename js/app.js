@@ -926,40 +926,40 @@ window.finalizzaDocente = async function() {
         links = [
           { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'disabled', label: 'Mappa', icon: 'fa-map-marked-alt' },
-          { view: 'disabled', label: 'Diario', icon: 'fa-feather-pointed' },
-          { view: 'disabled', label: 'Tempio', icon: 'fa-book-open' }
+          { view: 'disabled', label: 'Tempio', icon: 'fa-book-open' },
+          { view: 'disabled', label: 'Diario', icon: 'fa-feather-pointed' }
         ];
       } else if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
         links = [
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
-          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
+          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
         ];
       } else if ((user.role === 'docente' || user.role === 'teacher')) {
         links = [
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
-          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
+          { view: 'view-teacher-dashboard', label: 'Docente', icon: 'fa-chalkboard-user' },
+          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
         ];
       } else if (user.role === 'admin') {
         links = [
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
-          { view: 'view-admin-dashboard', label: 'Pannello Admin', icon: 'fa-screwdriver-wrench' },
-          { view: 'view-teacher-dashboard', label: 'Pannello Docente', icon: 'fa-chalkboard-user' },
           { view: 'view-map', label: 'Mappa', icon: 'fa-map-marked-alt' },
+          { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-guides', label: 'Tempio', icon: 'fa-book-open' },
-          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
+          { view: 'view-admin-dashboard', label: 'Pannello Admin', icon: 'fa-screwdriver-wrench' },
+          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
         ];
       }
 
@@ -5059,6 +5059,16 @@ window.finalizzaDocente = async function() {
         `).join('');
       } else {
         teachSection.style.display = 'none';
+      }
+    },
+
+    // --- PANNELLO ADMIN & LIVE EDITOR ---
+    renderAdminDashboard: function() {
+      if (window.LiveEditor && typeof window.LiveEditor.renderAdminPanel === 'function') {
+        window.LiveEditor.renderAdminPanel('admin-live-editor-container');
+      }
+      if (typeof this.loadHistoricalArchives === 'function') {
+        this.loadHistoricalArchives();
       }
     },
 
