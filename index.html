@@ -1220,54 +1220,48 @@
             </a>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-            <!-- Live Editor Didattico (Correzioni al Volo) -->
-            <div id="admin-live-editor-container" style="grid-column: 1 / -1;"></div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Account Amministratore</label>
+            <input type="text" id="admin-rotta-email" class="input-control" value="prof.memmo@gmail.com" readonly style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #aaa;">
+          </div>
 
-            <!-- Manutenzione Database & Backup Gioco -->
-            <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <h3 class="panel-title"><i class="fa-solid fa-database" style="color: var(--gold);"></i> Backup &amp; Salvataggi Eroi</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4;">
-                  Salva lo stato del gioco (dracme, progressi, isole e squadre) come file JSON locale o esporta gli studenti.
-                </p>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                  <button class="btn btn-secondary" onclick="EroiApp.triggerBackupExport()">
-                    <i class="fa-solid fa-download"></i> Esporta Database JSON
-                  </button>
-                  <button class="btn btn-secondary" onclick="document.getElementById('import-db-file').click()">
-                    <i class="fa-solid fa-upload"></i> Ripristina Database JSON
-                  </button>
-                  <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
-                  <button class="btn btn-secondary" onclick="EroiApp.triggerCSVExport()">
-                    <i class="fa-solid fa-file-csv"></i> Esporta Studenti CSV
-                  </button>
-                </div>
-              </div>
-              <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
-                <button class="btn btn-danger" style="width: 100%;" onclick="EroiApp.triggerDatabaseReset()">
-                  <i class="fa-solid fa-triangle-exclamation"></i> Ripristina Valori Fabbrica
-                </button>
-              </div>
+          <!-- 1. Live Editor Didattico (Correzioni al Volo) -->
+          <div id="admin-live-editor-container"></div>
+
+          <!-- 2. Diagnostica e Notifiche -->
+          <div style="margin-bottom: 25px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255, 255, 255, 0.02);">
+            <h3 style="color: var(--gold); margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-wrench"></i> Diagnostica &amp; Sistema</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Strumenti di verifica connessione, gestione avvisi e backup dell'amministratore.</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="EroiApp.testConnessioneAdmin()"><i class="fa-solid fa-satellite-dish"></i> Test Connessione Database</button>
+              <button type="button" class="btn" style="background:var(--gold); color:var(--bg-dark); font-size:0.85rem;" onclick="EroiApp.resetNotificheLette()"><i class="fa-solid fa-bell-slash"></i> Reset Notifiche Non Lette</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="EroiApp.triggerBackupExport()"><i class="fa-solid fa-download"></i> Esporta Backup JSON</button>
+              <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="document.getElementById('import-db-file').click()"><i class="fa-solid fa-upload"></i> Ripristina Backup JSON</button>
+              <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
+              <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="EroiApp.triggerCSVExport()"><i class="fa-solid fa-file-csv"></i> Esporta Studenti CSV</button>
             </div>
+          </div>
 
-            <!-- Box Hub Centralizzato -->
-            <div class="glass-panel" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <h3 class="panel-title"><i class="fa-solid fa-users-gear" style="color: #60a5fa;"></i> Gestione Utenti &amp; Ecosistema</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 15px;">
-                  La gestione di tutti gli iscritti, l'approvazione delle richieste docenti, i piani di abbonamento e i documenti legali sono ora centralizzati nell'<b>Hub Didattico Ecosistema Prof. Memmo</b>.
-                </p>
-                <ul style="color: var(--text-muted); font-size: 0.85rem; padding-left: 20px; line-height: 1.6; margin-bottom: 15px;">
-                  <li>Anagrafica unificata e ruoli globali</li>
-                  <li>Analytics e statistiche sull'ecosistema</li>
-                  <li>Newsletter didattica ed email template</li>
-                  <li>Configurazioni legali e informative privacy</li>
-                </ul>
-              </div>
-              <a href="https://prof-memmo.github.io/prof-memmo-gestione-siti/" target="_blank" class="btn" style="width: 100%; text-align: center; font-weight: bold; background: rgba(99,102,241,0.2); color: #818cf8; border: 1px solid #6366f1;">
-                Apri Hub Amministrazione &rarr;
-              </a>
+          <!-- 3. Danger Zone: Gestione Punteggi Stagionali -->
+          <div style="margin-bottom: 25px; padding: 15px; border: 1px solid rgba(231, 76, 60, 0.3); border-radius: 12px; background: rgba(231, 76, 60, 0.05);">
+            <h3 style="color: #e74c3c; margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-rotate-left"></i> Reset Validazioni Stagione</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Azzera contemporaneamente tutti i progressi e le validazioni delle isole per la nuova stagione mantenendo inalterate squadre, dracme e studenti.</p>
+            <button type="button" class="btn btn-danger" style="width:auto; padding:8px 18px; font-size:0.85rem;" onclick="EroiApp.azzeraValidazioniStagione()"><i class="fa-solid fa-rotate-left"></i> Azzera Tutte le Validazioni Isole</button>
+          </div>
+
+          <!-- 4. Danger Zone: Archiviazione Annuale -->
+          <div style="margin-bottom: 25px; padding: 15px; border: 1px solid var(--danger-color); border-radius: 12px; background: rgba(231, 76, 60, 0.1);">
+            <h3 class="text-danger" style="margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-box-archive"></i> Archiviazione Annuale La Rotta degli Eroi</h3>
+            <p style="font-size: 0.85rem; margin-bottom: 15px;">Salva una "fotografia" della classifica finale e archivia le classi dell'anno scolastico in corso. Potrà essere ripristinata dall'Archivio Storico in caso di necessità.</p>
+            <button type="button" class="btn text-danger" style="background: transparent; border: 1px solid var(--danger-color); width:auto; padding:8px 18px; font-size:0.85rem;" onclick="EroiApp.archiviaAnnoCorrente()"><i class="fa-solid fa-box-archive"></i> Esegui Archiviazione Anno</button>
+          </div>
+
+          <!-- 5. Archivio Storico -->
+          <div style="padding: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255, 255, 255, 0.02);">
+            <h3 style="color: var(--gold); margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-clock-rotate-left"></i> Archivio Storico</h3>
+            <p style="font-size: 0.85rem; margin-bottom: 15px; color: var(--text-muted);">Consulta le classifiche degli anni passati o ripristina un anno archiviato per errore.</p>
+            <div id="admin-historical-archives-list">
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Caricamento archivio in corso...</p>
             </div>
           </div>
         </div>
@@ -1436,8 +1430,8 @@
   <!-- Components & Dashboard -->
   <script src="js/components/modals.js?v=41"></script>
   <script src="js/dashboard/admin-logic.js?v=41"></script>
-  <script src="js/live-editor.js?v=42"></script>
-  <script src="js/app.js?v=42"></script>
+  <script src="js/live-editor.js?v=43"></script>
+  <script src="js/app.js?v=43"></script>
   <!-- 6. Mini-giochi Interattivi -->
   <script src="js/minigames.js?v=41"></script>
 

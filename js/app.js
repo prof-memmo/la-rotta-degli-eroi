@@ -5134,6 +5134,45 @@ window.finalizzaDocente = async function() {
       }
     },
 
+    testConnessioneAdmin: async function() {
+      try {
+        if (!window.fbDb) throw new Error("Database Firebase non inizializzato");
+        const snap = await window.fbDb.collection('users').limit(1).get();
+        alert("✅ Connessione al Cloud Firestore riuscita e operativa!\nLatenza ottimale.");
+      } catch (e) {
+        console.error("Errore test connessione:", e);
+        alert("❌ Errore connessione database: " + e.message);
+      }
+    },
+
+    resetNotificheLette: function() {
+      try {
+        localStorage.removeItem('eroi_unread_notifications');
+        localStorage.removeItem('eroi_seen_notifications');
+        alert("✅ Tutte le notifiche dell'amministratore sono state reimpostate come lette.");
+      } catch (e) {
+        alert("Errore reset notifiche: " + e.message);
+      }
+    },
+
+    azzeraValidazioniStagione: async function() {
+      if (!EroiDB.isAdminOrDocente()) return;
+      if (!confirm("Sei sicuro di voler AZZERARE TUTTI I PROGRESSI E LE VALIDAZIONI delle isole per la nuova stagione?\nSquadre, studenti e classi rimarranno inalterati.")) return;
+      try {
+        const snap = await window.fbDb.collection('progress').get();
+        let batch = window.fbDb.batch();
+        snap.docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+        await batch.commit();
+        alert("✅ Tutte le validazioni e i progressi delle isole sono stati azzerati con successo!");
+        window.location.reload();
+      } catch (e) {
+        console.error("Errore azzeramento validazioni:", e);
+        alert("Errore: " + e.message);
+      }
+    },
+
     triggerDatabaseReset: function() {
       if (confirm("ATTENZIONE! Questa operazione distruggerà tutti i progressi degli studenti, le classi e le missioni create ripristinando il database ai dati di fabbrica fittizi. Vuoi procedere?")) {
         window.EroiDB.resetDatabase();
