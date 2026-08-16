@@ -25,7 +25,7 @@
   
   /* Fonts */
   --font-heading: 'Julius Sans One', sans-serif;
-  --font-body: 'Outfit', sans-serif;
+  --font-body: 'Julius Sans One', sans-serif;
   
   /* Layout */
   --sidebar-width: 260px;
@@ -37,6 +37,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Julius Sans One', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -47,7 +48,7 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: 'Julius Sans One', sans-serif;
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
