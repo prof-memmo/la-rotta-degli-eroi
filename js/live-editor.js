@@ -1,16 +1,43 @@
 /**
- * LIVE EDITOR DIDATTICO (La Rotta degli Eroi)
- * Consente all'Amministratore (prof.memmo@gmail.com) di correggere al volo
- * domande di quiz, missioni e testi direttamente dal gioco,
- * salvandoli su Firestore senza toccare i file sorgente su GitHub.
+ * LIVE EDITOR DIDATTICO (Quick-Edit al Volo) - La Rotta degli Eroi
+ * Consente al Docente / Amministratore (prof.memmo@gmail.com) di correggere al volo
+ * domande di quiz, indovinelli e missioni direttamente dalla mappa e dai giochi.
  */
 
 (function() {
+    function htmlToPlainText(html) {
+        if (!html) return '';
+        if (typeof html !== 'string') return String(html);
+        if (!/<[a-z][\s\S]*>/i.test(html)) return html;
+
+        return html
+            .replace(/<br\s*[\/]?>/gi, '\n')
+            .replace(/<\/p>/gi, '\n\n')
+            .replace(/<\/div>/gi, '\n')
+            .replace(/<[^>]+>/g, '')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&')
+            .trim();
+    }
+
+    function plainTextToHtml(text, originalHtml) {
+        if (!text) return '';
+        const trimmed = text.trim();
+        if (trimmed.startsWith('<') && trimmed.endsWith('>')) return trimmed;
+        if (originalHtml && (originalHtml.includes('<br>') || originalHtml.includes('<p>'))) {
+            return trimmed.split('\n').join('<br>');
+        }
+        return trimmed;
+    }
+
     window.LiveEditor = {
         platformKey: 'la_rotta_eroi',
         platformName: 'La Rotta degli Eroi',
         overrides: {},
         isLoaded: false,
+        _originalCache: {},
 
         init: async function() {
             if (!window.fbDb) return;
@@ -19,31 +46,110 @@
                     .where('platform', '==', this.platformKey)
                     .get();
                 
+                this.overrides = {};
                 snapshot.forEach(doc => {
                     this.overrides[doc.id] = { docId: doc.id, ...doc.data() };
                 });
                 this.isLoaded = true;
-                console.log(`✏️ Live Editor La Rotta: Caricati ${Object.keys(this.overrides).length} override.`);
+                console.log(`✏️ Live Editor [La Rotta]: ${Object.keys(this.overrides).length} override caricati.`);
             } catch (e) {
-                console.warn("Live Editor La Rotta cloud error:", e);
+                console.warn("Live Editor Rotta cloud error:", e);
             }
         },
 
         isAdmin: function() {
-            if (typeof Auth !== 'undefined' && Auth.getUser) {
-                const u = Auth.getUser();
-                if (u && u.email && u.email.toLowerCase() === 'prof.memmo@gmail.com') return true;
-                if (u && u.role === 'admin') return true;
+            let u = null;
+            if (typeof Auth !== 'undefined' && Auth.getUser) u = Auth.getUser();
+            else if (window.EroiAuth && window.EroiAuth.getUser) u = window.EroiAuth.getUser();
+            if (u) {
+                if (u.email && u.email.toLowerCase() === 'prof.memmo@gmail.com') return true;
+                if (u.role === 'admin' || u.role === 'docente') return true;
             }
+            try {
+                const stored = localStorage.getItem('eroi_user') || localStorage.getItem('hub_user_session');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (parsed.email && parsed.email.toLowerCase() === 'prof.memmo@gmail.com') return true;
+                    if (parsed.role === 'admin' || parsed.role === 'docente') return true;
+                }
+            } catch(e){}
             return false;
         },
 
         apply: function(itemKey, originalItem) {
             if (!originalItem) return originalItem;
             const key = String(itemKey);
+            this._originalCache[key] = originalItem;
             const override = this.overrides[key];
             if (!override || !override.data) return originalItem;
             return { ...originalItem, ...override.data, _isOverridden: true };
+        },
+
+        renderFloatingBadge: function() {
+            if (!this.isAdmin()) {
+                const existing = document.getElementById('live-editor-floating-badge');
+                if (existing) existing.remove();
+                return;
+            }
+            let badge = document.getElementById('live-editor-floating-badge');
+            if (!badge) {
+                badge = document.createElement('div');
+                badge.id = 'live-editor-floating-badge';
+                badge.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 99999; background: #0f172a; color: #f5c53c; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1.5px solid #f5c53c; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: transform 0.2s;';
+                badge.title = "Fai click per visualizzare o inserire correzioni al volo nei quiz e missioni";
+                badge.onmouseenter = () => badge.style.transform = 'scale(1.05)';
+                badge.onmouseleave = () => badge.style.transform = 'scale(1)';
+                badge.onclick = () => {
+                    const key = prompt("✏️ Inserisci l'ID della missione o domanda da modificare (es. mission_1_q0):", "");
+                    if (key) this.openModal(key.trim(), '');
+                };
+                document.body.appendChild(badge);
+            }
+            badge.innerHTML = `<span>✏️ Live Editor [${Object.keys(this.overrides).length} attivi]</span>`;
+            this.scanAndInjectPencils();
+        },
+
+        scanAndInjectPencils: function() {
+            if (!this.isAdmin()) return;
+            // Inietta matite su domande quiz
+            document.querySelectorAll('.quiz-question-box').forEach((box, idx) => {
+                const textEl = box.querySelector('.quiz-question-text');
+                if (textEl && !textEl.querySelector('.live-edit-quick-btn')) {
+                    const missionId = window.currentMissionId || (window.currentMission && window.currentMission.id) || 1;
+                    const key = `mission_${missionId}_q${idx}`;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'live-edit-quick-btn';
+                    btn.innerHTML = '✏️';
+                    btn.title = 'Modifica al volo questa domanda';
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        window.LiveEditor.openModal(key, '');
+                    };
+                    textEl.appendChild(btn);
+                }
+            });
+
+            // Inietta matite su schede missioni
+            document.querySelectorAll('.mission-card, .mission-preview-box').forEach(card => {
+                const titleEl = card.querySelector('.mission-card-title, h3, h4');
+                if (titleEl && !titleEl.querySelector('.live-edit-quick-btn')) {
+                    const mId = card.getAttribute('data-mission-id') || card.getAttribute('data-id');
+                    if (mId) {
+                        const key = `mission_${mId}_info`;
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'live-edit-quick-btn';
+                        btn.innerHTML = '✏️';
+                        btn.title = 'Modifica testo di questa missione';
+                        btn.onclick = (e) => {
+                            e.stopPropagation();
+                            window.LiveEditor.openModal(key, '');
+                        };
+                        titleEl.appendChild(btn);
+                    }
+                }
+            });
         },
 
         renderBtn: function(itemKey, rawItemJson) {
@@ -55,7 +161,7 @@
             } catch(e) { encodedData = ''; }
 
             return `
-                <button type="button" class="live-edit-quick-btn" onclick="event.stopPropagation(); LiveEditor.openModal('${safeKey}', '${encodedData}')" title="Modifica al volo questa domanda (Solo Admin)">
+                <button type="button" class="live-edit-quick-btn" onclick="event.stopPropagation(); LiveEditor.openModal('${safeKey}', '${encodedData}')" title="Modifica al volo questa domanda (Solo Docente/Admin)">
                     ✏️
                 </button>
             `;
@@ -68,51 +174,56 @@
                     item = JSON.parse(decodeURIComponent(atob(encodedData)));
                 } catch(e) {}
             }
+            if (!item && this._originalCache[itemKey]) {
+                item = this._originalCache[itemKey];
+            }
+
             const existingOverride = this.overrides[itemKey] || {};
             const currentData = existingOverride.data || item || {};
+
+            let rawText = currentData.q || currentData.text || currentData.frase || currentData.title || '';
+            const cleanText = htmlToPlainText(rawText);
 
             let modal = document.getElementById('live-editor-modal');
             if (!modal) {
                 modal = document.createElement('div');
                 modal.id = 'live-editor-modal';
                 modal.className = 'modal-overlay';
-                modal.style.cssText = 'display: none; align-items: center; justify-content: center; z-index: 100000; background: rgba(15,23,42,0.8); backdrop-filter: blur(6px); position: fixed; inset: 0; padding: 20px;';
+                modal.style.cssText = 'display: none; align-items: center; justify-content: center; z-index: 100000; background: rgba(15,23,42,0.85); backdrop-filter: blur(6px); position: fixed; inset: 0; padding: 20px;';
                 document.body.appendChild(modal);
             }
 
-            const currentText = currentData.q || currentData.text || currentData.frase || '';
-
             modal.innerHTML = `
-                <div class="modal-content" style="background: #1e293b; color: #f8fafc; border-radius: 20px; border: 1px solid rgba(245,197,60,0.3); width: 100%; max-width: 650px; padding: 25px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); font-family: inherit; position: relative;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+                <div class="modal-content" style="background: #1e293b; color: #f8fafc; border-radius: 20px; border: 1.5px solid rgba(245,197,60,0.4); width: 100%; max-width: 620px; padding: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); font-family: inherit; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
                         <h3 style="margin: 0; color: #f5c53c; font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
-                            ✏️ Modifica al Volo Domanda Quiz
+                            ✏️ Modifica al Volo Domanda Quiz [${itemKey}]
                         </h3>
                         <button onclick="document.getElementById('live-editor-modal').style.display='none'" style="background: transparent; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
                     </div>
 
-                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 0; margin-bottom: 15px;">
-                        La correzione verrà applicata <strong>immediatamente per tutti gli studenti</strong> via cloud.
+                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 0; margin-bottom: 14px;">
+                        Modifica il testo in italiano naturale. Verrà salvato nel database centrale e applicato a tutti gli studenti.
                     </p>
 
-                    <form onsubmit="event.preventDefault(); LiveEditor.save('${itemKey}');">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; font-weight: 700; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 5px;">Testo della Domanda:</label>
-                            <textarea id="live-edit-text" class="input-field" rows="4" style="width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid #475569; background: #0f172a; color: white; font-size: 0.95rem;" required>${currentText}</textarea>
+                    <form onsubmit="event.preventDefault(); LiveEditor.save('${itemKey}', '${btoa(encodeURIComponent(rawText))}');">
+                        <div style="margin-bottom: 14px;">
+                            <label style="display: block; font-weight: 700; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 6px;">Testo della Domanda / Missione:</label>
+                            <textarea id="live-edit-text" class="form-control" rows="4" style="width: 100%; background: #0f172a; color: white; border: 1.5px solid rgba(245,197,60,0.3); border-radius: 10px; padding: 10px 12px; font-size: 0.95rem; font-family: inherit; resize: vertical;" required>${cleanText}</textarea>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">
                             ${existingOverride.docId ? `
-                                <button type="button" onclick="LiveEditor.remove('${itemKey}')" style="background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                                <button type="button" onclick="LiveEditor.remove('${itemKey}')" style="background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                                     🔄 Ripristina Originale
                                 </button>
                             ` : '<div></div>'}
 
                             <div style="display: flex; gap: 10px;">
-                                <button type="button" onclick="document.getElementById('live-editor-modal').style.display='none'" style="background: rgba(255,255,255,0.1); color: #e2e8f0; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                                <button type="button" onclick="document.getElementById('live-editor-modal').style.display='none'" style="background: rgba(255,255,255,0.1); color: #cbd5e1; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">
                                     Annulla
                                 </button>
-                                <button type="submit" style="background: #f5c53c; color: #0f172a; border: none; padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245,197,60,0.3);">
+                                <button type="submit" style="background: #f5c53c; color: #0f172a; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245,197,60,0.3);">
                                     💾 Salva Modifica
                                 </button>
                             </div>
@@ -124,14 +235,18 @@
             modal.style.display = 'flex';
         },
 
-        save: async function(itemKey) {
+        save: async function(itemKey, encodedOriginal) {
             const textInput = document.getElementById('live-edit-text');
-            const text = textInput ? textInput.value.trim() : '';
+            const rawText = textInput ? textInput.value.trim() : '';
 
-            if (!text) {
+            if (!rawText) {
                 alert("Il testo non può essere vuoto.");
                 return;
             }
+
+            let originalHtml = '';
+            try { originalHtml = decodeURIComponent(atob(encodedOriginal)); } catch(e){}
+            const formattedText = plainTextToHtml(rawText, originalHtml);
 
             const docId = `${this.platformKey}_${itemKey.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
             const overridePayload = {
@@ -139,8 +254,9 @@
                 platformName: this.platformName,
                 itemKey: itemKey,
                 data: {
-                    q: text,
-                    text: text
+                    q: formattedText,
+                    text: formattedText,
+                    frase: formattedText
                 },
                 updatedAt: new Date().toISOString(),
                 author: 'prof.memmo@gmail.com',
@@ -159,32 +275,8 @@
             }
         },
 
-        renderFloatingBadge: function() {
-            if (!this.isAdmin()) {
-                const existing = document.getElementById('live-editor-floating-badge');
-                if (existing) existing.remove();
-                return;
-            }
-            if (document.getElementById('live-editor-floating-badge')) return;
-
-            const badge = document.createElement('div');
-            badge.id = 'live-editor-floating-badge';
-            badge.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 99999; background: #0f172a; color: #f5c53c; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1.5px solid #f5c53c; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: transform 0.2s;';
-            badge.innerHTML = `<span>✏️ Live Editor [${Object.keys(this.overrides).length} attivi]</span>`;
-            badge.title = "Fai click per visualizzare o inserire correzioni al volo nei quiz e missioni";
-            
-            badge.onmouseenter = () => badge.style.transform = 'scale(1.05)';
-            badge.onmouseleave = () => badge.style.transform = 'scale(1)';
-            badge.onclick = () => {
-                const key = prompt("✏️ Inserisci l'ID della missione o domanda da modificare:", "");
-                if (key) this.openModal(key.trim(), '');
-            };
-
-            document.body.appendChild(badge);
-        },
-
         remove: async function(itemKey) {
-            if (!confirm("Sei sicuro di voler ripristinare il testo originale di base?")) return;
+            if (!confirm("Sei sicuro di voler ripristinare il testo originale?")) return;
             const docId = `${this.platformKey}_${itemKey.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
             try {
                 await window.fbDb.collection('hub_didactic_overrides').doc(docId).delete();
@@ -209,13 +301,13 @@
             background: rgba(245, 197, 60, 0.15);
             color: #f5c53c;
             border: 1px solid rgba(245, 197, 60, 0.3);
-            border-radius: 8px;
-            padding: 4px 8px;
-            font-size: 0.85rem;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s ease;
             vertical-align: middle;
-            margin-left: 8px;
+            margin-left: 6px;
         }
         .live-edit-quick-btn:hover {
             background: #f5c53c;
