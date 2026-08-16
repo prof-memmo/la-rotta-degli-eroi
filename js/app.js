@@ -835,6 +835,9 @@ window.finalizzaDocente = async function() {
           </div>
 
           <div class="dropdown-legal-btns" style="display: flex; flex-direction: column; gap: 5px;">
+            <a href="https://prof-memmo.github.io/games/profilo.html" target="_blank" class="btn btn-secondary dropdown-sm-btn" style="width: 100%; text-decoration: none; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: rgba(212,175,55,0.15); border: 1px solid var(--gold); color: var(--gold); font-weight: 700;">
+              <i class="fa-solid fa-globe"></i> Profilo Globale
+            </a>
             <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openEditProfileModal()" style="width: 100%;">
               <i class="fa-solid fa-user-edit"></i> Modifica Profilo
             </button>
