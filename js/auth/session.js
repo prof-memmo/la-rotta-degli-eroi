@@ -113,13 +113,13 @@ Object.assign(window.Auth = window.Auth || {}, {
             }
 
             // 2. Lettura/scrittura documento utente gioco
+            let docExists = false;
             try {
                 const doc = await window.fbDb.collection('users').doc(fbUser.uid).get();
                 if (doc.exists) {
+                    docExists = true;
                     const cloudData = doc.data();
                     window.Auth._user = { ...window.Auth._user, ...cloudData };
-                } else {
-                    await window.fbDb.collection('users').doc(fbUser.uid).set(window.Auth._user);
                 }
             } catch (dbErr) {
                 console.warn("Recupero documento users gioco:", dbErr);
@@ -129,10 +129,10 @@ Object.assign(window.Auth = window.Auth || {}, {
                 window.Auth._user.role = 'admin';
                 window.Auth._user.setupComplete = true;
                 window.Auth._user.approved = true;
-            } else if (hubRole) {
-                window.Auth._user.role = hubRole;
-                window.Auth._user.setupComplete = true;
-                window.Auth._user.approved = true;
+            } else {
+                window.Auth._user.role = hubRole || 'studente';
+                window.Auth._user.setupComplete = docExists ? (window.Auth._user.setupComplete || false) : false;
+                window.Auth._user.approved = docExists ? (window.Auth._user.approved !== false) : false;
             }
 
             if (hubName && !isSuperAdmin) {
