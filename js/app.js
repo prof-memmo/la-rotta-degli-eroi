@@ -1926,22 +1926,25 @@ window.finalizzaDocente = async function() {
       const areas = ["Accademia", "Miti di Fondazione", "Biblioteca", "Archivio", "Olimpo", "Creta", "Troia", "Itaca", "Lazio", "Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
       const secondTermAreas = ["Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
 
+      const _curr_user = Auth.getUser();
+      const _isAdmin = _curr_user && (_curr_user.role === 'admin' || (_curr_user.email && _curr_user.email.toLowerCase() === 'prof.memmo@gmail.com'));
+
       areas.forEach(area => {
         const node = document.getElementById(`node-${area}`);
         if (!node) return;
 
-        // Accademia è sempre sbloccata (punto di partenza)
-        const alwaysUnlocked = area === 'Accademia';
-        const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser();
+        // Accademia è sempre sbloccata (punto di partenza), l'Amministratore ha tutto sbloccato
+        const alwaysUnlocked = area === 'Accademia' || _isAdmin;
+        const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser() && !_isAdmin;
 
-        if ((alwaysUnlocked || unlocked.includes(area)) && !isSecondTermLocked) {
+        if (alwaysUnlocked || unlocked.includes(area) || _isAdmin) {
           node.classList.remove('locked');
           node.onclick = () => {
-            if (Auth.getUser() && Auth.getUser().role === 'docente' && secondTermAreas.includes(area)) {
+            if (_curr_user && _curr_user.role === 'docente' && secondTermAreas.includes(area) && !_isAdmin) {
                 // Controlla se il docente ha attivato il 2Q per le sue classi
-                const myClasses = Object.values(window.EroiDB.getClasses()).filter(c => c.teacher === Auth.getUser().email);
+                const myClasses = Object.values(window.EroiDB.getClasses()).filter(c => c.teacher === _curr_user.email);
                 const hasActive = myClasses.some(c => c.secondTermActive);
-                if (!hasActive && myClasses.length > 0 && Auth.getUser().role !== 'admin') {
+                if (!hasActive && myClasses.length > 0) {
                     EroiApp.showToast("Nota: Quest'area appartiene al 2° Quadrimestre che non è ancora attivo per le tue classi. Puoi attivarlo dalle Impostazioni Classe.", "info");
                 }
             }
@@ -2097,8 +2100,11 @@ window.finalizzaDocente = async function() {
         `;
       }
 
+      const _curr_user_m = Auth.getUser();
+      const _isAdmin_m = _curr_user_m && (_curr_user_m.role === 'admin' || (_curr_user_m.email && _curr_user_m.email.toLowerCase() === 'prof.memmo@gmail.com'));
+
       categories.forEach(cat => {
-        const isSecondTermLocked = cat.term === 2 && !window.EroiApp.isSecondTermActiveForUser();
+        const isSecondTermLocked = cat.term === 2 && !window.EroiApp.isSecondTermActiveForUser() && !_isAdmin_m;
         const catMissions = missions.filter(m => m.category === cat.name);
         
         if (catMissions.length === 0) return;
@@ -2119,8 +2125,8 @@ window.finalizzaDocente = async function() {
         `;
 
         catMissions.forEach(m => {
-          const isUnlocked = (profile.unlockedAreas || ['Accademia']).includes(m.area) || m.id === 'mit_caos' || m.id === 'quiz_inizio';
-          const isPlayable = isUnlocked && !isSecondTermLocked;
+          const isUnlocked = (profile.unlockedAreas || ['Accademia']).includes(m.area) || m.id === 'mit_caos' || m.id === 'quiz_inizio' || _isAdmin_m;
+          const isPlayable = (isUnlocked && !isSecondTermLocked) || _isAdmin_m;
 
           html += `
             <div style="padding: 16px; background: rgba(255,255,255,0.02); 
@@ -5563,12 +5569,15 @@ window.finalizzaDocente = async function() {
 
       const secondTermAreas = ["Aquisgrana", "Roncisvalle", "Camelot", "Foresta di Brocelandia", "Castello del Graal", "Worms", "Reno"];
 
+      const _curr_user_d = Auth.getUser();
+      const _isAdmin_d = _curr_user_d && (_curr_user_d.role === 'admin' || (_curr_user_d.email && _curr_user_d.email.toLowerCase() === 'prof.memmo@gmail.com'));
+
       allAreas.forEach(area => {
         const areaDiaries = diaries.filter(d => d.studentEmail === studentEmail && d.area === area && !d.isSelfEval);
         const count = areaDiaries.length;
-        const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser();
+        const isSecondTermLocked = secondTermAreas.includes(area) && !window.EroiApp.isSecondTermActiveForUser() && !_isAdmin_d;
         const isTeacherUnlocked = activeDiaries.includes(area);
-        const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area) || isTeacherUnlocked) && !isSecondTermLocked;
+        const isUnlockedOnMap = (area === 'Accademia' || unlockedAreas.includes(area) || isTeacherUnlocked || _isAdmin_d) && (!isSecondTermLocked || _isAdmin_d);
 
         
         let badgeColor = 'rgba(255,255,255,0.1)';
