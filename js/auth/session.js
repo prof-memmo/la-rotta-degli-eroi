@@ -43,6 +43,7 @@ Object.assign(window.Auth = window.Auth || {}, {
                         await window.Auth._handleFirebaseUser(user);
                     } finally {
                         window.Auth._resolveReady();
+                        window.dispatchEvent(new CustomEvent('authChange'));
                     }
                 } else {
                     window.Auth._fbUser = null;
