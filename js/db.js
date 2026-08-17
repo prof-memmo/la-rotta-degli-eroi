@@ -165,6 +165,11 @@
       }
     },
 
+    loadAllData: async function() {
+      this.init();
+      return true;
+    },
+
     save: function() {
       if (dbState) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(dbState));

@@ -534,7 +534,11 @@ window.finalizzaDocente = async function() {
         Auth._user = user;
         localStorage.setItem('eroi_user', JSON.stringify(user));
         
-        await window.EroiDB.loadAllData(false);
+        if (window.EroiDB && typeof window.EroiDB.loadAllData === 'function') {
+            await window.EroiDB.loadAllData(false);
+        } else if (window.EroiDB && typeof window.EroiDB.save === 'function') {
+            window.EroiDB.save();
+        }
         this.generateNavbarLinks(user);
         
         const badgeName = document.getElementById('user-display-name');
