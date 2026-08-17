@@ -1217,29 +1217,109 @@
       <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
       <!-- VIEW: PANNELLO ADMIN (Backup & Hub) -->
       <section id="view-admin-dashboard" class="view">
+        <div style="display: flex; gap: 10px; margin-bottom: 25px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="EroiApp.switchView('view-teacher-dashboard')" class="btn" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; border-radius: 50px; padding: 10px 22px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-chalkboard-user"></i> 👨‍🏫 Pannello Docente
+            </button>
+            <button onclick="EroiApp.switchView('view-admin-dashboard')" class="btn" style="background: var(--gold); color: #0d1326; border-radius: 50px; padding: 10px 22px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);">
+                <i class="fa-solid fa-shield-halved"></i> 🛡️ Dashboard Admin &amp; Impostazioni
+            </button>
+        </div>
+
         <div class="glass-panel">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
-            <h2 class="section-title" style="margin: 0;"><i class="fa-solid fa-screwdriver-wrench" style="color: var(--gold);"></i> Pannello Tecnico di Gioco</h2>
-            <a href="https://prof-memmo.github.io/prof-memmo-gestione-siti/" target="_blank" class="btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;">
+            <div>
+              <h2 class="section-title" style="margin: 0; color: #1e293b;"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> DASHBOARD AMMINISTRATORE</h2>
+              <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">Pannello di controllo globale, iscritti, scuole e impostazioni della Rotta degli Eroi.</p>
+            </div>
+            <a href="https://prof-memmo.github.io/prof-memmo-gestione-siti/" target="_blank" class="btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; text-decoration: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
               <i class="fa-solid fa-gauge-high"></i> Vai all'Hub Amministrazione
             </a>
           </div>
 
+          <!-- STAT CARDS ROW (STILE PALESTRA) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div class="admin-stat-card active" onclick="EroiApp.setAdminUserFilter('all')" data-filter="all">
+              <div style="font-size: 1.6rem; font-weight: 900; color: var(--gold);" id="admin-count-total">0</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Tutti</div>
+            </div>
+            <div class="admin-stat-card" onclick="EroiApp.setAdminUserFilter('teacher')" data-filter="teacher">
+              <div style="font-size: 1.6rem; font-weight: 900; color: #2563eb;" id="admin-count-teachers">0</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Docenti</div>
+            </div>
+            <div class="admin-stat-card" onclick="EroiApp.setAdminUserFilter('student')" data-filter="student">
+              <div style="font-size: 1.6rem; font-weight: 900; color: #16a34a;" id="admin-count-students">0</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Studenti</div>
+            </div>
+            <div class="admin-stat-card" onclick="EroiApp.setAdminUserFilter('forestiero')" data-filter="forestiero">
+              <div style="font-size: 1.6rem; font-weight: 900; color: #9333ea;" id="admin-count-forestieri">0</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Forestieri</div>
+            </div>
+            <div class="admin-stat-card" onclick="EroiApp.setAdminUserFilter('schools')" data-filter="schools">
+              <div style="font-size: 1.6rem; font-weight: 900; color: #db2777;" id="admin-count-schools">0</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Scuole Attive</div>
+            </div>
+          </div>
+
+          <!-- SEARCH & USER MANAGEMENT -->
+          <div style="background: #f8fafc; padding: 1.2rem; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 2rem;">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <input type="text" id="admin-search-users" oninput="EroiApp.filterAdminUsers()" placeholder="Cerca utente per nome o email..." style="flex: 1; min-width: 250px; padding: 0.9rem 1.4rem; border-radius: 50px; border: 1.5px solid #cbd5e1; outline: none; font-size: 0.95rem; background: white; color: #1e293b;">
+            </div>
+          </div>
+
+          <!-- USERS TABLE WRAPPER -->
+          <div id="admin-users-table-wrapper" style="margin-bottom: 2rem;">
+            <h3 style="color: #1e293b; margin-top: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-users"></i> Gestione Utenti Iscritti</h3>
+            <div class="table-responsive" style="overflow-x:auto;">
+              <table class="game-table" id="admin-all-users-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
+                    <th style="padding: 10px;">Nome e Cognome</th>
+                    <th style="padding: 10px;">Email</th>
+                    <th style="padding: 10px;">Ruolo</th>
+                    <th style="padding: 10px;">Iscritto il</th>
+                    <th style="padding: 10px; text-align: center;">Contatta</th>
+                    <th style="padding: 10px; text-align: right;">Azioni</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SCHOOLS TABLE WRAPPER -->
+          <div id="admin-schools-table-wrapper" style="display: none; margin-bottom: 2rem;">
+            <h3 style="color: #1e293b; margin-top: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-school"></i> Elenco Istituti e Scuole Registrate</h3>
+            <div class="table-responsive" style="overflow-x:auto;">
+              <table class="game-table" id="admin-schools-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
+                    <th style="padding: 10px;">🏫 Nome Istituto</th>
+                    <th style="padding: 10px;">📍 Città</th>
+                    <th style="padding: 10px;">📁 Classi Associate</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
           <div style="margin-bottom: 20px;">
-            <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Account Amministratore</label>
-            <input type="text" id="admin-rotta-email" class="input-control" value="prof.memmo@gmail.com" readonly style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #aaa;">
+            <label style="font-size: 0.85rem; color: #64748b; font-weight: 700; display: block; margin-bottom: 6px;">Account Amministratore</label>
+            <input type="text" id="admin-rotta-email" class="input-control" value="prof.memmo@gmail.com" readonly style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #e2e8f0; background: #f8fafc; color: #475569; font-weight: 600;">
           </div>
 
           <!-- 1. Live Editor Didattico (Correzioni al Volo) -->
           <div id="admin-live-editor-container"></div>
 
           <!-- 2. Diagnostica e Notifiche -->
-          <div style="margin-bottom: 25px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255, 255, 255, 0.02);">
-            <h3 style="color: var(--gold); margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-wrench"></i> Diagnostica &amp; Sistema</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Strumenti di verifica connessione, gestione avvisi e backup dell'amministratore.</p>
+          <div style="margin-bottom: 25px; padding: 18px; border: 1px solid #e2e8f0; border-radius: 16px; background: #f8fafc;">
+            <h3 style="color: #0284c7; margin-top:0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-wrench"></i> Diagnostica &amp; Sistema</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Strumenti di verifica connessione, gestione avvisi e backup dell'amministratore.</p>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
               <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="EroiApp.testConnessioneAdmin()"><i class="fa-solid fa-satellite-dish"></i> Test Connessione Database</button>
-              <button type="button" class="btn" style="background:var(--gold); color:var(--bg-dark); font-size:0.85rem;" onclick="EroiApp.resetNotificheLette()"><i class="fa-solid fa-bell-slash"></i> Reset Notifiche Non Lette</button>
+              <button type="button" class="btn" style="background:var(--gold); color:var(--bg-dark); font-size:0.85rem; font-weight: 700;" onclick="EroiApp.resetNotificheLette()"><i class="fa-solid fa-bell-slash"></i> Reset Notifiche Non Lette</button>
               <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="EroiApp.triggerBackupExport()"><i class="fa-solid fa-download"></i> Esporta Backup JSON</button>
               <button type="button" class="btn btn-secondary" style="font-size:0.85rem;" onclick="document.getElementById('import-db-file').click()"><i class="fa-solid fa-upload"></i> Ripristina Backup JSON</button>
               <input type="file" id="import-db-file" style="display: none;" accept=".json" onchange="EroiApp.triggerBackupImport(event)">
@@ -1248,25 +1328,25 @@
           </div>
 
           <!-- 3. Danger Zone: Gestione Punteggi Stagionali -->
-          <div style="margin-bottom: 25px; padding: 15px; border: 1px solid rgba(231, 76, 60, 0.3); border-radius: 12px; background: rgba(231, 76, 60, 0.05);">
-            <h3 style="color: #e74c3c; margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-rotate-left"></i> Reset Validazioni Stagione</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Azzera contemporaneamente tutti i progressi e le validazioni delle isole per la nuova stagione mantenendo inalterate squadre, dracme e studenti.</p>
-            <button type="button" class="btn btn-danger" style="width:auto; padding:8px 18px; font-size:0.85rem;" onclick="EroiApp.azzeraValidazioniStagione()"><i class="fa-solid fa-rotate-left"></i> Azzera Tutte le Validazioni Isole</button>
+          <div style="margin-bottom: 25px; padding: 18px; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; background: rgba(239, 68, 68, 0.04);">
+            <h3 style="color: #dc2626; margin-top:0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-rotate-left"></i> Reset Validazioni Stagione</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Azzera contemporaneamente tutti i progressi e le validazioni delle isole per la nuova stagione mantenendo inalterate squadre, dracme e studenti.</p>
+            <button type="button" class="btn" style="background: #dc2626; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer;" onclick="EroiApp.azzeraValidazioniStagione()"><i class="fa-solid fa-rotate-left"></i> Azzera Tutte le Validazioni Isole</button>
           </div>
 
           <!-- 4. Danger Zone: Archiviazione Annuale -->
-          <div style="margin-bottom: 25px; padding: 15px; border: 1px solid var(--danger-color); border-radius: 12px; background: rgba(231, 76, 60, 0.1);">
-            <h3 class="text-danger" style="margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-box-archive"></i> Archiviazione Annuale La Rotta degli Eroi</h3>
-            <p style="font-size: 0.85rem; margin-bottom: 15px;">Salva una "fotografia" della classifica finale e archivia le classi dell'anno scolastico in corso. Potrà essere ripristinata dall'Archivio Storico in caso di necessità.</p>
-            <button type="button" class="btn text-danger" style="background: transparent; border: 1px solid var(--danger-color); width:auto; padding:8px 18px; font-size:0.85rem;" onclick="EroiApp.archiviaAnnoCorrente()"><i class="fa-solid fa-box-archive"></i> Esegui Archiviazione Anno</button>
+          <div style="margin-bottom: 25px; padding: 18px; border: 1px solid #dc2626; border-radius: 16px; background: rgba(239, 68, 68, 0.08);">
+            <h3 style="color: #dc2626; margin-top:0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-box-archive"></i> Archiviazione Annuale La Rotta degli Eroi</h3>
+            <p style="font-size: 0.85rem; margin-bottom: 15px; color: #475569;">Salva una "fotografia" della classifica finale e archivia le classi dell'anno scolastico in corso. Potrà essere ripristinata dall'Archivio Storico in caso di necessità.</p>
+            <button type="button" class="btn" style="background: transparent; color: #dc2626; border: 1.5px solid #dc2626; padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;" onclick="EroiApp.archiviaAnnoCorrente()"><i class="fa-solid fa-box-archive"></i> Esegui Archiviazione Anno</button>
           </div>
 
           <!-- 5. Archivio Storico -->
-          <div style="padding: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255, 255, 255, 0.02);">
-            <h3 style="color: var(--gold); margin-top:0; font-size: 1.05rem;"><i class="fa-solid fa-clock-rotate-left"></i> Archivio Storico</h3>
-            <p style="font-size: 0.85rem; margin-bottom: 15px; color: var(--text-muted);">Consulta le classifiche degli anni passati o ripristina un anno archiviato per errore.</p>
+          <div style="margin-bottom: 30px; padding: 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
+            <h3 style="color: #d97706; margin-top:0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-clock-rotate-left"></i> Archivio Storico</h3>
+            <p style="font-size: 0.85rem; margin-bottom: 15px; color: #64748b;">Consulta le classifiche degli anni passati o ripristina un anno archiviato per errore.</p>
             <div id="admin-historical-archives-list">
-              <p style="font-size: 0.85rem; color: var(--text-muted);">Caricamento archivio in corso...</p>
+              <p style="font-size: 0.85rem; color: #94a3b8;">Caricamento archivio in corso...</p>
             </div>
           </div>
         </div>
