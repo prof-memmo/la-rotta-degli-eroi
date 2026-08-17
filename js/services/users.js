@@ -60,21 +60,30 @@ window.EroiDB.getAllUsers = function() {
 window.EroiDB.syncCloudUsers = async function() {
       if (!window.fbDb) return;
       try {
-        const snap = await window.fbDb.collection('users').get();
+        let snap = await window.fbDb.collection('users').get();
+        if (snap.empty) {
+          try { snap = await window.fbDb.collection('eroi_users').get(); } catch(e){}
+        }
         let changed = false;
         snap.docs.forEach(doc => {
           const d = doc.data();
-          if (!d.email || d.role === 'pending' || d.status === 'pending') return; // I pending si gestiscono a parte
-          const key = d.email.toLowerCase();
-          if (!dbState.users[key]) {
-            dbState.users[key] = d;
+          const email = (d.email || doc.id).toLowerCase().trim();
+          if (!email || d.role === 'pending' || d.status === 'pending') return;
+          const userObj = {
+            ...d,
+            email: email,
+            name: d.name || d.nome || d.displayName || email.split('@')[0],
+            role: d.role || d.ruolo || 'student',
+            scuola: d.scuola || d.school || '',
+            classId: d.classId || d.classe || '',
+            joinedAt: d.joinedAt || d.createdAt || Date.now()
+          };
+          if (!dbState.users[email]) {
+            dbState.users[email] = userObj;
             changed = true;
           } else {
-            // Aggiorna se i ruoli non coincidono
-            if (dbState.users[key].role !== d.role) {
-              dbState.users[key].role = d.role;
-              changed = true;
-            }
+            dbState.users[email] = { ...dbState.users[email], ...userObj };
+            changed = true;
           }
         });
         if (changed) this.save();
