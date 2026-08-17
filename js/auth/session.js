@@ -105,6 +105,9 @@ Object.assign(window.Auth = window.Auth || {}, {
                     if (hubData.anagrafica && hubData.anagrafica.nome) {
                         hubName = hubData.anagrafica.nome;
                     }
+                    if (hubData.avatar || (hubData.anagrafica && hubData.anagrafica.avatar)) {
+                        window.Auth._user.avatar = hubData.avatar || hubData.anagrafica.avatar;
+                    }
                     if (!isSuperAdmin && hubData.statusAccount && (hubData.statusAccount === 'rejected' || hubData.statusAccount === 'suspended')) {
                         alert("Accesso negato: L'account è stato sospeso nell'Hub.");
                         window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';

@@ -514,13 +514,23 @@ window.finalizzaDocente = async function() {
         // Salva su database centrale eroi_users e users
         if (window.fbDb) {
             await window.fbDb.collection('users').doc(user.uid || user.email.toLowerCase()).set(updateData, { merge: true });
+            if (user.uid) {
+                await window.fbDb.collection('hub_users').doc(user.uid).set({
+                    avatar: this.selectedRottaAvatar,
+                    'anagrafica.avatar': this.selectedRottaAvatar,
+                    'anagrafica.nome': nameInput
+                }, { merge: true });
+            }
+        }
+        if (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.updateProfile) {
+            await window.fbAuth.currentUser.updateProfile({ photoURL: this.selectedRottaAvatar, displayName: nameInput }).catch(e => console.warn(e));
         }
         
         user.name = nameInput;
         user.avatar = this.selectedRottaAvatar;
         if (isTeacher) user.school = schoolInput;
 
-        this.showToast('Profilo e avatar aggiornati con successo!', 'success');
+        this.showToast('Profilo e avatar aggiornati con successo in tutto l\'ecosistema!', 'success');
         document.getElementById('edit-profile-modal').classList.add('hidden');
         if (this.renderHeader) this.renderHeader();
       } catch (err) {
