@@ -2021,7 +2021,7 @@ table.game-table tr:hover td {
   height: 32px;
   border-radius: 50%;
   border: 1.5px solid var(--gold);
-  background: var(--bg-dark);
+  background: #ffffff;
   overflow: hidden;
   display: flex;
   align-items: center;
