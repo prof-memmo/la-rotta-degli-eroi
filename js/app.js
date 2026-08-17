@@ -3436,10 +3436,14 @@ window.finalizzaDocente = async function() {
         }
       });
 
-      document.getElementById('teacher-stats-teachers').textContent = colleagueEmails.size;
-      document.getElementById('teacher-stats-students').textContent = students.length;
-      document.getElementById('teacher-stats-classes').textContent = myClasses.length;
-      document.getElementById('teacher-stats-schools').textContent = schools.size;
+      const elT = document.getElementById('teacher-stats-teachers');
+      if (elT) elT.textContent = colleagueEmails.size;
+      const elS = document.getElementById('teacher-stats-students');
+      if (elS) elS.textContent = students.length;
+      const elC = document.getElementById('teacher-stats-classes');
+      if (elC) elC.textContent = myClasses.length;
+      const elSc = document.getElementById('teacher-stats-schools');
+      if (elSc) elSc.textContent = schools.size;
     },
 
     populateClassSelects: function() {
