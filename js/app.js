@@ -432,6 +432,7 @@ window.finalizzaDocente = async function() {
         if (u.createdAt.toDate) return u.createdAt.toDate().getTime();
         return 0;
     },
+    selectedRottaAvatar: 'assets/avatars/6.png',
     openEditProfileModal: function() {
       const user = Auth.getUser();
       if (!user) return;
@@ -439,6 +440,7 @@ window.finalizzaDocente = async function() {
       const nameInput = document.getElementById('edit-profile-name');
       const schoolGroup = document.getElementById('edit-profile-school-group');
       const schoolInput = document.getElementById('edit-profile-school');
+      const avatarGrid = document.getElementById('rotta-edit-avatar-grid');
       
       const isTeacher = (user.role === 'docente' || user.role === 'teacher' || user.role === 'admin');
       
@@ -453,10 +455,38 @@ window.finalizzaDocente = async function() {
       }
       
       nameInput.value = profile ? profile.name : (user.name || '');
+      
+      const currentAvatar = user.avatar || (profile ? profile.avatar : 'assets/avatars/6.png');
+      this.selectedRottaAvatar = currentAvatar;
+
+      if (avatarGrid) {
+          avatarGrid.innerHTML = [6,7,8,9,10,11,12,13,14,15,16].map(num => `
+              <div class="rotta-avatar-opt ${currentAvatar === `assets/avatars/${num}.png` ? 'active' : ''}" 
+                   onclick="window.EroiApp.selectRottaAvatar(this, 'assets/avatars/${num}.png')"
+                   style="width:46px; height:46px; border-radius:50%; border:3px solid ${currentAvatar === `assets/avatars/${num}.png` ? 'var(--gold)' : 'transparent'}; cursor:pointer; overflow:hidden; transition:transform 0.2s; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
+                  <img src="assets/avatars/${num}.png" alt="Avatar ${num}" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+          `).join('');
+      }
+
       modal.classList.remove('hidden');
       if (this.closeMobileDropdown) this.closeMobileDropdown();
       const dropdown = document.getElementById('profile-dropdown-card');
       if (dropdown) dropdown.style.display = 'none';
+    },
+
+    selectRottaAvatar: function(el, avatarPath) {
+        this.selectedRottaAvatar = avatarPath;
+        document.querySelectorAll('.rotta-avatar-opt').forEach(opt => {
+            opt.classList.remove('active');
+            opt.style.borderColor = 'transparent';
+            opt.style.transform = 'scale(1)';
+        });
+        if (el) {
+            el.classList.add('active');
+            el.style.borderColor = 'var(--gold)';
+            el.style.transform = 'scale(1.1)';
+        }
     },
 
     saveProfileData: async function() {
@@ -473,11 +503,31 @@ window.finalizzaDocente = async function() {
       const isTeacher = (user.role === 'docente' || user.role === 'teacher' || user.role === 'admin');
       
       try {
-        const updateData = { name: nameInput };
+        const updateData = { 
+            name: nameInput,
+            avatar: this.selectedRottaAvatar || 'assets/avatars/6.png'
+        };
         if (isTeacher) {
           updateData.school = schoolInput;
         }
-        await window.fbDb.collection('users').doc(user.uid).update(updateData);
+        
+        // Salva su database centrale eroi_users e users
+        if (window.fbDb) {
+            await window.fbDb.collection('users').doc(user.uid || user.email.toLowerCase()).set(updateData, { merge: true });
+        }
+        
+        user.name = nameInput;
+        user.avatar = this.selectedRottaAvatar;
+        if (isTeacher) user.school = schoolInput;
+
+        this.showToast('Profilo e avatar aggiornati con successo!', 'success');
+        document.getElementById('edit-profile-modal').classList.add('hidden');
+        if (this.renderHeader) this.renderHeader();
+      } catch (err) {
+        console.error(err);
+        this.showToast('Errore durante il salvataggio: ' + err.message, 'danger');
+      }
+    },
         
         // Update local auth cache
         user.name = nameInput;
