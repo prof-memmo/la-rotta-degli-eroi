@@ -526,9 +526,21 @@ window.finalizzaDocente = async function() {
             await window.fbAuth.currentUser.updateProfile({ photoURL: this.selectedRottaAvatar, displayName: nameInput }).catch(e => console.warn(e));
         }
         
+        // Aggiorna cache locale e UI
         user.name = nameInput;
         user.avatar = this.selectedRottaAvatar;
         if (isTeacher) user.school = schoolInput;
+        Auth._user = user;
+        localStorage.setItem('eroi_user', JSON.stringify(user));
+        
+        await window.EroiDB.loadAllData(false);
+        this.generateNavbarLinks(user);
+        
+        const badgeName = document.getElementById('user-display-name');
+        if (badgeName) badgeName.textContent = nameInput;
+        
+        const studDashName = document.getElementById('stud-dashboard-name');
+        if (studDashName && !isTeacher) studDashName.textContent = nameInput;
 
         this.showToast('Profilo e avatar aggiornati con successo in tutto l\'ecosistema!', 'success');
         document.getElementById('edit-profile-modal').classList.add('hidden');
@@ -536,31 +548,6 @@ window.finalizzaDocente = async function() {
       } catch (err) {
         console.error(err);
         this.showToast('Errore durante il salvataggio: ' + err.message, 'danger');
-      }
-    },
-        
-        // Update local auth cache
-        user.name = nameInput;
-        if (isTeacher) user.school = schoolInput;
-        Auth._user = user;
-        
-        this.showToast('Profilo aggiornato con successo!', 'success');
-        document.getElementById('edit-profile-modal').classList.add('hidden');
-        
-        // Force refresh local data and UI
-        await window.EroiDB.loadAllData(false);
-        this.generateNavbarLinks(user);
-        
-        // Update specific view labels if needed
-        const badgeName = document.getElementById('user-display-name');
-        if (badgeName) badgeName.textContent = nameInput;
-        
-        const studDashName = document.getElementById('stud-dashboard-name');
-        if (studDashName && !isTeacher) studDashName.textContent = nameInput;
-        
-      } catch (err) {
-        console.error(err);
-        this.showToast('Errore durante il salvataggio.', 'danger');
       }
     },
     isSecondTermActiveForUser: function(userEmail) {
