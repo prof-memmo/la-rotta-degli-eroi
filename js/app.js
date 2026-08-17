@@ -503,9 +503,10 @@ window.finalizzaDocente = async function() {
       const isTeacher = (user.role === 'docente' || user.role === 'teacher' || user.role === 'admin');
       
       try {
+        const chosenAvatar = this.selectedRottaAvatar || user.avatar || 'assets/avatars/6.png';
         const updateData = { 
             name: nameInput,
-            avatar: this.selectedRottaAvatar || 'assets/avatars/6.png'
+            avatar: chosenAvatar
         };
         if (isTeacher) {
           updateData.school = schoolInput;
@@ -516,19 +517,19 @@ window.finalizzaDocente = async function() {
             await window.fbDb.collection('users').doc(user.uid || user.email.toLowerCase()).set(updateData, { merge: true });
             if (user.uid) {
                 await window.fbDb.collection('hub_users').doc(user.uid).set({
-                    avatar: this.selectedRottaAvatar,
-                    'anagrafica.avatar': this.selectedRottaAvatar,
+                    avatar: chosenAvatar,
+                    'anagrafica.avatar': chosenAvatar,
                     'anagrafica.nome': nameInput
                 }, { merge: true });
             }
         }
         if (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.updateProfile) {
-            await window.fbAuth.currentUser.updateProfile({ photoURL: this.selectedRottaAvatar, displayName: nameInput }).catch(e => console.warn(e));
+            await window.fbAuth.currentUser.updateProfile({ photoURL: chosenAvatar, displayName: nameInput }).catch(e => console.warn(e));
         }
         
         // Aggiorna cache locale e UI
         user.name = nameInput;
-        user.avatar = this.selectedRottaAvatar;
+        user.avatar = chosenAvatar;
         if (isTeacher) user.school = schoolInput;
         Auth._user = user;
         localStorage.setItem('eroi_user', JSON.stringify(user));
