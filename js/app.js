@@ -541,6 +541,9 @@ window.finalizzaDocente = async function() {
         }
         this.generateNavbarLinks(user);
         
+        const headerAvatarImg = document.querySelector('.header-avatar-img');
+        if (headerAvatarImg) headerAvatarImg.src = chosenAvatar;
+
         const badgeName = document.getElementById('user-display-name');
         if (badgeName) badgeName.textContent = nameInput;
         
@@ -807,18 +810,18 @@ window.finalizzaDocente = async function() {
       
       // Renderizza Header Profile Widget e Dropdown Card
       if (user && profileWidget && profileDropdown) {
-        let avatarImg = 'assets/images/pergamena_crest.png';
+        let avatarImg = user.avatar || user.photoURL || 'assets/avatars/6.png';
         let levelText = '';
         let dropdownHtml = '';
         
         if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
           const _u_profile = window.EroiDB.getUser(user.email);
-      const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
-      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(user.email) : window.EroiDB.getStudentProfile(user.email);
+          const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
+          const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(user.email) : window.EroiDB.getStudentProfile(user.email);
           if (profile) {
             const u = window.EroiDB.getUser(user.email);
             const classId = u ? u.classId : "";
-            avatarImg = this.getAvatarImage(profile.avatarClass);
+            avatarImg = user.avatar || user.photoURL || this.getAvatarImage(profile.avatarClass);
             levelText = `LIV. ${profile.level || 1}`;
             const nextInfo = window.EroiGame.getNextLevelInfo(profile.xp);
             
@@ -848,7 +851,7 @@ window.finalizzaDocente = async function() {
         } else {
           // Docente o Admin
           const roleText = user.role === 'admin' ? 'Amministratore' : 'Docente';
-          avatarImg = 'assets/images/pergamena_crest.png';
+          avatarImg = user.avatar || user.photoURL || 'assets/avatars/6.png';
           levelText = roleText;
           
           dropdownHtml = `
