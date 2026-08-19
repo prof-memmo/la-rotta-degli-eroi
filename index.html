@@ -1230,19 +1230,10 @@
       <!-- 9. DASHBOARD AMMINISTRATORE VIEW (prof.memmo@gmail.com) -->
       <!-- VIEW: PANNELLO ADMIN (Backup & Hub) -->
       <section id="view-admin-dashboard" class="view">
-        <div style="display: flex; gap: 10px; margin-bottom: 25px; justify-content: center; flex-wrap: wrap;">
-            <button onclick="EroiApp.switchView('view-teacher-dashboard')" class="btn" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; border-radius: 50px; padding: 10px 22px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-chalkboard-user"></i> 👨‍🏫 Pannello Docente
-            </button>
-            <button onclick="EroiApp.switchView('view-admin-dashboard')" class="btn" style="background: var(--gold); color: #0d1326; border-radius: 50px; padding: 10px 22px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);">
-                <i class="fa-solid fa-shield-halved"></i> 🛡️ Dashboard Admin &amp; Impostazioni
-            </button>
-        </div>
-
         <div class="glass-panel">
-          <div style="margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;">
-            <h2 class="section-title" style="margin: 0; color: #1e293b;"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> DASHBOARD AMMINISTRATORE</h2>
-            <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">Pannello di controllo globale, iscritti, scuole e impostazioni della Rotta degli Eroi.</p>
+          <div style="margin-bottom: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;">
+            <h2 class="section-title" style="margin: 0;"><i class="fa-solid fa-shield-halved" style="color: var(--gold);"></i> DASHBOARD AMMINISTRATORE</h2>
+            <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Pannello di controllo globale, iscritti, scuole e impostazioni della Rotta degli Eroi.</p>
           </div>
 
           <!-- STAT CARDS ROW (STILE PALESTRA) -->
@@ -1270,10 +1261,8 @@
           </div>
 
           <!-- SEARCH & USER MANAGEMENT -->
-          <div style="background: #f8fafc; padding: 1.2rem; border-radius: 20px; border: 1px solid #e2e8f0; margin-bottom: 2rem;">
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-              <input type="text" id="admin-search-users" oninput="EroiApp.filterAdminUsers()" placeholder="Cerca utente per nome o email..." style="flex: 1; min-width: 250px; padding: 0.9rem 1.4rem; border-radius: 50px; border: 1.5px solid #cbd5e1; outline: none; font-size: 0.95rem; background: white; color: #1e293b;">
-            </div>
+          <div style="margin-bottom: 1.5rem;">
+            <input type="text" id="admin-search-users" oninput="EroiApp.filterAdminUsers()" placeholder="🔍 Cerca utente per nome o email..." style="width: 100%; box-sizing: border-box; padding: 0.9rem 1.4rem; border-radius: 50px; border: 1.5px solid rgba(212, 175, 55, 0.4); outline: none; font-size: 0.95rem; background: rgba(0,0,0,0.25); color: var(--gold);">
           </div>
 
           <!-- USERS TABLE WRAPPER -->
@@ -1494,35 +1483,35 @@
 
   <!-- SCRIPT DI PROGETTO -->
   <!-- 1. Dati Iniziali -->
-  <script src="js/mockData.js?v=20260819a"></script>
+  <script src="js/mockData.js?v=20260819b"></script>
   <!-- 2. Database locale -->
   <!-- Services -->
 
-  <script src="js/services/users.js?v=20260819a"></script>
-  <script src="js/services/classes.js?v=20260819a"></script>
-  <script src="js/services/progress.js?v=20260819a"></script>
-  <script src="js/db.js?v=20260819a"></script>
+  <script src="js/services/users.js?v=20260819b"></script>
+  <script src="js/services/classes.js?v=20260819b"></script>
+  <script src="js/services/progress.js?v=20260819b"></script>
+  <script src="js/db.js?v=20260819b"></script>
   <!-- 2.5 Inizializzazione Firebase -->
-  <script src="js/firebase-init.js?v=20260819a"></script>
+  <script src="js/firebase-init.js?v=20260819b"></script>
   <!-- 3. Gestore Autenticazione -->
   <!-- Auth Modules -->
-  <script src="js/auth/session.js?v=20260819a"></script>
-  <script src="js/auth/login.js?v=20260819a"></script>
-  <script src="js/auth/logout.js?v=20260819a"></script>
-  <script src="js/auth/user.js?v=20260819a"></script>
-  <script src="js/auth/roles.js?v=20260819a"></script>
+  <script src="js/auth/session.js?v=20260819b"></script>
+  <script src="js/auth/login.js?v=20260819b"></script>
+  <script src="js/auth/logout.js?v=20260819b"></script>
+  <script src="js/auth/user.js?v=20260819b"></script>
+  <script src="js/auth/roles.js?v=20260819b"></script>
   <!-- 4. Bilanciamento e Gioco -->
-  <script src="js/game.js?v=20260819a"></script>
-  <script src="js/music.js?v=20260819a"></script>
-  <script src="js/timer.js?v=20260819a"></script>
+  <script src="js/game.js?v=20260819b"></script>
+  <script src="js/music.js?v=20260819b"></script>
+  <script src="js/timer.js?v=20260819b"></script>
   <!-- 5. Logica Applicativa e Interfaccia -->
   <!-- Components & Dashboard -->
-  <script src="js/components/modals.js?v=20260819a"></script>
-  <script src="js/live-editor.js?v=20260819a"></script>
-  <script src="js/dashboard/admin-logic.js?v=20260819a"></script>
-  <script src="js/app.js?v=20260819a"></script>
+  <script src="js/components/modals.js?v=20260819b"></script>
+  <script src="js/live-editor.js?v=20260819b"></script>
+  <script src="js/dashboard/admin-logic.js?v=20260819b"></script>
+  <script src="js/app.js?v=20260819b"></script>
   <!-- 6. Mini-giochi Interattivi -->
-  <script src="js/minigames.js?v=20260819a"></script>
+  <script src="js/minigames.js?v=20260819b"></script>
 
   <!-- Firebase future configuration placeholder (SI, commentato) -->
   <!--

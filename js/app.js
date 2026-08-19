@@ -906,11 +906,20 @@ window.finalizzaDocente = async function() {
             </button>
           </div>
           
-          <!-- Link dashboard visibile solo su mobile -->
-          <div class="dropdown-dashboard-link">
-            <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${(user.role === 'docente' || user.role === 'teacher') ? 'view-teacher-dashboard' : user.role === 'admin' ? 'view-admin-dashboard' : 'view-student-dashboard'}')">
-              <i class="fa-solid fa-gauge"></i> Dashboard
-            </button>
+          <!-- Link dashboard nel dropdown -->
+          <div class="dropdown-dashboard-link" style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+            ${user.role === 'admin' ? `
+              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('view-teacher-dashboard')" style="background: rgba(212,175,55,0.1); border-color: var(--gold); color: var(--gold); font-weight: 700;">
+                <i class="fa-solid fa-chalkboard-user"></i> 👨‍🏫 Pannello Docente
+              </button>
+              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('view-admin-dashboard')" style="background: rgba(212,175,55,0.25); border-color: var(--gold); color: var(--gold); font-weight: 700;">
+                <i class="fa-solid fa-shield-halved"></i> 🛡️ Dashboard Admin
+              </button>
+            ` : `
+              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${(user.role === 'docente' || user.role === 'teacher') ? 'view-teacher-dashboard' : 'view-student-dashboard'}')">
+                <i class="fa-solid fa-gauge"></i> ${(user.role === 'docente' || user.role === 'teacher') ? '👨‍🏫 Pannello Docente' : '🎮 Dashboard Studente'}
+              </button>
+            `}
           </div>
           
           <div class="dropdown-actions">
@@ -963,26 +972,25 @@ window.finalizzaDocente = async function() {
         if (logoutBtn) {
           logoutBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (confirm("Sei sicuro di voler uscire dal gioco?")) {
-              Auth.logout();
-              this.showToast("Disconnessione effettuata.", "success");
-              this.checkSession();
-            }
+            this.logout();
           });
         }
         
         // Aggiorna l'icona dell'audio nel dropdown al rendering
         EroiAudio.updateMuteUI();
+      } else {
+        // Utente non autenticato o widget mancante
+        if (profileWidget) profileWidget.innerHTML = '';
+        if (profileDropdown) profileDropdown.innerHTML = '';
       }
 
+      // Definisci i link di navigazione in base al ruolo dell'utente
       let links = [];
 
       if (!user) {
         links = [
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
-          { view: 'disabled', label: 'Mappa', icon: 'fa-map-marked-alt' },
-          { view: 'disabled', label: 'Tempio', icon: 'fa-book-open' },
-          { view: 'disabled', label: 'Diario', icon: 'fa-feather-pointed' }
+          { view: 'view-welcome', label: 'Accedi', icon: 'fa-right-to-bracket' },
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
         ];
       } else if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
         links = [
@@ -1012,7 +1020,8 @@ window.finalizzaDocente = async function() {
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-admin-dashboard', label: 'Pannello Admin', icon: 'fa-screwdriver-wrench' },
+          { view: 'view-teacher-dashboard', label: 'Docente', icon: 'fa-chalkboard-user' },
+          { view: 'view-admin-dashboard', label: 'Admin', icon: 'fa-shield-halved' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
           { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
         ];
