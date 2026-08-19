@@ -3427,6 +3427,13 @@ window.finalizzaDocente = async function() {
       this.renderTeacherDiaries();
       // Attiva pannello studenti per default (come Palestra di Riflessione)
       this.selectStatsCategory('students');
+      // Mostra sezioni admin-only nel tab Impostazioni
+      const user = Auth.getUser();
+      const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
+      ['admin-global-settings-block', 'admin-create-staff-block', 'admin-legal-docs-block'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = isAdmin ? '' : 'none';
+      });
     },
 
     renderTeacherStats: function() {
