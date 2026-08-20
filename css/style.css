@@ -95,9 +95,19 @@ body {
   background: #f8fafc !important;
   color: #1e293b !important;
   border-radius: 24px !important;
-  padding: 1rem 2rem 2rem 2rem !important; /* ridotto padding-top per eliminare spazio vuoto ricorrente */
-  margin: 0 !important; /* rimosso margin-top che causava spazio sopra */
+  padding: 1rem 2rem 2rem 2rem !important;
+  margin: 0 !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.06) !important;
+  /* FIX DEFINITIVO spazio sopra: la dashboard scrolla internamente,
+     il body non scrolla mai, nessuno spazio random può apparire sopra */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Blocchi visibili solo all'admin: nascosti di default via CSS.
+   JS li rivela solo se l'utente è admin (più robusto degli inline style) */
+[data-admin-only="true"] {
+  display: none !important;
 }
 
 #view-teacher-dashboard .glass-panel, #view-admin-dashboard .glass-panel {

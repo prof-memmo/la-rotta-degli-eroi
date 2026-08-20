@@ -3427,15 +3427,17 @@ window.finalizzaDocente = async function() {
       this.renderTeacherDiaries();
       // Attiva pannello studenti per default (come Palestra di Riflessione)
       this.selectStatsCategory('students');
-      // Mostra/nascondi form di creazione contenuti: solo Admin può creare nuovi oggetti
+      // Mostra/nascondi blocchi admin-only: solo Admin può creare/modificare oggetti shop, artefatti, guide
       const user = Auth.getUser();
       const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
-      ['form-create-shop-item', 'form-create-artifact', 'form-create-guide'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          // Nascondi anche il pulsante submit (tutta la card contenitore)
-          const card = el.closest('.glass-panel') || el;
-          card.style.display = isAdmin ? '' : 'none';
+      // CSS nasconde [data-admin-only="true"] con !important.
+      // Per admin: sovrascriviamo con setProperty(...,'important') sull'inline style.
+      // Per non-admin: removeProperty ripristina il controllo CSS (pannello resta nascosto).
+      document.querySelectorAll('#view-teacher-dashboard [data-admin-only="true"]').forEach(el => {
+        if (isAdmin) {
+          el.style.setProperty('display', 'block', 'important');
+        } else {
+          el.style.removeProperty('display');
         }
       });
     },
