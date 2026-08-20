@@ -751,7 +751,7 @@
 
       <!-- 8. DASHBOARD DOCENTE VIEW -->
       <section id="view-teacher-dashboard" class="view">
-        <div class="glass-panel">
+        <div>
           <h2 class="section-title"><i class="fa-solid fa-graduation-cap" style="color: var(--gold);"></i> Pannello di Controllo Docente</h2>
           
           <div class="tabs-header">
@@ -762,7 +762,7 @@
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('registro')">Registro Attività</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('tornei')">Tornei Interni</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('diario')">Valutazione Diari</button>
-            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('impostazioni')"><i class="fa-solid fa-gear"></i> Impostazioni</button>
+
           </div>
 
           <!-- TAB PANORAMICA -->
@@ -1226,125 +1226,7 @@
           </div>
           </div>
 
-          <!-- TAB IMPOSTAZIONI -->
-          <div id="t-tab-impostazioni" class="tab-content">
-            <!-- Impostazioni Classe (Docente e Admin) -->
-            <div class="glass-panel" style="margin-bottom: 20px;">
-              <h3 class="panel-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-school" style="color: var(--gold);"></i> Configurazione Classe
-              </h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Seleziona una classe per gestirne le impostazioni specifiche.</p>
-              <form id="form-teacher-settings" style="display: flex; flex-direction: column; gap: 16px;">
-                <div>
-                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">CLASSE</label>
-                  <select id="teacher-settings-class-select" class="form-control" style="width: 100%;">
-                    <option value="">— Nessuna classe disponibile —</option>
-                  </select>
-                </div>
-                <div>
-                  <button type="submit" class="btn" style="background: var(--gold); color: var(--bg-dark); font-weight: 800;">
-                    <i class="fa-solid fa-floppy-disk"></i> Salva Impostazioni Classe
-                  </button>
-                </div>
-              </form>
-            </div>
 
-            <!-- Impostazioni Globali (Solo Admin) -->
-            <div id="admin-global-settings-block" class="glass-panel" style="margin-bottom: 20px; display: none;">
-              <h3 class="panel-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-globe" style="color: var(--gold);"></i> Impostazioni Globali App
-              </h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Modifica nome applicazione, testo copyright e informazioni di contatto visualizzati nel footer.</p>
-              <form id="form-admin-settings" style="display: flex; flex-direction: column; gap: 14px;">
-                <div>
-                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">NOME APPLICAZIONE</label>
-                  <input type="text" id="admin-setting-appname" class="form-control" placeholder="Es: La Rotta degli Eroi" style="width: 100%;">
-                </div>
-                <div>
-                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">TESTO COPYRIGHT</label>
-                  <input type="text" id="admin-setting-copyright" class="form-control" placeholder="© 2026 Guglielmo Piersanti..." style="width: 100%;">
-                </div>
-                <div>
-                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">CONTATTI</label>
-                  <input type="text" id="admin-setting-contacts" class="form-control" placeholder="email di contatto" style="width: 100%;">
-                </div>
-                <div>
-                  <button type="submit" class="btn" style="background: var(--gold); color: var(--bg-dark); font-weight: 800;">
-                    <i class="fa-solid fa-floppy-disk"></i> Salva Configurazione Globale
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Crea Account Staff (Solo Admin) -->
-            <div id="admin-create-staff-block" class="glass-panel" style="margin-bottom: 20px; display: none;">
-              <h3 class="panel-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-user-plus" style="color: var(--gold);"></i> Registra Membro Staff
-              </h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Crea un account docente o collaboratore direttamente dall'admin panel.</p>
-              <form id="form-create-staff" style="display: flex; flex-direction: column; gap: 14px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-                  <div>
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">NOME COMPLETO</label>
-                    <input type="text" id="staff-name" class="form-control" placeholder="Nome Cognome" required>
-                  </div>
-                  <div>
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">EMAIL</label>
-                    <input type="email" id="staff-email" class="form-control" placeholder="email@scuola.it" required>
-                  </div>
-                  <div>
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">PASSWORD TEMPORANEA</label>
-                    <input type="password" id="staff-password" class="form-control" placeholder="min. 8 caratteri" required>
-                  </div>
-                  <div>
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">RUOLO</label>
-                    <select id="staff-role" class="form-control">
-                      <option value="docente">Docente</option>
-                      <option value="admin">Amministratore</option>
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <button type="submit" class="btn" style="background: #16a34a; color: white; font-weight: 800; border: none;">
-                    <i class="fa-solid fa-user-plus"></i> Crea Account Staff
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Documenti Legali (Solo Admin) -->
-            <div id="admin-legal-docs-block" class="glass-panel" style="display: none;">
-              <h3 class="panel-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-file-shield" style="color: var(--gold);"></i> Documenti Legali
-              </h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Aggiorna i testi delle informative legali della piattaforma (Privacy, Termini, Cookie, GDPR).</p>
-              <form id="form-legal-docs" style="display: flex; flex-direction: column; gap: 14px;">
-                <div>
-                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">PRIVACY POLICY</label>
-                  <textarea id="legal-doc-privacy" class="form-control" rows="4" placeholder="Testo completo della Privacy Policy..."></textarea>
-                </div>
-                <div>
-                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">TERMINI DI UTILIZZO</label>
-                  <textarea id="legal-doc-terms" class="form-control" rows="4" placeholder="Testo completo dei Termini di Utilizzo..."></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-                  <div>
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">COOKIE POLICY</label>
-                    <textarea id="legal-doc-cookies" class="form-control" rows="3" placeholder="Cookie Policy..."></textarea>
-                  </div>
-                  <div>
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">GDPR</label>
-                    <textarea id="legal-doc-gdpr" class="form-control" rows="3" placeholder="GDPR statement..."></textarea>
-                  </div>
-                </div>
-                <div>
-                  <button type="submit" class="btn" style="background: var(--gold); color: var(--bg-dark); font-weight: 800;">
-                    <i class="fa-solid fa-floppy-disk"></i> Salva Documenti Legali
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
 
         </div>
       </section>

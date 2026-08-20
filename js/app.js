@@ -3427,12 +3427,16 @@ window.finalizzaDocente = async function() {
       this.renderTeacherDiaries();
       // Attiva pannello studenti per default (come Palestra di Riflessione)
       this.selectStatsCategory('students');
-      // Mostra sezioni admin-only nel tab Impostazioni
+      // Mostra/nascondi form di creazione contenuti: solo Admin può creare nuovi oggetti
       const user = Auth.getUser();
       const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
-      ['admin-global-settings-block', 'admin-create-staff-block', 'admin-legal-docs-block'].forEach(id => {
+      ['form-create-shop-item', 'form-create-artifact', 'form-create-guide'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.style.display = isAdmin ? '' : 'none';
+        if (el) {
+          // Nascondi anche il pulsante submit (tutta la card contenitore)
+          const card = el.closest('.glass-panel') || el;
+          card.style.display = isAdmin ? '' : 'none';
+        }
       });
     },
 
@@ -4080,6 +4084,8 @@ window.finalizzaDocente = async function() {
       const tbody = document.querySelector('#teacher-shop-table tbody');
       if (!tbody) return;
       tbody.innerHTML = '';
+      const user = Auth.getUser();
+      const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
 
       let container = document.getElementById('teacher-shop-preview-container');
       if (!container) {
@@ -4115,9 +4121,9 @@ window.finalizzaDocente = async function() {
               <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.toggleShopItemActive('${item.id}', ${item.active})">
                 ${item.active ? 'Disattiva' : 'Attiva'}
               </button>
-              <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.72rem;" onclick="EroiApp.deleteShopItem('${item.id}')">
+              ${isAdmin ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size:0.72rem;" onclick="EroiApp.deleteShopItem('${item.id}')">
                 <i class="fa-solid fa-trash"></i>
-              </button>
+              </button>` : ''}
             </div>
           </td>
         `;
@@ -4392,6 +4398,9 @@ window.finalizzaDocente = async function() {
 
     // --- TEACHER HELPERS & ARTEFACTS ---
     renderTeacherHelpersAndArtifacts: function() {
+      const user = Auth.getUser();
+      const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
+
       // 1. Helpers
       const helpers = window.EroiDB.getHelpers();
       const hTbody = document.querySelector('#teacher-helpers-table tbody');
@@ -4411,9 +4420,9 @@ window.finalizzaDocente = async function() {
           <td>
             <div style="display:flex; gap:4px;">
               <button class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.saveHelperConfig('${h.id}')">Salva</button>
-              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.hideHelper('${h.id}')" title="Nascondi aiutante (ripristinabile)">
+              ${isAdmin ? `<button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.hideHelper('${h.id}')" title="Nascondi aiutante (ripristinabile)">
                 <i class="fa-solid fa-trash"></i>
-              </button>
+              </button>` : ''}
             </div>
           </td>
         `;
@@ -4444,11 +4453,11 @@ window.finalizzaDocente = async function() {
           <td>${a.rarity}</td>
           <td>${a.bonus}</td>
           <td>
-            <div style="display:flex; gap:4px;">
+            ${isAdmin ? `<div style="display:flex; gap:4px;">
               <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteArtifact('${a.id}')" title="${isPreset ? 'Nascondi artefatto (ripristinabile)' : 'Elimina definitivamente'}">
                 <i class="fa-solid fa-trash"></i>
               </button>
-            </div>
+            </div>` : '<span style="color:var(--text-muted); font-size:0.8rem;">—</span>'}
           </td>
         `;
         aTbody.appendChild(tr);
@@ -4630,6 +4639,8 @@ window.finalizzaDocente = async function() {
       const guides = window.EroiDB.getStudyGuides();
       const tbody = document.querySelector('#teacher-guides-table tbody');
       tbody.innerHTML = '';
+      const user = Auth.getUser();
+      const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
 
       if (guides.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);"><i>Nessuna scheda disponibile.</i></td></tr>`;
@@ -4647,9 +4658,9 @@ window.finalizzaDocente = async function() {
           <td>${g.category}</td>
           <td style="font-size:0.82rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.summary}</td>
           <td>
-            <button class="btn btn-danger" style="padding:4px 8px;font-size:0.75rem;" onclick="EroiApp.deleteGuide('${g.id}')" title="${isPreset ? 'Nascondi scheda (ripristinabile)' : 'Elimina definitivamente'}">
+            ${isAdmin ? `<button class="btn btn-danger" style="padding:4px 8px;font-size:0.75rem;" onclick="EroiApp.deleteGuide('${g.id}')" title="${isPreset ? 'Nascondi scheda (ripristinabile)' : 'Elimina definitivamente'}">
               <i class="fa-solid fa-trash"></i>
-            </button>
+            </button>` : '<span style="color:var(--text-muted); font-size:0.8rem;">—</span>'}
           </td>
         `;
         tbody.appendChild(tr);
