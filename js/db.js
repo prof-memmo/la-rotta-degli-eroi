@@ -169,9 +169,48 @@
             }
           }
 
+          // 9. Migrazione unlockedHelpers / unlockedArtifacts nei profili studente.
+          // Converte il vecchio sistema (inventario/manuale) al nuovo sistema progressione automatica.
+          const _migrateProfile = function(p) {
+            let dirty = false;
+            if (!p.unlockedHelpers) {
+              p.unlockedHelpers = [];
+              // Pre-seeda dall'aiutante attivo (se presente) per non perdere lo stato attuale
+              if (p.activeHelper && !p.unlockedHelpers.includes(p.activeHelper)) {
+                p.unlockedHelpers.push(p.activeHelper);
+              }
+              dirty = true;
+            }
+            if (!p.unlockedArtifacts) {
+              p.unlockedArtifacts = [];
+              // Pre-seeda dagli artefatti attivi (se presenti)
+              if (Array.isArray(p.activeArtifacts)) {
+                p.activeArtifacts.forEach(function(a) {
+                  if (!p.unlockedArtifacts.includes(a)) p.unlockedArtifacts.push(a);
+                });
+              }
+              dirty = true;
+            }
+            if (!p.completedMissions) {
+              p.completedMissions = [];
+              dirty = true;
+            }
+            return dirty;
+          };
+          if (dbState.students_profile) {
+            Object.values(dbState.students_profile).forEach(function(p) {
+              if (_migrateProfile(p)) updated = true;
+            });
+          }
+          if (dbState.teacher_player_profiles) {
+            Object.values(dbState.teacher_player_profiles).forEach(function(p) {
+              if (_migrateProfile(p)) updated = true;
+            });
+          }
+
           if (updated) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(dbState));
-            console.log("Database migrato con successo: aggiornate schede di studio, missioni, aiutanti, artefatti e shop.");
+            console.log("Database migrato con successo: aggiornate schede di studio, missioni, aiutanti, artefatti, shop e sblocchi progressione.");
           }
         } catch (e) {
           console.error("Errore nel caricamento del database locale, resetto ai dati di default.", e);

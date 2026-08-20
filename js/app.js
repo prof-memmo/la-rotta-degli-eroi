@@ -2718,6 +2718,26 @@ window.finalizzaDocente = async function() {
             EroiAudio.playSuccess();
           }
           this.showToast(`Missione Superata! +${result.xpGained} XP e +${result.dracmeGained} Dracme.`, "success");
+
+          // Notifiche sblocco aiutante
+          if (result.unlockedHelper) {
+            const helpers = window.EroiDB.getHelpers();
+            const h = helpers[result.unlockedHelper];
+            const hName = h ? h.name : result.unlockedHelper;
+            setTimeout(() => {
+              this.showToast(`🧙 Aiutante sbloccato: ${hName}! Equipaggialo nell'inventario.`, "level");
+            }, 1800);
+          }
+          // Notifiche sblocco artefatto
+          if (result.unlockedArtifact) {
+            const artifacts = window.EroiDB.getArtifacts();
+            const a = artifacts[result.unlockedArtifact];
+            const aName = a ? a.name : result.unlockedArtifact;
+            setTimeout(() => {
+              this.showToast(`⚔️ Artefatto sbloccato: ${aName}! Equipaggialo nell'inventario.`, "level");
+            }, 3200);
+          }
+
           this.navigateTo('view-missions');
         } else {
           EroiAudio.playFailure();
@@ -2887,21 +2907,16 @@ window.finalizzaDocente = async function() {
       
       artifactsGrid.innerHTML = '';
       
-      // Gli artefatti disponibili per l'equipaggiamento includono quelli nell'inventario o i predefiniti
-      // Raccogliamo tutti gli ID posseduti
-      const ownedArtifactIds = inventory.filter(i => i.type === 'permanent' && allArtifacts[i.itemId.replace('item_', '')])
-                                       .map(i => i.itemId.replace('item_', ''));
-      // Aggiungiamo quelli predefiniti sui profili mock per dimostrazione
-      if (profile.activeArtifacts) {
-        profile.activeArtifacts.forEach(id => {
-          if (!ownedArtifactIds.includes(id)) ownedArtifactIds.push(id);
-        });
-      }
+      // Artefatti sbloccati per progressione XP o acquisto shop
+      const unlockedArtifactIds = profile.unlockedArtifacts || [];
 
-      if (ownedArtifactIds.length === 0) {
-        artifactsGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;"><i>Nessun artefatto posseduto. Acquistali nello Shop.</i></p>`;
+      if (unlockedArtifactIds.length === 0) {
+        artifactsGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;">
+          <i>⚔️ Nessun artefatto ancora sbloccato.<br>
+          Accumula XP per sbloccarli automaticamente (es. 300 XP → primo artefatto)!<br>
+          Excalibur è acquistabile nello Shop con 180 💰.</i></p>`;
       } else {
-        ownedArtifactIds.forEach(artId => {
+        unlockedArtifactIds.forEach(artId => {
           const a = allArtifacts[artId];
           if (!a) return;
 
@@ -2930,54 +2945,45 @@ window.finalizzaDocente = async function() {
       const helpersGrid = document.getElementById('inventory-helpers-grid');
       const warningHelper = document.getElementById('second-term-warning-helper');
       const allHelpers = window.EroiDB.getHelpers();
-      
+
+      if (warningHelper) warningHelper.style.display = 'none';
       helpersGrid.innerHTML = '';
-      if (!window.EroiApp.isSecondTermActiveForUser()) {
-        warningHelper.style.display = 'block';
-        helpersGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;"><i>Aiutanti bloccati fino al 2° Quadrimestre.</i></p>`;
+
+      const unlockedHelperIds = profile.unlockedHelpers || [];
+
+      if (unlockedHelperIds.length === 0) {
+        helpersGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;">
+          <i>🧙 Nessun aiutante ancora sbloccato.<br>
+          Completa missioni per ottenerne uno random dalla categoria corrispondente!<br>
+          Zeus è acquistabile nello Shop con 250 💰.</i></p>`;
       } else {
-        warningHelper.style.display = 'none';
+        unlockedHelperIds.forEach(hId => {
+          const h = allHelpers[hId];
+          if (!h) return;
 
-        // Gli aiutanti posseduti includono quelli presenti in inventario con prefisso helper_ o sbloccati
-        const ownedHelperIds = inventory.filter(i => i.itemId.startsWith('helper_') || i.itemId.startsWith('item_aiutante_'))
-                                       .map(i => i.itemId.replace('helper_', '').replace('item_aiutante_', ''));
-        
-        // Aggiungi quello eventualmente attivo sul profilo
-        if (profile.activeHelper && !ownedHelperIds.includes(profile.activeHelper)) {
-          ownedHelperIds.push(profile.activeHelper);
-        }
-
-        if (ownedHelperIds.length === 0) {
-          helpersGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;"><i>Nessun aiutante sbloccato. Acquistali nello Shop (es. Benedizione di Zeus).</i></p>`;
-        } else {
-          ownedHelperIds.forEach(hId => {
-            const h = allHelpers[hId];
-            if (!h) return;
-
-            const isActive = profile.activeHelper === hId;
-            const card = document.createElement('div');
-            card.className = `card rarity-leggendario`; // Tutti gli aiutanti sono di livello supremo
-            card.innerHTML = `
-              <div>
-                <span class="card-rarity-badge">${h.category}</span>
-                <span class="card-icon">👑</span>
-                <h4 class="card-title">${h.name}</h4>
-                <p class="card-desc">${h.desc}</p>
-                <div style="text-align: left; font-size: 0.75rem; margin: 10px 0; border-top:1px solid rgba(255,255,255,0.05); padding-top: 8px;">
-                  <p>🟢 <strong>Passivo</strong>: ${h.bonusPassive || 'Nessuno'}</p>
-                  <p>🔵 <strong>Potere</strong>: ${h.potereSpeciale || 'Nessuno'}</p>
-                  <p>🛡️ <strong>Immunità</strong>: ${h.immunita || 'Nessuna'}</p>
-                </div>
+          const isActive = profile.activeHelper === hId;
+          const card = document.createElement('div');
+          card.className = `card rarity-leggendario`;
+          card.innerHTML = `
+            <div>
+              <span class="card-rarity-badge">${h.category}</span>
+              <span class="card-icon">👑</span>
+              <h4 class="card-title">${h.name}</h4>
+              <p class="card-desc">${h.desc}</p>
+              <div style="text-align: left; font-size: 0.75rem; margin: 10px 0; border-top:1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                <p>🟢 <strong>Passivo</strong>: ${h.bonusPassive || 'Nessuno'}</p>
+                <p>🔵 <strong>Potere</strong>: ${h.potereSpeciale || 'Nessuno'}</p>
+                <p>🛡️ <strong>Immunità</strong>: ${h.immunita || 'Nessuna'}</p>
               </div>
-              <div>
-                <button class="btn ${isActive ? 'btn-danger' : ''}" style="width: 100%;" onclick="EroiApp.toggleHelper('${email}', '${hId}', ${isActive})">
-                  ${isActive ? '<i class="fa-solid fa-xmark"></i> Disattiva' : '<i class="fa-solid fa-check"></i> Equipaggia come Aiutante'}
-                </button>
-              </div>
-            `;
-            helpersGrid.appendChild(card);
-          });
-        }
+            </div>
+            <div>
+              <button class="btn ${isActive ? 'btn-danger' : ''}" style="width: 100%;" onclick="EroiApp.toggleHelper('${email}', '${hId}', ${isActive})">
+                ${isActive ? '<i class="fa-solid fa-xmark"></i> Disattiva' : '<i class="fa-solid fa-check"></i> Equipaggia come Aiutante'}
+              </button>
+            </div>
+          `;
+          helpersGrid.appendChild(card);
+        });
       }
     },
 

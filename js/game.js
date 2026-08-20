@@ -1,5 +1,34 @@
 // Eroi in Viaggio - Game Mechanics Engine
 (function() {
+
+  // ── Mappe di sblocco per progressione ────────────────────────────────────────
+  // Helper per categoria letteraria (1 random per missione completata nell'area)
+  var HELPER_CATEGORY_MAP = {
+    'Epica Classica':   ['achille', 'ulisse', 'enea', 'eracle'],
+    'Ciclo Carolingio': ['orlando', 'rinaldo', 'astolfo'],
+    'Ciclo Bretone':    ['artu', 'lancillotto', 'galahad', 'parsifal']
+  };
+
+  // Divinità sbloccate per soglia XP (Zeus è solo shop)
+  var DEITY_HELPERS   = ['atena', 'apollo', 'hermes', 'poseidone'];
+  var DEITY_XP_GATES  = [300, 800, 1500, 2500]; // 1 divinità random per soglia
+
+  // Artefatti sbloccati per soglia XP (Excalibur è solo shop)
+  var ARTIFACT_TIERS = [
+    { xp: 300,  pool: ['arco_apollo', 'olifante_orlando'] },
+    { xp: 800,  pool: ['sandali_alati', 'tridente_poseidone', 'scudo_atena'] },
+    { xp: 1500, pool: ['durendal', 'fulmine_zeus'] },
+    { xp: 2500, pool: ['elmo_ade'] },
+    { xp: 4000, pool: ['sacro_graal'] }
+  ];
+
+  // Seleziona 1 random da pool non ancora sbloccato
+  function pickRandom(pool, alreadyUnlocked) {
+    var available = pool.filter(function(id) { return !alreadyUnlocked.includes(id); });
+    if (!available.length) return null;
+    return available[Math.floor(Math.random() * available.length)];
+  }
+  // ─────────────────────────────────────────────────────────────────────────────
   window.EroiGame = {
     // Calcola il livello dello studente in base agli XP correnti
     calculateLevel: function(xp) {
@@ -153,6 +182,63 @@
     },
 
     // Gestione degli acquisti nello shop
+    // Controlla e applica gli sblocchi automatici dopo una missione superata
+    checkProgressionUnlocks: function(mission, profile, newXP, oldXP) {
+      if (!profile.unlockedHelpers)  profile.unlockedHelpers  = [];
+      if (!profile.unlockedArtifacts) profile.unlockedArtifacts = [];
+
+      var unlocked = { helper: null, artifact: null };
+
+      // 1. Helper per categoria missione (1 random per missione completata)
+      var categoryHelpers = HELPER_CATEGORY_MAP[mission.category];
+      if (categoryHelpers) {
+        var alreadyFromCat = profile.unlockedHelpers.filter(function(h) {
+          return categoryHelpers.includes(h);
+        });
+        var completedInCat = (profile.completedMissions || []).filter(function(mid) {
+          var m = window.EroiDB.getMissions().find(function(x) { return x.id === mid; });
+          return m && m.category === mission.category;
+        }).length;
+        // Sblocca 1 nuovo helper se ne ha completate più di quanti ne ha già sbloccati
+        if (completedInCat > alreadyFromCat.length && alreadyFromCat.length < categoryHelpers.length) {
+          var newHelper = pickRandom(categoryHelpers, profile.unlockedHelpers);
+          if (newHelper) {
+            profile.unlockedHelpers.push(newHelper);
+            unlocked.helper = newHelper;
+          }
+        }
+      }
+
+      // 2. Divinità per soglia XP
+      DEITY_XP_GATES.forEach(function(threshold, i) {
+        if (oldXP < threshold && newXP >= threshold) {
+          var alreadyDeities = profile.unlockedHelpers.filter(function(h) {
+            return DEITY_HELPERS.includes(h);
+          });
+          if (alreadyDeities.length <= i) {
+            var newDeity = pickRandom(DEITY_HELPERS, profile.unlockedHelpers);
+            if (newDeity) {
+              profile.unlockedHelpers.push(newDeity);
+              if (!unlocked.helper) unlocked.helper = newDeity;
+            }
+          }
+        }
+      });
+
+      // 3. Artefatti per soglia XP
+      ARTIFACT_TIERS.forEach(function(tier) {
+        if (oldXP < tier.xp && newXP >= tier.xp) {
+          var newArtifact = pickRandom(tier.pool, profile.unlockedArtifacts);
+          if (newArtifact) {
+            profile.unlockedArtifacts.push(newArtifact);
+            unlocked.artifact = newArtifact;
+          }
+        }
+      });
+
+      return unlocked;
+    },
+
     purchaseItem: function(email, itemId) {
       const shopItems = window.EroiDB.getShopItems(email);
       const item = shopItems.find(i => i.id === itemId);
@@ -196,7 +282,24 @@
       
       window.EroiDB.saveInventory(email, inventory);
       window.EroiDB.logActivity(email, `Acquistato "${item.name}" dallo Shop per ${finalPrice} Dracme (Prezzo base: ${item.price}).`);
-      
+
+      // Sblocchi speciali shop: Zeus helper e Excalibur artefatto
+      var _u = window.EroiDB.getUser(email);
+      var _isT = _u && (_u.role === 'docente' || _u.role === 'admin');
+      var _prof = _isT ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
+      if (_prof) {
+        if (!_prof.unlockedHelpers)   _prof.unlockedHelpers   = [];
+        if (!_prof.unlockedArtifacts) _prof.unlockedArtifacts = [];
+        if (itemId === 'item_aiutante_zeus' && !_prof.unlockedHelpers.includes('zeus')) {
+          _prof.unlockedHelpers.push('zeus');
+        }
+        if (itemId === 'item_excalibur_pass' && !_prof.unlockedArtifacts.includes('excalibur')) {
+          _prof.unlockedArtifacts.push('excalibur');
+        }
+        if (_isT) window.EroiDB.saveTeacherPlayerProfile(email, _prof);
+        else      window.EroiDB.saveStudentProfile(email, _prof);
+      }
+
       return finalPrice;
     },
 
@@ -218,38 +321,25 @@
 
     // Equipaggia un aiutante (Secondo Quadrimestre)
     activateHelper: function(email, helperId) {
-      const settings = window.EroiDB.getSettings();
-      if (!window.EroiApp.isSecondTermActiveForUser()) {
-        throw new Error("Gli aiutanti sono sbloccabili solo a partire dal secondo quadrimestre.");
-      }
-
       const _u_profile = window.EroiDB.getUser(email);
       const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
       const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return false;
 
-      // Verifica che possieda l'aiutante (deve averlo comprato nello shop o assegnato dal docente)
-      const inventory = window.EroiDB.getInventory(email);
-      // L'aiutante si considera sbloccato se presente nell'inventario permanente o pre-assegnato
-      const isUnlocked = inventory.some(i => i.itemId === `helper_${helperId}` || i.itemId === itemIdMapping(helperId)) 
-                          || profile.activeHelper === helperId;
-
-      // NOTA: Per flessibilità, se l'aiutante è nelle chiavi di configurazione, consentiamo
       const helperObj = window.EroiDB.getHelpers()[helperId];
-      if (!helperObj) {
-        throw new Error("Aiutante sconosciuto.");
-      }
+      if (!helperObj) throw new Error("Aiutante sconosciuto.");
 
-      // Controlliamo se è effettivamente sbloccato
-      const hasItem = inventory.some(i => i.itemId === helperId || i.itemId === `item_aiutante_${helperId}`);
-      if (!hasItem && helperId !== null) {
-        throw new Error("Devi sbloccare questo aiutante nello Shop prima di poterlo equipaggiare!");
+      if (!profile.unlockedHelpers) profile.unlockedHelpers = [];
+
+      // Verifica che l'aiutante sia stato sbloccato tramite progressione
+      if (!profile.unlockedHelpers.includes(helperId)) {
+        throw new Error(`"${helperObj.name}" non è ancora sbloccato. Completa più missioni per ottenerlo!`);
       }
 
       profile.activeHelper = helperId;
       const _su = window.EroiDB.getUser(email);
-        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
-        else window.EroiDB.saveStudentProfile(email, profile);
+      if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+      else window.EroiDB.saveStudentProfile(email, profile);
       window.EroiDB.logActivity(email, `Equipaggiato l'aiutante: ${helperObj.name}.`);
       return true;
     },
@@ -261,14 +351,13 @@
       const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return false;
 
-      if (!profile.activeArtifacts) {
-        profile.activeArtifacts = [];
-      }
+      if (!profile.activeArtifacts)  profile.activeArtifacts  = [];
+      if (!profile.unlockedArtifacts) profile.unlockedArtifacts = [];
 
       const isEquipped = profile.activeArtifacts.includes(artifactId);
 
       if (isEquipped) {
-        // Disattiva
+        // Rimuovi dall'equipaggiamento
         profile.activeArtifacts = profile.activeArtifacts.filter(id => id !== artifactId);
         const _su = window.EroiDB.getUser(email);
         if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
@@ -276,16 +365,14 @@
         window.EroiDB.logActivity(email, `Rimosso l'artefatto equipaggiato: ${artifactId}.`);
         return { action: "removed", list: profile.activeArtifacts };
       } else {
-        // Verifica possesso nell'inventario
-        const inventory = window.EroiDB.getInventory(email);
-        const hasItem = inventory.some(i => i.itemId === artifactId || i.itemId === `item_${artifactId}` || artifactId === "scudo_atena" || artifactId === "sandali_alati"); 
-        // Nota: Scudo Atena e Sandali Alati sono pre-equipaggiati sui profili mock per scopi dimostrativi
-        
-        if (!hasItem && artifactId !== "scudo_atena" && artifactId !== "sandali_alati") {
-          throw new Error("Non possiedi questo artefatto nel tuo inventario!");
+        // Verifica sblocco tramite progressione
+        if (!profile.unlockedArtifacts.includes(artifactId)) {
+          const artifacts = window.EroiDB.getArtifacts();
+          const artName = artifacts[artifactId] ? artifacts[artifactId].name : artifactId;
+          throw new Error(`"${artName}" non è ancora sbloccato. Continua a progredire nel gioco!`);
         }
 
-        // Attiva (max 2)
+        // Max 2 artefatti attivi
         if (profile.activeArtifacts.length >= 2) {
           throw new Error("Puoi tenere attivi al massimo due artefatti contemporaneamente. Disattiva prima uno di quelli equipaggiati.");
         }
@@ -385,9 +472,23 @@
       const finalXPGained = Math.round(xpGained * xpMultiplier);
       const finalDracmeGained = Math.round(dracmeGained * dracmeMultiplier);
 
+      // Cattura XP prima dell'aggiornamento (serve per calcolo soglie progressione)
+      const xpBeforeMission = profile.xp;
+
       // Accredita XP e Dracme
       const xpResult = this.addXP(email, finalXPGained);
       this.addDracme(email, finalDracmeGained);
+
+      // Traccia missione completata
+      if (!profile.completedMissions) profile.completedMissions = [];
+      if (!profile.completedMissions.includes(missionId)) {
+        profile.completedMissions.push(missionId);
+      }
+
+      // Controlla sblocchi progressione (helper + artefatti)
+      const progressionUnlocks = this.checkProgressionUnlocks(
+        mission, profile, profile.xp, xpBeforeMission
+      );
 
       // Sblocca la nuova area geografica collegata sulla mappa se non già sbloccata
       if (mission.area && !profile.unlockedAreas.includes(mission.area)) {
@@ -431,7 +532,9 @@
         xpGained: finalXPGained,
         dracmeGained: finalDracmeGained,
         levelUp: xpResult.levelUp,
-        newLevel: xpResult.newLevel
+        newLevel: xpResult.newLevel,
+        unlockedHelper:   progressionUnlocks ? progressionUnlocks.helper   : null,
+        unlockedArtifact: progressionUnlocks ? progressionUnlocks.artifact : null
       };
     }
   };
