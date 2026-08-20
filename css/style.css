@@ -111,11 +111,19 @@ body {
 }
 
 #view-teacher-dashboard .glass-panel, #view-admin-dashboard .glass-panel {
-  background: #ffffff !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #e8ecf0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 20px 0 !important;
+  margin-bottom: 0 !important;
   color: #1e293b !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 20px !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
+}
+
+#view-teacher-dashboard .glass-panel:last-child,
+#view-admin-dashboard .glass-panel:last-child {
+  border-bottom: none !important;
 }
 
 #view-teacher-dashboard .stat-card-interactive, 
@@ -157,6 +165,36 @@ body {
   font-weight: 800 !important;
   text-transform: uppercase !important;
 }
+
+/* Titoli e testi leggibili sul dashboard chiaro */
+#view-teacher-dashboard h3.panel-title,
+#view-admin-dashboard h3.panel-title {
+  color: #0f172a !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 12px !important;
+  padding-bottom: 8px !important;
+}
+
+#view-teacher-dashboard .panel-title i,
+#view-admin-dashboard .panel-title i {
+  color: var(--gold) !important;
+}
+
+#view-teacher-dashboard label,
+#view-admin-dashboard label {
+  color: #374151 !important;
+}
+
+#view-teacher-dashboard .form-control,
+#view-admin-dashboard .form-control {
+  color: #1e293b !important;
+  background: #f8fafc !important;
+  border-color: #d1d5db !important;
+}
+
 
 /* Layout SPA Wrapper */
 #app-container {

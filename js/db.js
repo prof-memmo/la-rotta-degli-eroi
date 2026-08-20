@@ -152,9 +152,26 @@
             updated = true;
           }
 
+          // 8. Migrazione shop_items: mancava dal ciclo di migrazione.
+          // Chi aveva un DB già salvato non riceveva gli articoli dello shop.
+          if (dbState && window.EroiMockData && window.EroiMockData.shop_items) {
+            if (!dbState.shop_items || dbState.shop_items.length === 0) {
+              dbState.shop_items = JSON.parse(JSON.stringify(window.EroiMockData.shop_items));
+              updated = true;
+            } else {
+              // Aggiunge nuovi articoli non presenti nel DB
+              window.EroiMockData.shop_items.forEach(mockItem => {
+                if (!dbState.shop_items.find(i => i.id === mockItem.id)) {
+                  dbState.shop_items.push(JSON.parse(JSON.stringify(mockItem)));
+                  updated = true;
+                }
+              });
+            }
+          }
+
           if (updated) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(dbState));
-            console.log("Database migrato con successo: aggiornate schede di studio, missioni, aiutanti e artefatti.");
+            console.log("Database migrato con successo: aggiornate schede di studio, missioni, aiutanti, artefatti e shop.");
           }
         } catch (e) {
           console.error("Errore nel caricamento del database locale, resetto ai dati di default.", e);
