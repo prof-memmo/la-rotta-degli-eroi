@@ -2910,47 +2910,57 @@ window.finalizzaDocente = async function() {
         });
       }
 
-      // 2. Render Artifacts
+      // 2. Render Artifacts (Tutti gli artefatti con stato sbloccato/bloccato)
       const artifactsGrid = document.getElementById('inventory-artifacts-grid');
       const allArtifacts = window.EroiDB.getArtifacts();
-      
       artifactsGrid.innerHTML = '';
       
-      // Artefatti sbloccati per progressione XP o acquisto shop
       const unlockedArtifactIds = profile.unlockedArtifacts || [];
 
-      if (unlockedArtifactIds.length === 0) {
-        artifactsGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;">
-          <i>⚔️ Nessun artefatto ancora sbloccato.<br>
-          Accumula XP per sbloccarli automaticamente (es. 300 XP → primo artefatto)!<br>
-          Excalibur è acquistabile nello Shop con 180 💰.</i></p>`;
-      } else {
-        unlockedArtifactIds.forEach(artId => {
-          const a = allArtifacts[artId];
-          if (!a) return;
-
-          const isEquipped = profile.activeArtifacts && profile.activeArtifacts.includes(artId);
-          const card = document.createElement('div');
-          card.className = `card rarity-${a.rarity.toLowerCase()}`;
-          card.innerHTML = `
-            <div>
-              <span class="card-rarity-badge">${a.rarity}</span>
-              <span class="card-icon">${a.image}</span>
-              <h4 class="card-title">${a.name}</h4>
-              <p class="card-desc">${a.desc}</p>
-              <p style="font-size: 0.85rem; color: var(--gold); font-weight: bold; margin-bottom: 10px;">Bonus: ${a.bonus}</p>
-            </div>
-            <div>
-              <button class="btn ${isEquipped ? 'btn-danger' : ''}" style="width: 100%;" onclick="EroiApp.toggleArtifact('${email}', '${artId}')">
-                ${isEquipped ? '<i class="fa-solid fa-xmark"></i> Disattiva' : '<i class="fa-solid fa-check"></i> Equipaggia'}
-              </button>
-            </div>
-          `;
-          artifactsGrid.appendChild(card);
-        });
+      function getArtifactUnlockHint(artId) {
+        if (artId === 'arco_apollo' || artId === 'olifante_orlando') return "Sblocco automatico: 300 XP (Livello Avventuriero)";
+        if (artId === 'sandali_hermes' || artId === 'tridente_poseidone' || artId === 'scudo_atena') return "Sblocco automatico: 800 XP (Livello Eroe)";
+        if (artId === 'durendal_orlando' || artId === 'fulmine_zeus') return "Sblocco automatico: 1.500 XP (Livello Campione)";
+        if (artId === 'elmo_ade') return "Sblocco automatico: 2.500 XP (Livello Leggenda)";
+        if (artId === 'sacro_graal') return "Sblocco automatico: 4.000 XP (Livello Semidio)";
+        if (artId === 'excalibur') return "Acquistabile nel Mercato per 180 💰";
+        return "Sblocco per progressione nel viaggio";
       }
 
-      // 3. Render Helpers (Aiutanti)
+      Object.values(allArtifacts).forEach(a => {
+        const isUnlocked = unlockedArtifactIds.includes(a.id);
+        const isEquipped = profile.activeArtifacts && profile.activeArtifacts.includes(a.id);
+        const card = document.createElement('div');
+        card.className = `card rarity-${a.rarity.toLowerCase()} ${!isUnlocked ? 'card-locked' : ''}`;
+        
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="card-rarity-badge">${a.rarity}</span>
+              ${!isUnlocked ? '<span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;"><i class="fa-solid fa-lock"></i> Bloccato</span>' : ''}
+            </div>
+            <span class="card-icon" style="${!isUnlocked ? 'filter: grayscale(100%); opacity: 0.7;' : ''}">${a.image}</span>
+            <h4 class="card-title">${a.name}</h4>
+            <p class="card-desc">${a.desc}</p>
+            <p style="font-size: 0.85rem; color: var(--gold); font-weight: bold; margin-bottom: 10px;">Bonus: ${a.bonus}</p>
+            ${!isUnlocked ? `<p style="font-size: 0.75rem; color: #94a3b8; font-style: italic; margin-bottom: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px;">💡 ${getArtifactUnlockHint(a.id)}</p>` : ''}
+          </div>
+          <div>
+            ${isUnlocked ? `
+              <button class="btn ${isEquipped ? 'btn-danger' : ''}" style="width: 100%;" onclick="EroiApp.toggleArtifact('${email}', '${a.id}')">
+                ${isEquipped ? '<i class="fa-solid fa-xmark"></i> Disattiva' : '<i class="fa-solid fa-check"></i> Equipaggia'}
+              </button>
+            ` : `
+              <button class="btn btn-secondary" style="width: 100%; opacity: 0.6; cursor: not-allowed;" disabled>
+                <i class="fa-solid fa-lock"></i> Da sbloccare
+              </button>
+            `}
+          </div>
+        `;
+        artifactsGrid.appendChild(card);
+      });
+
+      // 3. Render Helpers (Tutti gli aiutanti con stato sbloccato/bloccato)
       const helpersGrid = document.getElementById('inventory-helpers-grid');
       const warningHelper = document.getElementById('second-term-warning-helper');
       const allHelpers = window.EroiDB.getHelpers();
@@ -2960,40 +2970,51 @@ window.finalizzaDocente = async function() {
 
       const unlockedHelperIds = profile.unlockedHelpers || [];
 
-      if (unlockedHelperIds.length === 0) {
-        helpersGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color: var(--text-muted); margin-top:20px;">
-          <i>🧙 Nessun aiutante ancora sbloccato.<br>
-          Completa missioni per ottenerne uno random dalla categoria corrispondente!<br>
-          Zeus è acquistabile nello Shop con 250 💰.</i></p>`;
-      } else {
-        unlockedHelperIds.forEach(hId => {
-          const h = allHelpers[hId];
-          if (!h) return;
+      function getHelperUnlockHint(h) {
+        if (h.id === 'zeus') return "Acquistabile nel Mercato per 250 💰";
+        if (h.category === 'Divinità') return "Sblocco automatico per XP accumulati";
+        if (h.category === 'Epica Classica') return "Sblocco completando missioni di Epica Classica";
+        if (h.category === 'Ciclo Carolingio') return "Sblocco completando missioni del Ciclo Carolingio";
+        if (h.category === 'Ciclo Bretone') return "Sblocco completando missioni del Ciclo Bretone";
+        return "Sblocco con il progresso nel viaggio";
+      }
 
-          const isActive = profile.activeHelper === hId;
-          const card = document.createElement('div');
-          card.className = `card rarity-leggendario`;
-          card.innerHTML = `
-            <div>
+      Object.values(allHelpers).forEach(h => {
+        const isUnlocked = unlockedHelperIds.includes(h.id);
+        const isActive = profile.activeHelper === h.id;
+        const card = document.createElement('div');
+        card.className = `card rarity-leggendario ${!isUnlocked ? 'card-locked' : ''}`;
+        
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
               <span class="card-rarity-badge">${h.category}</span>
-              <span class="card-icon">👑</span>
-              <h4 class="card-title">${h.name}</h4>
-              <p class="card-desc">${h.desc}</p>
-              <div style="text-align: left; font-size: 0.75rem; margin: 10px 0; border-top:1px solid rgba(255,255,255,0.05); padding-top: 8px;">
-                <p>🟢 <strong>Passivo</strong>: ${h.bonusPassive || 'Nessuno'}</p>
-                <p>🔵 <strong>Potere</strong>: ${h.potereSpeciale || 'Nessuno'}</p>
-                <p>🛡️ <strong>Immunità</strong>: ${h.immunita || 'Nessuna'}</p>
-              </div>
+              ${!isUnlocked ? '<span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;"><i class="fa-solid fa-lock"></i> Bloccato</span>' : ''}
             </div>
-            <div>
-              <button class="btn ${isActive ? 'btn-danger' : ''}" style="width: 100%;" onclick="EroiApp.toggleHelper('${email}', '${hId}', ${isActive})">
+            <span class="card-icon" style="${!isUnlocked ? 'filter: grayscale(100%); opacity: 0.7;' : ''}">👑</span>
+            <h4 class="card-title">${h.name}</h4>
+            <p class="card-desc">${h.desc}</p>
+            <div style="text-align: left; font-size: 0.75rem; margin: 10px 0; border-top:1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+              <p>🟢 <strong>Passivo</strong>: ${h.bonusPassive || 'Nessuno'}</p>
+              <p>🔵 <strong>Potere</strong>: ${h.potereSpeciale || 'Nessuno'}</p>
+              <p>🛡️ <strong>Immunità</strong>: ${h.immunita || 'Nessuna'}</p>
+            </div>
+            ${!isUnlocked ? `<p style="font-size: 0.75rem; color: #94a3b8; font-style: italic; margin-bottom: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px;">💡 ${getHelperUnlockHint(h)}</p>` : ''}
+          </div>
+          <div>
+            ${isUnlocked ? `
+              <button class="btn ${isActive ? 'btn-danger' : ''}" style="width: 100%;" onclick="EroiApp.toggleHelper('${email}', '${h.id}', ${isActive})">
                 ${isActive ? '<i class="fa-solid fa-xmark"></i> Disattiva' : '<i class="fa-solid fa-check"></i> Equipaggia come Aiutante'}
               </button>
-            </div>
-          `;
-          helpersGrid.appendChild(card);
-        });
-      }
+            ` : `
+              <button class="btn btn-secondary" style="width: 100%; opacity: 0.6; cursor: not-allowed;" disabled>
+                <i class="fa-solid fa-lock"></i> Da sbloccare
+              </button>
+            `}
+          </div>
+        `;
+        helpersGrid.appendChild(card);
+      });
     },
 
     toggleArtifact: function(email, artId) {
@@ -4144,13 +4165,12 @@ window.finalizzaDocente = async function() {
       items.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${item.id}</strong></td>
-          <td>${item.name}</td>
-          <td>${item.rarity}</td>
-          <td>${item.price} Dracme</td>
+          <td><strong>${item.name}</strong></td>
+          <td><span class="card-rarity-badge" style="font-size:0.75rem;">${item.rarity}</span></td>
+          <td>${item.price} 💰</td>
           <td>${item.stock}</td>
           <td>
-            <span style="color: ${item.active ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">
+            <span style="color: ${item.active ? 'var(--success)' : 'var(--danger)'}; font-weight:bold; font-size:0.85rem;">
               ${item.active ? 'Attivo' : 'Disattivato'}
             </span>
           </td>
@@ -4449,20 +4469,11 @@ window.finalizzaDocente = async function() {
         tr.innerHTML = `
           <td>
             <strong>${h.name}</strong>
-            <span title="Aiutante predefinito" style="margin-left:6px; font-size:0.68rem; background:rgba(212,175,55,0.15); color:var(--gold); border:1px solid rgba(212,175,55,0.4); border-radius:4px; padding:1px 5px;">🔒 preset</span>
           </td>
-          <td>${h.category}</td>
-          <td><input type="text" id="helper-pass-${h.id}" class="form-control" style="padding:4px; font-size:0.8rem;" value="${h.bonusPassive || ''}"></td>
-          <td><input type="text" id="helper-power-${h.id}" class="form-control" style="padding:4px; font-size:0.8rem;" value="${h.potereSpeciale || ''}"></td>
-          <td><input type="text" id="helper-imm-${h.id}" class="form-control" style="padding:4px; font-size:0.8rem;" value="${h.immunita || ''}"></td>
-          <td>
-            <div style="display:flex; gap:4px;">
-              <button class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.saveHelperConfig('${h.id}')">Salva</button>
-              ${isAdmin ? `<button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="EroiApp.hideHelper('${h.id}')" title="Nascondi aiutante (ripristinabile)">
-                <i class="fa-solid fa-trash"></i>
-              </button>` : ''}
-            </div>
-          </td>
+          <td><span class="card-rarity-badge" style="font-size:0.75rem;">${h.category}</span></td>
+          <td><span style="color:var(--success); font-weight:600; font-size:0.85rem;">${h.bonusPassive || '—'}</span></td>
+          <td><span style="color:var(--info); font-weight:600; font-size:0.85rem;">${h.potereSpeciale || '—'}</span></td>
+          <td><span style="color:var(--gold); font-weight:600; font-size:0.85rem;">${h.immunita || '—'}</span></td>
         `;
         hTbody.appendChild(tr);
       });
@@ -4688,13 +4699,9 @@ window.finalizzaDocente = async function() {
         const isPreset = window.EroiDB.isPresetStudyGuide(g.id);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>
-            <strong>${g.id}</strong>
-            ${isPreset ? `<span title="Scheda predefinita" style="margin-left:6px;font-size:0.68rem;background:rgba(212,175,55,0.15);color:var(--gold);border:1px solid rgba(212,175,55,0.4);border-radius:4px;padding:1px 5px;">🔒 preset</span>` : ''}
-          </td>
-          <td>${g.title}</td>
-          <td>${g.category}</td>
-          <td style="font-size:0.82rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.summary}</td>
+          <td><strong>${g.title}</strong></td>
+          <td><span class="card-rarity-badge" style="font-size:0.75rem;">${g.category}</span></td>
+          <td style="font-size:0.82rem; max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${g.summary}</td>
           <td>
             ${isAdmin ? `<button class="btn btn-danger" style="padding:4px 8px;font-size:0.75rem;" onclick="EroiApp.deleteGuide('${g.id}')" title="${isPreset ? 'Nascondi scheda (ripristinabile)' : 'Elimina definitivamente'}">
               <i class="fa-solid fa-trash"></i>
