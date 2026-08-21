@@ -756,9 +756,13 @@
           
           <div class="tabs-header">
             <button class="tab-btn active" onclick="EroiApp.switchTeacherTab('panoramica')">Panoramica</button>
+            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('shop')">Shop & Economia</button>
+            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('aiutanti')">Aiutanti & Artefatti</button>
+            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('guide')">Guide Didattiche</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('registro')">Registro Attività</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('tornei')">Tornei Interni</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('diario')">Valutazione Diari</button>
+
           </div>
 
           <!-- TAB PANORAMICA -->
@@ -924,6 +928,214 @@
                 </div>
               </div>
 
+            </div>
+          </div>
+
+
+          <!-- TAB SHOP E BILANCIAMENTO -->
+          <div id="t-tab-shop" class="tab-content">
+            <div class="glass-panel" data-admin-only="true">
+              <h3 class="panel-title">Aggiungi/Modifica Oggetti dello Shop</h3>
+              <form id="form-create-shop-item" onsubmit="return false;" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                <div class="form-group">
+                  <label for="new-item-id">Codice Oggetto (ID)</label>
+                  <input type="text" id="new-item-id" class="form-control" placeholder="es: item_pergamena" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-item-name">Nome Prodotto</label>
+                  <input type="text" id="new-item-name" class="form-control" placeholder="Pergamena della Chiarezza" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-item-price">Prezzo in Dracme</label>
+                  <input type="number" id="new-item-price" class="form-control" value="20" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-item-rarity">Rarità</label>
+                  <select id="new-item-rarity" class="form-control" required>
+                    <option value="Comune">Comune</option>
+                    <option value="Raro">Raro</option>
+                    <option value="Epico">Epico</option>
+                    <option value="Leggendario">Leggendario</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="new-item-type">Tipologia</label>
+                  <select id="new-item-type" class="form-control" required>
+                    <option value="consumable">Consumabile (Monouso)</option>
+                    <option value="permanent">Permanente (Equipaggiamento/Titolo)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="new-item-stock">Stock Disponibile</label>
+                  <input type="number" id="new-item-stock" class="form-control" value="99" required>
+                </div>
+                <div class="form-group" style="grid-column: 3 / -1;">
+                  <label for="new-item-desc">Descrizione Effetto</label>
+                  <input type="text" id="new-item-desc" class="form-control" placeholder="Fornisce una mappa concettuale per lo studio" required>
+                </div>
+                <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-shop-item">Salva Oggetto Shop</button>
+              </form>
+            </div>
+
+            <div class="glass-panel">
+              <h3 class="panel-title">Lista Articoli dello Shop</h3>
+              <div class="table-responsive">
+                <table class="game-table" id="teacher-shop-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Rarità</th>
+                      <th>Prezzo</th>
+                      <th>Stock</th>
+                      <th>Stato</th>
+                      <th>Azioni</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="glass-panel">
+              <h3 class="panel-title"><i class="fa-solid fa-chart-bar" style="color: var(--gold);"></i> Andamento Economico e Popolarità Shop</h3>
+              <div id="shop-analytics-info" style="margin-top: 15px; font-size: 0.9rem; line-height: 1.6;">
+                <!-- Generato da JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB AIUTANTI E ARTEFATTI -->
+          <div id="t-tab-aiutanti" class="tab-content">
+            <div class="glass-panel">
+              <h3 class="panel-title">Compendio Aiutanti Epici e Divini</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
+                Consulta le abilità passive, i poteri speciali e le immunità degli eroi e delle divinità sbloccabili nel gioco.
+              </p>
+              <div class="table-responsive">
+                <table class="game-table" id="teacher-helpers-table">
+                  <thead>
+                    <tr>
+                      <th>Aiutante</th>
+                      <th>Categoria</th>
+                      <th>Bonus Passivo</th>
+                      <th>Potere Speciale</th>
+                      <th>Immunità</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="glass-panel">
+              <div data-admin-only="true" style="margin-bottom: 20px;">
+                <h3 class="panel-title">Gestione Artefatti Speciali</h3>
+                <form id="form-create-artifact" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                  <div class="form-group">
+                    <label for="new-art-id">ID Artefatto</label>
+                    <input type="text" id="new-art-id" class="form-control" placeholder="es: elmo_ade" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-art-name">Nome Artefatto</label>
+                    <input type="text" id="new-art-name" class="form-control" placeholder="Elmo dell'Invisibilità" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-art-rarity">Rarità</label>
+                    <select id="new-art-rarity" class="form-control" required>
+                      <option value="Comune">Comune</option>
+                      <option value="Raro">Raro</option>
+                      <option value="Epico">Epico</option>
+                      <option value="Leggendario">Leggendario</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-art-icon">Icona Emoji</label>
+                    <input type="text" id="new-art-icon" class="form-control" value="🔮" required>
+                  </div>
+                  <div class="form-group" style="grid-column: 2 / -1;">
+                    <label for="new-art-bonus">Bonus/Condizioni</label>
+                    <input type="text" id="new-art-bonus" class="form-control" placeholder="+3 Sapienza nelle missioni mitologiche" required>
+                  </div>
+                  <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="new-art-desc">Descrizione Narrativa</label>
+                    <textarea id="new-art-desc" class="form-control" rows="2" placeholder="Un elmo magico appartenente ad Ade..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-artifact">Salva Artefatto</button>
+                </form>
+              </div>
+              
+              <h3 class="panel-title">Lista Artefatti Speciali</h3>
+              <div class="table-responsive">
+                <table class="game-table" id="teacher-artifacts-table">
+                  <thead>
+                    <tr>
+                      <th>Icona</th>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Rarità</th>
+                      <th>Effetti</th>
+                      <th>Azione</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB GUIDE DIDATTICHE -->
+          <div id="t-tab-guide" class="tab-content">
+            <div class="glass-panel">
+              <div data-admin-only="true" style="margin-bottom: 20px;">
+                <h3 class="panel-title">Crea/Modifica Schede Studio</h3>
+                <form id="form-create-guide" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                  <div class="form-group">
+                    <label for="guide-id">Codice Scheda (ID)</label>
+                    <input type="text" id="guide-id" class="form-control" placeholder="es: auth_tasso" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="guide-title">Titolo</label>
+                    <input type="text" id="guide-title" class="form-control" placeholder="Torquato Tasso" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="guide-category">Tipologia Guida</label>
+                    <select id="guide-category" class="form-control" required>
+                      <option value="Luoghi e Miti di Fondazione">Luoghi e Miti di Fondazione</option>
+                      <option value="Schede Autore">Schede Autore</option>
+                      <option value="Schede Personaggio (Mitologia)">Schede Personaggio (Mitologia)</option>
+                      <option value="Schede Personaggio (Iliade)">Schede Personaggio (Iliade)</option>
+                      <option value="Schede Personaggio (Odissea)">Schede Personaggio (Odissea)</option>
+                      <option value="Schede Personaggio (Eneide)">Schede Personaggio (Eneide)</option>
+                      <option value="Schede Personaggio (Ciclo Carolingio)">Schede Personaggio (Ciclo Carolingio)</option>
+                      <option value="Schede Personaggio (Ciclo Bretone)">Schede Personaggio (Ciclo Bretone)</option>
+                      <option value="Schede Tematiche">Schede Tematiche</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="guide-summary">Riassunto Breve</label>
+                    <input type="text" id="guide-summary" class="form-control" placeholder="Biografia ed opere principali..." required>
+                  </div>
+                  <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="guide-content">Contenuto della Guida (Testo completo)</label>
+                    <textarea id="guide-content" class="form-control" rows="6" placeholder="Testo didattico..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-guide">Pubblica Guida Didattica</button>
+                </form>
+              </div>
+              
+              <h3 class="panel-title">Archivio Guide e Schede Studio</h3>
+              <div class="table-responsive">
+                <table class="game-table" id="teacher-guides-table">
+                  <thead>
+                    <tr>
+                      <th>Titolo</th>
+                      <th>Categoria</th>
+                      <th>Riassunto</th>
+                      <th>Azione</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
           </div>
 
@@ -1166,17 +1378,18 @@
         </div>
       </section>
 
-      <!-- Global Footer -->
-      <footer class="main-footer" style="padding: 15px 20px 25px 20px; text-align: center; margin-top: auto;">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; margin: 0; padding: 5px 0;">
-            <p class="footer-copy" id="footer-copyright-text" style="text-align: justify; font-size: 0.8rem; line-height: 1.4; margin: 0; flex: 1; color: inherit;">
-                &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
-            </p>
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" style="height: 90px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0px 0px 12px rgba(255, 255, 255, 0.45)) drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.25)); margin: 10px;">
-        </div>
-      </footer>
-
     </main>
+
+    <!-- Global Footer -->
+    <footer class="main-footer" style="padding: 5px 20px; text-align: center;">
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; margin: 0; padding: 5px 0;">
+          <p class="footer-copy" id="footer-copyright-text" style="text-align: justify; font-size: 0.8rem; line-height: 1.4; margin: 0; flex: 1; color: inherit;">
+              &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+          </p>
+          <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" style="height: 100px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0px 0px 12px rgba(255, 255, 255, 0.45)) drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.25)); margin: 10px;">
+      </div>
+    </footer>
 
 
 

@@ -540,31 +540,25 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;       /* Il contenuto principale NON scrolla, scrollano le view */
   height: 100dvh;
-  flex: 1;
+  flex: none;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
 
 body.logged-in .main-content {
-  margin-top: 70px;
+  margin-top: 70px;       /* sotto l'header fisso */
   height: calc(100dvh - 70px - 64px);
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 /* Footer rules */
 .main-footer {
-  position: relative;
-  margin-top: auto;
-  margin-bottom: 0;
+  position: relative; /* Fa parte del flusso del documento, non copre nulla */
+  margin-bottom: 64px; /* Spazio per la bottom nav */
   left: 0;
   right: 0;
-  width: 100%;
-  box-sizing: border-box;
   min-height: 30px;
   background: var(--bg-dark);
   border-top: 1px solid rgba(212, 175, 55, 0.2);
@@ -572,9 +566,9 @@ body.logged-in .main-content {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 15px 20px 25px 20px;
+  padding: 5px; /* Molto ridotto */
   z-index: 10;
-  gap: 6px;
+  gap: 2px;
 }
 
 .footer-prof-logo {
@@ -4544,10 +4538,9 @@ table.game-table tr:hover td {
 .view.active {
     display: flex;
     justify-content: flex-start !important;
-    overflow-y: visible;
+    overflow-y: auto;
     overflow-x: hidden;
-    max-height: none;
-    flex: 1 0 auto;
+    max-height: 100%;
 }
 
 /* Eccezioni: view che gestiscono lo scroll internamente */
