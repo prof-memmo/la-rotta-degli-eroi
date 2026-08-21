@@ -326,6 +326,16 @@
       const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
       if (!profile) return false;
 
+      // Disattivazione aiutante
+      if (helperId === null) {
+        profile.activeHelper = null;
+        const _su = window.EroiDB.getUser(email);
+        if (_su && (_su.role === "docente" || _su.role === "admin")) window.EroiDB.saveTeacherPlayerProfile(email, profile);
+        else window.EroiDB.saveStudentProfile(email, profile);
+        window.EroiDB.logActivity(email, `Disattivato l'aiutante equipaggiato.`);
+        return true;
+      }
+
       const helperObj = window.EroiDB.getHelpers()[helperId];
       if (!helperObj) throw new Error("Aiutante sconosciuto.");
 
@@ -478,6 +488,12 @@
       // Accredita XP e Dracme
       const xpResult = this.addXP(email, finalXPGained);
       this.addDracme(email, finalDracmeGained);
+
+      // Sincronizza stato locale del profilo
+      if (xpResult && typeof xpResult.currentXP === 'number') {
+        profile.xp = xpResult.currentXP;
+        profile.level = xpResult.newLevel;
+      }
 
       // Traccia missione completata
       if (!profile.completedMissions) profile.completedMissions = [];

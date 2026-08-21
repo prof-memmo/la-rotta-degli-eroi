@@ -3707,11 +3707,21 @@ window.finalizzaDocente = async function() {
       }
 
       if (artId) {
-        // Aggiunge l'artefatto nell'inventario dello studente come oggetto permanente
+        // Aggiunge l'artefatto agli artefatti sbloccati dello studente
+        const profile = window.EroiDB.getStudentProfile(email);
+        if (profile) {
+          if (!profile.unlockedArtifacts) profile.unlockedArtifacts = [];
+          if (!profile.unlockedArtifacts.includes(artId)) {
+            profile.unlockedArtifacts.push(artId);
+            window.EroiDB.saveStudentProfile(email, profile);
+          }
+        }
+
+        // Aggiunge anche all'inventario per tracciamento storico
         const inventory = window.EroiDB.getInventory(email);
         const art = window.EroiDB.getArtifacts()[artId];
         
-        if (!inventory.some(i => i.itemId === artId)) {
+        if (art && !inventory.some(i => i.itemId === artId)) {
           inventory.push({
             itemId: artId,
             name: art.name,
