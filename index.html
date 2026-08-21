@@ -225,7 +225,7 @@
               <div class="glass" style="padding: 20px; text-align: center; border: 2px solid var(--gold); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="selectOnboardingRole('docente')">
                   <div style="font-size: 3rem; margin-bottom: 10px;">👨‍🏫</div>
                   <h3 style="color: var(--gold); margin: 0;">DOCENTE</h3>
-                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">Crea classi, organizza missioni e convalida i progressi degli studenti (richiede approvazione).</p>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">Accedi o registrati tramite l'Hub Centrale per gestire classi, missioni e studenti.</p>
               </div>
 
               <!-- Forestiero -->
@@ -266,31 +266,9 @@
               </form>
           </div>
       </section>
-
-      <!-- VIEW: Iscrizione Docente -->
-      <section id="view-iscrizione" class="view">
-          <button class="btn btn-secondary" onclick="window.EroiApp.switchActiveView('view-onboarding')" style="margin-bottom: 15px; align-self: flex-start;"><i class="fa-solid fa-arrow-left"></i> Indietro</button>
-          <h2 class="text-center mb-2" style="color: var(--gold);">Benvenuto Docente!</h2>
-          <div class="glass" style="max-width: 600px; margin: 0 auto; padding: 20px; font-size: 0.95rem; color: #ddd;">
-              <p style="margin-bottom: 15px;">Grazie per l'interesse verso La Rotta degli Eroi. L'obiettivo del gioco è stimolare l'interesse per testi e contesti storici attraverso una dinamica di esplorazione, missioni didattiche e punteggi.</p>
-              <p style="margin-bottom: 15px;">Compila il modulo qui sotto per inviare la tua richiesta di iscrizione come docente. Verrai approvato a breve!</p>
-              
-              <form id="form-iscrizione-docente" onsubmit="event.preventDefault(); finalizzaDocente();">
-                  <div style="margin-bottom: 1.5rem;">
-                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">Scuola:</label>
-                      <input type="text" id="iscrizione-scuola" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Nome della tua scuola">
-                  </div>
-                  <div style="margin-bottom: 1.5rem;">
-                      <label style="display: block; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">Città:</label>
-                      <input type="text" id="iscrizione-citta" required style="width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white;" placeholder="Città della scuola">
-                  </div>
-                  <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; border-radius: 30px; font-weight: 800;">Invia Richiesta</button>
-              </form>
-          </div>
-      </section>
       
-      <!-- VIEW: Pending Docente -->
-      <section id="view-pending-docente" class="view">
+      <!-- VIEW: Pausa Obbligatoria Timer -->
+      <section id="view-pausa-obbligatoria" class="view">
           <svg width="0" height="0" style="position:absolute;">
             <filter id="remove-white" color-interpolation-filters="sRGB">
               <feColorMatrix type="matrix" values="
@@ -300,16 +278,6 @@
                 -3 -3 -3 1 8" />
             </filter>
           </svg>
-          <div class="glass" style="max-width: 450px; margin: 0 auto; padding: 30px; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 15px; color: var(--gold);"><i class="fa-solid fa-hourglass-half"></i></div>
-              <h2 style="color: var(--gold); margin-bottom: 15px;">Richiesta in Attesa</h2>
-              <p style="color: #ddd;">Il tuo account docente è in attesa di approvazione dal Game Master.<br>Ti avviseremo appena sarai attivo!</p>
-              <button class="btn mt-2" onclick="Auth.logout();">Esci</button>
-          </div>
-      </section>
-
-      <!-- VIEW: Pausa Obbligatoria Timer -->
-      <section id="view-pausa-obbligatoria" class="view">
           <div style="max-width: 600px; margin: 0 auto; text-align: center; padding: 20px;">
               <h2 style="color: var(--gold); margin-bottom: 20px; font-size: 2rem;">Tempo di Riposo!</h2>
               <div id="pausa-video-container" class="pausa-video-container">

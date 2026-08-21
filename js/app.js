@@ -142,7 +142,9 @@ window.selectOnboardingRole = async function(role) {
     if (role === 'studente') {
         window.EroiApp.switchActiveView('view-selezione-profilo');
     } else if (role === 'docente') {
-        window.EroiApp.switchActiveView('view-iscrizione');
+        alert("La registrazione per i docenti è centralizzata nell'Hub. Verrai reindirizzato al Portale Hub.");
+        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+        return;
     } else if (role === 'forestiero') {
         // Forestiero completa subito
         user.role = 'forestiero';
@@ -245,44 +247,6 @@ window.finalizzaStudente = async function() {
     window.EroiApp.checkSession();
 };
 
-window.finalizzaDocente = async function() {
-    const scuola = document.getElementById('iscrizione-scuola').value.trim();
-    const citta = document.getElementById('iscrizione-citta').value.trim();
-    
-    if (!scuola || !citta) {
-        alert("Compila tutti i campi!"); return;
-    }
-    
-    const user = Auth.getUser();
-    if (!user) return;
-    
-    // Salva in pending_requests
-    const requestData = {
-        uid: user.uid,
-        email: user.email,
-        name: user.name,
-        scuola: scuola,
-        citta: citta,
-        role: 'docente',
-        status: 'pending'
-    };
-    await window.EroiDB.saveTeacherRequest(requestData);
-
-    user.role = 'docente';
-    user.setupComplete = true;
-    user.approved = false; // Pending approval
-    
-    await window.fbDb.collection('users').doc(user.uid).update({ 
-        role: 'docente', 
-        setupComplete: true,
-        approved: false,
-        scuola: scuola,
-        citta: citta
-    });
-    
-    localStorage.setItem('eroi_user', JSON.stringify(user));
-    window.EroiApp.checkSession();
-};
 (function() {
   let currentShopFilter = 'all';
   let activeTeacherTab = 'panoramica';
@@ -689,7 +653,7 @@ window.finalizzaDocente = async function() {
       const user = isLogged ? Auth.getUser() : null;
       
       // Protezione delle rotte in base al ruolo
-      const publicViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
+      const publicViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo'];
       const studentViews = ['view-student-dashboard', 'view-map', 'view-diario', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento', 'view-pausa-obbligatoria'];
       const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento', 'view-map', 'view-diario', 'view-shop', 'view-inventory'];
       const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento', 'view-map', 'view-diario', 'view-shop', 'view-inventory'];
@@ -724,7 +688,7 @@ window.finalizzaDocente = async function() {
       }
 
       // Hide sidebar/header during onboarding
-      if (['view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente', 'view-pausa-obbligatoria'].includes(viewId)) {
+      if (['view-onboarding', 'view-selezione-profilo', 'view-pausa-obbligatoria'].includes(viewId)) {
         document.body.classList.remove('logged-in');
         document.getElementById('main-sidebar').style.display = 'none';
         document.getElementById('mobile-navigation').style.display = 'none'; // nascosta anche durante onboarding
@@ -1674,7 +1638,7 @@ window.finalizzaDocente = async function() {
         
         // Reindirizza alla dashboard corretta se eravamo fermi alla login o all'onboarding
         const currentView = this.getCurrentViewId();
-        const authViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pending-docente'];
+        const authViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo'];
         if (authViews.includes(currentView)) {
           if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
           else if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') this.navigateTo('view-teacher-dashboard');
@@ -5012,117 +4976,7 @@ window.finalizzaDocente = async function() {
       }
     },
 
-    // --- ADMIN DASHBOARD ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-
-    renderPendingRequests: async function() {
-      const tbody = document.querySelector('#admin-pending-table tbody');
-      tbody.innerHTML = '<tr><td colspan="5">Caricamento richieste in corso...</td></tr>';
-      
-      try {
-        const requests = await window.EroiDB.getTeacherRequests();
-        tbody.innerHTML = '';
-        
-        if (requests.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessuna richiesta in attesa</td></tr>';
-          return;
-        }
-        
-        requests.forEach(req => {
-          const tr = document.createElement('tr');
-          // Salviamo i dati completi codificati in base64 per sicurezza nei pulsanti
-          const reqStr = btoa(encodeURIComponent(JSON.stringify(req)));
-          tr.innerHTML = `
-            <td><strong>${req.name}</strong></td>
-            <td>${req.email}</td>
-            <td>${req.scuola}</td>
-            <td>${req.citta}</td>
-            <td style="text-align:center;"><a href="mailto:${req.email}" title="Scrivi a ${req.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
-            <td style="display: flex; gap: 5px;">
-              <button class="btn" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.approveTeacher('${req.id}', '${reqStr}')">
-                <i class="fa-solid fa-check"></i> Approva
-              </button>
-              <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.rejectTeacher('${req.id}')">
-                <i class="fa-solid fa-times"></i> Rifiuta
-              </button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (e) {
-        console.error("Errore recupero richieste:", e);
-        tbody.innerHTML = '<tr><td colspan="5" style="color:red;">Errore durante il caricamento</td></tr>';
-      }
-    },
-
-    approveTeacher: async function(requestId, encodedData) {
-      if (!confirm("Sei sicuro di voler approvare questo docente? Avrà pieno accesso al pannello docenti.")) return;
-      try {
-        const data = JSON.parse(decodeURIComponent(atob(encodedData)));
-        await window.EroiDB.approveTeacherRequest(requestId, data);
-        this.showToast("Docente approvato con successo!", "success");
-        this.renderPendingRequests();
-        this.renderAdminAllUsers();
-        
-        // Apertura client mail (mailto)
-        const email = data.email;
-        const nomeDocente = data.name || 'Docente';
-        const emailSubject = encodeURIComponent('✅ Benvenuto ne La Rotta degli Eroi!');
-        const emailBody = encodeURIComponent(
-            `Ciao ${nomeDocente}!\n\n` +
-            `La tua richiesta di iscrizione a La Rotta degli Eroi è stata APPROVATA. 🎉\n` +
-            `Da adesso puoi accedere alla piattaforma con la tua email: ${email}\n\n` +
-            `Potrai creare le tue squadre, consultare le missioni e gestire i tuoi studenti.\n\n` +
-            `Aiutaci a far crescere la community condividendo la tua esperienza:\n` +
-            `https://prof-memmo.github.io/games/condividi-esperienza.html\n\n` +
-            `Che l'epica sia con te!\n` +
-            `Il Team de La Rotta degli Eroi`
-        );
-        
-        // --- INTEGRAZIONE HUB ---
-        try {
-            const configHub = {
-                apiKey: "AIzaSyD-n2m-kYEuzGXPMKclZTggf4Y5Zm8_cdM",
-                authDomain: "prof-memmo-hub.firebaseapp.com",
-                projectId: "prof-memmo-hub",
-                storageBucket: "prof-memmo-hub.firebasestorage.app",
-                messagingSenderId: "839149485689",
-                appId: "1:839149485689:web:531776ce3cf495a6f23697"
-            };
-            let hubApp;
-            if (!firebase.apps.find(a => a.name === 'Hub')) {
-                hubApp = firebase.initializeApp(configHub, 'Hub');
-            } else {
-                hubApp = firebase.app('Hub');
-            }
-            await hubApp.firestore().collection("hub_posta_inviata").add({
-                destinatarioEmail: email,
-                destinatarioNome: nomeDocente,
-                gioco: 'La Rotta degli Eroi',
-                oggetto: '✅ Benvenuto ne La Rotta degli Eroi!',
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        } catch(errHub) {
-            console.warn("Errore salvataggio log nell'Hub:", errHub);
-        }
-
-        window.location.href = `mailto:${email}?subject=${emailSubject}&body=${emailBody}`;
-      } catch (e) {
-        console.error("Errore approvazione docente:", e);
-        alert("Errore durante l'approvazione: " + e.message);
-      }
-    },
-
-    rejectTeacher: async function(requestId) {
-      if (!confirm("Sei sicuro di voler rifiutare ed eliminare questa richiesta?")) return;
-      try {
-        await window.EroiDB.rejectTeacherRequest(requestId);
-        this.showToast("Richiesta rifiutata ed eliminata.", "success");
-        this.renderPendingRequests();
-      } catch (e) {
-        console.error("Errore rifiuto docente:", e);
-        alert("Errore durante l'operazione: " + e.message);
-      }
-    },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+    // --- ADMIN DASHBOARD ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
     changeUserRole: async function(email, newRole) {
       if (!confirm(`Sei sicuro di voler cambiare il ruolo di ${email} in ${newRole.toUpperCase()}?`)) {

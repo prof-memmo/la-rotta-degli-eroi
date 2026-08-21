@@ -22,7 +22,6 @@ window.EroiApp.renderAdminDashboard = function() {
       document.getElementById('admin-setting-copyright').value = settings.copyright;
       document.getElementById('admin-setting-contacts').value = settings.contacts;
 
-      this.renderPendingRequests();
       // Renderizza componenti spostati da Teacher a Admin
       this.renderTeacherMissions();
       this.renderTeacherShop();
@@ -64,7 +63,6 @@ window.EroiApp.renderAdminDashboard = function() {
       document.getElementById('legal-doc-cookies').value = settings.cookies || '';
       document.getElementById('legal-doc-gdpr').value = settings.gdpr || '';
 
-      this.renderPendingRequests();
       this.renderAdminAllUsers();
       this.renderAdminSchoolsList();
     };

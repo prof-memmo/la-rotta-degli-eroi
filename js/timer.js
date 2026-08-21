@@ -103,7 +103,7 @@ const SessionTimer = {
     updateTimerUI: function(secsLeft) {
         // Nascondi timer se in onboarding
         const currentView = window.EroiApp.getCurrentViewId();
-        const onboardingViews = ['view-welcome', 'view-login', 'view-onboarding', 'view-selezione-profilo', 'view-iscrizione', 'view-pausa-obbligatoria'];
+        const onboardingViews = ['view-welcome', 'view-login', 'view-onboarding', 'view-selezione-profilo', 'view-pausa-obbligatoria'];
         
         // Rimuovi timer dall'header se esiste (legacy)
         const oldHeaderTimer = document.getElementById('student-session-timer');

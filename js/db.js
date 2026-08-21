@@ -259,60 +259,7 @@
 
     // --- UTENTI ED AUTENTICAZIONE ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 
-    // --- RICHIESTE DOCENTI (Firestore) ---
-    saveTeacherRequest: async function(requestData) {
-      if (!window.fbDb) return;
-      await window.fbDb.collection("pending_requests").add({
-        ...requestData,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    },
-    getTeacherRequests: async function() {
-      if (!window.fbDb) return [];
-      const snapshot = await window.fbDb.collection("pending_requests").get();
-      let reqs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      
-      // Recupera anche i "ghost" pending (chi non ha completato l'onboarding e non ha un record in pending_requests)
-      try {
-        const ghostSnap = await window.fbDb.collection("users").where('role', '==', 'pending').get();
-        ghostSnap.docs.forEach(doc => {
-          const d = doc.data();
-          if (!reqs.find(r => r.uid === doc.id || r.email === d.email)) {
-            reqs.push({
-              id: doc.id,
-              uid: doc.id,
-              email: d.email || 'Nessuna email',
-              name: d.name || d.displayName || 'Utente Incompleto',
-              scuola: 'Non completato (Ghost)',
-              citta: 'Non completato',
-              status: 'pending'
-            });
-          }
-        });
-      } catch(e) { console.warn("Ghost pending fetch error:", e); }
-      
-      return reqs;
-    },
-    approveTeacherRequest: async function(requestId, requestData) {
-      if (!window.fbDb) return;
-      const uid = requestData.uid || requestId;
-      // Aggiorna ruolo in users (cloud)
-      await window.fbDb.collection('users').doc(uid).update({
-        role: 'docente',
-        setupComplete: true,
-        approved: true,
-        scuola: requestData.scuola || 'Non specificata',
-        citta: requestData.citta || 'Non specificata'
-      });
-      // Elimina da pending_requests (ignorando errori se era un ghost senza record in pending_requests)
-      try { await window.fbDb.collection("pending_requests").doc(requestId).delete(); } catch(e){}
-    },
-    rejectTeacherRequest: async function(requestId) {
-      if (!window.fbDb) return;
-      try { await window.fbDb.collection("pending_requests").doc(requestId).delete(); } catch(e){}
-      // Elimina l'utente dalla collection users se era rimasto bloccato in pending (ghost)
-      try { await window.fbDb.collection("users").doc(requestId).delete(); } catch(e){}
-    },
+
 
     // --- PROFILI STUDENTI ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
