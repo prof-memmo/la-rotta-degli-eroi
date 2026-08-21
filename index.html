@@ -1028,41 +1028,44 @@
               </div>
             </div>
 
-            <div class="glass-panel" data-admin-only="true">
-              <h3 class="panel-title">Gestione Artefatti Speciali</h3>
-              <form id="form-create-artifact" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                <div class="form-group">
-                  <label for="new-art-id">ID Artefatto</label>
-                  <input type="text" id="new-art-id" class="form-control" placeholder="es: elmo_ade" required>
-                </div>
-                <div class="form-group">
-                  <label for="new-art-name">Nome Artefatto</label>
-                  <input type="text" id="new-art-name" class="form-control" placeholder="Elmo dell'Invisibilità" required>
-                </div>
-                <div class="form-group">
-                  <label for="new-art-rarity">Rarità</label>
-                  <select id="new-art-rarity" class="form-control" required>
-                    <option value="Comune">Comune</option>
-                    <option value="Raro">Raro</option>
-                    <option value="Epico">Epico</option>
-                    <option value="Leggendario">Leggendario</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="new-art-icon">Icona Emoji</label>
-                  <input type="text" id="new-art-icon" class="form-control" value="🔮" required>
-                </div>
-                <div class="form-group" style="grid-column: 2 / -1;">
-                  <label for="new-art-bonus">Bonus/Condizioni</label>
-                  <input type="text" id="new-art-bonus" class="form-control" placeholder="+3 Sapienza nelle missioni mitologiche" required>
-                </div>
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label for="new-art-desc">Descrizione Narrativa</label>
-                  <textarea id="new-art-desc" class="form-control" rows="2" placeholder="Un elmo magico appartenente ad Ade..." required></textarea>
-                </div>
-                <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-artifact">Salva Artefatto</button>
-              </form>
+            <div class="glass-panel">
+              <div data-admin-only="true" style="margin-bottom: 20px;">
+                <h3 class="panel-title">Gestione Artefatti Speciali</h3>
+                <form id="form-create-artifact" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                  <div class="form-group">
+                    <label for="new-art-id">ID Artefatto</label>
+                    <input type="text" id="new-art-id" class="form-control" placeholder="es: elmo_ade" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-art-name">Nome Artefatto</label>
+                    <input type="text" id="new-art-name" class="form-control" placeholder="Elmo dell'Invisibilità" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-art-rarity">Rarità</label>
+                    <select id="new-art-rarity" class="form-control" required>
+                      <option value="Comune">Comune</option>
+                      <option value="Raro">Raro</option>
+                      <option value="Epico">Epico</option>
+                      <option value="Leggendario">Leggendario</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-art-icon">Icona Emoji</label>
+                    <input type="text" id="new-art-icon" class="form-control" value="🔮" required>
+                  </div>
+                  <div class="form-group" style="grid-column: 2 / -1;">
+                    <label for="new-art-bonus">Bonus/Condizioni</label>
+                    <input type="text" id="new-art-bonus" class="form-control" placeholder="+3 Sapienza nelle missioni mitologiche" required>
+                  </div>
+                  <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="new-art-desc">Descrizione Narrativa</label>
+                    <textarea id="new-art-desc" class="form-control" rows="2" placeholder="Un elmo magico appartenente ad Ade..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-artifact">Salva Artefatto</button>
+                </form>
+              </div>
               
+              <h3 class="panel-title">Lista Artefatti Speciali</h3>
               <div class="table-responsive">
                 <table class="game-table" id="teacher-artifacts-table">
                   <thead>
@@ -1083,42 +1086,45 @@
 
           <!-- TAB GUIDE DIDATTICHE -->
           <div id="t-tab-guide" class="tab-content">
-            <div class="glass-panel" data-admin-only="true">
-              <h3 class="panel-title">Crea/Modifica Schede Studio</h3>
-              <form id="form-create-guide" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                <div class="form-group">
-                  <label for="guide-id">Codice Scheda (ID)</label>
-                  <input type="text" id="guide-id" class="form-control" placeholder="es: auth_tasso" required>
-                </div>
-                <div class="form-group">
-                  <label for="guide-title">Titolo</label>
-                  <input type="text" id="guide-title" class="form-control" placeholder="Torquato Tasso" required>
-                </div>
-                <div class="form-group">
-                  <label for="guide-category">Tipologia Guida</label>
-                  <select id="guide-category" class="form-control" required>
-                    <option value="Luoghi e Miti di Fondazione">Luoghi e Miti di Fondazione</option>
-                    <option value="Schede Autore">Schede Autore</option>
-                    <option value="Schede Personaggio (Mitologia)">Schede Personaggio (Mitologia)</option>
-                    <option value="Schede Personaggio (Iliade)">Schede Personaggio (Iliade)</option>
-                    <option value="Schede Personaggio (Odissea)">Schede Personaggio (Odissea)</option>
-                    <option value="Schede Personaggio (Eneide)">Schede Personaggio (Eneide)</option>
-                    <option value="Schede Personaggio (Ciclo Carolingio)">Schede Personaggio (Ciclo Carolingio)</option>
-                    <option value="Schede Personaggio (Ciclo Bretone)">Schede Personaggio (Ciclo Bretone)</option>
-                    <option value="Schede Tematiche">Schede Tematiche</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="guide-summary">Riassunto Breve</label>
-                  <input type="text" id="guide-summary" class="form-control" placeholder="Biografia ed opere principali..." required>
-                </div>
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label for="guide-content">Contenuto della Guida (Testo completo)</label>
-                  <textarea id="guide-content" class="form-control" rows="6" placeholder="Testo didattico..." required></textarea>
-                </div>
-                <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-guide">Pubblica Guida Didattica</button>
-              </form>
+            <div class="glass-panel">
+              <div data-admin-only="true" style="margin-bottom: 20px;">
+                <h3 class="panel-title">Crea/Modifica Schede Studio</h3>
+                <form id="form-create-guide" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                  <div class="form-group">
+                    <label for="guide-id">Codice Scheda (ID)</label>
+                    <input type="text" id="guide-id" class="form-control" placeholder="es: auth_tasso" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="guide-title">Titolo</label>
+                    <input type="text" id="guide-title" class="form-control" placeholder="Torquato Tasso" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="guide-category">Tipologia Guida</label>
+                    <select id="guide-category" class="form-control" required>
+                      <option value="Luoghi e Miti di Fondazione">Luoghi e Miti di Fondazione</option>
+                      <option value="Schede Autore">Schede Autore</option>
+                      <option value="Schede Personaggio (Mitologia)">Schede Personaggio (Mitologia)</option>
+                      <option value="Schede Personaggio (Iliade)">Schede Personaggio (Iliade)</option>
+                      <option value="Schede Personaggio (Odissea)">Schede Personaggio (Odissea)</option>
+                      <option value="Schede Personaggio (Eneide)">Schede Personaggio (Eneide)</option>
+                      <option value="Schede Personaggio (Ciclo Carolingio)">Schede Personaggio (Ciclo Carolingio)</option>
+                      <option value="Schede Personaggio (Ciclo Bretone)">Schede Personaggio (Ciclo Bretone)</option>
+                      <option value="Schede Tematiche">Schede Tematiche</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="guide-summary">Riassunto Breve</label>
+                    <input type="text" id="guide-summary" class="form-control" placeholder="Biografia ed opere principali..." required>
+                  </div>
+                  <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="guide-content">Contenuto della Guida (Testo completo)</label>
+                    <textarea id="guide-content" class="form-control" rows="6" placeholder="Testo didattico..." required></textarea>
+                  </div>
+                  <button type="submit" class="btn" style="grid-column: 1 / -1;" id="btn-save-guide">Pubblica Guida Didattica</button>
+                </form>
+              </div>
               
+              <h3 class="panel-title">Archivio Guide e Schede Studio</h3>
               <div class="table-responsive">
                 <table class="game-table" id="teacher-guides-table">
                   <thead>
@@ -1224,9 +1230,6 @@
               </div>
             </div>
           </div>
-          </div>
-
-
 
         </div>
       </section>

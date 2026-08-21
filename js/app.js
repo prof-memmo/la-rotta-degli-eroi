@@ -767,7 +767,16 @@ window.finalizzaDocente = async function() {
       if (target) {
         target.classList.add('active');
         target.scrollTop = 0;
-        setTimeout(() => window.scrollTo(0, 0), 50);
+        const mainContent = document.querySelector('.main-content') || document.getElementById('main-layout');
+        if (mainContent) mainContent.scrollTop = 0;
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        setTimeout(() => {
+          if (target) target.scrollTop = 0;
+          if (mainContent) mainContent.scrollTop = 0;
+          window.scrollTo(0, 0);
+        }, 50);
       }
       this.updateImpersonationBanner();
     },
@@ -3241,7 +3250,22 @@ window.finalizzaDocente = async function() {
       const tabEl = document.getElementById(`t-tab-${tab}`);
       if (tabEl) tabEl.classList.add('active');
 
-      if (tab === 'nodi') {
+      if (tab === 'panoramica') {
+        this.renderTeacherStats();
+        this.selectStatsCategory('students');
+      } else if (tab === 'shop') {
+        this.renderTeacherShop();
+      } else if (tab === 'aiutanti') {
+        this.renderTeacherHelpersAndArtifacts();
+      } else if (tab === 'guide') {
+        this.renderTeacherGuides();
+      } else if (tab === 'registro') {
+        this.renderTeacherLogs();
+      } else if (tab === 'tornei') {
+        this.renderTeacherTournaments();
+      } else if (tab === 'diario') {
+        this.renderTeacherDiaries();
+      } else if (tab === 'nodi') {
         const select = document.getElementById('teacher-nodi-class-select');
         if (select) {
             const allUsers = window.EroiDB.getAllUsers();
@@ -3249,10 +3273,6 @@ window.finalizzaDocente = async function() {
             select.innerHTML = '<option value="">Seleziona una classe</option>' + classes.map(c => `<option value="${c}">Classe ${c}</option>`).join('');
         }
         this.renderTeacherMapNodes();
-      }
-
-      if (tab === 'diario') {
-        this.renderTeacherDiaries();
       }
     },
 
@@ -5174,6 +5194,7 @@ window.finalizzaDocente = async function() {
 
     // --- PANNELLO ADMIN & LIVE EDITOR ---
     renderAdminDashboard: function() {
+      this.renderAdminAllUsers();
       if (window.LiveEditor && typeof window.LiveEditor.renderAdminPanel === 'function') {
         window.LiveEditor.renderAdminPanel('admin-live-editor-container');
       }
