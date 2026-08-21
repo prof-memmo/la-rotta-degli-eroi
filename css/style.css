@@ -555,24 +555,32 @@ body.logged-in .main-content {
 
 /* View Terminal Footer (Opzione 2: in coda allo scroll naturale di ciascuna vista) */
 .view-footer-copyright {
-  margin-top: 50px;
-  padding: 20px 0 30px 0;
-  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  margin-top: 30px;
+  padding: 12px 0 16px 0;
+  border-top: 1px solid rgba(212, 175, 55, 0.18);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 15px;
   width: 100%;
   flex-shrink: 0;
   box-sizing: border-box;
 }
 
+.view-footer-copyright .footer-copy {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
 .patamu-footer-badge {
-  height: 80px;
+  height: 38px;
+  max-width: 100px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.35));
-  margin: 5px;
+  filter: drop-shadow(0px 0px 6px rgba(255, 255, 255, 0.25));
+  margin: 0;
 }
 
 /* SPA Views */
@@ -4241,15 +4249,14 @@ table.game-table tr:hover td {
 
 /* Mercato */
 #view-shop {
-    padding: 15px;
+    padding: 15px 30px;
     flex-direction: column;
     min-height: auto;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 #view-shop.active { display: flex; }
 #view-shop > div {
-    flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
 }
@@ -4259,25 +4266,24 @@ table.game-table tr:hover td {
     align-content: start;
     gap: 20px;
     padding-bottom: 20px;
-    overflow-y: auto;
+    overflow: visible;
 }
 
 /* Inventario */
 #view-inventory {
-    padding: 15px;
+    padding: 15px 30px;
     flex-direction: column;
     min-height: auto;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 #view-inventory.active { display: flex; }
 #view-inventory > div {
-    flex: 1;
     display: flex;
     flex-direction: column;
 }
 #view-inventory .tab-content {
-    flex: 1;
-    min-height: 0;
+    display: none;
 }
 #view-inventory .tab-content.active {
     display: flex;
@@ -4288,10 +4294,8 @@ table.game-table tr:hover td {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     align-content: start;
     gap: 20px;
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
     padding-bottom: 20px;
+    overflow: visible;
 }
 #view-inventory .btn-secondary {
     padding: 4px 8px;
