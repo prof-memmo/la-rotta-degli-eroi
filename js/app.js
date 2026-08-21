@@ -3274,26 +3274,12 @@ window.finalizzaDocente = async function() {
       if (tab === 'panoramica') {
         this.renderTeacherStats();
         this.selectStatsCategory('students');
-      } else if (tab === 'shop') {
-        this.renderTeacherShop();
-      } else if (tab === 'aiutanti') {
-        this.renderTeacherHelpersAndArtifacts();
-      } else if (tab === 'guide') {
-        this.renderTeacherGuides();
       } else if (tab === 'registro') {
         this.renderTeacherLogs();
       } else if (tab === 'tornei') {
         this.renderTeacherTournaments();
       } else if (tab === 'diario') {
         this.renderTeacherDiaries();
-      } else if (tab === 'nodi') {
-        const select = document.getElementById('teacher-nodi-class-select');
-        if (select) {
-            const allUsers = window.EroiDB.getAllUsers();
-            const classes = [...new Set(allUsers.filter(u => u.role === 'studente' && u.classId).map(u => u.classId))];
-            select.innerHTML = '<option value="">Seleziona una classe</option>' + classes.map(c => `<option value="${c}">Classe ${c}</option>`).join('');
-        }
-        this.renderTeacherMapNodes();
       }
     },
 
@@ -3465,28 +3451,11 @@ window.finalizzaDocente = async function() {
     renderTeacherDashboard: function() {
       this.renderTeacherStats();
       this.populateClassSelects();
-      this.renderTeacherMissions();
-      this.renderTeacherShop();
-      this.renderTeacherHelpersAndArtifacts();
-      this.renderTeacherGuides();
       this.renderTeacherLogs();
       this.renderTeacherTournaments();
       this.renderTeacherDiaries();
       // Attiva pannello studenti per default (come Palestra di Riflessione)
       this.selectStatsCategory('students');
-      // Mostra/nascondi blocchi admin-only: solo Admin può creare/modificare oggetti shop, artefatti, guide
-      const user = Auth.getUser();
-      const isAdmin = user && (user.role === 'admin' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com'));
-      // CSS nasconde [data-admin-only="true"] con !important.
-      // Per admin: sovrascriviamo con setProperty(...,'important') sull'inline style.
-      // Per non-admin: removeProperty ripristina il controllo CSS (pannello resta nascosto).
-      document.querySelectorAll('#view-teacher-dashboard [data-admin-only="true"]').forEach(el => {
-        if (isAdmin) {
-          el.style.setProperty('display', 'block', 'important');
-        } else {
-          el.style.removeProperty('display');
-        }
-      });
     },
 
     renderTeacherStats: function() {
