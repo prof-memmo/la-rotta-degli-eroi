@@ -647,19 +647,28 @@ window.finalizzaStudente = async function() {
     },
 
     // --- NAVIGATION & ROUTING ---
-    navigateTo: function(viewId) {
+    navigateTo: async function(viewId) {
       // Use the new Auth object
       const isLogged = typeof Auth !== 'undefined' && Auth.isLoggedIn ? Auth.isLoggedIn() : false;
       const user = isLogged ? Auth.getUser() : null;
       
       // Protezione delle rotte in base al ruolo
-      const publicViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo'];
+      const publicViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo', 'view-regolamento'];
       const studentViews = ['view-student-dashboard', 'view-map', 'view-diario', 'view-missions', 'view-shop', 'view-inventory', 'view-guides', 'view-regolamento', 'view-pausa-obbligatoria'];
       const teacherViews = ['view-teacher-dashboard', 'view-guides', 'view-regolamento', 'view-map', 'view-diario', 'view-shop', 'view-inventory'];
       const adminViews = ['view-admin-dashboard', 'view-teacher-dashboard', 'view-guides', 'view-regolamento', 'view-map', 'view-diario', 'view-shop', 'view-inventory'];
 
       if (!isLogged || !user) {
-        // Forza login se non autenticato
+        // Se non autenticato e la vista è pubblica
+        const isTargetPublic = publicViews.includes(viewId);
+        const finalPublicView = isTargetPublic ? viewId : 'view-welcome';
+        
+        // Sblocca eventuale overlay se siamo su una vista pubblica
+        if (window.HubSubscriptionGuard) {
+            window.HubSubscriptionGuard.hideBlockOverlay();
+        }
+
+        // Forza login / visualizzazione pubblica se non autenticato
         hideLoginOverlay();
         document.body.classList.remove('logged-in');
         document.getElementById('main-sidebar').style.display = 'none';
@@ -671,7 +680,7 @@ window.finalizzaStudente = async function() {
         // Genera i bottoni disabilitati per il login
         this.generateNavbarLinks(null);
         
-        this.switchActiveView('view-welcome');
+        this.switchActiveView(finalPublicView);
         return;
       }
 
@@ -679,12 +688,33 @@ window.finalizzaStudente = async function() {
       hideLoginOverlay();
 
       // Se autenticato e chiede login/welcome, reindirizza subito alla dashboard appropriata
-      if (publicViews.includes(viewId)) {
+      if (['view-login', 'view-welcome'].includes(viewId)) {
          if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') {
              viewId = 'view-student-dashboard';
          } else if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') {
              viewId = 'view-teacher-dashboard';
          }
+      }
+
+      // Controllo HubSubscriptionGuard sulle viste private
+      const isPublic = publicViews.includes(viewId);
+      if (window.HubSubscriptionGuard) {
+          if (isPublic) {
+              window.HubSubscriptionGuard.hideBlockOverlay();
+          } else {
+              let checkUser = user;
+              if ((user.role === 'studente' || user.role === 'student') && user.teacherId) {
+                  checkUser = { ...user, uid: user.teacherId };
+              }
+              const isAllowed = await window.HubSubscriptionGuard.verifyAccess({
+                  user: checkUser,
+                  role: user.role,
+                  isPublicView: false
+              });
+              if (!isAllowed) {
+                  return; // Blocco attivo: interrompi il rendering della vista privata
+              }
+          }
       }
 
       // Hide sidebar/header during onboarding
