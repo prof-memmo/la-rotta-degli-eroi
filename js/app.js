@@ -858,7 +858,7 @@ window.finalizzaStudente = async function() {
           levelText = roleText;
           
           dropdownHtml = `
-            <div class="dropdown-class-info" style="font-family: var(--font-heading); color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.1); padding-bottom: 8px;">
+            <div class="dropdown-class-info" style="font-family: var(--font-heading); color: var(--gold);">
               <strong>${user.name}</strong><br>
               <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-body); text-transform: uppercase;">${roleText}</span>
             </div>
@@ -892,7 +892,7 @@ window.finalizzaStudente = async function() {
               </div>
           </div>
 
-          <div class="dropdown-legal-btns" style="display: flex; flex-direction: column; gap: 5px;">
+          <div class="dropdown-legal-btns" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px;">
             <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openEditProfileModal()" style="width: 100%;">
               <i class="fa-solid fa-user-gear"></i> Modifica Profilo
             </button>
@@ -907,22 +907,6 @@ window.finalizzaStudente = async function() {
             <button class="btn btn-secondary dropdown-sm-btn" onclick="window.showContattiModal()" style="width: 100%;">
               <i class="fa-solid fa-envelope"></i> Contatti
             </button>
-          </div>
-          
-          <!-- Link dashboard nel dropdown -->
-          <div class="dropdown-dashboard-link" style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
-            ${user.role === 'admin' ? `
-              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('view-teacher-dashboard')" style="background: rgba(212,175,55,0.1); border-color: var(--gold); color: var(--gold); font-weight: 700;">
-                <i class="fa-solid fa-chalkboard-user"></i> 👨‍🏫 Pannello Docente
-              </button>
-              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('view-admin-dashboard')" style="background: rgba(212,175,55,0.25); border-color: var(--gold); color: var(--gold); font-weight: 700;">
-                <i class="fa-solid fa-shield-halved"></i> 🛡️ Dashboard Admin
-              </button>
-            ` : `
-              <button class="btn btn-secondary dropdown-sm-btn dropdown-dashboard-btn" onclick="EroiApp.closeMobileDropdown && EroiApp.closeMobileDropdown(); EroiApp.navigateTo('${(user.role === 'docente' || user.role === 'teacher') ? 'view-teacher-dashboard' : 'view-student-dashboard'}')">
-                <i class="fa-solid fa-gauge"></i> ${(user.role === 'docente' || user.role === 'teacher') ? '👨‍🏫 Pannello Docente' : '🎮 Dashboard Studente'}
-              </button>
-            `}
           </div>
           
           <div class="dropdown-actions">
