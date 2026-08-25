@@ -2282,9 +2282,17 @@ window.finalizzaStudente = async function() {
           const editBtn = (window.LiveEditor && typeof window.LiveEditor.renderBtn === 'function')
             ? window.LiveEditor.renderBtn(`mission_${missionId}_q${qIndex}`, { q: qData.q })
             : '';
+          const levelKey = qData.level || (qIndex < 3 ? 'facile' : (qIndex < 7 ? 'intermedio' : 'avanzato'));
+          const levelBadges = {
+            facile: '<span style="font-size:0.72rem; font-weight:700; background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.4); padding:2px 7px; border-radius:4px; margin-left:8px; vertical-align:middle;">🟢 Facile</span>',
+            intermedio: '<span style="font-size:0.72rem; font-weight:700; background:rgba(234,179,8,0.15); color:#fde047; border:1px solid rgba(234,179,8,0.4); padding:2px 7px; border-radius:4px; margin-left:8px; vertical-align:middle;">🟡 Intermedio</span>',
+            avanzato: '<span style="font-size:0.72rem; font-weight:700; background:rgba(59,130,246,0.15); color:#60a5fa; border:1px solid rgba(59,130,246,0.4); padding:2px 7px; border-radius:4px; margin-left:8px; vertical-align:middle;">🔵 Avanzato</span>',
+            sfida: '<span style="font-size:0.72rem; font-weight:700; background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.4); padding:2px 7px; border-radius:4px; margin-left:8px; vertical-align:middle;">🟣 Sfida</span>'
+          };
+          const lvlBadge = levelBadges[levelKey] || levelBadges.facile;
           return `
             <div class="quiz-question-box" data-correct="${qData.correct}">
-              <p class="quiz-question-text">${qIndex + 1}. ${qData.q} ${editBtn}</p>
+              <p class="quiz-question-text">${qIndex + 1}. ${qData.q} ${lvlBadge} ${editBtn}</p>
               <div class="quiz-options">
                 ${qData.a.map((opt, optIndex) => `
                   <div class="quiz-option" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${optIndex})">

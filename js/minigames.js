@@ -493,10 +493,10 @@
       const topicBadge = data.topic ? `<span style="font-size:0.75rem; background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.3); padding:2px 10px; border-radius:4px; color:var(--gold); margin-left:8px;">${data.topic}</span>` : '';
 
       const typeLabels = {
-        impiccato: '🎭 Impiccato',
-        puzzle: '🧩 Riordina la Frase',
-        cloze: '📝 Cloze — Completa il Testo',
-        versi: '📜 Riordina i Versi'
+        impiccato: '🎭 Impiccato <span style="font-size:0.75rem; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); padding:2px 8px; border-radius:4px; color:#4ade80; font-weight:700; margin-left:6px;">🟢 Facile</span>',
+        puzzle: '🧩 Riordina la Frase <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#fde047; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        cloze: '📝 Cloze — Completa il Testo <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#fde047; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        versi: '📜 Riordina i Versi <span style="font-size:0.75rem; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); padding:2px 8px; border-radius:4px; color:#60a5fa; font-weight:700; margin-left:6px;">🔵 Avanzato</span>'
       };
       title.innerHTML = (typeLabels[type] || type) + topicBadge;
 
