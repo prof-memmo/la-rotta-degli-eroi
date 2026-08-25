@@ -12,6 +12,7 @@
     // --- PRIMO VIAGGIO ---
     quiz_inizio: {
       topic: "Concetti di base dell'Epica",
+      curiosita: "Gli aedi recitavano i poemi interamente a memoria accompagnati dalla cetra: il ritmo metrico dell'esametro serviva proprio come supporto mnemonico!",
       impiccato: [
         { word: "MITO", hint: "Racconto sacro che spiega fenomeni naturali" },
         { word: "EPICA", hint: "Genere letterario delle grandi gesta eroiche" },
@@ -43,6 +44,7 @@
 
     quiz_fondazione: {
       topic: "Luoghi e Miti di Fondazione",
+      curiosita: "Il mito dell'amore tragico tra Didone ed Enea fu elaborato dai poeti latini per spiegare l'origine ancestrale della rivalità tra Roma e Cartagine nelle guerre puniche.",
       impiccato: [
         { word: "TROIA", hint: "Città dell'Asia Minore, distrutta dopo 10 anni di assedio" },
         { word: "ROMA", hint: "Città eterna fondata da Romolo, legata al mito di Enea" },
@@ -73,6 +75,7 @@
 
     quiz_autori: {
       topic: "Gli Autori dell'Epica",
+      curiosita: "Omero era descritto come cieco perché nell'antichità la cecità era vista come dono divino che permetteva di 'vedere' la verità interiore e il volere degli dei.",
       impiccato: [
         { word: "OMERO", hint: "Il leggendario aedo cieco autore di Iliade e Odissea" },
         { word: "VIRGILIO", hint: "Il sommo poeta romano autore dell'Eneide" },
@@ -104,6 +107,7 @@
 
     quiz_opere: {
       topic: "Le Opere dell'Epica Classica",
+      curiosita: "Il nome 'Iliade' deriva da 'Ilio', il nome originario e poetico della rocca di Troia fondata dal mitico re Ilo!",
       impiccato: [
         { word: "ILIADE", hint: "24 canti, l'ira di Achille contro i Troiani" },
         { word: "ODISSEA", hint: "24 canti, il viaggio di Ulisse verso Itaca" },
@@ -138,6 +142,7 @@
     // --- MITOLOGIA ---
     mit_caos: {
       topic: "Il Caos Primordiale e le Origini",
+      curiosita: "Nella mitologia greca, 'Caos' significava letteralmente 'spazio aperto / voragine', non disordine come lo intendiamo oggi!",
       impiccato: [
         { word: "CAOS", hint: "Il vuoto primordiale da cui nacquero gli dei" },
         { word: "GEA", hint: "La Terra, prima dea nata dal Caos" },
@@ -168,6 +173,7 @@
 
     mit_dei: {
       topic: "Gli Dei dell'Olimpo",
+      curiosita: "Il monte Olimpo in Tessaglia (2.917 m) è la vetta più alta della Grecia. Si riteneva che i suoi picchi immersi nelle nubi fossero inaccessibili ai mortali.",
       impiccato: [
         { word: "ZEUS", hint: "Re degli dei, signore del fulmine" },
         { word: "ERA", hint: "Regina dell'Olimpo, dea del matrimonio" },
@@ -198,6 +204,7 @@
     // --- ILIADE ---
     ili_achille: {
       topic: "L'Iliade: Achille e la Guerra di Troia",
+      curiosita: "L'ira di Achille (in greco 'mênis') è il motore dell'intera Iliade: un sentimento devastante che si placherà solo quando restituirà il corpo di Ettore al vecchio padre Priamo.",
       impiccato: [
         { word: "ACHILLE", hint: "Il più forte dei Greci, ucciso da una freccia al tallone" },
         { word: "ETTORE", hint: "Il più nobile guerriero troiano, ucciso da Achille" },
@@ -229,6 +236,7 @@
     // --- ODISSEA ---
     od_viaggio: {
       topic: "L'Odissea: Il Viaggio di Ulisse",
+      curiosita: "L'arma più potente di Ulisse non è la spada ma la 'mêtis': l'intelligenza pratica, la prudenza e l'astuzia strategica che gli permettono di superare ogni prova.",
       impiccato: [
         { word: "ULISSE", hint: "Re di Itaca dal multiforme ingegno" },
         { word: "PENELOPE", hint: "La moglie fedele che tesse e distesse la tela" },
@@ -260,6 +268,7 @@
     // --- ENEIDE ---
     en_enea: {
       topic: "L'Eneide: Il Destino di Enea",
+      curiosita: "A differenza degli eroi greci spinti dalla gloria personale, Enea è guidato dal 'Fato' e si sacrifica per la futura grandezza della civiltà romana.",
       impiccato: [
         { word: "ENEA", hint: "L'eroe troiano destinato a fondare la stirpe romana" },
         { word: "DIDONE", hint: "La regina di Cartagine innamorata di Enea" },
@@ -289,6 +298,7 @@
     },
     car_orlando: {
       topic: "Ciclo Carolingio: Carlo Magno e i Paladini",
+      curiosita: "L'elsa d'oro della spada Durendal custodiva secondo il poema preziose reliquie, simboleggiando la difesa della cristianità.",
       impiccato: [
         { word: "ORLANDO", hint: "Il più valoroso paladino di Carlo Magno" },
         { word: "DURENDAL", hint: "La spada indistruttibile di Orlando" },
@@ -311,6 +321,7 @@
     },
     bre_artu: {
       topic: "Ciclo Bretone: Re Artù e la Tavola Rotonda",
+      curiosita: "La Tavola Rotonda fu ideata circolare affinché nessun cavaliere occupasse una posizione di testa: tutti i cavalieri avevano pari dignità e diritto di parola.",
       impiccato: [
         { word: "CAMELOT", hint: "Il leggendario castello di Re Artù" },
         { word: "EXCALIBUR", hint: "La leggendaria spada estratta dalla roccia" },
@@ -335,6 +346,7 @@
     },
     nib_sigfrido: {
       topic: "Epica Germanica: Il Canto dei Nibelunghi",
+      curiosita: "Il punto debole di Sigfrido (la foglia di tiglio tra le scapole) riprende l'antico mito del tallone di Achille: nessun eroe è completamente invulnerabile.",
       impiccato: [
         { word: "SIGFRIDO", hint: "L'eroe invulnerabile che uccise il drago" },
         { word: "FAFNIR", hint: "Il drago custode del tesoro dei Nibelunghi" },
@@ -358,6 +370,7 @@
 
     quiz_videogiochi: {
       topic: "I Videogiochi",
+      curiosita: "Il termine 'avatar' deriva dall'antico sanscrito induista e indicava la discesa di una divinità sulla Terra in forma visibile!",
       impiccato: [
         { word: "VIDEOGIOCO", hint: "Dispositivo elettronico interattivo con schermo" },
         { word: "MINECRAFT", hint: "Il videogioco più venduto della storia" },
@@ -387,6 +400,7 @@
   // Contenuto di default per missioni senza dati specifici
   const DEFAULT_DATA = {
     topic: "Epica Classica e Medievale",
+    curiosita: "I poemi epici venivano tramandati oralmente per generazioni prima di essere trascritti ad Atene sotto il governo di Pisistrato nel VI secolo a.C.!",
     impiccato: [
       { word: "ACHILLE", hint: "Il più forte guerriero greco dell'Iliade" },
       { word: "ODISSEA", hint: "Poema omerico sul ritorno di Ulisse" },
@@ -552,15 +566,28 @@
       });
       kb += '</div>';
 
+      const buttonsBar = `
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-secondary" style="background:rgba(212,175,55,0.15);border:1px solid var(--gold);color:var(--gold);font-weight:600;" onclick="EroiMinigames.hintImpiccato()"><i class="fa-solid fa-lightbulb"></i> Aiuto: Svela Lettera (-2 🪙)</button>
+          <button class="btn btn-secondary" style="background:rgba(255,255,255,0.05);color:#aaa;" onclick="EroiMinigames.skipCurrent('impiccato')"><i class="fa-solid fa-forward-step"></i> Passa (BES)</button>
+        </div>`;
+
+      const curiositaHtml = data.curiosita ? `
+        <div style="background:rgba(212,175,55,0.08);border-left:3px solid var(--gold);padding:8px 12px;border-radius:4px;margin-top:12px;font-size:0.8rem;color:var(--text-light);text-align:left;">
+          💡 <strong>Curiosità del Mito:</strong> ${data.curiosita}
+        </div>` : '';
+
       let result = '';
       if (won) {
         result = `<div style="background:rgba(22,163,74,0.15);border:1px solid #16a34a;border-radius:10px;padding:16px;text-align:center;margin-top:16px;">
           <div style="color:#16a34a;font-weight:bold;font-size:1.1rem;">🎉 Hai indovinato! +20 XP, +10 Dracme</div>
+          ${curiositaHtml}
           <button class="btn" style="margin-top:12px;" onclick="EroiMinigames.rewardAndNext('impiccato',20,10)">Nuova parola</button>
         </div>`;
       } else if (lost) {
         result = `<div style="background:rgba(239,68,68,0.1);border:1px solid #ef4444;border-radius:10px;padding:16px;text-align:center;margin-top:16px;">
           <div style="color:#ef4444;font-weight:bold;">💀 La parola era: <span style="color:var(--gold);">${word}</span></div>
+          ${curiositaHtml}
           <button class="btn btn-secondary" style="margin-top:12px;" onclick="EroiMinigames.retryImpiccato()">Riprova</button>
         </div>`;
       }
@@ -578,6 +605,7 @@
             <div style="text-align:center;padding:14px 0;letter-spacing:6px;">${wordDisplay}</div>
             ${wrongLetters.length ? `<div style="font-size:0.8rem;color:#ef4444;margin-bottom:6px;">Lettere sbagliate: ${wrongLetters.join(', ')}</div>` : ''}
             ${kb}
+            ${!won && !lost ? buttonsBar : ''}
           </div>
         </div>
         ${result}`;
@@ -610,6 +638,7 @@
 
     renderPuzzle: function(container) {
       const s = puzzleState;
+      const data = getData(currentMissionId);
       const correct = s.selected.join(' ') === s.ex.solution;
 
       const sel = s.selected.length
@@ -622,10 +651,16 @@
          onclick="EroiMinigames.puzzleAdd(${i})">${w}</button>`
       ).join('');
 
+      const curiositaHtml = data.curiosita ? `
+        <div style="background:rgba(212,175,55,0.08);border-left:3px solid var(--gold);padding:8px 12px;border-radius:4px;margin-top:12px;font-size:0.8rem;color:var(--text-light);text-align:left;">
+          💡 <strong>Curiosità del Mito:</strong> ${data.curiosita}
+        </div>` : '';
+
       const resultHtml = correct ? `
         <div style="background:rgba(22,163,74,0.15);border:1px solid #16a34a;border-radius:10px;padding:16px;text-align:center;margin-top:16px;">
           <div style="color:#16a34a;font-weight:bold;font-size:1.1rem;">✅ Perfetto! Frase ricostruita! +15 XP</div>
           <div style="font-size:0.83rem;color:var(--text-muted);margin-top:5px;">Fonte: <em>${s.ex.source}</em></div>
+          ${curiositaHtml}
           <button class="btn" style="margin-top:12px;" onclick="EroiMinigames.rewardAndNext('puzzle',15,8)">Nuova frase</button>
         </div>` : '';
 
@@ -636,6 +671,10 @@
         <div style="min-height:55px;">${rem}</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
           <button class="btn btn-secondary" onclick="EroiMinigames.puzzleReset()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          ${!correct ? `
+            <button class="btn btn-secondary" style="background:rgba(212,175,55,0.15);border:1px solid var(--gold);color:var(--gold);font-weight:600;" onclick="EroiMinigames.hintPuzzle()"><i class="fa-solid fa-lightbulb"></i> Aiuto: Prossima Parola (-2 🪙)</button>
+            <button class="btn btn-secondary" style="background:rgba(255,255,255,0.05);color:#aaa;" onclick="EroiMinigames.skipCurrent('puzzle')"><i class="fa-solid fa-forward-step"></i> Passa (BES)</button>
+          ` : ''}
         </div>
         ${resultHtml}`;
     },
@@ -688,6 +727,8 @@
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button class="btn" onclick="EroiMinigames.verifyCloze()"><i class="fa-solid fa-check"></i> Verifica</button>
+          <button class="btn btn-secondary" style="background:rgba(212,175,55,0.15);border:1px solid var(--gold);color:var(--gold);font-weight:600;" onclick="EroiMinigames.hintCloze()"><i class="fa-solid fa-lightbulb"></i> Aiuto: Iniziali (-2 🪙)</button>
+          <button class="btn btn-secondary" style="background:rgba(255,255,255,0.05);color:#aaa;" onclick="EroiMinigames.skipCurrent('cloze')"><i class="fa-solid fa-forward-step"></i> Passa (BES)</button>
           <button class="btn btn-secondary" onclick="EroiMinigames.retryCurrentCloze()"><i class="fa-solid fa-dice"></i> Nuovo esercizio</button>
         </div>
         <div id="cloze-result" style="margin-top:14px;"></div>`;
@@ -697,6 +738,7 @@
 
     verifyCloze: function() {
       const s = clozeState;
+      const data = getData(currentMissionId);
       // Prendi valori dagli input
       s.ex.blanks.forEach((_, i) => {
         const inp = document.getElementById(`cloze-${i}`);
@@ -717,14 +759,22 @@
 
       const res = document.getElementById('cloze-result');
       if (!res) return;
+
+      const curiositaHtml = data.curiosita ? `
+        <div style="background:rgba(212,175,55,0.08);border-left:3px solid var(--gold);padding:8px 12px;border-radius:4px;margin-top:12px;font-size:0.8rem;color:var(--text-light);text-align:left;">
+          💡 <strong>Curiosità del Mito:</strong> ${data.curiosita}
+        </div>` : '';
+
       if (correct === s.ex.blanks.length) {
         res.innerHTML = `<div style="background:rgba(22,163,74,0.15);border:1px solid #16a34a;border-radius:10px;padding:16px;text-align:center;">
           <div style="color:#16a34a;font-weight:bold;font-size:1.1rem;">🎉 Perfetto! Tutte le risposte corrette! +25 XP</div>
+          ${curiositaHtml}
           <button class="btn" style="margin-top:10px;" onclick="EroiMinigames.rewardAndNext('cloze',25,12)">Nuovo esercizio</button>
         </div>`;
       } else {
         res.innerHTML = `<div style="background:rgba(245,158,11,0.1);border:1px solid #f59e0b;border-radius:10px;padding:16px;text-align:center;">
           <div style="color:#f59e0b;font-weight:bold;">${correct}/${s.ex.blanks.length} corrette. Le risposte sono rivelate in oro.</div>
+          ${curiositaHtml}
           <button class="btn btn-secondary" style="margin-top:10px;" onclick="EroiMinigames.retryCurrentCloze()">Riprova con nuovo testo</button>
         </div>`;
       }
@@ -749,6 +799,7 @@
 
     renderVersi: function(container) {
       const s = versiState;
+      const data = getData(currentMissionId);
       const isComplete = s.ordered.length === s.ex.lines.length;
       const isCorrect = isComplete && s.ordered.every((l, i) => l === s.ex.lines[i]);
 
@@ -772,18 +823,25 @@
         </div>`
       ).join('');
 
+      const curiositaHtml = data.curiosita ? `
+        <div style="background:rgba(212,175,55,0.08);border-left:3px solid var(--gold);padding:8px 12px;border-radius:4px;margin-top:12px;font-size:0.8rem;color:var(--text-light);text-align:left;">
+          💡 <strong>Curiosità del Mito:</strong> ${data.curiosita}
+        </div>` : '';
+
       let resultHtml = '';
       if (isComplete) {
         if (isCorrect) {
           resultHtml = `<div style="background:rgba(22,163,74,0.15);border:1px solid #16a34a;border-radius:10px;padding:16px;text-align:center;margin-top:14px;">
             <div style="color:#16a34a;font-weight:bold;font-size:1.1rem;">🏆 Eccellente! Versi nell'ordine corretto! +30 XP</div>
             <div style="font-size:0.84rem;color:var(--text-muted);margin-top:5px;"><em>${s.ex.title}</em></div>
+            ${curiositaHtml}
             <button class="btn" style="margin-top:12px;" onclick="EroiMinigames.rewardAndNext('versi',30,15)">Nuovo testo</button>
           </div>`;
         } else {
           resultHtml = `<div style="background:rgba(245,158,11,0.1);border:1px solid #f59e0b;border-radius:10px;padding:14px;margin-top:14px;">
             <div style="color:#f59e0b;font-weight:bold;margin-bottom:8px;">Quasi! L'ordine corretto era:</div>
             ${s.ex.lines.map((l,i)=>`<div style="font-size:0.83rem;color:var(--text-muted);font-style:italic;margin-bottom:3px;">${i+1}. "${l}"</div>`).join('')}
+            ${curiositaHtml}
             <button class="btn btn-secondary" style="margin-top:10px;" onclick="EroiMinigames.versiReset()">Riprova</button>
           </div>`;
         }
@@ -806,6 +864,10 @@
         </div>
         <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
           <button class="btn btn-secondary" onclick="EroiMinigames.versiReset()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          ${!isComplete ? `
+            <button class="btn btn-secondary" style="background:rgba(212,175,55,0.15);border:1px solid var(--gold);color:var(--gold);font-weight:600;" onclick="EroiMinigames.hintVersi()"><i class="fa-solid fa-lightbulb"></i> Aiuto: Prossimo Verso (-2 🪙)</button>
+            <button class="btn btn-secondary" style="background:rgba(255,255,255,0.05);color:#aaa;" onclick="EroiMinigames.skipCurrent('versi')"><i class="fa-solid fa-forward-step"></i> Passa (BES)</button>
+          ` : ''}
         </div>
         ${resultHtml}`;
     },
@@ -829,6 +891,90 @@
       versiState.remaining = [...versiState.shuffled];
       const c = document.getElementById('minigame-content');
       if (c) this.renderVersi(c);
+    },
+
+    // =====================================================
+    // LOGICA AIUTI E SALTO DOMANDA (INCLUSIVITÀ BES / DSA)
+    // =====================================================
+    useDracmeForHint: function(cost, callback) {
+      try {
+        const user = window.EroiAuth ? window.EroiAuth.getCurrentUser() : null;
+        if (user && user.role === 'student' && window.EroiGame) {
+          const profile = window.EroiGame.getProfile ? window.EroiGame.getProfile(user.email) : null;
+          const currentDracme = (profile && profile.dracme !== undefined) ? profile.dracme : 10;
+          if (currentDracme >= cost) {
+            window.EroiGame.addDracme(user.email, -cost);
+            if (window.EroiApp && window.EroiApp.showToast) {
+              window.EroiApp.showToast(`-${cost} Dracme per l'indizio! (Saldo: ${currentDracme - cost} 🪙)`, 'info');
+            }
+          } else {
+            if (window.EroiApp && window.EroiApp.showToast) {
+              window.EroiApp.showToast(`Indizio concesso (Supporto Inclusivo)!`, 'info');
+            }
+          }
+        }
+      } catch(e) { console.warn('Hint currency error:', e); }
+      callback();
+    },
+
+    hintImpiccato: function() {
+      if (!impiccatoState.word) return;
+      this.useDracmeForHint(2, () => {
+        const missing = impiccatoState.word.split('').filter(l => !impiccatoState.guessed.has(l));
+        if (missing.length) {
+          const randomL = missing[Math.floor(Math.random() * missing.length)];
+          this.guessLetter(randomL);
+        }
+      });
+    },
+
+    hintPuzzle: function() {
+      if (!puzzleState.ex) return;
+      this.useDracmeForHint(2, () => {
+        const fullWords = puzzleState.ex.solution.split(' ');
+        const nextIdx = puzzleState.selected.length;
+        if (nextIdx < fullWords.length) {
+          const expectedWord = fullWords[nextIdx];
+          const remIndex = puzzleState.remaining.indexOf(expectedWord);
+          if (remIndex !== -1) {
+            this.puzzleAdd(remIndex);
+          }
+        }
+      });
+    },
+
+    hintCloze: function() {
+      if (!clozeState.ex) return;
+      this.useDracmeForHint(2, () => {
+        clozeState.ex.blanks.forEach((b, i) => {
+          const inp = document.getElementById(`cloze-${i}`);
+          if (inp && (!inp.value || inp.value === '___')) {
+            inp.value = b.charAt(0) + '...';
+            clozeState.answers[i] = b.charAt(0);
+          }
+        });
+      });
+    },
+
+    hintVersi: function() {
+      if (!versiState.ex) return;
+      this.useDracmeForHint(2, () => {
+        const nextIdx = versiState.ordered.length;
+        if (nextIdx < versiState.ex.lines.length) {
+          const expectedLine = versiState.ex.lines[nextIdx];
+          const remIndex = versiState.remaining.indexOf(expectedLine);
+          if (remIndex !== -1) {
+            this.versiAdd(remIndex);
+          }
+        }
+      });
+    },
+
+    skipCurrent: function(type) {
+      if (window.EroiApp && window.EroiApp.showToast) {
+        window.EroiApp.showToast('Esercizio saltato. Proseguiamo con il prossimo!', 'info');
+      }
+      this.startMinigame(type, currentMissionId);
     },
 
     // =====================================================
