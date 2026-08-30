@@ -896,6 +896,9 @@ window.finalizzaStudente = async function() {
             <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openEditProfileModal()" style="width: 100%;">
               <i class="fa-solid fa-user-gear"></i> Modifica Profilo
             </button>
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="window.openSharedModal('invita')" style="width: 100%;">
+              <i class="fa-solid fa-paper-plane" style="color:#ffffff;"></i> Invita un Collega
+            </button>
             <div style="display: flex; gap: 5px; width: 100%;">
               <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('privacy')" style="flex: 1;">
                 <i class="fa-solid fa-shield"></i> Privacy
