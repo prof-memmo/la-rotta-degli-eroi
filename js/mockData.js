@@ -28,85 +28,9 @@ window.EroiMockData = {
     ]
   },
 
-  users: {
-    "prof.memmo@gmail.com": {
-      email: "prof.memmo@gmail.com",
-      name: "Prof. Memmo",
-      role: "admin",
-      passwordHash: "248bba23ba97be555f52f60049174aa5f7e2bfd39b72345f21e6a695899b50c9" // "antigravity2026"
-    },
-    "docente.aurora@gmail.com": {
-      email: "docente.aurora@gmail.com",
-      name: "Prof.ssa Aurora",
-      role: "teacher",
-      passwordHash: "dafdf80d25755872f4255e5bfea666c98a5b16b86c4085485a16578c07ce1079" // "storia123"
-    },
-    "achille.studente@gmail.com": {
-      email: "achille.studente@gmail.com",
-      name: "Achille Rossi",
-      role: "student",
-      classId: "1A",
-      passwordHash: "04b51e5ae5cb21575540518a2743f37b8e87f9f358f974ca3dedbee53424c054" // "guerra123"
-    },
-    "ulisse.studente@gmail.com": {
-      email: "ulisse.studente@gmail.com",
-      name: "Ulisse Bianchi",
-      role: "student",
-      classId: "1A",
-      passwordHash: "d3a5779693588af113f543d9789a1380e9169be769de1adebd32e82e9982ffbc" // "viaggio123"
-    },
-    "artu.studente@gmail.com": {
-      email: "artu.studente@gmail.com",
-      name: "Arturo Verdi",
-      role: "student",
-      classId: "1B",
-      passwordHash: "fffb7d65fd8d6772a4ebda9b2200d7cf44fa253ec059712964fc71f33dfc6dd0" // "tavolaronda"
-    }
-  },
-
-  classes: {
-    "1A": { id: "1A", name: "Classe 1ª A Epica", code: "ER-1A99", teacher: "docente.aurora@gmail.com", collaborators: [], school: "Scuola Statale Olimpo", city: "Atene" },
-    "1B": { id: "1B", name: "Classe 1ª B Cavalieri", code: "ER-1B88", teacher: "docente.aurora@gmail.com", collaborators: [], school: "Scuola Statale Olimpo", city: "Atene" }
-  },
-
-  students_profile: {
-    "achille.studente@gmail.com": {
-      email: "achille.studente@gmail.com",
-      name: "Achille Rossi",
-      avatarClass: "Guerriero",
-      level: "Viaggiatore",
-      xp: 120,
-      dracme: 75,
-      stats: { coraggio: 18, astuzia: 8, sapienza: 6, onore: 14 },
-      activeHelper: null,
-      activeArtifacts: ["scudo_atena"],
-      unlockedAreas: ["Accademia", "Miti di Fondazione", "Biblioteca", "Archivio", "Olimpo", "Creta", "Troia"]
-    },
-    "ulisse.studente@gmail.com": {
-      email: "ulisse.studente@gmail.com",
-      name: "Ulisse Bianchi",
-      avatarClass: "Navigatore",
-      level: "Avventuriero",
-      xp: 450,
-      dracme: 140,
-      stats: { coraggio: 12, astuzia: 20, sapienza: 15, onore: 10 },
-      activeHelper: null,
-      activeArtifacts: ["sandali_alati"],
-      unlockedAreas: ["Accademia", "Miti di Fondazione", "Biblioteca", "Archivio", "Olimpo", "Creta", "Troia", "Itaca"]
-    },
-    "artu.studente@gmail.com": {
-      email: "artu.studente@gmail.com",
-      name: "Arturo Verdi",
-      avatarClass: "Esploratore",
-      level: "Viaggiatore",
-      xp: 80,
-      dracme: 25,
-      stats: { coraggio: 10, astuzia: 12, sapienza: 10, onore: 12 },
-      activeHelper: null,
-      activeArtifacts: [],
-      unlockedAreas: ["Accademia"]
-    }
-  },
+  users: {},
+  classes: {},
+  students_profile: {},
 
   levels: [
     { name: "Viaggiatore", xpRequired: 0 },

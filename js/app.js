@@ -3437,7 +3437,10 @@ window.finalizzaStudente = async function() {
       }
     },
 
-    renderTeacherDashboard: function() {
+    renderTeacherDashboard: async function() {
+      if (window.EroiDB.syncCloudClasses) {
+        await window.EroiDB.syncCloudClasses();
+      }
       this.renderTeacherStats();
       this.populateClassSelects();
       this.renderTeacherLogs();
@@ -3448,7 +3451,6 @@ window.finalizzaStudente = async function() {
     },
 
     renderTeacherStats: function() {
-      const allUsers = window.EroiDB.getAllUsers();
       const user = Auth.getUser();
       const isAdmin = user && user.role === 'admin';
       
@@ -3458,7 +3460,8 @@ window.finalizzaStudente = async function() {
       });
       const myClassIds = myClasses.map(c => c.id);
 
-      const students = allUsers.filter(u => u.role === 'student' && (isAdmin || myClassIds.includes(u.classId)));
+      const allStudents = window.EroiDB.getAllStudents();
+      const students = allStudents.filter(s => (isAdmin || myClassIds.includes(s.classId)));
       const schools = new Set(myClasses.map(c => c.school).filter(Boolean));
 
       const colleagueEmails = new Set();
@@ -3508,6 +3511,7 @@ window.finalizzaStudente = async function() {
     renderTeacherClasses: function() {
       const classes = window.EroiDB.getClasses();
       const tbody = document.querySelector('#teacher-classes-table tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
       
       const searchInput = document.getElementById('search-class-teacher');
@@ -3528,7 +3532,7 @@ window.finalizzaStudente = async function() {
 
       filtered.forEach(c => {
         const isOwner = c.teacher === user.email || user.role === 'admin';
-        const teacherNames = [c.teacher.split('@')[0]];
+        const teacherNames = [c.teacher ? c.teacher.split('@')[0] : 'Docente'];
         if (c.collaborators) {
           c.collaborators.forEach(email => {
             teacherNames.push(email.split('@')[0]);
@@ -3550,32 +3554,29 @@ window.finalizzaStudente = async function() {
               <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteClass('${c.id}')">
                 <i class="fa-solid fa-trash"></i> Elimina
               </button>
-            ` : `
-              <button class="btn btn-secondary" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.leaveClassAsCollaborator('${c.id}')">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Abbandona
-              </button>
-            `}
+            ` : '<span style="font-size:0.75rem; color:var(--text-muted);">Collaboratore</span>'}
           </td>
         `;
         tbody.appendChild(tr);
       });
     },
 
-    deleteClass: function(classId) {
-      if (confirm(`Eliminare la classe ${classId}? Gli studenti associati non verranno eliminati, ma rimarranno senza classe.`)) {
-        window.EroiDB.deleteClass(classId);
-        this.showToast("Classe eliminata.", "success");
-        this.renderTeacherClasses();
-        this.populateClassSelects();
-        this.renderTeacherStudents();
-      }
+    deleteClass: async function(classId) {
+      if (!confirm("Sei sicuro di voler eliminare questa classe? Tutti gli studenti perderanno l'associazione.")) return;
+      await window.EroiDB.deleteClass(classId);
+      this.showToast("Classe eliminata con successo.", "success");
+      this.renderTeacherStats();
+      this.populateClassSelects();
+      this.renderTeacherClasses();
+      this.renderTeacherStudents();
     },
 
     renderTeacherStudents: function() {
       const students = window.EroiDB.getAllStudents();
-      const search = document.getElementById('search-student-teacher').value.toLowerCase();
-      const filterClass = document.getElementById('filter-class-teacher').value;
+      const search = (document.getElementById('search-student-teacher') ? document.getElementById('search-student-teacher').value : '').toLowerCase();
+      const filterClass = document.getElementById('filter-class-teacher') ? document.getElementById('filter-class-teacher').value : 'all';
       const tbody = document.querySelector('#teacher-students-table tbody');
+      if (!tbody) return;
       
       tbody.innerHTML = '';
 
@@ -3587,20 +3588,17 @@ window.finalizzaStudente = async function() {
 
       const filtered = students.filter(s => {
         const matchesSearch = (s.name || '').toLowerCase().includes(search) || (s.email || '').toLowerCase().includes(search);
-        
-        const u = window.EroiDB.getUser(s.email);
         let matchesClass = false;
         if (filterClass === 'all') {
-          matchesClass = (user.role === 'admin' || (u && u.classId && myClassIds.includes(u.classId)));
+          matchesClass = (user.role === 'admin' || myClassIds.includes(s.classId));
         } else {
-          matchesClass = (u && u.classId === filterClass);
+          matchesClass = (s.classId === filterClass);
         }
-
         return matchesSearch && matchesClass;
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nessuno studente trovato.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Nessuno studente registrato nelle classi.</td></tr>`;
         return;
       }
 
@@ -3608,18 +3606,15 @@ window.finalizzaStudente = async function() {
       const state = this.sortState.teacherStudents;
       filtered.sort((a, b) => {
           let valA, valB;
-          const uA = window.EroiDB.getUser(a.email);
-          const uB = window.EroiDB.getUser(b.email);
-          
           if (state.col === 'name') {
               valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase();
           } else if (state.col === 'class') {
-              valA = (uA && uA.classId) ? uA.classId.toLowerCase() : '';
-              valB = (uB && uB.classId) ? uB.classId.toLowerCase() : '';
+              valA = (a.className || a.classId || '').toLowerCase();
+              valB = (b.className || b.classId || '').toLowerCase();
           } else if (state.col === 'level') {
               valA = a.level || 0; valB = b.level || 0;
           } else if (state.col === 'date') {
-              valA = this.getDateValue(uA); valB = this.getDateValue(uB);
+              valA = a.joinedAt || 0; valB = b.joinedAt || 0;
           } else {
               valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase();
           }
@@ -3630,35 +3625,35 @@ window.finalizzaStudente = async function() {
       });
 
       filtered.forEach(s => {
-        const u = window.EroiDB.getUser(s.email);
         const tr = document.createElement('tr');
+        const formattedDate = s.joinedAt ? new Date(s.joinedAt).toLocaleDateString('it-IT') : 'N/D';
         tr.innerHTML = `
           <td>
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:1.4rem;">${this.getAvatarEmoji(s.avatarClass)}</span>
               <div>
-                <strong>${s.name || 'Utente Sconosciuto'}</strong><br>
-                <span style="font-size:0.75rem; color:var(--text-muted);">${s.email || 'Email non fornita'}</span>
+                <strong>${s.name || 'Studente'}</strong><br>
+                <span style="font-size:0.75rem; color:var(--text-muted);">${s.email || ''}</span>
               </div>
             </div>
           </td>
-          <td>${u ? u.classId : 'Senza classe'}</td>
-          <td><span style="color:var(--gold); font-weight:bold;">${s.level}</span></td>
-          <td style="font-size:0.85rem; color:var(--text-muted);">${u && this.getDateValue(u) > 0 ? new Date(this.getDateValue(u)).toLocaleDateString('it-IT') : 'N/D'}</td>
-          <td>${s.xp} XP / ${s.dracme} Dracme</td>
-          <td style="text-align:center;"><a href="mailto:${s.email}" title="Scrivi a ${s.name}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
+          <td>${s.className || s.classId || 'Senza classe'}</td>
+          <td><span style="color:var(--gold); font-weight:bold;">${s.level || 'Viaggiatore'}</span></td>
+          <td style="font-size:0.85rem; color:var(--text-muted);">${formattedDate}</td>
+          <td>${s.xp || 0} XP / ${s.dracme || 0} Dracme</td>
+          <td style="text-align:center;"><span title="${s.name}" style="color:var(--gold);"><i class="fa-solid fa-user-graduate"></i></span></td>
           <td>
             <div style="display:flex; gap:6px;">
               <button class="btn" style="padding:4px 8px; font-size:0.72rem; border: 1px solid var(--gold); color: var(--gold); background: transparent;" onclick="EroiApp.openStudentPreviewAll('${s.email}')" title="Preview Didattica">
                 <i class="fa-solid fa-eye"></i> Osserva
               </button>
-              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openAwardModal('${s.email}', '${s.name.replace(/'/g, "\\'")}')">
+              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openAwardModal('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}')">
                 🏆 Premia
               </button>
-              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openSpostaModal('${s.email}', '${s.name.replace(/'/g, "\\'")}', '${u ? u.classId : ''}')">
+              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openSpostaModal('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}', '${s.classId || ''}')">
                 📁 Trasferisci
               </button>
-              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.deleteStudent('${s.email}', '${s.name.replace(/'/g, "\\'")}')">
+              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.deleteStudent('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}')">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </div>

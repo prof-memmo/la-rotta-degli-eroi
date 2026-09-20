@@ -19,6 +19,27 @@
           
           // Migrazione automatica per nuove schede, missioni, aiutanti, artefatti o allineamento contenuti
           let updated = false;
+
+          // Pulizia automatica dei vecchi utenti e classi mock da localStorage
+          const mockEmails = [
+            "achille.studente@gmail.com",
+            "ulisse.studente@gmail.com",
+            "artu.studente@gmail.com",
+            "docente.aurora@gmail.com",
+            "testhero12345@gmail.com",
+            "test@example.com"
+          ];
+          if (dbState && dbState.users) {
+            mockEmails.forEach(em => {
+              if (dbState.users[em]) { delete dbState.users[em]; updated = true; }
+              if (dbState.students_profile && dbState.students_profile[em]) { delete dbState.students_profile[em]; updated = true; }
+              if (dbState.inventories && dbState.inventories[em]) { delete dbState.inventories[em]; updated = true; }
+            });
+          }
+          if (dbState && dbState.classes) {
+            if (dbState.classes["1A"] && dbState.classes["1A"].code === "ER-1A99") { delete dbState.classes["1A"]; updated = true; }
+            if (dbState.classes["1B"] && dbState.classes["1B"].code === "ER-1B88") { delete dbState.classes["1B"]; updated = true; }
+          }
           
           // Rimozione hardcoded delle vecchie lezioni rimosse
           if (dbState.study_guides) {
