@@ -66,31 +66,56 @@ window.EroiDB.getAllUsers = function() {
 window.EroiDB.syncCloudUsers = async function() {
   if (!window.fbDb) return;
   try {
+    // Sincronizza prima le classi per identificare i docenti attivi sulla Rotta
+    let classesTeachers = new Set();
+    try {
+      const clsSnap = await window.fbDb.collection('hub_classes').get().catch(() => ({ docs: [] }));
+      clsSnap.docs.forEach(cd => {
+        const cdata = cd.data() || {};
+        if (cdata.teacherEmail) classesTeachers.add(cdata.teacherEmail.toLowerCase().trim());
+        if (Array.isArray(cdata.collaboratori)) {
+          cdata.collaboratori.forEach(em => classesTeachers.add(String(em).toLowerCase().trim()));
+        }
+      });
+    } catch (_) {}
+
     const snap = await window.fbDb.collection('hub_users').get().catch(() => ({ docs: [] }));
     let changed = false;
     dbState.users = {};
+
+    const mockTestEmails = [
+      'testhero12345@gmail.com',
+      'test@example.com',
+      'docente.aurora@gmail.com',
+      'achille.studente@gmail.com',
+      'ulisse.studente@gmail.com',
+      'artu.studente@gmail.com'
+    ];
 
     snap.docs.forEach(doc => {
       const d = doc.data() || {};
       const email = (d.email || '').toLowerCase().trim();
       if (!email || email.includes('studenti.prof-memmo.local') || email.includes('@studenti.profmemmo.internal')) return;
-      
-      const mockTestEmails = [
-        'testhero12345@gmail.com',
-        'test@example.com',
-        'docente.aurora@gmail.com',
-        'achille.studente@gmail.com',
-        'ulisse.studente@gmail.com',
-        'artu.studente@gmail.com'
-      ];
       if (mockTestEmails.includes(email)) return;
       if (d.role === 'pending' || d.statusAccount === 'pending') return;
 
+      const userPlan = (d.plan || d.abbonamento || d.subscription || 'base').toLowerCase();
+      const userGioco = (d.gioco || d.game || '').toLowerCase();
+      const isAdmin = d.role === 'admin' || email === 'prof.memmo@gmail.com';
+      const isViandante = d.role === 'viandante' || d.role === 'forestiero' || userPlan === 'viandante';
+      const hasEcosystemPlan = userPlan.includes('ecosistema') || userPlan.includes('didattic');
+      const isRottaGame = userGioco.includes('eroi') || userGioco.includes('rotta');
+      const hasClasses = classesTeachers.has(email);
+
+      // Includi SOLO utenti che hanno accesso a La Rotta degli Eroi
+      if (!isAdmin && !isViandante && !hasEcosystemPlan && !isRottaGame && !hasClasses) {
+        return;
+      }
+
       let role = 'docente';
-      if (d.role === 'admin' || email === 'prof.memmo@gmail.com') role = 'admin';
-      else if (d.role === 'viandante' || d.role === 'forestiero') role = 'forestiero';
-      else if (d.role === 'docente') role = 'docente';
-      else role = d.role || 'docente';
+      if (isAdmin) role = 'admin';
+      else if (isViandante) role = 'forestiero';
+      else role = 'docente';
 
       const userObj = {
         id: doc.id,
@@ -99,6 +124,7 @@ window.EroiDB.syncCloudUsers = async function() {
           ? `${d.anagrafica.nome || ''} ${d.anagrafica.cognome || ''}`.trim()
           : (d.nome ? `${d.nome || ''} ${d.cognome || ''}`.trim() : (d.displayName || email.split('@')[0])),
         role: role,
+        plan: userPlan,
         scuola: (d.anagrafica && d.anagrafica.istituto) || d.scuola || d.school || '',
         classId: d.classId || '',
         joinedAt: d.createdAt ? (d.createdAt.toDate ? d.createdAt.toDate().getTime() : new Date(d.createdAt).getTime()) : Date.now()

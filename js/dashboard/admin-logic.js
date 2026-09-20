@@ -97,27 +97,39 @@ window.EroiApp.setAdminUserFilter = function(filter) {
 window.EroiApp.renderAdminAllUsers = async function() {
       const tbody = document.querySelector('#admin-all-users-table tbody');
       if(!tbody) return;
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Sincronizzazione utenti in corso dal cloud...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Sincronizzazione utenti in corso dal cloud...</td></tr>';
 
       try {
-        await window.EroiDB.syncCloudUsers();
+        await Promise.all([
+          window.EroiDB.syncCloudUsers(),
+          window.EroiDB.syncCloudClasses()
+        ]);
       } catch (e) {
-        console.warn("Errore durante syncCloudUsers in renderAdminAllUsers:", e);
+        console.warn("Errore durante syncCloudUsers/Classes in renderAdminAllUsers:", e);
       }
       
       const users = window.EroiDB.getAllUsers();
+      const classes = window.EroiDB.getClasses() || {};
+      const studentsProfile = dbState.students_profile || {};
       
+      // Calcolo reale studenti dai roster delle classi
+      const realStudentsCount = Object.keys(studentsProfile).length;
+
       // Update Summary Cards
-      const counts = { totale: users.length, docenti: 0, studenti: 0, forestieri: 0, scuole: 0 };
+      const counts = { totale: 0, docenti: 0, studenti: realStudentsCount, forestieri: 0, scuole: 0 };
       const scuoleSet = new Set();
       
       users.forEach(u => {
           if (u.role === 'admin' || u.role === 'teacher' || u.role === 'docente') counts.docenti++;
-          else if (u.role === 'forestiero') counts.forestieri++;
-          else counts.studenti++;
+          else if (u.role === 'forestiero' || u.role === 'viandante') counts.forestieri++;
           
           if (u.scuola && u.scuola.trim() !== '') scuoleSet.add(u.scuola.trim().toLowerCase());
       });
+      Object.values(classes).forEach(c => {
+          if (c.school && c.school.trim() !== '') scuoleSet.add(c.school.trim().toLowerCase());
+      });
+
+      counts.totale = counts.docenti + counts.forestieri + counts.studenti;
       counts.scuole = scuoleSet.size;
       
       const elTotal = document.getElementById('admin-count-total');
@@ -136,17 +148,39 @@ window.EroiApp.renderAdminAllUsers = async function() {
 
       // Applica filtro
       const filter = this.adminUserFilter || 'all';
-      let filteredUsers = users;
+      
       if (filter === 'student') {
-          filteredUsers = users.filter(u => u.role !== 'docente' && u.role !== 'admin' && u.role !== 'teacher' && u.role !== 'forestiero');
-      } else if (filter === 'teacher') {
+          // Mostra gli studenti reali associati alle classi
+          const studentEntries = Object.entries(studentsProfile);
+          if (studentEntries.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding: 1.5rem;">Nessun alunno registrato nelle classi della Rotta.</td></tr>';
+              return;
+          }
+          studentEntries.forEach(([stKey, st]) => {
+              const cls = classes[st.classId] || {};
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td><strong>${st.name || st.nickname || 'Studente'}</strong></td>
+                <td><span style="color: #64748b; font-size: 0.82rem; font-family: monospace;">Classe: ${cls.name || st.classId || 'N/D'}</span></td>
+                <td><span class="badge" style="background: #dcfce7; color: #15803d; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.75rem;">Alunno (Classe)</span></td>
+                <td style="font-size:0.82rem; color:var(--text-muted);">${cls.school || 'Scuola Hub'}</td>
+                <td style="text-align:center;"><span title="Zero-Email per minori" style="color:#94a3b8; font-size:0.8rem;">🔒 Protetto</span></td>
+                <td style="text-align:right;"><span style="font-size:0.8rem; color:#64748b;">Gestito dal Docente</span></td>
+              `;
+              tbody.appendChild(tr);
+          });
+          return;
+      }
+
+      let filteredUsers = users;
+      if (filter === 'teacher') {
           filteredUsers = users.filter(u => u.role === 'docente' || u.role === 'admin' || u.role === 'teacher');
       } else if (filter === 'forestiero') {
-          filteredUsers = users.filter(u => u.role === 'forestiero');
+          filteredUsers = users.filter(u => u.role === 'forestiero' || u.role === 'viandante');
       }
 
       if (filteredUsers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nessun utente trovato</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding: 1.5rem;">Nessun utente trovato per questo filtro.</td></tr>';
         return;
       }
 
@@ -167,22 +201,23 @@ window.EroiApp.renderAdminAllUsers = async function() {
 
       filteredUsers.forEach(u => {
         const tr = document.createElement('tr');
-        const isDocente = u.role === 'docente' || u.role === 'admin' || u.role === 'teacher';
+        const isAdmin = u.role === 'admin' || u.email === 'prof.memmo@gmail.com';
         
         tr.innerHTML = `
           <td><strong>${u.name || 'Sconosciuto'}</strong></td>
           <td>${u.email}</td>
           <td>
-            <select class="input-field" style="padding: 4px; font-size: 0.75rem; width: auto;" onchange="EroiApp.changeUserRole('${u.email}', this.value)" ${u.email === 'prof.memmo@gmail.com' ? 'disabled' : ''}>
-              <option value="student" ${u.role !== 'docente' && u.role !== 'admin' && u.role !== 'teacher' && u.role !== 'forestiero' ? 'selected' : ''}>Studente</option>
-              <option value="docente" ${u.role === 'docente' || u.role === 'admin' || u.role === 'teacher' ? 'selected' : ''}>Docente</option>
-              <option value="forestiero" ${u.role === 'forestiero' ? 'selected' : ''}>Forestiero</option>
-            </select>
+            ${isAdmin ? '<span class="badge" style="background:#fef3c7; color:#b45309; padding:2px 6px; border-radius:4px; font-weight:700; font-size:0.75rem;">Admin</span>' : `
+              <select class="input-field" style="padding: 4px; font-size: 0.75rem; width: auto;" onchange="EroiApp.changeUserRole('${u.email}', this.value)">
+                <option value="docente" ${u.role === 'docente' || u.role === 'teacher' ? 'selected' : ''}>Docente</option>
+                <option value="forestiero" ${u.role === 'forestiero' || u.role === 'viandante' ? 'selected' : ''}>Forestiero / Viandante</option>
+              </select>
+            `}
           </td>
           <td style="font-size:0.85rem; color:var(--text-muted);">${this.getDateValue(u) > 0 ? new Date(this.getDateValue(u)).toLocaleDateString('it-IT') : 'N/D'}</td>
           <td style="text-align:center;"><a href="mailto:${u.email}" title="Scrivi a ${u.name || 'Sconosciuto'}" style="color:var(--gold); text-decoration:none;"><i class="fa-solid fa-envelope"></i></a></td>
-          <td>
-            ${u.email !== 'prof.memmo@gmail.com' ? `
+          <td style="text-align:right;">
+            ${!isAdmin ? `
               <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteUserAdmin('${u.email}')">
                 <i class="fa-solid fa-trash"></i> Elimina
               </button>
