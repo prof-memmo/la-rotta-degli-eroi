@@ -74,6 +74,16 @@ window.EroiDB.syncCloudUsers = async function() {
       const d = doc.data() || {};
       const email = (d.email || '').toLowerCase().trim();
       if (!email || email.includes('studenti.prof-memmo.local') || email.includes('@studenti.profmemmo.internal')) return;
+      
+      const mockTestEmails = [
+        'testhero12345@gmail.com',
+        'test@example.com',
+        'docente.aurora@gmail.com',
+        'achille.studente@gmail.com',
+        'ulisse.studente@gmail.com',
+        'artu.studente@gmail.com'
+      ];
+      if (mockTestEmails.includes(email)) return;
       if (d.role === 'pending' || d.statusAccount === 'pending') return;
 
       let role = 'docente';
