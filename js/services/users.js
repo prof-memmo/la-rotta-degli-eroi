@@ -1,137 +1,134 @@
 window.EroiDB = window.EroiDB || {};
 
 window.EroiDB.getUser = function(email) {
-      return dbState.users[email.toLowerCase()] || null;
-    };
+  if (!email) return null;
+  return (dbState.users && dbState.users[email.toLowerCase()]) || null;
+};
 
 window.EroiDB.saveUser = function(email, userData) {
-      const key = email.toLowerCase();
-      dbState.users[key] = { ...dbState.users[key], ...userData };
-      this.save();
-    };
+  if (!email) return;
+  const key = email.toLowerCase();
+  if (!dbState.users) dbState.users = {};
+  dbState.users[key] = { ...dbState.users[key], ...userData };
+  this.save();
+};
 
 window.EroiDB.updateUserRole = async function(email, newRole) {
-      const key = email.toLowerCase();
-      if (dbState.users[key]) {
-        dbState.users[key].role = newRole;
-        this.save();
+  if (!email) return;
+  const key = email.toLowerCase();
+  if (dbState.users && dbState.users[key]) {
+    dbState.users[key].role = newRole;
+    this.save();
+  }
+  if (window.fbDb) {
+    try {
+      const q = await window.fbDb.collection('hub_users').where('email', '==', email).get();
+      if (!q.empty) {
+        await window.fbDb.collection('hub_users').doc(q.docs[0].id).update({ role: newRole });
       }
-      if (window.fbDb) {
-        try {
-          const q = await window.fbDb.collection('users').where('email', '==', email).get();
-          if (!q.empty) {
-            await window.fbDb.collection('users').doc(q.docs[0].id).update({ role: newRole });
-          }
-        } catch (e) {
-          console.error("Firestore update role error:", e);
-        }
-      }
-    };
+    } catch (e) {
+      console.error("Firestore update role error:", e);
+    }
+  }
+};
 
 window.EroiDB.deleteUser = async function(email) {
-      const key = email.toLowerCase();
-      if (dbState.users[key]) {
-        delete dbState.users[key];
-        if (dbState.students_profile[key]) {
-          delete dbState.students_profile[key];
-        }
-        if (dbState.inventories[key]) {
-          delete dbState.inventories[key];
-        }
-        this.save();
+  if (!email) return;
+  const key = email.toLowerCase();
+  if (dbState.users && dbState.users[key]) {
+    delete dbState.users[key];
+    if (dbState.students_profile && dbState.students_profile[key]) {
+      delete dbState.students_profile[key];
+    }
+    if (dbState.inventories && dbState.inventories[key]) {
+      delete dbState.inventories[key];
+    }
+    this.save();
+  }
+  if (window.fbDb) {
+    try {
+      const q = await window.fbDb.collection('hub_users').where('email', '==', email).get();
+      if (!q.empty) {
+        const batch = window.fbDb.batch();
+        q.docs.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
       }
-      // Elimina anche da Firestore per mantenere la sincronia
-      if (window.fbDb) {
-        try {
-          const q = await window.fbDb.collection('users').where('email', '==', email).get();
-          if (!q.empty) {
-            const batch = window.fbDb.batch();
-            q.docs.forEach(doc => batch.delete(doc.ref));
-            await batch.commit();
-          }
-        } catch (e) { console.error("Firestore delete user error:", e); }
-      }
-    };
+    } catch (e) {
+      console.error("Firestore delete user error:", e);
+    }
+  }
+};
 
 window.EroiDB.getAllUsers = function() {
-      return Object.values(dbState.users);
-    };
+  return Object.values(dbState.users || {});
+};
 
 window.EroiDB.syncCloudUsers = async function() {
-      if (!window.fbDb) return;
-      try {
-        let snap = await window.fbDb.collection('users').get();
-        if (snap.empty) {
-          try { snap = await window.fbDb.collection('eroi_users').get(); } catch(e){}
-        }
-        let changed = false;
-        snap.docs.forEach(doc => {
-          const d = doc.data();
-          const email = (d.email || doc.id).toLowerCase().trim();
-          if (!email || d.role === 'pending' || d.status === 'pending') return;
-          const userObj = {
-            ...d,
-            email: email,
-            name: d.name || d.nome || d.displayName || email.split('@')[0],
-            role: d.role || d.ruolo || 'student',
-            scuola: d.scuola || d.school || '',
-            classId: d.classId || d.classe || '',
-            joinedAt: d.joinedAt || d.createdAt || Date.now()
-          };
-          if (!dbState.users[email]) {
-            dbState.users[email] = userObj;
-            changed = true;
-          } else {
-            dbState.users[email] = { ...dbState.users[email], ...userObj };
-            changed = true;
-          }
-        });
-        if (changed) this.save();
-      } catch(e) { console.warn("Sync cloud users error:", e); }
-    };
+  if (!window.fbDb) return;
+  try {
+    const snap = await window.fbDb.collection('hub_users').get().catch(() => ({ docs: [] }));
+    let changed = false;
+    dbState.users = {};
+
+    snap.docs.forEach(doc => {
+      const d = doc.data() || {};
+      const email = (d.email || '').toLowerCase().trim();
+      if (!email || email.includes('studenti.prof-memmo.local') || email.includes('@studenti.profmemmo.internal')) return;
+      if (d.role === 'pending' || d.statusAccount === 'pending') return;
+
+      let role = 'docente';
+      if (d.role === 'admin' || email === 'prof.memmo@gmail.com') role = 'admin';
+      else if (d.role === 'viandante' || d.role === 'forestiero') role = 'forestiero';
+      else if (d.role === 'docente') role = 'docente';
+      else role = d.role || 'docente';
+
+      const userObj = {
+        id: doc.id,
+        email: email,
+        name: (d.anagrafica && (d.anagrafica.nome || d.anagrafica.cognome))
+          ? `${d.anagrafica.nome || ''} ${d.anagrafica.cognome || ''}`.trim()
+          : (d.nome ? `${d.nome || ''} ${d.cognome || ''}`.trim() : (d.displayName || email.split('@')[0])),
+        role: role,
+        scuola: (d.anagrafica && d.anagrafica.istituto) || d.scuola || d.school || '',
+        classId: d.classId || '',
+        joinedAt: d.createdAt ? (d.createdAt.toDate ? d.createdAt.toDate().getTime() : new Date(d.createdAt).getTime()) : Date.now()
+      };
+
+      dbState.users[email] = userObj;
+      changed = true;
+    });
+
+    if (changed) this.save();
+  } catch(e) {
+    console.warn("Sync cloud users error:", e);
+  }
+};
 
 window.EroiDB.getStudentProfile = function(email) {
-      return dbState.students_profile[email.toLowerCase()] || null;
-    };
+  if (!email) return null;
+  return (dbState.students_profile && dbState.students_profile[email.toLowerCase()]) || null;
+};
 
 window.EroiDB.saveStudentProfile = function(email, profileData) {
-      const key = email.toLowerCase();
-      dbState.students_profile[key] = { ...dbState.students_profile[key], ...profileData };
-      this.save();
-    };
+  if (!email) return;
+  const key = email.toLowerCase();
+  if (!dbState.students_profile) dbState.students_profile = {};
+  dbState.students_profile[key] = { ...dbState.students_profile[key], ...profileData };
+  this.save();
+};
 
 window.EroiDB.getAllStudents = function() {
-      const profiles = Object.values(dbState.students_profile);
-      const allUsers = Object.values(dbState.users || {});
-      
-      // Fallback per gli studenti registrati su Firebase che non hanno ancora il profilo locale sincronizzato
-      allUsers.forEach(u => {
-        const key = (u.email || '').toLowerCase();
-        if (key && u.role === 'student' && !dbState.students_profile[key]) {
-           profiles.push({
-             name: u.name || u.email.split('@')[0],
-             email: u.email,
-             avatarClass: 'viandante',
-             xp: 0,
-             dracme: 10,
-             items: [],
-             completedMissions: [],
-             citta: ''
-           });
-        }
-      });
-      return profiles;
-    };
+  return Object.values(dbState.students_profile || {});
+};
 
 window.EroiDB.getTeacherPlayerProfile = function(email) {
-      if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
-      return dbState.teacher_profiles[email.toLowerCase()] || null;
-    };
+  if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
+  return dbState.teacher_profiles[email.toLowerCase()] || null;
+};
 
 window.EroiDB.saveTeacherPlayerProfile = function(email, profileData) {
-      if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
-      const key = email.toLowerCase();
-      dbState.teacher_profiles[key] = { ...dbState.teacher_profiles[key], ...profileData };
-      this.save();
-    };
-
+  if (!dbState.teacher_profiles) dbState.teacher_profiles = {};
+  const key = email.toLowerCase();
+  dbState.teacher_profiles[key] = { ...dbState.teacher_profiles[key], ...profileData };
+  this.save();
+};

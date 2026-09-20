@@ -861,36 +861,17 @@
 
               <!-- PANNELLO: STUDENTI -->
               <div id="panel-stats-students" class="panoramica-sub-panel" style="display: none;">
-                <!-- Nuovo Studente -->
-                <div class="glass-panel" style="margin-bottom: 24px;">
-                  <h3 class="panel-title">Nuovo Studente</h3>
-                  <form id="form-create-student" class="form-create-student-grid" onsubmit="return false;">
-                    <div class="form-group" style="margin-bottom: 0;">
-                      <label for="new-student-name">Nome e Cognome</label>
-                      <input type="text" id="new-student-name" class="form-control" required placeholder="Ettore Priamo">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                      <label for="new-student-email">Email</label>
-                      <input type="email" id="new-student-email" class="form-control" required placeholder="ettore@scuola.it">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                      <label for="new-student-class">Classe</label>
-                      <select id="new-student-class" class="form-control" required>
-                        <!-- Popolata dinamicamente -->
-                      </select>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                      <label for="new-student-avatar">Avatar Iniziale</label>
-                      <select id="new-student-avatar" class="form-control" required>
-                        <option value="Custode della Sapienza">Custode della Sapienza</option>
-                        <option value="Guerriero">Guerriero</option>
-                        <option value="Navigatore">Navigatore</option>
-                        <option value="Cantastorie">Cantastorie</option>
-                        <option value="Esploratore">Esploratore</option>
-                      </select>
-                    </div>
-                    <button type="submit" class="btn" style="height: 44px;" id="btn-save-new-student">Aggiungi</button>
-                  </form>
+                <!-- Info Sincronizzazione Hub -->
+                <div class="glass-panel" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; border-left: 4px solid var(--gold);">
+                  <div>
+                    <h3 class="panel-title" style="margin-bottom: 4px;"><i class="fa-solid fa-users" style="color: var(--gold);"></i> Roster e Classi Sincronizzati</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; line-height: 1.4;">
+                      Gli studenti e le classi sono gestiti centralmente tramite l'Hub con il sistema a slot protetti (Zero-Email).
+                    </p>
+                  </div>
+                  <a href="https://prof-memmo.github.io/games/profilo.html" target="_blank" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-chalkboard-user"></i> Gestisci Classi nell'Hub
+                  </a>
                 </div>
 
                 <div class="glass-panel" id="teacher-students-section">
