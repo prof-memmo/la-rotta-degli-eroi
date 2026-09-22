@@ -962,7 +962,7 @@ window.finalizzaStudente = async function() {
         if (logoutBtn) {
           logoutBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.logout();
+            Auth.logout();
           });
         }
         
