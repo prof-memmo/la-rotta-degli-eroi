@@ -555,6 +555,13 @@ window.finalizzaStudente = async function() {
       this.bindAudioEvents();
       this.checkSession();
       this.renderFooterDetails();
+      if (window.EroiRulesService) {
+        window.EroiRulesService.subscribe(() => {
+          if (this.currentView === 'view-regolamento') {
+            this.renderRegolamento(window.currentUser || window.EroiUser || {});
+          }
+        });
+      }
     },
 
     bindAudioEvents: function() {
@@ -5015,30 +5022,38 @@ window.finalizzaStudente = async function() {
 
     // --- REGOLAMENTO ---
     renderRegolamento: function(user) {
+      if (window.EroiRulesService) {
+        window.EroiRulesService.renderPublicView(user);
+        return;
+      }
       const rules = window.EroiDB.getRegolamenti();
       
       const studBox = document.getElementById('rules-student-box');
       const teachBox = document.getElementById('rules-teacher-box');
       const teachSection = document.getElementById('rules-teacher-section');
 
-      studBox.innerHTML = rules.studente.map(r => `
-        <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02); border-left:3px solid var(--gold); border-radius:4px;">
-          <strong style="color:var(--text-light); font-size:0.95rem;">${r.titolo}</strong>
-          <p style="font-size:0.85rem; color:var(--text-muted); margin-top:5px; line-height:1.4;">${r.testo}</p>
-        </div>
-      `).join('');
-
-      // Mostra sezione docenti solo a docenti e amministratori
-      if ((user.role === 'docente' || user.role === 'teacher') || user.role === 'admin') {
-        teachSection.style.display = 'block';
-        teachBox.innerHTML = rules.docente.map(r => `
+      if (studBox) {
+        studBox.innerHTML = rules.studente.map(r => `
           <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02); border-left:3px solid var(--gold); border-radius:4px;">
             <strong style="color:var(--text-light); font-size:0.95rem;">${r.titolo}</strong>
             <p style="font-size:0.85rem; color:var(--text-muted); margin-top:5px; line-height:1.4;">${r.testo}</p>
           </div>
         `).join('');
-      } else {
-        teachSection.style.display = 'none';
+      }
+
+      // Mostra sezione docenti solo a docenti e amministratori
+      if (teachSection && teachBox) {
+        if ((user && (user.role === 'docente' || user.role === 'teacher')) || (user && user.role === 'admin')) {
+          teachSection.style.display = 'block';
+          teachBox.innerHTML = rules.docente.map(r => `
+            <div style="margin-bottom:15px; padding:10px; background:rgba(255,255,255,0.02); border-left:3px solid var(--gold); border-radius:4px;">
+              <strong style="color:var(--text-light); font-size:0.95rem;">${r.titolo}</strong>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:5px; line-height:1.4;">${r.testo}</p>
+            </div>
+          `).join('');
+        } else {
+          teachSection.style.display = 'none';
+        }
       }
     },
 
@@ -5047,6 +5062,9 @@ window.finalizzaStudente = async function() {
       this.renderAdminAllUsers();
       if (window.LiveEditor && typeof window.LiveEditor.renderAdminPanel === 'function') {
         window.LiveEditor.renderAdminPanel('admin-live-editor-container');
+      }
+      if (window.EroiRulesService && typeof window.EroiRulesService.renderAdminEditor === 'function') {
+        window.EroiRulesService.renderAdminEditor('admin-rules-editor-container');
       }
       if (typeof this.loadHistoricalArchives === 'function') {
         this.loadHistoricalArchives();
