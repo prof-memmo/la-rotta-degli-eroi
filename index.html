@@ -1088,6 +1088,12 @@
           <!-- 1. Live Editor Didattico (Correzioni al Volo) -->
           <div id="admin-live-editor-container"></div>
 
+          <!-- 1.5 Live Editor Regolamento Cloud -->
+          <div id="admin-rules-editor-container"></div>
+
+          <!-- 1.6 Live Editor Miniguida Cloud -->
+          <div id="admin-miniguida-editor-container"></div>
+
           <!-- 2. Diagnostica e Notifiche -->
           <div style="margin-bottom: 25px; padding: 18px; border: 1px solid #e2e8f0; border-radius: 16px; background: #f8fafc;">
             <h3 style="color: #0284c7; margin-top:0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-wrench"></i> Diagnostica &amp; Sistema</h3>
@@ -1291,8 +1297,9 @@
   <!-- Components & Dashboard -->
   <script src="js/components/modals.js?v=20260819c"></script>
   <script src="js/live-editor.js?v=20260819c"></script>
+  <script src="js/services/rules-service.js?v=20260927_rules_v1"></script>
   <script src="js/dashboard/admin-logic.js?v=20260819c"></script>
-  <script src="js/app.js?v=20260819c"></script>
+  <script src="js/app.js?v=20260927_rules_v1"></script>
   <!-- 6. Mini-giochi Interattivi -->
   <script src="js/minigames.js?v=20260819c"></script>
 
@@ -1319,31 +1326,31 @@
     <div id="modal-miniguida" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 9999; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); position: fixed; inset: 0; padding: 20px;">
         <div class="modal-content" style="background: white; border-radius: 24px; width: 100%; max-width: 900px; display: flex; overflow: hidden; position: relative; max-height: 90vh; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
             <div style="width: 33%; background: #f8fafc; display: flex; align-items: flex-end; justify-content: center; border-right: 2px solid #f1f5f9; padding-top: 20px;" class="hide-mobile">
-                <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/prof-memmo/prof-memmo-avatar.png" alt="Prof Memmo" style="width: 120%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
+                <img src="assets/prof_memmo_full.jpg" onerror="this.src='https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/prof-memmo/prof-memmo-full.jpg';" alt="Prof Memmo" style="width: 120%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
             </div>
             <div style="flex: 1; padding: 30px 40px; display: flex; flex-direction: column; position: relative; min-height: 450px;">
                 <button onclick="closeMiniguida()" style="position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f5f9; color: #475569; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;"><i class="fa-solid fa-xmark"></i></button>
                 
-                <h2 style="font-size: 2rem; font-weight: 900; color: #3b82f6; margin-bottom: 30px; text-align: center; text-transform: uppercase; border-bottom: 4px solid rgba(59, 130, 246, 0.2); padding-bottom: 10px; display: inline-block; margin-left: auto; margin-right: auto;">Come si gioca?</h2>
+                <h2 id="miniguida-title" style="font-size: 2rem; font-weight: 900; color: #3b82f6; margin-bottom: 30px; text-align: center; text-transform: uppercase; border-bottom: 4px solid rgba(59, 130, 246, 0.2); padding-bottom: 10px; display: inline-block; margin-left: auto; margin-right: auto;">Come si gioca?</h2>
                 
                 <div id="miniguida-step-0" class="miniguida-step" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-ship" style="font-size: 5rem; color: #3b82f6; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.3rem; color: #475569; line-height: 1.6; font-weight: 500;">Imbarcati come <strong>Marinaio</strong> e unisciti a una Ciurma.</p>
+                    <i class="fa-solid fa-compass" style="font-size: 5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">🧭 <strong>Salpa sulla Mappa dell'Epica:</strong><br>Esplora le rotte dei grandi poemi (<em>Odissea, Iliade, Eneide</em>), affronta le tappe e rispondi alle sfide mitologiche.</p>
                 </div>
                 
                 <div id="miniguida-step-1" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-cloud-bolt" style="font-size: 5rem; color: #f59e0b; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.3rem; color: #475569; line-height: 1.6; font-weight: 500;">Supera le <strong>Tempeste</strong> per ottenere dobloni e tesori.</p>
+                    <i class="fa-solid fa-bolt-lightning" style="font-size: 5rem; color: #f59e0b; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">⚡ <strong>Quiz, Mostri e Divinità:</strong><br>Risolvi i quesiti su dei, eroi e creature del mito per accumulare punti esperienza (<strong>XP</strong>) e <strong>Dracme d'argento</strong>.</p>
                 </div>
                 
                 <div id="miniguida-step-2" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-crown" style="font-size: 5rem; color: #ec4899; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.3rem; color: #475569; line-height: 1.6; font-weight: 500;">Acquista potenziamenti e scala la gerarchia navale fino a diventare <strong>Leggenda</strong>!</p>
+                    <i class="fa-solid fa-shield-halved" style="font-size: 5rem; color: #ec4899; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">🛡️ <strong>Mercato &amp; Artefatti:</strong><br>Visita l'Emporio per equipaggiare artefatti leggendari e sbloccare gli <strong>Eroi Aiutanti</strong> con poteri speciali.</p>
                 </div>
 
                 <div id="miniguida-step-3" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-people-group" style="font-size: 5rem; color: #10b981; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.3rem; color: #475569; line-height: 1.6; font-weight: 500;"><strong>Collabora</strong> con i compagni e sviluppa la tua capacità di lavorare in squadra!</p>
+                    <i class="fa-solid fa-trophy" style="font-size: 5rem; color: #10b981; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">🏆 <strong>Taglia il Traguardo:</strong><br>Scala la gerarchia della classe, completa tutte le tappe della mappa e diventa una vera <strong>Leggenda del Mito</strong>!</p>
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
@@ -1376,16 +1383,28 @@
         const totalMiniguidaSteps = 4;
         
         function openMiniguida() {
+            if (window.EroiMiniguidaService) {
+                window.EroiMiniguidaService.openModal();
+                return;
+            }
             document.getElementById('modal-miniguida').style.display = 'flex';
             currentMiniguidaStep = 0;
             updateMiniguidaView();
         }
         
         function closeMiniguida() {
+            if (window.EroiMiniguidaService) {
+                window.EroiMiniguidaService.closeModal();
+                return;
+            }
             document.getElementById('modal-miniguida').style.display = 'none';
         }
         
         function nextMiniguidaStep() {
+            if (window.EroiMiniguidaService) {
+                window.EroiMiniguidaService.nextStep();
+                return;
+            }
             if (currentMiniguidaStep < totalMiniguidaSteps - 1) {
                 currentMiniguidaStep++;
                 updateMiniguidaView();
@@ -1396,13 +1415,16 @@
         
         function updateMiniguidaView() {
             for (let i = 0; i < totalMiniguidaSteps; i++) {
-                document.getElementById('miniguida-step-' + i).style.display = i === currentMiniguidaStep ? 'flex' : 'none';
-                const dot = document.getElementById('miniguida-dots').children[i];
-                dot.style.background = i === currentMiniguidaStep ? '#3b82f6' : '#e2e8f0';
+                const el = document.getElementById('miniguida-step-' + i);
+                if (el) el.style.display = i === currentMiniguidaStep ? 'flex' : 'none';
+                const dot = document.getElementById('miniguida-dots')?.children[i];
+                if (dot) dot.style.background = i === currentMiniguidaStep ? '#3b82f6' : '#e2e8f0';
             }
-            document.getElementById('miniguida-next-btn').innerText = currentMiniguidaStep === totalMiniguidaSteps - 1 ? 'GIOCA!' : 'AVANTI';
+            const nextBtn = document.getElementById('miniguida-next-btn');
+            if (nextBtn) nextBtn.innerText = currentMiniguidaStep === totalMiniguidaSteps - 1 ? 'GIOCA!' : 'AVANTI';
         }
     </script>
+    <script src="js/services/miniguida-service.js?v=20260929_miniguida_v1"></script>
     <!-- Modali condivisi ecosistema Prof. Memmo -->
     <script src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/legal-modal.js?v=20260819a"></script>
 </body>
