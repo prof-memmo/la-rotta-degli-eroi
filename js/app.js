@@ -5066,6 +5066,9 @@ window.finalizzaStudente = async function() {
       if (window.EroiRulesService && typeof window.EroiRulesService.renderAdminEditor === 'function') {
         window.EroiRulesService.renderAdminEditor('admin-rules-editor-container');
       }
+      if (window.EroiMiniguidaService && typeof window.EroiMiniguidaService.renderAdminEditor === 'function') {
+        window.EroiMiniguidaService.renderAdminEditor('admin-miniguida-editor-container');
+      }
       if (typeof this.loadHistoricalArchives === 'function') {
         this.loadHistoricalArchives();
       }

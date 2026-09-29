@@ -1091,6 +1091,9 @@
           <!-- 1.5 Live Editor Regolamento Cloud -->
           <div id="admin-rules-editor-container"></div>
 
+          <!-- 1.6 Live Editor Miniguida Cloud -->
+          <div id="admin-miniguida-editor-container"></div>
+
           <!-- 2. Diagnostica e Notifiche -->
           <div style="margin-bottom: 25px; padding: 18px; border: 1px solid #e2e8f0; border-radius: 16px; background: #f8fafc;">
             <h3 style="color: #0284c7; margin-top:0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-wrench"></i> Diagnostica &amp; Sistema</h3>
@@ -1380,16 +1383,28 @@
         const totalMiniguidaSteps = 4;
         
         function openMiniguida() {
+            if (window.EroiMiniguidaService) {
+                window.EroiMiniguidaService.openModal();
+                return;
+            }
             document.getElementById('modal-miniguida').style.display = 'flex';
             currentMiniguidaStep = 0;
             updateMiniguidaView();
         }
         
         function closeMiniguida() {
+            if (window.EroiMiniguidaService) {
+                window.EroiMiniguidaService.closeModal();
+                return;
+            }
             document.getElementById('modal-miniguida').style.display = 'none';
         }
         
         function nextMiniguidaStep() {
+            if (window.EroiMiniguidaService) {
+                window.EroiMiniguidaService.nextStep();
+                return;
+            }
             if (currentMiniguidaStep < totalMiniguidaSteps - 1) {
                 currentMiniguidaStep++;
                 updateMiniguidaView();
@@ -1400,13 +1415,16 @@
         
         function updateMiniguidaView() {
             for (let i = 0; i < totalMiniguidaSteps; i++) {
-                document.getElementById('miniguida-step-' + i).style.display = i === currentMiniguidaStep ? 'flex' : 'none';
-                const dot = document.getElementById('miniguida-dots').children[i];
-                dot.style.background = i === currentMiniguidaStep ? '#3b82f6' : '#e2e8f0';
+                const el = document.getElementById('miniguida-step-' + i);
+                if (el) el.style.display = i === currentMiniguidaStep ? 'flex' : 'none';
+                const dot = document.getElementById('miniguida-dots')?.children[i];
+                if (dot) dot.style.background = i === currentMiniguidaStep ? '#3b82f6' : '#e2e8f0';
             }
-            document.getElementById('miniguida-next-btn').innerText = currentMiniguidaStep === totalMiniguidaSteps - 1 ? 'GIOCA!' : 'AVANTI';
+            const nextBtn = document.getElementById('miniguida-next-btn');
+            if (nextBtn) nextBtn.innerText = currentMiniguidaStep === totalMiniguidaSteps - 1 ? 'GIOCA!' : 'AVANTI';
         }
     </script>
+    <script src="js/services/miniguida-service.js?v=20260929_miniguida_v1"></script>
     <!-- Modali condivisi ecosistema Prof. Memmo -->
     <script src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/legal-modal.js?v=20260819a"></script>
 </body>
