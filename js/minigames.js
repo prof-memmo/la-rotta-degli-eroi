@@ -440,6 +440,144 @@
       { title: "Proemio dell'ILIADE", lines: ["Cantami, o Diva, del pelide Achille", "l'ira funesta che infiniti addusse", "lutti agli Achei, molte anzi tempo all'Orco", "generose travolse alme d'eroi."], hint: "Il proemio annuncia il tema: l'ira di Achille. Inizia con l'invocazione alla Musa." },
       { title: "Proemio dell'ODISSEA", lines: ["Dimmi, o Musa, dell'eroe multiforme,", "che tanto vagò, dopo che distrusse", "la rocca sacra di Troia:", "di molti uomini vide le città e conobbe i costumi."], hint: "Il proemio enuncia il viaggio dell'eroe astuto. Il tema è il nostos, il ritorno." },
       { title: "Proemio dell'ENEIDE", lines: ["Canto le armi e l'uomo che per primo", "dalle coste di Troia, profugo per decreto del fato,", "giunse in Italia e al lido di Lavinio;", "molto fu sballottato per terra e per mare."], hint: "Il proemio dell'Eneide: armi, uomo, destino, Roma." }
+    ],
+    memory: [
+      { a: "Achille", b: "Tallone vulnerabile" },
+      { a: "Ulisse", b: "Cavallo di Troia" },
+      { a: "Enea", b: "Padre Anchise sulle spalle" },
+      { a: "Re Artù", b: "Spada Excalibur" },
+      { a: "Orlando", b: "Lama Durlindana" },
+      { a: "Sigfrido", b: "Drago Fafnir" },
+      { a: "Polifemo", b: "Unico occhio accecato" },
+      { a: "Medusa", b: "Sguardo pietrificante" }
+    ],
+    cruciverba: {
+      title: "Crocevia dei Grandi Eroi",
+      grid: [
+        ["U","L","I","S","S","E"],
+        ["N","","L","","","T"],
+        ["I","L","I","A","D","E"],
+        ["C","","A","","","N"],
+        ["O","M","E","R","O","E"]
+      ],
+      definitions: {
+        orizzontali: [
+          { num: 1, text: "L'astuto re di Itaca eroe dell'Odissea (6)", row: 0, col: 0, word: "ULISSE" },
+          { num: 2, text: "Il poema sull'assedio di Troia e l'ira di Achille (6)", row: 2, col: 0, word: "ILIADE" },
+          { num: 3, text: "Il sommo aedo greco autore dei poemi (5)", row: 4, col: 0, word: "OMERO" }
+        ],
+        verticali: [
+          { num: 4, text: "L'occhio solitario del gigante Polifemo (5)", row: 0, col: 0, word: "UNICO" },
+          { num: 5, text: "L'eroe difensore di Troia caduto nel duello (6)", row: 0, col: 5, word: "ETTORE" }
+        ]
+      }
+    },
+    rebus: [
+      {
+        emoji: "🐴 🏛️ ⚔️ 🔥",
+        formula: "(7, 2, 5)",
+        solution: "CAVALLO DI TROIA",
+        hint: "Il leggendario stratagemma ideato da Ulisse per espugnare Ilio."
+      },
+      {
+        emoji: "👑 🗡️ 🪨 ✨",
+        formula: "(5, 5, 5)",
+        solution: "SPADA NELLA ROCCIA",
+        hint: "La prova sacra superata dal giovane Artù per diventare re di Britannia."
+      },
+      {
+        emoji: "🛡️ 🐉 🩸 🌲",
+        formula: "(8, 3, 5)",
+        solution: "SIGFRIDO E IL DRAGO",
+        hint: "Il leggendario eroe dei Nibelunghi che affrontò il mostro Fafnir."
+      }
+    ],
+    crittografia: [
+      {
+        cipher: "CANTAMI O DIVA DEL PELIDE ACHILLE L'IRA FUNESTA",
+        hint: "Il celebre incipit del primo libro dell'Iliade di Omero.",
+        author: "Omero (Iliade)"
+      },
+      {
+        cipher: "CANTO LE ARMI E L'UOMO CHE PER PRIMO GIUNSE IN ITALIA",
+        hint: "Il solenne proemio dell'Eneide di Virgilio.",
+        author: "Virgilio (Eneide)"
+      },
+      {
+        cipher: "DIMMI O MUSA DELL'EROE MULTIFORME CHE A LUNGO ERRÒ",
+        hint: "L'invocazione alla Musa che apre il viaggio di Ulisse nell'Odissea.",
+        author: "Omero (Odissea)"
+      }
+    ],
+    indovinello: [
+      {
+        title: "Chi sono?",
+        clues: [
+          "Sono nato sull'isola rocciosa di Itaca e ho combattuto sotto le mura di Troia.",
+          "Ho accecato il ciclope Polifemo dicendogli di chiamarmi 'Nessuno'.",
+          "Ho impiegato dieci anni di mare, mostri e incantesimi per riabbracciare Penelope."
+        ],
+        solution: "ULISSE",
+        hint: "L'eroe dal multiforme ingegno protagonista dell'Odissea."
+      },
+      {
+        title: "Chi sono?",
+        clues: [
+          "Sono il più valoroso tra tutti i guerrieri achei accampati a Troia.",
+          "Mia madre Teti mi immerse nello Stige rendendomi invulnerabile, tranne in un punto.",
+          "La mia ira funesta fu scatenata dall'offesa di Agamennone e dal dolore per Patroclo."
+        ],
+        solution: "ACHILLE",
+        hint: "Il piè veloce, il più temuto eroe dell'Iliade."
+      },
+      {
+        title: "Chi sono?",
+        clues: [
+          "Fuggii da Troia in fiamme portando sulle spalle il vecchio padre Anchise.",
+          "La regina Didone si innamorò di me a Cartagine prima del mio destino nel Lazio.",
+          "Dalla mia stirpe e dal matrimonio con Lavinia nasceranno i fondatori di Roma."
+        ],
+        solution: "ENEA",
+        hint: "Il pio eroe troiano protagonista del poema di Virgilio."
+      }
+    ],
+    anagramma: [
+      {
+        scrambled: "EXCALIBUR",
+        letters: ["E","X","C","A","L","I","B","U","R"],
+        solution: "EXCALIBUR",
+        hint: "La mitica spada estratta dalla roccia dal giovane Re Artù."
+      },
+      {
+        scrambled: "DURLINDANA",
+        letters: ["D","U","R","L","I","N","D","A","N","A"],
+        solution: "DURLINDANA",
+        hint: "La lama indistruttibile del paladino Orlando a Roncisvalle."
+      },
+      {
+        scrambled: "POLIFEMO",
+        letters: ["P","O","L","I","F","E","M","O"],
+        solution: "POLIFEMO",
+        hint: "Il feroce gigante pastore con un solo occhio sulla fronte."
+      },
+      {
+        scrambled: "PENELOPE",
+        letters: ["P","E","N","E","L","O","P","E"],
+        solution: "PENELOPE",
+        hint: "La fedele regina di Itaca che tesseva la tela attendendo lo sposo."
+      }
+    ],
+    differenze: [
+      {
+        title: "L'Imbarco di Ulisse verso Itaca",
+        source: "Affresco storico su tavola mitologica",
+        totalDiffs: 3,
+        diffs: [
+          { id: 1, x: 28, y: 35, label: "L'elmo piumato dell'eroe acheo" },
+          { id: 2, x: 74, y: 22, label: "La vela quadrata della nave" },
+          { id: 3, x: 52, y: 78, label: "Lo scudo dorato con la civetta" }
+        ]
+      }
     ]
   };
 
