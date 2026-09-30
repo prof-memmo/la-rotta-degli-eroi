@@ -4994,3 +4994,295 @@ table.game-table tr:hover td {
     display: none !important;
   }
 }
+
+/* =====================================================
+   MINIGAMES ENGINE STYLES - LA ROTTA DEGLI EROI
+   ===================================================== */
+
+/* Defensive UI per icone illustrate */
+.eroi-minigame-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.eroi-minigame-icon-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    aspect-ratio: 1/1;
+    display: block;
+}
+
+/* 1. Memory Game */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 550px;
+    margin: 15px auto;
+    perspective: 1000px;
+}
+@media (max-width: 480px) {
+    .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+}
+.memory-card {
+    height: 90px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
+    border-radius: 10px;
+}
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+.memory-card.matched {
+    transform: rotateY(180deg);
+    pointer-events: none;
+}
+.memory-card-front, .memory-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8px;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.memory-card-front {
+    background: rgba(212,175,55,0.08);
+    border: 1.5px solid rgba(212,175,55,0.3);
+    color: var(--gold, #d4af37);
+    font-size: 1.5rem;
+}
+.memory-card-back {
+    background: linear-gradient(135deg, rgba(212,175,55,0.25), rgba(10,13,24,0.95));
+    border: 1.5px solid var(--gold, #d4af37);
+    color: #fff;
+    transform: rotateY(180deg);
+    line-height: 1.2;
+}
+.memory-card.matched .memory-card-back {
+    background: linear-gradient(135deg, rgba(46,204,113,0.3), rgba(39,174,96,0.5));
+    border-color: #2ecc71;
+    color: #fff;
+}
+
+/* 2. Cruciverba */
+.cw-board {
+    display: grid;
+    gap: 2px;
+    background: rgba(255,255,255,0.08);
+    padding: 6px;
+    border-radius: 8px;
+    width: fit-content;
+    margin: 0 auto 15px auto;
+    border: 1px solid rgba(212,175,55,0.3);
+}
+.cw-cell {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    background: rgba(0,0,0,0.6);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cw-cell.block {
+    background: rgba(0,0,0,0.9);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.cw-cell.active {
+    background: rgba(212,175,55,0.2);
+    border: 1px solid var(--gold, #d4af37);
+}
+.cw-cell-num {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    font-size: 0.55rem;
+    color: var(--gold, #d4af37);
+    font-weight: 700;
+    pointer-events: none;
+}
+.cw-input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    outline: none;
+    padding: 0;
+}
+.cw-input:focus {
+    background: rgba(212,175,55,0.3);
+}
+
+/* 3. Rebus */
+.rebus-container {
+    background: rgba(0,0,0,0.4);
+    border: 1.5px solid rgba(212,175,55,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.rebus-image-box {
+    max-width: 320px;
+    margin: 0 auto 12px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.5);
+    padding: 10px;
+}
+
+/* 4. Crittografia */
+.crypto-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+.crypto-cell-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+.crypto-symbol {
+    font-size: 0.75rem;
+    color: var(--gold, #d4af37);
+    font-weight: 800;
+    font-family: monospace;
+}
+.crypto-input {
+    width: 28px;
+    height: 32px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 6px;
+    color: #fff;
+    outline: none;
+}
+.crypto-input:focus {
+    border-color: var(--gold, #d4af37);
+    background: rgba(212,175,55,0.15);
+}
+
+/* 5. Indovinelli */
+.indovinello-clues {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.indovinello-clue-item {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--gold, #d4af37);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: #e0e0e0;
+}
+
+/* 6. Anagrammi */
+.anagram-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+.anagram-tile {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212,175,55,0.15);
+    border: 1.5px solid var(--gold, #d4af37);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s, background 0.15s;
+}
+.anagram-tile:hover {
+    transform: translateY(-2px);
+    background: rgba(212,175,55,0.3);
+}
+.anagram-tile.used {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* 7. Trova le Differenze */
+.diff-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+@media (max-width: 600px) {
+    .diff-split {
+        grid-template-columns: 1fr;
+    }
+}
+.diff-image-wrapper {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid rgba(212,175,55,0.3);
+    background: #000;
+    cursor: crosshair;
+}
+.diff-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.diff-marker {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #2ecc71;
+    background: rgba(46,204,113,0.3);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: diffPulse 1.5s infinite;
+}
+@keyframes diffPulse {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+}
