@@ -1599,6 +1599,14 @@
       const pool = data.differenze && data.differenze.length ? data.differenze : DEFAULT_DATA.differenze;
       const diffObj = pool[0] || DEFAULT_DATA.differenze[0];
 
+      let imgSrc = 'assets/images/navigatore_class.png';
+      const topic = (data.topic || '').toLowerCase();
+      if (topic.includes('iliade') || topic.includes('guerra') || topic.includes('carolingio') || topic.includes('nibelunghi')) {
+        imgSrc = 'assets/images/guerriero_class.png';
+      } else if (topic.includes('autori') || topic.includes('mito') || topic.includes('inizio') || topic.includes('caos') || topic.includes('opere')) {
+        imgSrc = 'assets/images/cantastorie_class.png';
+      }
+
       this.diffState = {
         current: diffObj,
         foundIds: new Set()
@@ -1607,16 +1615,16 @@
       container.innerHTML = `
         <div style="max-width: 600px; margin: 0 auto; text-align: center;">
           <h4 style="color: var(--gold); margin-bottom: 4px;">${diffObj.title}</h4>
-          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Trova i 3 dettagli discordanti tra le due tavole storiche (Trovate: <strong id="diff-found-count" style="color:var(--gold);">0/${diffObj.totalDiffs}</strong>).</p>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Trova i 3 dettagli discordanti tra le due tavole epiche (Trovate: <strong id="diff-found-count" style="color:var(--gold);">0/${diffObj.totalDiffs}</strong>).</p>
           <div class="diff-split">
             <div class="diff-image-wrapper" id="diff-box-left" onclick="EroiMinigames.clickDiffImage(event)">
-              <img src="assets/prof_memmo_full.jpg" alt="Tavola A">
+              <img src="${imgSrc}" alt="Tavola A (Originale)">
             </div>
             <div class="diff-image-wrapper" id="diff-box-right" onclick="EroiMinigames.clickDiffImage(event)">
-              <img src="assets/prof_memmo_full.jpg" alt="Tavola B" style="filter: sepia(0.2) contrast(1.05);">
+              <img src="${imgSrc}" alt="Tavola B (Indagine)" style="filter: sepia(0.2) contrast(1.05);">
             </div>
           </div>
-          <div style="display: flex; justify-content: center; gap: 10px;">
+          <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
             <button class="btn btn-secondary" onclick="EroiMinigames.hintDifferenze()"><i class="fa-solid fa-lightbulb"></i> Aiuto (-2 🪙)</button>
             <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('differenze')"><i class="fa-solid fa-forward-step"></i> Passa</button>
           </div>
