@@ -631,18 +631,35 @@
       const topicBadge = data.topic ? `<span style="font-size:0.75rem; background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.3); padding:2px 10px; border-radius:4px; color:var(--gold); margin-left:8px;">${data.topic}</span>` : '';
 
       const typeLabels = {
-        impiccato: '🎭 Impiccato <span style="font-size:0.75rem; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); padding:2px 8px; border-radius:4px; color:#4ade80; font-weight:700; margin-left:6px;">🟢 Facile</span>',
-        puzzle: '🧩 Riordina la Frase <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#fde047; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
-        cloze: '📝 Cloze — Completa il Testo <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#fde047; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
-        versi: '📜 Riordina i Versi <span style="font-size:0.75rem; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); padding:2px 8px; border-radius:4px; color:#60a5fa; font-weight:700; margin-left:6px;">🔵 Avanzato</span>'
+        quiz: '⚔️ Quiz Epico <span style="font-size:0.75rem; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); padding:2px 8px; border-radius:4px; color:#60a5fa; font-weight:700; margin-left:6px;">🟢 Facile</span>',
+        impiccato: '🎭 L\'Impiccato <span style="font-size:0.75rem; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); padding:2px 8px; border-radius:4px; color:#4ade80; font-weight:700; margin-left:6px;">🟢 Facile</span>',
+        cloze: '📝 Cloze — Testo Bucato <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#fde047; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        puzzle: '🧩 Puzzle di Frasi <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#fde047; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        versi: '📜 Riordina i Versi <span style="font-size:0.75rem; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.4); padding:2px 8px; border-radius:4px; color:#60a5fa; font-weight:700; margin-left:6px;">🔵 Avanzato</span>',
+        memory: '🧠 Memory Mitologico <span style="font-size:0.75rem; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); padding:2px 8px; border-radius:4px; color:#a855f7; font-weight:700; margin-left:6px;">🟢 Facile</span>',
+        cruciverba: '📐 Parole Crociate <span style="font-size:0.75rem; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); padding:2px 8px; border-radius:4px; color:#eab308; font-weight:700; margin-left:6px;">🔵 Avanzato</span>',
+        rebus: '🔍 Rebus Epico <span style="font-size:0.75rem; background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); padding:2px 8px; border-radius:4px; color:#f97316; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        crittografia: '🗝️ Crittografia del Timone <span style="font-size:0.75rem; background:rgba(20,184,166,0.15); border:1px solid rgba(20,184,166,0.4); padding:2px 8px; border-radius:4px; color:#14b8a6; font-weight:700; margin-left:6px;">🔵 Avanzato</span>',
+        indovinello: '❓ Indovinelli dell\'Aedo <span style="font-size:0.75rem; background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.4); padding:2px 8px; border-radius:4px; color:#ec4899; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        anagramma: '🔤 Anagrammi degli Eroi <span style="font-size:0.75rem; background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.4); padding:2px 8px; border-radius:4px; color:#6366f1; font-weight:700; margin-left:6px;">🟡 Intermedio</span>',
+        differenze: '👀 Trova le Differenze <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); padding:2px 8px; border-radius:4px; color:#10b981; font-weight:700; margin-left:6px;">🟢 Facile</span>'
       };
       title.innerHTML = (typeLabels[type] || type) + topicBadge;
 
       switch(type) {
-        case 'impiccato': this.initImpiccato(content, data); break;
-        case 'puzzle':    this.initPuzzle(content, data); break;
-        case 'cloze':     this.initCloze(content, data); break;
-        case 'versi':     this.initVersi(content, data); break;
+        case 'quiz':         this.initQuiz(content, data); break;
+        case 'impiccato':    this.initImpiccato(content, data); break;
+        case 'puzzle':       this.initPuzzle(content, data); break;
+        case 'cloze':        this.initCloze(content, data); break;
+        case 'versi':        this.initVersi(content, data); break;
+        case 'memory':       this.initMemory(content, data); break;
+        case 'cruciverba':   this.initCruciverba(content, data); break;
+        case 'rebus':        this.initRebus(content, data); break;
+        case 'crittografia': this.initCrittografia(content, data); break;
+        case 'indovinello':  this.initIndovinello(content, data); break;
+        case 'anagramma':    this.initAnagramma(content, data); break;
+        case 'differenze':   this.initDifferenze(content, data); break;
+        default:             this.initQuiz(content, data); break;
       }
     },
 
@@ -1081,31 +1098,613 @@
       });
     },
 
-    hintCloze: function() {
-      if (!clozeState.ex) return;
-      this.useDracmeForHint(2, () => {
-        clozeState.ex.blanks.forEach((b, i) => {
-          const inp = document.getElementById(`cloze-${i}`);
-          if (inp && (!inp.value || inp.value === '___')) {
-            inp.value = b.charAt(0) + '...';
-            clozeState.answers[i] = b.charAt(0);
+    // =====================================================
+    // QUIZ EPICO
+    // =====================================================
+    initQuiz: function(container, data) {
+      const questions = (window.mockData && window.mockData.missions && window.mockData.missions.find(m => m.id === currentMissionId)?.questions) || [
+        { q: "Quale eroe ideò l'inganno del Cavallo di Troia?", options: ["Achille", "Ulisse", "Enea", "Agamennone"], a: 1 },
+        { q: "Chi è l'autore dell'Eneide?", options: ["Omero", "Virgilio", "Dante", "Turoldo"], a: 1 },
+        { q: "Come si chiama la mitica spada di Re Artù?", options: ["Durlindana", "Excalibur", "Gioiosa", "Balmung"], a: 1 }
+      ];
+      const q = questions[Math.floor(Math.random() * questions.length)];
+      
+      container.innerHTML = `
+        <div style="max-width: 500px; margin: 0 auto; text-align: center;">
+          <h4 style="color: var(--gold); font-size: 1.1rem; margin-bottom: 15px;">${q.q}</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+            ${q.options.map((opt, i) => `
+              <button class="btn btn-secondary quiz-opt-btn" style="padding: 10px 14px; text-align: left; font-size: 0.9rem;" onclick="EroiMinigames.checkQuizAnswer(${i}, ${q.a})">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    },
+
+    checkQuizAnswer: function(selected, correct) {
+      if (selected === correct) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Risposta Esatta! Bravo Eroe!', 'success');
+        this.rewardAndNext('quiz', 20, 10);
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Risposta errata. Riprova!', 'danger');
+      }
+    },
+
+    // =====================================================
+    // MEMORY MITOLOGICO
+    // =====================================================
+    initMemory: function(container, data) {
+      const pool = data.memory && data.memory.length ? data.memory : DEFAULT_DATA.memory;
+      const selectedPairs = pool.slice(0, 6);
+      const cards = [];
+      
+      selectedPairs.forEach((pair, idx) => {
+        cards.push({ id: idx, text: pair.a, pairId: idx });
+        cards.push({ id: idx, text: pair.b, pairId: idx });
+      });
+      
+      // Shuffle
+      cards.sort(() => Math.random() - 0.5);
+
+      this.memoryState = {
+        cards: cards,
+        flipped: [],
+        matchedCount: 0,
+        totalPairs: selectedPairs.length,
+        lockBoard: false
+      };
+
+      this.renderMemory(container);
+    },
+
+    renderMemory: function(container) {
+      const ms = this.memoryState;
+      container.innerHTML = `
+        <div style="max-width: 550px; margin: 0 auto; text-align: center;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Abbina ciascun eroe o mostro al proprio attributo mitologico.</p>
+          <div class="memory-grid">
+            ${ms.cards.map((c, idx) => `
+              <div class="memory-card" id="mem-card-${idx}" onclick="EroiMinigames.flipMemoryCard(${idx})">
+                <div class="memory-card-front"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="memory-card-back">${c.text}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+            <button class="btn btn-secondary" onclick="EroiMinigames.startMinigame('memory', currentMissionId)"><i class="fa-solid fa-rotate-left"></i> Ricomincia</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('memory')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+          </div>
+        </div>
+      `;
+    },
+
+    flipMemoryCard: function(index) {
+      const ms = this.memoryState;
+      if (ms.lockBoard) return;
+      const cardEl = document.getElementById(`mem-card-${index}`);
+      if (!cardEl || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+      cardEl.classList.add('flipped');
+      ms.flipped.push({ index, card: ms.cards[index], el: cardEl });
+
+      if (ms.flipped.length === 2) {
+        ms.lockBoard = true;
+        const [c1, c2] = ms.flipped;
+        if (c1.card.pairId === c2.card.pairId) {
+          setTimeout(() => {
+            c1.el.classList.add('matched');
+            c2.el.classList.add('matched');
+            ms.matchedCount++;
+            ms.flipped = [];
+            ms.lockBoard = false;
+
+            if (ms.matchedCount === ms.totalPairs) {
+              if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Memory Completato! Tutte le coppie trovate!', 'success');
+              this.rewardAndNext('memory', 25, 12);
+            }
+          }, 500);
+        } else {
+          setTimeout(() => {
+            c1.el.classList.remove('flipped');
+            c2.el.classList.remove('flipped');
+            ms.flipped = [];
+            ms.lockBoard = false;
+          }, 900);
+        }
+      }
+    },
+
+    // =====================================================
+    // PAROLE CROCIATE (CRUCIVERBA)
+    // =====================================================
+    initCruciverba: function(container, data) {
+      const cw = data.cruciverba || DEFAULT_DATA.cruciverba;
+      this.cwState = {
+        data: cw,
+        rows: cw.grid.length,
+        cols: cw.grid[0].length
+      };
+
+      let boardHtml = `<div class="cw-board" style="grid-template-columns: repeat(${this.cwState.cols}, 32px);">`;
+      for (let r = 0; r < this.cwState.rows; r++) {
+        for (let c = 0; c < this.cwState.cols; c++) {
+          const letter = cw.grid[r][c];
+          if (letter === "") {
+            boardHtml += `<div class="cw-cell block"></div>`;
+          } else {
+            let numLabel = "";
+            cw.definitions.orizzontali.forEach(d => { if (d.row === r && d.col === c) numLabel = d.num; });
+            cw.definitions.verticali.forEach(d => { if (d.row === r && d.col === c) numLabel = d.num; });
+
+            boardHtml += `
+              <div class="cw-cell">
+                ${numLabel ? `<span class="cw-cell-num">${numLabel}</span>` : ''}
+                <input type="text" class="cw-input" maxlength="1" data-r="${r}" data-c="${c}" data-sol="${letter}" id="cw-${r}-${c}" oninput="this.value = this.value.toUpperCase();">
+              </div>
+            `;
           }
-        });
+        }
+      }
+      boardHtml += `</div>`;
+
+      container.innerHTML = `
+        <div style="max-width: 600px; margin: 0 auto;">
+          <h4 style="color: var(--gold); text-align: center; margin-bottom: 10px;">${cw.title || 'Parole Crociate'}</h4>
+          ${boardHtml}
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; font-size: 0.82rem; text-align: left;">
+            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+              <strong style="color: var(--gold); display: block; margin-bottom: 4px;">ORIZZONTALI:</strong>
+              ${cw.definitions.orizzontali.map(d => `<div style="margin-bottom: 4px;"><strong>${d.num}.</strong> ${d.text}</div>`).join('')}
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+              <strong style="color: var(--gold); display: block; margin-bottom: 4px;">VERTICALI:</strong>
+              ${cw.definitions.verticali.map(d => `<div style="margin-bottom: 4px;"><strong>${d.num}.</strong> ${d.text}</div>`).join('')}
+            </div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="btn" onclick="EroiMinigames.checkCruciverba()"><i class="fa-solid fa-check"></i> Verifica Schema</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.hintCruciverba()"><i class="fa-solid fa-lightbulb"></i> Aiuto (-2 🪙)</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('cruciverba')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+          </div>
+        </div>
+      `;
+    },
+
+    checkCruciverba: function() {
+      const inputs = document.querySelectorAll('.cw-input');
+      let allCorrect = true;
+      inputs.forEach(inp => {
+        const sol = inp.dataset.sol;
+        if (inp.value.toUpperCase() !== sol.toUpperCase()) {
+          allCorrect = false;
+          inp.style.background = 'rgba(239,68,68,0.3)';
+        } else {
+          inp.style.background = 'rgba(46,204,113,0.3)';
+        }
+      });
+
+      if (allCorrect) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Cruciverba Risolto Perfettamente!', 'success');
+        this.rewardAndNext('cruciverba', 35, 15);
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Alcune lettere sono errate. Controlla le definizioni!', 'warning');
+      }
+    },
+
+    hintCruciverba: function() {
+      this.useDracmeForHint(2, () => {
+        const emptyOrWrong = Array.from(document.querySelectorAll('.cw-input')).filter(inp => inp.value.toUpperCase() !== inp.dataset.sol.toUpperCase());
+        if (emptyOrWrong.length > 0) {
+          const target = emptyOrWrong[Math.floor(Math.random() * emptyOrWrong.length)];
+          target.value = target.dataset.sol;
+          target.style.background = 'rgba(46,204,113,0.3)';
+        }
       });
     },
 
-    hintVersi: function() {
-      if (!versiState.ex) return;
+    // =====================================================
+    // REBUS EPICO
+    // =====================================================
+    initRebus: function(container, data) {
+      const pool = data.rebus && data.rebus.length ? data.rebus : DEFAULT_DATA.rebus;
+      const r = pool[Math.floor(Math.random() * pool.length)];
+      this.rebusState = { current: r };
+
+      container.innerHTML = `
+        <div style="max-width: 480px; margin: 0 auto; text-align: center;">
+          <div class="rebus-container">
+            <div style="font-size: 2.2rem; margin-bottom: 10px; letter-spacing: 4px;">${r.emoji}</div>
+            <div style="display: inline-block; padding: 4px 12px; background: rgba(212,175,55,0.2); border: 1px solid var(--gold); border-radius: 20px; color: var(--gold); font-weight: 800; font-size: 0.9rem; margin-bottom: 12px;">
+              Formula: ${r.formula}
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Decifra l'enigma visivo per scoprire l'evento o l'eroe.</p>
+            <input type="text" id="rebus-input" class="input-control" placeholder="Scrivi la soluzione..." style="width: 100%; text-align: center; text-transform: uppercase; font-size: 1.05rem; font-weight: 800; margin-bottom: 15px;" oninput="this.value = this.value.toUpperCase();">
+            <div style="display: flex; justify-content: center; gap: 10px;">
+              <button class="btn" onclick="EroiMinigames.checkRebus()"><i class="fa-solid fa-check"></i> Risolvi Rebus</button>
+              <button class="btn btn-secondary" onclick="EroiMinigames.hintRebus()"><i class="fa-solid fa-lightbulb"></i> Indizio (-2 🪙)</button>
+              <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('rebus')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+            </div>
+          </div>
+        </div>
+      `;
+    },
+
+    checkRebus: function() {
+      const input = document.getElementById('rebus-input');
+      if (!input || !this.rebusState.current) return;
+      const sol = this.rebusState.current.solution.toUpperCase().replace(/\s+/g, '');
+      const userVal = input.value.toUpperCase().replace(/\s+/g, '');
+
+      if (userVal === sol) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Rebus Decifrato con Successo!', 'success');
+        this.rewardAndNext('rebus', 20, 10);
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Soluzione non corretta. Riprova!', 'danger');
+      }
+    },
+
+    hintRebus: function() {
+      if (!this.rebusState.current) return;
       this.useDracmeForHint(2, () => {
-        const nextIdx = versiState.ordered.length;
-        if (nextIdx < versiState.ex.lines.length) {
-          const expectedLine = versiState.ex.lines[nextIdx];
-          const remIndex = versiState.remaining.indexOf(expectedLine);
-          if (remIndex !== -1) {
-            this.versiAdd(remIndex);
-          }
+        if (window.EroiApp && window.EroiApp.showToast) {
+          window.EroiApp.showToast(`Indizio: ${this.rebusState.current.hint}`, 'info');
         }
       });
+    },
+
+    // =====================================================
+    // CRITTOGRAFIA DEL TIMONE
+    // =====================================================
+    initCrittografia: function(container, data) {
+      const pool = data.crittografia && data.crittografia.length ? data.crittografia : DEFAULT_DATA.crittografia;
+      const c = pool[Math.floor(Math.random() * pool.length)];
+      
+      const words = c.cipher.toUpperCase().split(' ');
+      this.cryptoState = { current: c };
+
+      const symbols = ["⚓","⚔️","🛡️","🏛️","🏹","📜","👑","⚡","🔥","🌊","🌙","☀️","🦅","🐍","🦁","🌲","⭐","👁️","🏺","🔱","🩸","🪙","🪨","🗡️","🎺","🐎"];
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const cipherMap = {};
+      for (let i = 0; i < alphabet.length; i++) {
+        cipherMap[alphabet[i]] = symbols[i % symbols.length] + (Math.floor(i / symbols.length) > 0 ? (Math.floor(i/symbols.length)+1) : '');
+      }
+
+      let gridHtml = `<div class="crypto-grid">`;
+      let letterIdx = 0;
+      words.forEach((w) => {
+        gridHtml += `<div style="display:flex; gap:4px; margin: 4px 8px;">`;
+        for (let char of w) {
+          if (alphabet.includes(char)) {
+            const sym = cipherMap[char] || char;
+            gridHtml += `
+              <div class="crypto-cell-box">
+                <span class="crypto-symbol">${sym}</span>
+                <input type="text" class="crypto-input" maxlength="1" data-letter="${char}" id="crypto-char-${letterIdx}" oninput="this.value = this.value.toUpperCase(); EroiMinigames.cryptoAdvance(${letterIdx});">
+              </div>
+            `;
+            letterIdx++;
+          } else {
+            gridHtml += `<div style="display:flex; align-items:flex-end; padding-bottom:6px; font-weight:bold; color:var(--gold);">${char}</div>`;
+          }
+        }
+        gridHtml += `</div>`;
+      });
+      gridHtml += `</div>`;
+
+      container.innerHTML = `
+        <div style="max-width: 650px; margin: 0 auto; text-align: center;">
+          <h4 style="color: var(--gold); margin-bottom: 5px;">Cifrario Epico Antico</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 15px;">Decodifica ciascun simbolo per ricostruire la citazione immortale (${c.author}).</p>
+          ${gridHtml}
+          <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+            <button class="btn" onclick="EroiMinigames.checkCrittografia()"><i class="fa-solid fa-check"></i> Convalida Frase</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.hintCrittografia()"><i class="fa-solid fa-lightbulb"></i> Svela Lettera (-2 🪙)</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('crittografia')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+          </div>
+        </div>
+      `;
+    },
+
+    cryptoAdvance: function(currentIdx) {
+      const nextInp = document.getElementById(`crypto-char-${currentIdx + 1}`);
+      if (nextInp) nextInp.focus();
+    },
+
+    checkCrittografia: function() {
+      const inputs = document.querySelectorAll('.crypto-input');
+      let allCorrect = true;
+      inputs.forEach(inp => {
+        if (inp.value.toUpperCase() !== inp.dataset.letter.toUpperCase()) {
+          allCorrect = false;
+          inp.style.borderColor = 'red';
+        } else {
+          inp.style.borderColor = 'green';
+        }
+      });
+
+      if (allCorrect) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Crittografia Risolta! Profezia Svelata!', 'success');
+        this.rewardAndNext('crittografia', 30, 15);
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Alcune lettere sono errate. Riprova!', 'danger');
+      }
+    },
+
+    hintCrittografia: function() {
+      this.useDracmeForHint(2, () => {
+        const wrongOrEmpty = Array.from(document.querySelectorAll('.crypto-input')).filter(inp => inp.value.toUpperCase() !== inp.dataset.letter.toUpperCase());
+        if (wrongOrEmpty.length > 0) {
+          const target = wrongOrEmpty[0];
+          target.value = target.dataset.letter;
+          target.style.borderColor = 'green';
+        }
+      });
+    },
+
+    // =====================================================
+    // INDOVINELLI DELL'AEDO
+    // =====================================================
+    initIndovinello: function(container, data) {
+      const pool = data.indovinello && data.indovinello.length ? data.indovinello : DEFAULT_DATA.indovinello;
+      const ind = pool[Math.floor(Math.random() * pool.length)];
+      this.indovinelloState = { current: ind, revealedCount: 1 };
+
+      container.innerHTML = `
+        <div style="max-width: 500px; margin: 0 auto; text-align: center;">
+          <h4 style="color: var(--gold); margin-bottom: 12px;">${ind.title || 'Indovinello dell\'Aedo'}</h4>
+          <div class="indovinello-clues" id="indovinello-clues-list">
+            <div class="indovinello-clue-item"><strong>1° Indizio:</strong> ${ind.clues[0]}</div>
+          </div>
+          <input type="text" id="indovinello-input" class="input-control" placeholder="Chi è il personaggio / eroe?..." style="width: 100%; text-align: center; text-transform: uppercase; font-weight: 800; margin-bottom: 15px;" oninput="this.value = this.value.toUpperCase();">
+          <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="btn" onclick="EroiMinigames.checkIndovinello()"><i class="fa-solid fa-check"></i> Rispondi</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.revealNextClue()"><i class="fa-solid fa-eye"></i> Prossimo Indizio (-2 🪙)</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('indovinello')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+          </div>
+        </div>
+      `;
+    },
+
+    revealNextClue: function() {
+      const is = this.indovinelloState;
+      if (!is || !is.current) return;
+      if (is.revealedCount >= is.current.clues.length) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Tutti gli indizi sono già stati svelati!', 'info');
+        return;
+      }
+
+      this.useDracmeForHint(2, () => {
+        const cluesList = document.getElementById('indovinello-clues-list');
+        const nextClueText = is.current.clues[is.revealedCount];
+        is.revealedCount++;
+        if (cluesList) {
+          cluesList.innerHTML += `<div class="indovinello-clue-item"><strong>${is.revealedCount}° Indizio:</strong> ${nextClueText}</div>`;
+        }
+      });
+    },
+
+    checkIndovinello: function() {
+      const input = document.getElementById('indovinello-input');
+      if (!input || !this.indovinelloState.current) return;
+      const sol = this.indovinelloState.current.solution.toUpperCase().trim();
+      const userVal = input.value.toUpperCase().trim();
+
+      if (userVal === sol || (sol.length > 4 && userVal.includes(sol))) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast(`Esatto! Era proprio ${sol}!`, 'success');
+        this.rewardAndNext('indovinello', 20, 10);
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Identità non corretta. Rileggi gli indizi!', 'danger');
+      }
+    },
+
+    // =====================================================
+    // ANAGRAMMI DEGLI EROI
+    // =====================================================
+    initAnagramma: function(container, data) {
+      const pool = data.anagramma && data.anagramma.length ? data.anagramma : DEFAULT_DATA.anagramma;
+      const a = pool[Math.floor(Math.random() * pool.length)];
+      const scrambledLetters = [...a.letters].sort(() => Math.random() - 0.5);
+
+      this.anagramState = {
+        current: a,
+        originalLetters: scrambledLetters,
+        currentWord: []
+      };
+
+      container.innerHTML = `
+        <div style="max-width: 500px; margin: 0 auto; text-align: center;">
+          <h4 style="color: var(--gold); margin-bottom: 5px;">Anagramma Mitologico</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">${a.hint}</p>
+          <div id="anagram-word-slot" style="min-height: 48px; background: rgba(0,0,0,0.4); border: 1.5px dashed var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 6px; margin-bottom: 15px; flex-wrap: wrap;">
+            <span style="color: var(--text-muted); font-size: 0.85rem;">Clicca le lettere sotto per comporre la parola</span>
+          </div>
+          <div class="anagram-tiles" id="anagram-tiles-pool">
+            ${scrambledLetters.map((l, idx) => `
+              <div class="anagram-tile" id="ana-tile-${idx}" onclick="EroiMinigames.anagramPickLetter(${idx}, '${l}')">${l}</div>
+            `).join('')}
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+            <button class="btn" onclick="EroiMinigames.checkAnagramma()"><i class="fa-solid fa-check"></i> Verifica</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.resetAnagramma()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('anagramma')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+          </div>
+        </div>
+      `;
+    },
+
+    anagramPickLetter: function(idx, letter) {
+      const tile = document.getElementById(`ana-tile-${idx}`);
+      if (!tile || tile.classList.contains('used')) return;
+      tile.classList.add('used');
+
+      const as = this.anagramState;
+      as.currentWord.push({ idx, letter });
+      this.renderAnagramSlots();
+    },
+
+    anagramRemoveLetter: function(wordIdx) {
+      const as = this.anagramState;
+      const removed = as.currentWord.splice(wordIdx, 1)[0];
+      if (removed) {
+        const tile = document.getElementById(`ana-tile-${removed.idx}`);
+        if (tile) tile.classList.remove('used');
+      }
+      this.renderAnagramSlots();
+    },
+
+    renderAnagramSlots: function() {
+      const slot = document.getElementById('anagram-word-slot');
+      const as = this.anagramState;
+      if (!slot) return;
+
+      if (as.currentWord.length === 0) {
+        slot.innerHTML = `<span style="color: var(--text-muted); font-size: 0.85rem;">Clicca le lettere sotto per comporre la parola</span>`;
+        return;
+      }
+
+      slot.innerHTML = as.currentWord.map((item, i) => `
+        <div class="anagram-tile" style="background: rgba(46,204,113,0.25); border-color: #2ecc71;" onclick="EroiMinigames.anagramRemoveLetter(${i})">
+          ${item.letter}
+        </div>
+      `).join('');
+    },
+
+    resetAnagramma: function() {
+      const as = this.anagramState;
+      as.currentWord = [];
+      document.querySelectorAll('.anagram-tile').forEach(t => t.classList.remove('used'));
+      this.renderAnagramSlots();
+    },
+
+    checkAnagramma: function() {
+      const as = this.anagramState;
+      if (!as || !as.current) return;
+      const userWord = as.currentWord.map(w => w.letter).join('').toUpperCase();
+      const sol = as.current.solution.toUpperCase();
+
+      if (userWord === sol) {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast(`Anagramma Risolto! Parola: ${sol}!`, 'success');
+        this.rewardAndNext('anagramma', 20, 10);
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Parola non corretta. Riprova!', 'danger');
+      }
+    },
+
+    // =====================================================
+    // TROVA LE DIFFERENZE MITOLOGICHE
+    // =====================================================
+    initDifferenze: function(container, data) {
+      const pool = data.differenze && data.differenze.length ? data.differenze : DEFAULT_DATA.differenze;
+      const diffObj = pool[0] || DEFAULT_DATA.differenze[0];
+
+      this.diffState = {
+        current: diffObj,
+        foundIds: new Set()
+      };
+
+      container.innerHTML = `
+        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+          <h4 style="color: var(--gold); margin-bottom: 4px;">${diffObj.title}</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Trova i 3 dettagli discordanti tra le due tavole storiche (Trovate: <strong id="diff-found-count" style="color:var(--gold);">0/${diffObj.totalDiffs}</strong>).</p>
+          <div class="diff-split">
+            <div class="diff-image-wrapper" id="diff-box-left" onclick="EroiMinigames.clickDiffImage(event)">
+              <img src="assets/prof_memmo_full.jpg" alt="Tavola A">
+            </div>
+            <div class="diff-image-wrapper" id="diff-box-right" onclick="EroiMinigames.clickDiffImage(event)">
+              <img src="assets/prof_memmo_full.jpg" alt="Tavola B" style="filter: sepia(0.2) contrast(1.05);">
+            </div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="btn btn-secondary" onclick="EroiMinigames.hintDifferenze()"><i class="fa-solid fa-lightbulb"></i> Aiuto (-2 🪙)</button>
+            <button class="btn btn-secondary" onclick="EroiMinigames.skipCurrent('differenze')"><i class="fa-solid fa-forward-step"></i> Passa</button>
+          </div>
+        </div>
+      `;
+    },
+
+    clickDiffImage: function(event) {
+      const ds = this.diffState;
+      if (!ds || !ds.current) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const clickX = ((event.clientX - rect.left) / rect.width) * 100;
+      const clickY = ((event.clientY - rect.top) / rect.height) * 100;
+
+      let hit = null;
+      ds.current.diffs.forEach(d => {
+        if (!ds.foundIds.has(d.id)) {
+          const dist = Math.sqrt(Math.pow(clickX - d.x, 2) + Math.pow(clickY - d.y, 2));
+          if (dist < 15) hit = d;
+        }
+      });
+
+      if (hit) {
+        ds.foundIds.add(hit.id);
+        const marker = document.createElement('div');
+        marker.className = 'diff-marker';
+        marker.style.left = `${hit.x}%`;
+        marker.style.top = `${hit.y}%`;
+        event.currentTarget.appendChild(marker);
+
+        const countLabel = document.getElementById('diff-found-count');
+        if (countLabel) countLabel.textContent = `${ds.foundIds.size}/${ds.current.totalDiffs}`;
+
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast(`Differenza trovata: ${hit.label}!`, 'success');
+
+        if (ds.foundIds.size >= ds.current.totalDiffs) {
+          setTimeout(() => {
+            if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Tutte le differenze trovate! Bravo osservatore!', 'success');
+            this.rewardAndNext('differenze', 25, 12);
+          }, 600);
+        }
+      } else {
+        if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast('Nessuna differenza qui. Osserva attentamente!', 'info');
+      }
+    },
+
+    hintDifferenze: function() {
+      const ds = this.diffState;
+      if (!ds || !ds.current) return;
+      this.useDracmeForHint(2, () => {
+        const remaining = ds.current.diffs.filter(d => !ds.foundIds.has(d.id));
+        if (remaining.length > 0) {
+          if (window.EroiApp && window.EroiApp.showToast) window.EroiApp.showToast(`Cerca attorno a: ${remaining[0].label}`, 'info');
+        }
+      });
+    },
+
+    // =====================================================
+    // HELPER INDIZI & DRACME
+    // =====================================================
+    useDracmeForHint: function(cost, callback) {
+      cost = cost || 2;
+      try {
+        const user = (window.EroiAuth && window.EroiAuth.getCurrentUser && window.EroiAuth.getCurrentUser()) || (window.Auth && window.Auth.getUser && window.Auth.getUser()) || null;
+        const userEmail = user ? (user.email || user.username || 'viandante') : 'viandante';
+        let currentDracme = 999;
+        if (window.EroiGame && window.EroiGame.getProfile) {
+          const p = window.EroiGame.getProfile(userEmail);
+          if (p && typeof p.dracme === 'number') currentDracme = p.dracme;
+        }
+
+        if (currentDracme < cost) {
+          if (window.EroiApp && window.EroiApp.showToast) {
+            window.EroiApp.showToast(`Dracme insufficienti! Ti servono ${cost} Dracme 🪙 per questo indizio.`, 'warning');
+          }
+          return;
+        }
+
+        if (window.EroiGame && window.EroiGame.addDracme && userEmail !== 'viandante') {
+          window.EroiGame.addDracme(userEmail, -cost);
+        }
+        if (window.EroiApp && window.EroiApp.showToast) {
+          window.EroiApp.showToast(`Indizio sbloccato! (-${cost} 🪙)`, 'info');
+        }
+        if (typeof callback === 'function') callback();
+      } catch(e) {
+        if (typeof callback === 'function') callback();
+      }
     },
 
     skipCurrent: function(type) {
@@ -1116,21 +1715,43 @@
     },
 
     // =====================================================
-    // RICOMPENSE
+    // RICOMPENSE CALIBRATE (1° Vittoria vs Replay Allenamento)
     // =====================================================
-    rewardAndNext: function(type, xp, dracme) {
+    rewardAndNext: function(type, defaultXp, defaultDracme) {
       try {
-        const user = window.EroiAuth.getCurrentUser();
-        if (user && user.role === 'student') {
-          if (window.EroiGame) {
-            window.EroiGame.addXP(user.email, xp);
-            window.EroiGame.addDracme(user.email, dracme);
-          }
-          if (window.EroiApp && window.EroiApp.showToast) {
-            window.EroiApp.showToast(`+${xp} XP e +${dracme} Dracme guadagnate!`, 'success');
-          }
+        const user = (window.EroiAuth && window.EroiAuth.getCurrentUser && window.EroiAuth.getCurrentUser()) || (window.Auth && window.Auth.getUser && window.Auth.getUser()) || null;
+        const userEmail = user ? (user.email || user.username || 'viandante') : 'viandante';
+        
+        // Traccia minigiochi vinti per evitare grinding
+        const storageKey = 'eroi_completed_minigames_' + userEmail;
+        let completed = {};
+        try { completed = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+        
+        const missionKey = (currentMissionId || 'default') + '_' + type;
+        const isFirstWin = !completed[missionKey];
+        
+        const xp = isFirstWin ? (defaultXp || 20) : 5;
+        const dracme = isFirstWin ? (defaultDracme || 10) : 2;
+        
+        if (isFirstWin) {
+          completed[missionKey] = true;
+          try { localStorage.setItem(storageKey, JSON.stringify(completed)); } catch(e) {}
+        }
+        
+        if (window.EroiGame && window.EroiGame.addXP) {
+          window.EroiGame.addXP(userEmail, xp);
+          window.EroiGame.addDracme(userEmail, dracme);
+        }
+        
+        const toastMsg = isFirstWin 
+          ? `🏆 Vittoria! +${xp} XP e +${dracme} Dracme d'Oro 🪙` 
+          : `⚡ Allenamento completato! +${xp} XP e +${dracme} Dracme 🪙`;
+          
+        if (window.EroiApp && window.EroiApp.showToast) {
+          window.EroiApp.showToast(toastMsg, 'success');
         }
       } catch(e) { console.warn('Reward error:', e); }
+      
       this.startMinigame(type, currentMissionId);
     }
   };
