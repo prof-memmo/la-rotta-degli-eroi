@@ -2126,20 +2126,29 @@ window.finalizzaStudente = async function() {
       ];
 
       function miniGameButtons(missionId) {
+        const games = [
+          { type: 'quiz', label: 'Quiz Epico', icon: 'assets/icone-giochi/1.png?v=2' },
+          { type: 'impiccato', label: 'Impiccato', icon: 'assets/icone-giochi/2.png?v=2' },
+          { type: 'cloze', label: 'Testo Cloze', icon: 'assets/icone-giochi/3.png?v=2' },
+          { type: 'puzzle', label: 'Puzzle Frasi', icon: 'assets/icone-giochi/4.png?v=2' },
+          { type: 'versi', label: 'Riordina Versi', icon: 'assets/icone-giochi/5.png?v=2' },
+          { type: 'memory', label: 'Memory', icon: 'assets/icone-giochi/6.png?v=2' },
+          { type: 'cruciverba', label: 'Cruciverba', icon: 'assets/icone-giochi/7.png?v=2' },
+          { type: 'rebus', label: 'Rebus', icon: 'assets/icone-giochi/8.png?v=2' },
+          { type: 'crittografia', label: 'Crittografia', icon: 'assets/icone-giochi/9.png?v=2' },
+          { type: 'indovinello', label: 'Indovinello', icon: 'assets/icone-giochi/10.png?v=2' },
+          { type: 'anagramma', label: 'Anagramma', icon: 'assets/icone-giochi/11.png?v=2' },
+          { type: 'differenze', label: 'Differenze', icon: 'assets/icone-giochi/12.png?v=2' }
+        ];
+
         return `
-          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.76rem; display: flex; align-items: center; gap: 6px; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2);" onclick="EroiApp.startMinigame('impiccato', '${missionId}')">
-              <i class="fa-solid fa-masks-theater" style="color: var(--gold);"></i> Impiccato
-            </button>
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.76rem; display: flex; align-items: center; gap: 6px; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2);" onclick="EroiApp.startMinigame('puzzle', '${missionId}')">
-              <i class="fa-solid fa-puzzle-piece" style="color: var(--gold);"></i> Puzzle
-            </button>
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.76rem; display: flex; align-items: center; gap: 6px; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2);" onclick="EroiApp.startMinigame('cloze', '${missionId}')">
-              <i class="fa-solid fa-pen-to-square" style="color: var(--gold);"></i> Cloze
-            </button>
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.76rem; display: flex; align-items: center; gap: 6px; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2);" onclick="EroiApp.startMinigame('versi', '${missionId}')">
-              <i class="fa-solid fa-scroll" style="color: var(--gold);"></i> Riordina Versi
-            </button>
+          <div class="mission-minigames-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+            ${games.map(g => `
+              <button class="btn btn-secondary minigame-pill-btn" style="padding: 6px 10px; font-size: 0.74rem; display: flex; align-items: center; gap: 8px; justify-content: flex-start; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.22); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: left;" onmouseover="this.style.background='rgba(212,175,55,0.18)'; this.style.borderColor='var(--gold)';" onmouseout="this.style.background='rgba(212,175,55,0.06)'; this.style.borderColor='rgba(212,175,55,0.22)';" onclick="EroiApp.startMinigame('${g.type}', '${missionId}')">
+                <img src="${g.icon}" alt="" style="width: 22px; height: 22px; object-fit: contain; aspect-ratio: 1/1; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4)); flex-shrink: 0;" />
+                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${g.label}</span>
+              </button>
+            `).join('')}
           </div>
         `;
       }
