@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Stylesheet di Progetto -->
   <link rel="stylesheet" href="css/style.css?v=21">
-  <link rel="stylesheet" href="css/components.css?v=21">
 
   <style>
     .vis-bar {
@@ -46,7 +45,7 @@
 
   <!-- Icone per Safari e Dispositivi Mobili -->
   <script>window.HUB_GAME_ID = "la-rotta-degli-eroi";</script>
-  <script src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/hub-subscription-guard.js?v=20260824_rotta_guard"></script>
+  <script src="https://gestionesiti.profmemmo.it/shared/hub-subscription-guard.js?v=20260824_rotta_guard"></script>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -93,7 +92,7 @@
                   <i class="fa-solid fa-globe"></i> Profilo Globale Ecosistema
               </div>
               <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0 0 10px 0;">Il tuo account è sincronizzato con l'Ecosistema Prof. Memmo. Gestisci abbonamenti e impostazioni generali dall'Hub.</p>
-              <a href="https://prof-memmo.github.io/games/profilo.html" target="_blank" class="btn" style="width: 100%; border-radius: 20px; font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 8px 12px; background: #6366f1; color: white;">
+              <a href="https://profmemmo.it/profilo.html" target="_blank" class="btn" style="width: 100%; border-radius: 20px; font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 8px 12px; background: #6366f1; color: white;">
                   Gestisci Profilo Globale <i class="fa-solid fa-arrow-up-right-from-square"></i>
               </a>
           </div>
@@ -110,13 +109,13 @@
     <header class="app-header" id="app-header" style="display: none;">
       <div id="impersonation-banner" style="display:none; text-align:center; padding:4px; font-weight:bold; font-size:0.75rem; z-index:9999; width:100%; background: var(--gold); color: #000; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>
       <div class="header-logo-container" style="display: flex; align-items: center; margin: 0; padding: 0; border: none;">
-        <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/games/rotta-eroi-header.png" alt="La Rotta degli Eroi Header Logo" style="height: 60px; max-width: 250px; object-fit: contain;">
+        <img src="https://gestionesiti.profmemmo.it/shared/assets/branding/games/rotta-eroi-header.png" alt="La Rotta degli Eroi Header Logo" style="height: 60px; max-width: 250px; object-fit: contain;">
       </div>
 
       <!-- Logo Avatar Centrato -->
       <div class="header-center-logo">
         <div class="header-prof-logo-wrapper">
-          <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/prof-memmo/prof-memmo-avatar.png" class="header-prof-logo" alt="Prof. Memmo Logo">
+          <img src="https://gestionesiti.profmemmo.it/shared/assets/branding/prof-memmo/prof-memmo-avatar.png" class="header-prof-logo" alt="Prof. Memmo Logo">
         </div>
       </div>
       
@@ -136,7 +135,7 @@
     <!-- Sidebar Navigation (Desktop) - HIDDEN but kept in DOM to avoid JS errors -->
     <nav class="sidebar" id="main-sidebar" style="display: none !important;">
       <div class="logo-container" style="display: flex; justify-content: center; align-items: center; border: none; padding-bottom: 0; margin-bottom: 10px;">
-        <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/games/rotta-eroi-header.png" alt="La Rotta degli Eroi Header Logo" style="height: 65px; object-fit: contain;">
+        <img src="https://gestionesiti.profmemmo.it/shared/assets/branding/games/rotta-eroi-header.png" alt="La Rotta degli Eroi Header Logo" style="height: 65px; object-fit: contain;">
       </div>
       
       <!-- RPG Player Card / Character Frame -->
@@ -195,19 +194,30 @@
           </button>
           <h1 style="text-align: center; color: white; display: none;">Benvenuto ne La Rotta degli Eroi!<br>Accedi per iniziare il tuo viaggio epico.</h1>
           <div style="text-align: center; margin-top: 0; margin-bottom: 10px;">
-              <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/games/rotta-eroi-badge.png" alt="Logo La Rotta degli Eroi" style="width: 280px; max-width: 90%; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3));">
+              <img src="https://gestionesiti.profmemmo.it/shared/assets/branding/games/rotta-eroi-badge.png" alt="Logo La Rotta degli Eroi" style="width: 280px; max-width: 90%; filter: drop-shadow(0 0 15px rgba(212,175,55,0.3));">
           </div>
           <div class="glass" style="padding: 24px; margin-top: 5px; max-width: 450px; margin-left: auto; margin-right: auto; text-align: center;" id="login-section">
               <p style="font-size: 0.95rem; color: #fff; margin-bottom: 20px; font-weight: 500;">Accedi per iniziare il tuo viaggio epico.</p>
               
               <div style="text-align: center; margin: 25px 0;">
-                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-size: 1.15rem; font-weight: 800; padding: 14px 28px; border-radius: 50px; box-shadow: 0 4px 15px rgba(212,175,55,0.4); border: none; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.location.href='https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html?redirect=rotta_degli_eroi'">
+                  <button type="button" class="btn" style="background: var(--gold); color: #1a1a2e; font-size: 1.15rem; font-weight: 800; padding: 14px 28px; border-radius: 50px; box-shadow: 0 4px 15px rgba(212,175,55,0.4); border: none; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.handleGoogleLogin()">
                       <i class="fa-solid fa-right-to-bracket"></i> Accedi tramite Hub
                   </button>
               </div>
 
               <p style="font-size: 0.85rem; color: #ccc; margin-top: 5px;">Verrai reindirizzato al Portale Unico del Prof. Memmo per l'accesso sicuro.</p>
           </div>
+      
+          <footer class="view-footer-copyright" style="margin-top: 30px;">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <p class="footer-copy" id="footer-copyright-text">
+              &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+            </p>
+          </footer>
       </section>
 
       <!-- VIEW: Onboarding -->
@@ -284,7 +294,7 @@
           <div style="max-width: 600px; margin: 0 auto; text-align: center; padding: 20px;">
               <h2 style="color: var(--gold); margin-bottom: 20px; font-size: 2rem;">Tempo di Riposo!</h2>
               <div id="pausa-video-container" class="pausa-video-container">
-                  <video src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/video/gatto-che-dorme.mp4" autoplay loop muted playsinline class="pausa-video" style="filter: url(#remove-white);"></video>
+                  <video src="https://gestionesiti.profmemmo.it/shared/assets/video/gatto-che-dorme.mp4" autoplay loop muted playsinline class="pausa-video" style="filter: url(#remove-white);"></video>
               </div>
               <p style="font-size: 1.1rem; color: #ddd; line-height: 1.5; margin-bottom: 20px;">
                   Hai giocato per 45 minuti! È il momento di fare una pausa.<br><br>
@@ -383,7 +393,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy" id="footer-copyright-text">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -562,7 +576,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -644,7 +662,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -694,7 +716,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -870,7 +896,7 @@
                       Gli studenti e le classi sono gestiti centralmente tramite l'Hub con il sistema a slot protetti (Zero-Email).
                     </p>
                   </div>
-                  <a href="https://prof-memmo.github.io/games/profilo.html" target="_blank" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                  <a href="https://profmemmo.it/profilo.html" target="_blank" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
                     <i class="fa-solid fa-chalkboard-user"></i> Gestisci Classi nell'Hub
                   </a>
                 </div>
@@ -997,7 +1023,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -1133,7 +1163,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -1166,7 +1200,11 @@
           </div>
 
           <footer class="view-footer-copyright">
-            <img src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
+            <div class="footer-legal-links" style="margin-bottom: 8px; display: flex; justify-content: center; gap: 15px; font-size: 0.85rem;">
+              <a href="#" onclick="event.preventDefault(); openSharedModal('privacy');" style="color: var(--gold); text-decoration: underline;">Privacy Policy</a>
+              <a href="#" onclick="event.preventDefault(); openSharedModal('termini');" style="color: var(--gold); text-decoration: underline;">Termini e Condizioni</a>
+            </div>
+            <img src="https://gestionesiti.profmemmo.it/shared/assets/legal/patamu-badge.png" alt="Patamu" class="patamu-footer-badge">
             <p class="footer-copy">
               &copy; 2026 Guglielmo Piersanti. Tutti i contenuti presenti su questo sito sono di proprietà dell'autore e sono protetti tramite deposito e marcatura temporale presso Patamu. I contenuti sono inoltre distribuiti con licenza Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
             </p>
@@ -1306,9 +1344,6 @@
 
   <!-- Firebase future configuration placeholder (SI, commentato) -->
   <!--
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
   <script>
     // Configurazione futura di Firebase per deploy e migrazione
     const firebaseConfig = {
@@ -1327,7 +1362,7 @@
     <div id="modal-miniguida" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 9999; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); position: fixed; inset: 0; padding: 20px;">
         <div class="modal-content" style="background: white; border-radius: 24px; width: 100%; max-width: 900px; display: flex; overflow: hidden; position: relative; max-height: 90vh; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
             <div style="width: 33%; background: #f8fafc; display: flex; align-items: flex-end; justify-content: center; border-right: 2px solid #f1f5f9; padding-top: 20px;" class="hide-mobile">
-                <img src="assets/prof_memmo_full.jpg" onerror="this.src='https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/prof-memmo/prof-memmo-full.jpg';" alt="Prof Memmo" style="width: 120%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
+                <img src="assets/prof_memmo_full.jpg" onerror="this.src='https://gestionesiti.profmemmo.it/shared/assets/branding/prof-memmo/prof-memmo-full.jpg';" alt="Prof Memmo" style="width: 120%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
             </div>
             <div style="flex: 1; padding: 30px 40px; display: flex; flex-direction: column; position: relative; min-height: 450px;">
                 <button onclick="closeMiniguida()" style="position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f5f9; color: #475569; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;"><i class="fa-solid fa-xmark"></i></button>
@@ -1427,6 +1462,6 @@
     </script>
     <script src="js/services/miniguida-service.js?v=20260929_miniguida_v1"></script>
     <!-- Modali condivisi ecosistema Prof. Memmo -->
-    <script src="https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/legal-modal.js?v=20260819a"></script>
+    <script src="https://gestionesiti.profmemmo.it/shared/legal-modal.js?v=20260819a"></script>
 </body>
 </html>
