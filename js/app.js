@@ -65,7 +65,7 @@ const LEGAL_TEXTS = {
 
 // --- Funzione contatti (apre direttamente la pagina unica di contatto) ---
 window.showContattiModal = function() {
-    window.open('https://prof-memmo.github.io/games/contatti.html', '_blank');
+    window.open('https://profmemmo.it/contatti.html', '_blank');
 };
 
 let _currentLegalType = null;
@@ -124,10 +124,10 @@ window.handleEmailLogin = async function() {
 };
 
 window.handleGoogleLogin = function() {
-    const checkAge = document.getElementById('welcome-check-age')?.checked;
-    const checkPrivacy = document.getElementById('welcome-check-privacy')?.checked;
+    const ageEl = document.getElementById('welcome-check-age');
+    const privEl = document.getElementById('welcome-check-privacy');
     
-    if (!checkAge || !checkPrivacy) {
+    if (ageEl && privEl && (!ageEl.checked || !privEl.checked)) {
         alert("Devi confermare l'età e accettare Privacy Policy e Termini per continuare.");
         return;
     }
@@ -143,7 +143,7 @@ window.selectOnboardingRole = async function(role) {
         window.EroiApp.switchActiveView('view-selezione-profilo');
     } else if (role === 'docente') {
         alert("La registrazione per i docenti è centralizzata nell'Hub. Verrai reindirizzato al Portale Hub.");
-        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+        window.location.href = 'https://gestionesiti.profmemmo.it/portal.html';
         return;
     } else if (role === 'forestiero') {
         // Forestiero completa subito
