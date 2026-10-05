@@ -16,35 +16,6 @@ Object.assign(window.Auth = window.Auth || {}, {
             };
         });
 
-        // 0. Check URL hash for SSO payload from Hub
-        try {
-            if (window.location.hash && window.location.hash.includes('pm_sso=')) {
-                const match = window.location.hash.match(/pm_sso=([^&]+)/);
-                if (match && match[1]) {
-                    const sso = JSON.parse(decodeURIComponent(match[1]));
-                    if (sso && sso.uid) {
-                        const isSuperAdmin = (sso.role === 'admin' || (sso.email && sso.email.toLowerCase() === 'prof.memmo@gmail.com'));
-                        window.Auth._user = {
-                            uid: sso.uid,
-                            name: sso.name || (isSuperAdmin ? 'Prof. Memmo' : 'Eroe'),
-                            avatar: sso.avatar || 'assets/avatar.png',
-                            role: isSuperAdmin ? 'admin' : (sso.role || 'docente'),
-                            points: 0,
-                            isGuest: false,
-                            email: sso.email || '',
-                            setupComplete: true,
-                            approved: true,
-                            createdAt: new Date().toISOString()
-                        };
-                        localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
-                        history.replaceState(null, '', window.location.pathname + window.location.search);
-                    }
-                }
-            }
-        } catch(e) {
-            console.warn("Errore parsing SSO Eroi:", e);
-        }
-
         const savedUser = localStorage.getItem('eroi_user');
         if (savedUser) {
             try {
@@ -76,8 +47,8 @@ Object.assign(window.Auth = window.Auth || {}, {
                     }
                 } else {
                     window.Auth._fbUser = null;
-                    const isLocalOrSso = window.Auth._user && (window.Auth._user.isGuest || (window.Auth._user.uid && String(window.Auth._user.uid).startsWith('std_')) || window.Auth._user.email);
-                    if (!isLocalOrSso) {
+                    const isLocalOnly = window.Auth._user && (window.Auth._user.isGuest || (window.Auth._user.uid && String(window.Auth._user.uid).startsWith('std_')));
+                    if (!isLocalOnly) {
                         window.Auth._user = null;
                         localStorage.removeItem('eroi_user');
                     }
@@ -143,7 +114,7 @@ Object.assign(window.Auth = window.Auth || {}, {
                     if (hubData.nickname) window.Auth._user.nickname = hubData.nickname;
                     if (!isSuperAdmin && hubData.statusAccount && (hubData.statusAccount === 'rejected' || hubData.statusAccount === 'suspended')) {
                         alert("Accesso negato: L'account è stato sospeso nell'Hub.");
-                        window.location.href = 'https://gestionesiti.profmemmo.it/portal.html';
+                        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
                         return;
                     }
                 }
