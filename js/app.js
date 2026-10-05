@@ -124,15 +124,11 @@ window.handleEmailLogin = async function() {
 };
 
 window.handleGoogleLogin = function() {
-    const ageEl = document.getElementById('welcome-check-age');
-    const privEl = document.getElementById('welcome-check-privacy');
-    
-    if (ageEl && privEl && (!ageEl.checked || !privEl.checked)) {
-        alert("Devi confermare l'età e accettare Privacy Policy e Termini per continuare.");
-        return;
-    }
-
-    Auth.loginWithGoogle();
+    const isPreview = window.location.pathname.includes('/preview');
+    const portalUrl = isPreview
+        ? 'https://gestionesiti.profmemmo.it/preview/portal.html?redirect=rotta_degli_eroi'
+        : 'https://gestionesiti.profmemmo.it/portal.html?redirect=rotta_degli_eroi';
+    window.location.href = portalUrl;
 };
 
 window.selectOnboardingRole = async function(role) {
