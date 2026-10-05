@@ -139,7 +139,11 @@ window.selectOnboardingRole = async function(role) {
         window.EroiApp.switchActiveView('view-selezione-profilo');
     } else if (role === 'docente') {
         alert("La registrazione per i docenti è centralizzata nell'Hub. Verrai reindirizzato al Portale Hub.");
-        window.location.href = 'https://gestionesiti.profmemmo.it/portal.html';
+        const isPreview = window.location.pathname.includes('/preview');
+        const portalUrl = isPreview
+            ? 'https://gestionesiti.profmemmo.it/preview/portal.html?redirect=rotta_degli_eroi'
+            : 'https://gestionesiti.profmemmo.it/portal.html?redirect=rotta_degli_eroi';
+        window.location.href = portalUrl;
         return;
     } else if (role === 'forestiero') {
         // Forestiero completa subito
