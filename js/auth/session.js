@@ -46,6 +46,19 @@ Object.assign(window.Auth = window.Auth || {}, {
                         window.dispatchEvent(new CustomEvent('authChange'));
                     }
                 } else {
+                    // Se abbiamo una sessione SSO valida (da ponte Hub o cookie), preserviamola!
+                    const ssoUser = localStorage.getItem('eroi_user') || localStorage.getItem('hub_user_session');
+                    if (ssoUser) {
+                        try {
+                            const parsed = JSON.parse(ssoUser);
+                            if (parsed && (parsed.email || parsed.name || parsed.displayName)) {
+                                window.Auth._user = parsed;
+                                window.Auth._resolveReady();
+                                window.dispatchEvent(new CustomEvent('authChange'));
+                                return;
+                            }
+                        } catch(e) {}
+                    }
                     window.Auth._fbUser = null;
                     const isLocalOnly = window.Auth._user && (window.Auth._user.isGuest || (window.Auth._user.uid && String(window.Auth._user.uid).startsWith('std_')));
                     if (!isLocalOnly) {
