@@ -143,7 +143,7 @@ window.selectOnboardingRole = async function(role) {
         window.EroiApp.switchActiveView('view-selezione-profilo');
     } else if (role === 'docente') {
         alert("La registrazione per i docenti è centralizzata nell'Hub. Verrai reindirizzato al Portale Hub.");
-        window.location.href = 'https://prof-memmo.github.io/prof-memmo-gestione-siti/portal.html';
+        window.location.href = 'https://profmemmo.it/portal.html';
         return;
     } else if (role === 'forestiero') {
         // Forestiero completa subito
