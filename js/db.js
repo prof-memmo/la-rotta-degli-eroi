@@ -5,6 +5,19 @@
   let dbState = null; Object.defineProperty(window, "dbState", { get: () => dbState, set: (val) => dbState = val });
 
   window.EroiDB = Object.assign(window.EroiDB || {}, {
+    isAdminOrDocente: function() {
+      const user = (window.Auth && window.Auth.getUser && window.Auth.getUser()) ||
+                   (window.App && window.App.state && window.App.state.user);
+      if (user) {
+        return user.role === 'admin' || user.role === 'docente' || user.role === 'teacher' || (user.email && user.email.toLowerCase() === 'prof.memmo@gmail.com');
+      }
+      try {
+        const stored = JSON.parse(localStorage.getItem('eroi_user') || localStorage.getItem('currentUser') || '{}');
+        return stored && (stored.role === 'admin' || stored.role === 'docente' || stored.role === 'teacher' || (stored.email && stored.email.toLowerCase() === 'prof.memmo@gmail.com'));
+      } catch (e) {
+        return false;
+      }
+    },
     init: function() {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

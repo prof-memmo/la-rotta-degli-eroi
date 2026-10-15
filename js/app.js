@@ -5238,8 +5238,9 @@ window.finalizzaStudente = async function() {
     },
 
     loadHistoricalArchives: async function() {
-      if(!EroiDB.isAdminOrDocente()) return;
+      if (!window.EroiDB || (typeof window.EroiDB.isAdminOrDocente === 'function' && !window.EroiDB.isAdminOrDocente())) return;
       try {
+          if (!window.fbDb) return;
           const snapshot = await window.fbDb.collection('archives').orderBy('timestamp', 'desc').get();
           const container = document.getElementById('admin-historical-archives-list');
           if(!container) return;
