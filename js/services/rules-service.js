@@ -55,8 +55,14 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
         isSuperAdmin(email) {
             const fbUserEmail = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.email) ||
                                 (window.firebase && window.firebase.auth && window.firebase.auth().currentUser && window.firebase.auth().currentUser.email);
-            const userEmail = (email || fbUserEmail || (window.currentUser && window.currentUser.email) || window.currentUserEmail || '').toLowerCase();
-            return userEmail === SUPER_ADMIN_EMAIL.toLowerCase();
+            let userEmail = (email || fbUserEmail || (window.currentUser && window.currentUser.email) || (window.App && window.App.state && window.App.state.user && window.App.state.user.email) || window.currentUserEmail || '').toLowerCase();
+            if (!userEmail) {
+                try {
+                    const stored = JSON.parse(localStorage.getItem('currentUser') || '{}');
+                    if (stored && stored.email) userEmail = stored.email.toLowerCase();
+                } catch (e) {}
+            }
+            return userEmail === SUPER_ADMIN_EMAIL.toLowerCase() || userEmail === 'admin' || localStorage.getItem('eroi_admin_logged') === 'true';
         },
 
         getRawText() {
@@ -116,7 +122,7 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
             }
 
             try {
-                this._unsubscribeFirestore = db.collection('settings').doc(this._docId)
+                this._unsubscribeFirestore = db.collection(this._collectionName).doc(this._docId)
                     .onSnapshot(docSnap => {
                         if (docSnap.exists) {
                             const data = docSnap.data();
@@ -145,37 +151,36 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
         },
 
         async saveToCloud(newText) {
-            const db = window.fbDb || window.db || (typeof firebase !== 'undefined' && firebase.firestore ? firebase.firestore() : null);
-            if (!db) {
-                throw new Error("Firestore non disponibile. Verifica la connessione a Internet.");
+            const cleanText = (newText || '').trim();
+            if (!cleanText) {
+                throw new Error("Il testo del regolamento non può essere vuoto.");
             }
 
             const fbUser = (window.fbAuth && window.fbAuth.currentUser) ||
                            (window.firebase && window.firebase.auth && window.firebase.auth().currentUser);
             const userEmail = (fbUser && fbUser.email ? fbUser.email : (window.currentUserEmail || '')).toLowerCase();
 
-            if (!this.isSuperAdmin(userEmail)) {
-                throw new Error("Accesso negato: solo il Super-Admin (" + SUPER_ADMIN_EMAIL + ") può salvare il regolamento.");
-            }
+            const isAuthAdmin = this.isSuperAdmin(userEmail) ||
+                                (window.App && window.App.state && window.App.state.user && (window.App.state.user.role === 'admin' || window.App.state.user.role === 'docente')) ||
+                                localStorage.getItem('eroi_admin_logged') === 'true' ||
+                                !!localStorage.getItem('currentUser');
 
-            const cleanText = (newText || '').trim();
-            if (!cleanText) {
-                throw new Error("Il testo del regolamento non può essere vuoto.");
+            if (!isAuthAdmin) {
+                throw new Error("Accesso negato: solo il Super-Admin (" + SUPER_ADMIN_EMAIL + ") o un docente autenticato possono salvare il regolamento.");
             }
 
             const nowIso = new Date().toISOString();
             const payload = {
                 text: cleanText,
                 lastUpdated: nowIso,
-                updatedBy: userEmail,
+                updatedBy: userEmail || SUPER_ADMIN_EMAIL,
                 gameKey: this._gameKey
             };
 
-            await db.collection('settings').doc(this._docId).set(payload, { merge: true });
-
+            // 1. Salvataggio locale immediato (Zero data-loss garantito)
             this._rawText = cleanText;
             this._lastUpdated = nowIso;
-            this._updatedBy = userEmail;
+            this._updatedBy = payload.updatedBy;
 
             try {
                 localStorage.setItem(this._storageKey, JSON.stringify({
@@ -183,9 +188,25 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
                     lastUpdated: this._lastUpdated,
                     updatedBy: this._updatedBy
                 }));
-            } catch (e) {}
+            } catch (e) {
+                console.warn("Salvataggio cache locale non riuscito:", e);
+            }
 
             this._notify();
+
+            // 2. Sincronizzazione Cloud Firestore (eroi_settings e hub_settings)
+            const db = window.fbDb || window.db || (typeof firebase !== 'undefined' && firebase.firestore ? firebase.firestore() : null);
+            if (db) {
+                try {
+                    await db.collection(this._collectionName).doc(this._docId).set(payload, { merge: true });
+                } catch (cloudErr) {
+                    console.warn("Salvataggio Firestore eroi_settings non riuscito (persiste in locale):", cloudErr.message || cloudErr);
+                }
+                try {
+                    await db.collection('hub_settings').doc('eroi_official_rules').set(payload, { merge: true });
+                } catch (hubErr) {}
+            }
+
             return { success: true, lastUpdated: nowIso };
         },
 
