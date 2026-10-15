@@ -15,12 +15,11 @@
 
     const SUPER_ADMIN_EMAIL = 'prof.memmo@gmail.com';
 
-    const DEFAULT_EROI_RULES_TEXT = `[STUDENTE]
-1. Il Cammino dell'Eroe
-Il tuo obiettivo è guadagnare XP per salire di livello ed ottenere Dracme da spendere nello Shop. Risolvi i quiz e partecipa alle missioni per progredire sulla mappa.
+    const DEFAULT_EROI_RULES_TEXT = `1. Scopo del Gioco e Accesso Centralizzato
+L'accesso, la gestione del proprio account, dei piani e delle classi avvengono esclusivamente tramite il Profilo del docente sul portale principale https://prof-memmo.github.io/games/ che genera un codice univoco da condividere con gli studenti. Il tuo obiettivo è guadagnare XP per salire di livello ed ottenere Dracme da spendere nello Shop. Risolvi i quiz e partecipa alle missioni per progredire sulla mappa della campagna epica.
 
 2. Economia e Progressione
-L'economia degli studenti è completamente indipendente. Le quantità di oggetti nel Mercato (stock) diminuiscono solo quando un altro studente acquista l'oggetto.
+L'economia degli studenti è completamente autonoma. Le quantità di oggetti nel Mercato (stock) diminuiscono solo quando un altro studente acquista l'oggetto. Gli acquisti del docente non influenzano lo stock della classe.
 
 3. L'Inventario e gli Equipaggiamenti
 Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per l'avatar e Artefatti. Puoi tenere attivi fino a 2 Artefatti contemporaneamente.
@@ -28,21 +27,14 @@ Nell'inventario puoi accumulare consumabili (indizi, tentativi extra), skin per 
 4. Gli Aiutanti (Secondo Quadrimestre)
 Dal secondo quadrimestre potrai scegliere un Aiutante fisso (Eroi, Paladini, Cavalieri o Divinità) che ti garantirà un bonus passivo, un potere speciale a usi limitati e un'immunità contro malus. Questa funzione si attiva automaticamente a partire dal 1° febbraio di ogni anno scolastico.
 
-5. Benessere e Pausa di Navigazione
-A tutela del benessere visivo e della concentrazione, dopo 45 minuti di navigazione continua è prevista una pausa di riposo per consentire il recupero delle energie.
+5. Ruolo del Docente e Didattica
+Dal Pannello Docente, l'insegnante gestisce le classi, monitora i progressi e attiva il 2° quadrimestre. Il gameplay personale del docente è isolato e non interferisce con l'equilibrio della classe.
 
-[DOCENTE]
-1. Due Mondi Separati (Universo Parallelo)
-Il docente opera in un universo parallelo. Può giocare come un normale studente (accumulando XP e Dracme reali sul proprio profilo), ma senza MAI interferire con l'economia, lo stock o i log degli studenti.
+6. Benessere Digitale e Gestione delle Pause
+In linea con le linee guida pedagogiche di Prof. Memmo, l'attività didattica prevede sessioni attive di massimo 45 minuti, seguite obbligatoriamente da almeno 15 minuti di pausa o debriefing non mediato da schermi, garantendo un equilibrio sostenibile tra gioco digitale e confronto in presenza.
 
-2. Isolamento Economico
-Gli acquisti del docente nello Shop NON decrementano la giacenza (stock) degli oggetti disponibili per gli studenti, né influenzano le statistiche globali.
-
-3. Gestione Didattica
-Dal Pannello Docente, l'insegnante gestisce le classi, attiva il 2° quadrimestre e monitora i progressi degli studenti, leggendo esclusivamente i dati del sistema didattico.
-
-4. Non Interferenza
-Il gameplay personale del docente è isolato. Qualsiasi progresso nella storia o acquisto effettuato dal docente non ha alcun impatto sul bilanciamento della classe.`;
+7. Codice Deontologico e Spirito dell'Eroe
+I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide e alla valorizzazione dell'impegno scolastico. Gli studenti identificati tramite il codice classe operano nel pieno rispetto della privacy scolastica.`;
 
     const RulesService = {
         _gameKey: 'eroi',
