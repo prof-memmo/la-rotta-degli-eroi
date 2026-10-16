@@ -1321,31 +1321,49 @@
             <div style="flex: 1; padding: 30px 40px; display: flex; flex-direction: column; position: relative; min-height: 450px;">
                 <button onclick="closeMiniguida()" style="position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; border: none; background: #f1f5f9; color: #475569; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;"><i class="fa-solid fa-xmark"></i></button>
                 
-                <h2 id="miniguida-title" style="font-size: 2rem; font-weight: 900; color: #3b82f6; margin-bottom: 30px; text-align: center; text-transform: uppercase; border-bottom: 4px solid rgba(59, 130, 246, 0.2); padding-bottom: 10px; display: inline-block; margin-left: auto; margin-right: auto;">Come si gioca?</h2>
+                <h2 id="miniguida-title" style="font-size: 2rem; font-weight: 900; color: #3b82f6; margin-bottom: 30px; text-align: center; text-transform: uppercase; border-bottom: 4px solid rgba(59, 130, 246, 0.2); padding-bottom: 10px; display: inline-block; margin-left: auto; margin-right: auto;">Miniguida</h2>
                 
                 <div id="miniguida-step-0" class="miniguida-step" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-compass" style="font-size: 5rem; color: #3b82f6; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">🧭 <strong>Salpa sulla Mappa dell'Epica:</strong><br>Esplora le rotte dei grandi poemi (<em>Odissea, Iliade, Eneide</em>), affronta le tappe e rispondi alle sfide mitologiche.</p>
+                    <i class="fa-solid fa-bullseye" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Lo scopo del gioco è guidare il tuo eroe lungo il Mediterraneo antico, superare le sfide mitologiche e accumulare virtù ed esperienza fino alla meta finale.</p>
                 </div>
                 
                 <div id="miniguida-step-1" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-bolt-lightning" style="font-size: 5rem; color: #f59e0b; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">⚡ <strong>Quiz, Mostri e Divinità:</strong><br>Risolvi i quesiti su dei, eroi e creature del mito per accumulare punti esperienza (<strong>XP</strong>) e <strong>Dracme d'argento</strong>.</p>
+                    <i class="fa-solid fa-compass" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Si gioca avanzando di tappa in tappa sulla mappa, rispondendo ai quesiti epici, guadagnando dracme ed equipaggiamento e arricchendo il diario di bordo.</p>
                 </div>
                 
                 <div id="miniguida-step-2" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-shield-halved" style="font-size: 5rem; color: #ec4899; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">🛡️ <strong>Mercato &amp; Artefatti:</strong><br>Visita l'Emporio per equipaggiare artefatti leggendari e sbloccare gli <strong>Eroi Aiutanti</strong> con poteri speciali.</p>
+                    <i class="fa-solid fa-map-location-dot" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Sulla <strong>Mappa</strong> puoi navigare lungo le tappe del viaggio epico e affrontare le prove.</p>
                 </div>
 
                 <div id="miniguida-step-3" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
-                    <i class="fa-solid fa-trophy" style="font-size: 5rem; color: #10b981; margin-bottom: 20px;"></i>
-                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500;">🏆 <strong>Taglia il Traguardo:</strong><br>Scala la gerarchia della classe, completa tutte le tappe della mappa e diventa una vera <strong>Leggenda del Mito</strong>!</p>
+                    <i class="fa-solid fa-feather-pointed" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Apri il <strong>Diario</strong> per rileggere o scrivere le riflessioni di bordo del tuo eroe.</p>
+                </div>
+
+                <div id="miniguida-step-4" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
+                    <i class="fa-solid fa-coins" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Vai al <strong>Mercato</strong> per acquistare equipaggiamento e consumabili con le dracme che hai guadagnato.</p>
+                </div>
+
+                <div id="miniguida-step-5" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
+                    <i class="fa-solid fa-box-open" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Controlla l'<strong>Inventario</strong> per vedere gli oggetti, gli artefatti leggendari e gli aiutanti che hai sbloccato.</p>
+                </div>
+
+                <div id="miniguida-step-6" class="miniguida-step" style="flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.3s ease-out;">
+                    <i class="fa-solid fa-book-open" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">Entra nel <strong>Tempio</strong> per consultare le guide mitologiche e i testi storici di approfondimento.<br><br><em>Consulta il regolamento per saperne di più.</em></p>
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
                     <div style="display: flex; gap: 8px;" id="miniguida-dots">
                         <div class="dot active" style="width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; transition: 0.3s;"></div>
+                        <div class="dot" style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: 0.3s;"></div>
+                        <div class="dot" style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: 0.3s;"></div>
+                        <div class="dot" style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: 0.3s;"></div>
                         <div class="dot" style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: 0.3s;"></div>
                         <div class="dot" style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: 0.3s;"></div>
                         <div class="dot" style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; transition: 0.3s;"></div>
@@ -1370,7 +1388,7 @@
     
     <script>
         let currentMiniguidaStep = 0;
-        const totalMiniguidaSteps = 4;
+        const totalMiniguidaSteps = 7;
         
         function openMiniguida() {
             if (window.EroiMiniguidaService) {
