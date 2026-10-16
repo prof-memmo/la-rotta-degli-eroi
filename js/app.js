@@ -996,8 +996,8 @@ window.finalizzaStudente = async function() {
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
+          { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' }
         ];
       } else if ((user.role === 'docente' || user.role === 'teacher')) {
         links = [
@@ -1006,9 +1006,9 @@ window.finalizzaStudente = async function() {
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-teacher-dashboard', label: 'Docente', icon: 'fa-chalkboard-user' },
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
+          { view: 'view-teacher-dashboard', label: 'Docente', icon: 'fa-chalkboard-user' }
         ];
       } else if (user.role === 'admin') {
         links = [
@@ -1017,10 +1017,10 @@ window.finalizzaStudente = async function() {
           { view: 'view-diario', label: 'Diario', icon: 'fa-feather-pointed' },
           { view: 'view-shop', label: 'Mercato', icon: 'fa-coins' },
           { view: 'view-inventory', label: 'Inventario', icon: 'fa-box-open' },
-          { view: 'view-teacher-dashboard', label: 'Docente', icon: 'fa-chalkboard-user' },
-          { view: 'view-admin-dashboard', label: 'Admin', icon: 'fa-shield-halved' },
+          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' },
           { view: 'view-regolamento', label: 'Regolamento', icon: 'fa-gavel' },
-          { action: 'openMiniguida()', label: 'Miniguida', icon: 'fa-circle-question' }
+          { view: 'view-teacher-dashboard', label: 'Docente', icon: 'fa-chalkboard-user' },
+          { view: 'view-admin-dashboard', label: 'Admin', icon: 'fa-shield-halved' }
         ];
       }
 

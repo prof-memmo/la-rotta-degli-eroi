@@ -4943,36 +4943,66 @@ table.game-table tr:hover td {
     }
 }
 
-/* Tooltips per la Navbar */
+/* Tooltips e Floating Dock (Desktop only - Standard Ecosistema) */
 @media screen and (min-width: 1024px) {
     .mobile-bottom-nav {
+        width: max-content !important;
+        min-width: 500px;
+        max-width: 90vw;
+        height: 68px;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        border-radius: 40px !important;
+        background: rgba(13, 19, 38, 0.94) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1.5px solid var(--gold, #d4af37) !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7) !important;
+        padding: 0 24px !important;
+        gap: 10px !important;
         overflow: visible !important;
+        align-items: center;
     }
 
     .mobile-nav-item {
         position: relative;
+        flex: 0 0 auto !important;
+        min-width: 58px !important;
+        padding: 6px 12px;
+    }
+
+    .mobile-nav-item span {
+        display: none !important; /* Nasconde le etichette statiche su desktop */
+    }
+
+    .mobile-nav-item i {
+        font-size: 1.45rem !important;
+        transition: transform 0.25s ease, color 0.25s ease;
     }
 
     .mobile-nav-item::after {
         content: attr(data-tooltip);
         position: absolute;
-        bottom: 110%;
+        bottom: 115%;
         left: 50%;
-        transform: translateX(-50%) translateY(10px);
-        background: var(--primary-color, #3b82f6);
-        color: white;
-        padding: 8px 14px;
-        border-radius: 12px;
-        font-size: 0.9rem;
-        font-weight: 600;
+        transform: translateX(-50%) translateY(8px);
+        background: var(--gold, #d4af37);
+        color: #0d1326;
+        padding: 7px 14px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 800;
         white-space: nowrap;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         pointer-events: none;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         z-index: 2000;
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        letter-spacing: 0.3px;
+        text-transform: none;
     }
 
     .mobile-nav-item:hover::after {
@@ -4982,17 +5012,9 @@ table.game-table tr:hover td {
     }
 
     .mobile-nav-item:hover i {
-        transform: translateY(-5px);
-        color: var(--primary-color, #3b82f6);
+        transform: translateY(-4px);
+        color: var(--gold, #d4af37);
     }
-}
-
-
-/* Nascondi testo navbar su PC */
-@media (min-width: 769px) {
-  .mobile-nav-item span {
-    display: none !important;
-  }
 }
 
 /* =====================================================
