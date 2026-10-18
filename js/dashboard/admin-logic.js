@@ -9,28 +9,35 @@ window.EroiApp.switchAdminTab = function(tab) {
 
       document.querySelectorAll('#view-admin-dashboard .tab-content').forEach(panel => {
         panel.classList.remove('active');
+        panel.style.display = 'none';
       });
       const tabEl = document.getElementById(`a-tab-${tab}`);
-      if (tabEl) tabEl.classList.add('active');
+      if (tabEl) {
+        tabEl.classList.add('active');
+        tabEl.style.display = 'block';
+      }
     };
 
 window.EroiApp.renderAdminDashboard = function() {
       const settings = window.EroiDB.getSettings();
       
-      // Ricarica input impostazioni globali
-      document.getElementById('admin-setting-appname').value = settings.appName;
-      document.getElementById('admin-setting-copyright').value = settings.copyright;
-      document.getElementById('admin-setting-contacts').value = settings.contacts;
+      // Ricarica input impostazioni globali se presenti
+      const elAppName = document.getElementById('admin-setting-appname');
+      if (elAppName) elAppName.value = settings.appName || '';
+      const elCopy = document.getElementById('admin-setting-copyright');
+      if (elCopy) elCopy.value = settings.copyright || '';
+      const elCont = document.getElementById('admin-setting-contacts');
+      if (elCont) elCont.value = settings.contacts || '';
 
       // Renderizza componenti spostati da Teacher a Admin
-      this.renderTeacherMissions();
-      this.renderTeacherShop();
-      this.renderTeacherHelpersAndArtifacts();
-      this.renderTeacherGuides();
-      this.renderTeacherLogs();
+      if (typeof this.renderTeacherMissions === 'function') this.renderTeacherMissions();
+      if (typeof this.renderTeacherShop === 'function') this.renderTeacherShop();
+      if (typeof this.renderTeacherHelpersAndArtifacts === 'function') this.renderTeacherHelpersAndArtifacts();
+      if (typeof this.renderTeacherGuides === 'function') this.renderTeacherGuides();
+      if (typeof this.renderTeacherLogs === 'function') this.renderTeacherLogs();
 
       // Renderizza analytics shop
-      const shopLogs = window.EroiDB.getLogs().filter(l => l.action.includes("Acquistato"));
+      const shopLogs = (window.EroiDB.getLogs ? window.EroiDB.getLogs() : []).filter(l => l.action && l.action.includes("Acquistato"));
       const analyticsBox = document.getElementById('shop-analytics-info');
       
       if (analyticsBox) {
@@ -57,14 +64,15 @@ window.EroiApp.renderAdminDashboard = function() {
           }
       }
 
-      // Documenti legali
-      document.getElementById('legal-doc-privacy').value = settings.privacy || '';
-      document.getElementById('legal-doc-terms').value = settings.terms || '';
-      document.getElementById('legal-doc-cookies').value = settings.cookies || '';
-      document.getElementById('legal-doc-gdpr').value = settings.gdpr || '';
-
-      this.renderAdminAllUsers();
-      this.renderAdminSchoolsList();
+      // Documenti legali se presenti
+      const elPriv = document.getElementById('legal-doc-privacy');
+      if (elPriv) elPriv.value = settings.privacy || '';
+      const elTerms = document.getElementById('legal-doc-terms');
+      if (elTerms) elTerms.value = settings.terms || '';
+      const elCookies = document.getElementById('legal-doc-cookies');
+      if (elCookies) elCookies.value = settings.cookies || '';
+      const elGdpr = document.getElementById('legal-doc-gdpr');
+      if (elGdpr) elGdpr.value = settings.gdpr || '';
     };
 
 window.EroiApp.setAdminUserFilter = function(filter) {

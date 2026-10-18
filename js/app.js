@@ -5007,7 +5007,6 @@ window.finalizzaStudente = async function() {
 
     // --- PANNELLO ADMIN & LIVE EDITOR ---
     renderAdminDashboard: function() {
-      this.renderAdminAllUsers();
       if (window.LiveEditor && typeof window.LiveEditor.renderAdminPanel === 'function') {
         window.LiveEditor.renderAdminPanel('admin-live-editor-container');
       }
@@ -5084,26 +5083,6 @@ window.finalizzaStudente = async function() {
       }
     },
 
-    testConnessioneAdmin: async function() {
-      try {
-        if (!window.fbDb) throw new Error("Database Firebase non inizializzato");
-        const snap = await window.fbDb.collection('users').limit(1).get();
-        alert("✅ Connessione al Cloud Firestore riuscita e operativa!\nLatenza ottimale.");
-      } catch (e) {
-        console.error("Errore test connessione:", e);
-        alert("❌ Errore connessione database: " + e.message);
-      }
-    },
-
-    resetNotificheLette: function() {
-      try {
-        localStorage.removeItem('eroi_unread_notifications');
-        localStorage.removeItem('eroi_seen_notifications');
-        alert("✅ Tutte le notifiche dell'amministratore sono state reimpostate come lette.");
-      } catch (e) {
-        alert("Errore reset notifiche: " + e.message);
-      }
-    },
 
     azzeraValidazioniStagione: async function() {
       if (!EroiDB.isAdminOrDocente()) return;
