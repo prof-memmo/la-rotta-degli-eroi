@@ -3277,12 +3277,7 @@ window.finalizzaStudente = async function() {
       if (tabEl) tabEl.classList.add('active');
 
       if (tab === 'panoramica') {
-        this.renderTeacherClasses();
         this.renderTeacherStudents();
-      } else if (tab === 'registro') {
-        this.renderTeacherLogs();
-      } else if (tab === 'tornei') {
-        this.renderTeacherTournaments();
       } else if (tab === 'diario') {
         this.renderTeacherDiaries();
       }
@@ -3458,10 +3453,7 @@ window.finalizzaStudente = async function() {
         await window.EroiDB.syncCloudClasses();
       }
       this.populateClassSelects();
-      this.renderTeacherClasses();
       this.renderTeacherStudents();
-      this.renderTeacherLogs();
-      this.renderTeacherTournaments();
       this.renderTeacherDiaries();
     },
 
@@ -3516,7 +3508,7 @@ window.finalizzaStudente = async function() {
       });
 
       const optionsHtml = filtered.map(c => `
-        <option value="${c.id}">${c.name} (${c.id})</option>
+        <option value="${c.id}">${c.name || 'Classe'}${c.code ? ' (Codice: ' + c.code + ')' : ''}</option>
       `).join('');
 
       if (studentClassSelect) studentClassSelect.innerHTML = optionsHtml;
@@ -3527,70 +3519,15 @@ window.finalizzaStudente = async function() {
       }
     },
 
+    onTeacherClassSelect: function(classId) {
+      this.renderTeacherStudents();
+    },
+
     renderTeacherClasses: function() {
-      const classes = window.EroiDB.getClasses();
+      // Obsolete: Class management is centralized in the Hub
       const tbody = document.querySelector('#teacher-classes-table tbody');
       if (!tbody) return;
       tbody.innerHTML = '';
-      
-      const searchInput = document.getElementById('search-class-teacher');
-      const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-      const user = Auth.getUser();
-      const userEmail = (user && user.email) ? user.email.toLowerCase() : '';
-      const userUid = user ? user.uid : '';
-      const filtered = Object.values(classes).filter(c => {
-        const hasAccess = (user && user.role === 'admin') || 
-                          (c.teacherId && c.teacherId === userUid) ||
-                          (c.teacher && c.teacher.toLowerCase() === userEmail) || 
-                          (c.collaborators && c.collaborators.map(e => String(e).toLowerCase()).includes(userEmail));
-        if (!hasAccess) return false;
-        
-        if (search) {
-            return (c.name && c.name.toLowerCase().includes(search)) || 
-                   (c.id && c.id.toLowerCase().includes(search)) || 
-                   (c.code && c.code.toLowerCase().includes(search)) ||
-                   (c.school && c.school.toLowerCase().includes(search)) ||
-                   (c.city && c.city.toLowerCase().includes(search));
-        }
-        return true;
-      });
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--text-muted); font-style: italic;">Nessuna classe trovata. Le classi create nel tuo Profilo dell'Hub appariranno automaticamente qui.</td></tr>`;
-        return;
-      }
-
-      filtered.forEach(c => {
-        const teacherNames = [c.teacher ? c.teacher.split('@')[0] : 'Docente'];
-        if (c.collaborators && Array.isArray(c.collaborators)) {
-          c.collaborators.forEach(email => {
-            const short = email.split('@')[0];
-            if (!teacherNames.includes(short)) teacherNames.push(short);
-          });
-        }
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${c.id}</strong></td>
-          <td>
-            <strong>${c.name}</strong>
-            ${(c.school || c.city) ? `<div style="font-size:0.75rem; color:var(--text-muted);">${c.school}${c.city ? ' (' + c.city + ')' : ''}</div>` : ''}
-          </td>
-          <td>
-            <span class="badge" style="font-family: monospace; font-size: 0.85rem; padding: 4px 8px; border: 1.5px solid var(--gold); border-radius: 6px; color: var(--gold); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; background: rgba(212,175,55,0.05);" onclick="navigator.clipboard.writeText('${c.code}'); alert('Codice classe copiato: ${c.code}')" title="Clicca per copiare">
-              ${c.code} <i class="fa-solid fa-copy" style="font-size: 0.75rem;"></i>
-            </span>
-          </td>
-          <td><span style="font-size: 0.8rem; color: var(--text-muted);">${teacherNames.join(', ')}</span></td>
-          <td>
-            <button class="btn btn-secondary" style="padding: 4px 10px; font-size:0.75rem; border-radius: 6px; cursor: pointer;" onclick="EroiApp.filterByClass('${c.id}')" title="Filtra gli studenti di questa classe">
-              <i class="fa-solid fa-users"></i> Studenti
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
     },
 
     filterByClass: function(classId) {
@@ -3606,13 +3543,7 @@ window.finalizzaStudente = async function() {
     },
 
     deleteClass: async function(classId) {
-      if (!confirm("Sei sicuro di voler eliminare questa classe? Tutti gli studenti perderanno l'associazione.")) return;
-      await window.EroiDB.deleteClass(classId);
-      this.showToast("Classe eliminata con successo.", "success");
-      this.renderTeacherStats();
-      this.populateClassSelects();
-      this.renderTeacherClasses();
-      this.renderTeacherStudents();
+      // Obsolete: Class management is centralized in the Hub
     },
 
     renderTeacherStudents: function() {
@@ -3625,16 +3556,23 @@ window.finalizzaStudente = async function() {
       tbody.innerHTML = '';
 
       const user = Auth.getUser();
+      const userEmail = (user && user.email) ? user.email.toLowerCase() : '';
+      const userUid = user ? user.uid : '';
       const classes = window.EroiDB.getClasses();
       const myClassIds = Object.values(classes)
-        .filter(c => user.role === 'admin' || c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email)))
+        .filter(c => {
+          if (user && user.role === 'admin') return true;
+          return (c.teacherId && c.teacherId === userUid) ||
+                 (c.teacher && c.teacher.toLowerCase() === userEmail) || 
+                 (c.collaborators && c.collaborators.map(e => String(e).toLowerCase()).includes(userEmail));
+        })
         .map(c => c.id);
 
       const filtered = students.filter(s => {
         const matchesSearch = (s.name || '').toLowerCase().includes(search) || (s.email || '').toLowerCase().includes(search);
         let matchesClass = false;
         if (filterClass === 'all') {
-          matchesClass = (user.role === 'admin' || myClassIds.includes(s.classId));
+          matchesClass = (user && user.role === 'admin') || myClassIds.includes(s.classId);
         } else {
           matchesClass = (s.classId === filterClass);
         }
@@ -3642,7 +3580,7 @@ window.finalizzaStudente = async function() {
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Nessuno studente registrato nelle classi.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--text-muted);">Nessuno studente registrato nella classe selezionata.</td></tr>`;
         return;
       }
 
@@ -3653,12 +3591,10 @@ window.finalizzaStudente = async function() {
           if (state.col === 'name') {
               valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase();
           } else if (state.col === 'class') {
-              valA = (a.className || a.classId || '').toLowerCase();
-              valB = (b.className || b.classId || '').toLowerCase();
+              valA = ((classes[a.classId] && classes[a.classId].name) || a.className || '').toLowerCase();
+              valB = ((classes[b.classId] && classes[b.classId].name) || b.className || '').toLowerCase();
           } else if (state.col === 'level') {
               valA = a.level || 0; valB = b.level || 0;
-          } else if (state.col === 'date') {
-              valA = a.joinedAt || 0; valB = b.joinedAt || 0;
           } else {
               valA = (a.name || '').toLowerCase(); valB = (b.name || '').toLowerCase();
           }
@@ -3670,37 +3606,16 @@ window.finalizzaStudente = async function() {
 
       filtered.forEach(s => {
         const tr = document.createElement('tr');
-        const formattedDate = s.joinedAt ? new Date(s.joinedAt).toLocaleDateString('it-IT') : 'N/D';
+        const studentClassName = (classes[s.classId] && classes[s.classId].name) ? classes[s.classId].name : (s.className || 'Senza classe');
         tr.innerHTML = `
-          <td>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:1.4rem;">${this.getAvatarEmoji(s.avatarClass)}</span>
-              <div>
-                <strong>${s.name || 'Studente'}</strong><br>
-                <span style="font-size:0.75rem; color:var(--text-muted);">${s.email || ''}</span>
-              </div>
-            </div>
-          </td>
-          <td>${s.className || s.classId || 'Senza classe'}</td>
+          <td><strong>${s.name || 'Studente'}</strong></td>
+          <td>${studentClassName}</td>
           <td><span style="color:var(--gold); font-weight:bold;">${s.level || 'Viaggiatore'}</span></td>
-          <td style="font-size:0.85rem; color:var(--text-muted);">${formattedDate}</td>
           <td>${s.xp || 0} XP / ${s.dracme || 0} Dracme</td>
-          <td style="text-align:center;"><span title="${s.name}" style="color:var(--gold);"><i class="fa-solid fa-user-graduate"></i></span></td>
           <td>
-            <div style="display:flex; gap:6px;">
-              <button class="btn" style="padding:4px 8px; font-size:0.72rem; border: 1px solid var(--gold); color: var(--gold); background: transparent;" onclick="EroiApp.openStudentPreviewAll('${s.email}')" title="Preview Didattica">
-                <i class="fa-solid fa-eye"></i> Osserva
-              </button>
-              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openAwardModal('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}')">
-                🏆 Premia
-              </button>
-              <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.openSpostaModal('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}', '${s.classId || ''}')">
-                📁 Trasferisci
-              </button>
-              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="EroiApp.deleteStudent('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}')">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
+            <button class="btn" style="padding:4px 10px; font-size:0.78rem; border: 1px solid var(--gold); color: var(--gold); background: transparent;" onclick="EroiApp.openStudentPreviewAll('${s.email}')" title="Anteprima Studente">
+              <i class="fa-solid fa-eye"></i> Osserva
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -4794,6 +4709,7 @@ window.finalizzaStudente = async function() {
     renderTeacherLogs: function() {
       const logs = window.EroiDB.getLogs();
       const tbody = document.querySelector('#teacher-logs-table tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       logs.forEach(l => {

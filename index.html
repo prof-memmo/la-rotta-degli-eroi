@@ -792,47 +792,28 @@
           
           <div class="tabs-header">
             <button class="tab-btn active" onclick="EroiApp.switchTeacherTab('panoramica')">Panoramica</button>
-            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('registro')">Registro Attività</button>
-            <button class="tab-btn" onclick="EroiApp.switchTeacherTab('tornei')">Tornei Interni</button>
             <button class="tab-btn" onclick="EroiApp.switchTeacherTab('diario')">Valutazione Diari</button>
           </div>
 
           <!-- TAB PANORAMICA -->
           <div id="t-tab-panoramica" class="tab-content active">
             
-            <!-- SEZIONE: LE MIE CLASSI -->
-            <div class="glass-panel" style="margin-bottom: 24px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                <h3 class="panel-title" style="margin: 0;"><i class="fa-solid fa-chalkboard-user" style="color: var(--gold);"></i> Le Mie Classi</h3>
-                <input type="text" id="search-class-teacher" placeholder="Cerca classe per nome o codice..." class="form-control" style="width: 260px; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; font-size: 0.85rem;">
-              </div>
-              <div class="table-responsive">
-                <table class="game-table" id="teacher-classes-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nome</th>
-                      <th>Codice Iscrizione</th>
-                      <th>Docenti</th>
-                      <th>Studenti</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- SEZIONE: STUDENTI -->
             <div class="glass-panel" id="teacher-students-section">
-              <div class="teacher-students-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                <h3 class="panel-title" id="students-panel-title-text" style="margin: 0;"><i class="fa-solid fa-users" style="color: var(--gold);"></i> Studenti Iscritti</h3>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                  <input type="text" id="search-student-teacher" class="form-control" placeholder="Cerca studente..." style="padding: 6px 12px; font-size: 0.85rem; width: 180px;">
-                  <select id="filter-class-teacher" class="form-control" style="padding: 6px 12px; font-size: 0.85rem; width: 150px;">
+              <div class="teacher-students-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <label for="filter-class-teacher" style="font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.95rem;">
+                    <i class="fa-solid fa-chalkboard-user"></i> Classe:
+                  </label>
+                  <select id="filter-class-teacher" class="form-control" style="width: auto; min-width: 200px; padding: 8px 14px; font-size: 0.9rem;" onchange="EroiApp.onTeacherClassSelect(this.value)">
                     <option value="all">Tutte le Classi</option>
                   </select>
                 </div>
+
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" id="search-student-teacher" class="form-control" placeholder="Cerca studente..." style="padding: 8px 14px; font-size: 0.85rem; width: 180px;" oninput="EroiApp.renderTeacherStudents()">
+                </div>
               </div>
+
               <div class="table-responsive">
                 <table class="game-table" id="teacher-students-table">
                   <thead>
@@ -840,10 +821,8 @@
                       <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'name')"><div style="display: flex; align-items: center; white-space: nowrap;">Studente <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
                       <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'class')"><div style="display: flex; align-items: center; white-space: nowrap;">Classe <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
                       <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'level')"><div style="display: flex; align-items: center; white-space: nowrap;">Livello <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                      <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'date')"><div style="display: flex; align-items: center; white-space: nowrap;">Data Iscrizione <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
                       <th>XP / Dracme</th>
-                      <th><i class="fa-solid fa-envelope"></i></th>
-                      <th>Azioni e Assegnazioni</th>
+                      <th>Anteprima</th>
                     </tr>
                   </thead>
                   <tbody></tbody>
@@ -851,56 +830,6 @@
               </div>
             </div>
 
-          </div>
-
-          <!-- TAB REGISTRO ATTIVITÀ -->
-          <div id="t-tab-registro" class="tab-content">
-            <div class="glass-panel">
-              <h3 class="panel-title">Storico delle Operazioni (Audit Log)</h3>
-              <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="game-table" id="teacher-logs-table">
-                  <thead>
-                    <tr>
-                      <th>Orario</th>
-                      <th>Utente</th>
-                      <th>Azione</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB TORNEI -->
-          <div id="t-tab-tornei" class="tab-content">
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
-              <!-- Crea Torneo -->
-              <div class="glass-panel">
-                <h3 class="panel-title"><i class="fa-solid fa-trophy" style="color: var(--gold);"></i> Crea Torneo Interno</h3>
-                <form id="form-create-tournament" onsubmit="return false;" style="margin-top: 15px;">
-                  <div class="form-group">
-                    <label for="new-tournament-name">Nome del Torneo</label>
-                    <input type="text" id="new-tournament-name" class="form-control" placeholder="Es: Torneo di Primavera" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Classi Partecipanti</label>
-                    <div id="tournament-classes-checkboxes" style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
-                      <!-- Popolato via JS -->
-                    </div>
-                  </div>
-                  <button type="submit" class="btn" style="width: 100%; margin-top: 15px;" id="btn-save-tournament">Crea Torneo</button>
-                </form>
-              </div>
-
-              <!-- Elenco Tornei e Classifica -->
-              <div class="glass-panel">
-                <h3 class="panel-title"><i class="fa-solid fa-ranking-star" style="color: var(--gold);"></i> Tornei Attivi</h3>
-                <div id="tournaments-list-container" style="margin-top: 15px;">
-                  <!-- Popolato via JS -->
-                </div>
-              </div>
-            </div>
           </div>
 
           <!-- TAB DIARIO -->
@@ -1150,65 +1079,6 @@
     </div>
   </div>
 
-  <!-- MODALE DI ASSEGNAZIONE DOCENTE (XP / DRACME / ARTEFATTI) -->
-  <div class="modal-overlay" id="modal-teacher-award">
-    <div class="modal-container" style="max-width: 480px;">
-      <div class="modal-header">
-        <h3>Premia lo Studente</h3>
-        <button class="modal-close-btn" onclick="EroiApp.closeAwardModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p style="margin-bottom: 15px; color: var(--text-muted);" id="award-student-name">Studente: ...</p>
-        <input type="hidden" id="award-student-email">
-        
-        <div class="form-group">
-          <label for="award-xp-qty">Assegna Esperienza (XP)</label>
-          <input type="number" id="award-xp-qty" class="form-control" value="0">
-        </div>
-        
-        <div class="form-group">
-          <label for="award-dracme-qty">Assegna Valuta (Dracme)</label>
-          <input type="number" id="award-dracme-qty" class="form-control" value="0">
-        </div>
-
-        <div class="form-group">
-          <label for="award-artifact-select">Assegna direttamente un Artefatto</label>
-          <select id="award-artifact-select" class="form-control">
-            <option value="">-- Nessun Artefatto --</option>
-            <!-- Caricati da JS -->
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="EroiApp.closeAwardModal()">Annulla</button>
-        <button class="btn" onclick="EroiApp.submitTeacherAward()">Concedi Ricompensa</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODALE SPOSTA STUDENTE -->
-  <div class="modal-overlay" id="modal-sposta-studente">
-    <div class="modal-container" style="max-width: 450px;">
-      <div class="modal-header">
-        <h3>Sposta Studente di Classe</h3>
-        <button class="modal-close-btn" onclick="EroiApp.closeSpostaModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p id="sposta-studente-label" style="margin-bottom: 15px; color: var(--text-muted);"></p>
-        <input type="hidden" id="sposta-studente-email">
-        <div class="form-group">
-          <label for="sposta-studente-select">Seleziona Classe di Destinazione</label>
-          <select id="sposta-studente-select" class="form-control">
-            <!-- Classi disponibili -->
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="EroiApp.closeSpostaModal()">Annulla</button>
-        <button class="btn" onclick="EroiApp.submitSpostaStudente()">Conferma Trasferimento</button>
-      </div>
-    </div>
-  </div>
 
   <!-- INTRO VIDEO OVERLAY -->
   <div id="intro-video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; background: black; z-index: 999999; flex-direction: column; align-items: center; justify-content: center;">
