@@ -799,149 +799,58 @@
 
           <!-- TAB PANORAMICA -->
           <div id="t-tab-panoramica" class="tab-content active">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 24px;">
-              <div id="card-stats-teachers" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('teachers')">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Collaboratori</span>
-                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-teachers">0</h4>
-              </div>
-              <div id="card-stats-students" class="glass-panel stat-card-interactive active" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('students')">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Studenti</span>
-                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-students">0</h4>
-              </div>
-              <div id="card-stats-classes" class="glass-panel stat-card-interactive" style="margin-bottom: 0; text-align: center; padding: 15px; cursor: pointer;" onclick="EroiApp.selectStatsCategory('classes')">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Classi</span>
-                <h4 style="font-size: 1.8rem; color: var(--gold); margin-top: 5px;" id="teacher-stats-classes">0</h4>
-              </div>
-            </div>
             
-
-            <!-- CONTENITORE PANNELLI DINAMICI -->
-            <div id="panoramica-panels-container">
-              
-              <!-- PANNELLO: DOCENTI -->
-              <div id="panel-stats-teachers" class="panoramica-sub-panel" style="display: none;">
-                <div class="glass-panel">
-                  <h3 class="panel-title"><i class="fa-solid fa-user-group" style="color: var(--gold);"></i> I Miei Colleghi Collaboratori</h3>
-                  <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Elenco dei docenti che collaborano alle tue classi.</p>
-                  <div class="table-responsive">
-                    <table class="game-table" id="teacher-docenti-table">
-                      <thead>
-                        <tr>
-                          <th>Nome</th>
-                          <th>Email</th>
-                          <th><i class="fa-solid fa-envelope"></i></th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
+            <!-- SEZIONE: LE MIE CLASSI -->
+            <div class="glass-panel" style="margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                <h3 class="panel-title" style="margin: 0;"><i class="fa-solid fa-chalkboard-user" style="color: var(--gold);"></i> Le Mie Classi</h3>
+                <input type="text" id="search-class-teacher" placeholder="Cerca classe per nome o codice..." class="form-control" style="width: 260px; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; font-size: 0.85rem;">
               </div>
-
-              <!-- PANNELLO: CLASSI -->
-              <div id="panel-stats-classes" class="panoramica-sub-panel" style="display: none;">
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
-                  <div class="glass-panel">
-                    <h3 class="panel-title">Nuova Classe</h3>
-                    <form id="form-create-class" onsubmit="return false;" style="margin-bottom: 15px;">
-                      <div class="form-group">
-                        <label for="new-class-id">Codice Classe (ID)</label>
-                        <input type="text" id="new-class-id" class="form-control" required placeholder="es: 1C">
-                      </div>
-                      <div class="form-group">
-                        <label for="new-class-name">Nome Classe esteso</label>
-                        <input type="text" id="new-class-name" class="form-control" required placeholder="Classe 1ª C Miti">
-                      </div>
-                      <div class="form-group">
-                        <label for="new-class-school">Istituto (Scuola)</label>
-                        <input type="text" id="new-class-school" class="form-control" placeholder="es: I.C. Olimpo">
-                      </div>
-                      <div class="form-group">
-                        <label for="new-class-city">Città</label>
-                        <input type="text" id="new-class-city" class="form-control" placeholder="es: Atene">
-                      </div>
-                      <button type="submit" class="btn" style="width: 100%;" id="btn-save-new-class">Crea Classe</button>
-                    </form>
-                    
-                    <!-- Collaborazione con codice -->
-                    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08);">
-                      <h4 style="font-size: 0.9rem; color: var(--gold); margin-bottom: 8px; font-family: var(--font-heading);">Collabora con un'altra Classe</h4>
-                      <p style="color: var(--text-muted); font-size: 0.78rem; margin-bottom: 10px; line-height: 1.3;">
-                        Se un altro docente ha creato una classe, inserisci il suo codice per collaborare e visualizzare/gestire i suoi studenti.
-                      </p>
-                      <form id="form-join-collaborator" onsubmit="return false;" style="display: flex; gap: 10px;">
-                        <input type="text" id="recover-class-code" class="form-control" placeholder="Es: ER-XXXX" style="font-family: monospace; text-transform: uppercase;" required>
-                        <button type="submit" class="btn" style="padding: 0 15px;" id="btn-join-collaborator">Unisciti</button>
-                      </form>
-                    </div>
-                  </div>
-
-                  <div class="glass-panel">
-                    <h3 class="panel-title">Classi Attive</h3>
-                  <div style="margin-bottom: 15px;"><input type="text" id="search-class-teacher" placeholder="Cerca in questo elenco..." class="form-control" style="width: 100%; border-radius: 20px; font-style: italic; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);"></div>
-                  <div class="table-responsive">
-                      <table class="game-table" id="teacher-classes-table">
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Codice Iscrizione</th>
-                            <th>Docenti</th>
-                            <th>Azione</th>
-                          </tr>
-                        </thead>
-                        <tbody></tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+              <div class="table-responsive">
+                <table class="game-table" id="teacher-classes-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Codice Iscrizione</th>
+                      <th>Docenti</th>
+                      <th>Studenti</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
               </div>
-
-              <!-- PANNELLO: STUDENTI -->
-              <div id="panel-stats-students" class="panoramica-sub-panel" style="display: none;">
-                <!-- Info Sincronizzazione Hub -->
-                <div class="glass-panel" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; border-left: 4px solid var(--gold);">
-                  <div>
-                    <h3 class="panel-title" style="margin-bottom: 4px;"><i class="fa-solid fa-users" style="color: var(--gold);"></i> Roster e Classi Sincronizzati</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; line-height: 1.4;">
-                      Gli studenti e le classi sono gestiti centralmente tramite l'Hub con il sistema a slot protetti (Zero-Email).
-                    </p>
-                  </div>
-                  <a href="https://prof-memmo.github.io/games/profilo.html" target="_blank" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-chalkboard-user"></i> Gestisci Classi nell'Hub
-                  </a>
-                </div>
-
-                <div class="glass-panel" id="teacher-students-section">
-                  <div class="teacher-students-header">
-                    <h3 class="panel-title" id="students-panel-title-text">Studenti Iscritti</h3>
-                    <div style="display: flex; gap: 10px;">
-                      <input type="text" id="search-student-teacher" class="form-control" placeholder="Cerca studente..." style="padding: 6px 12px; font-size: 0.85rem; width: 180px;">
-                      <select id="filter-class-teacher" class="form-control" style="padding: 6px 12px; font-size: 0.85rem; width: 130px;">
-                        <option value="all">Tutte le Classi</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="table-responsive">
-                    <table class="game-table" id="teacher-students-table">
-                      <thead>
-                        <tr>
-                          <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'name')"><div style="display: flex; align-items: center; white-space: nowrap;">Studente <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                          <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'class')"><div style="display: flex; align-items: center; white-space: nowrap;">Classe <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                          <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'level')"><div style="display: flex; align-items: center; white-space: nowrap;">Livello <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                          <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'date')"><div style="display: flex; align-items: center; white-space: nowrap;">Data Iscrizione <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
-                          <th>XP / Dracme</th>
-                          <th><i class="fa-solid fa-envelope"></i></th>
-                          <th>Azioni e Assegnazioni</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
             </div>
+
+            <!-- SEZIONE: STUDENTI -->
+            <div class="glass-panel" id="teacher-students-section">
+              <div class="teacher-students-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                <h3 class="panel-title" id="students-panel-title-text" style="margin: 0;"><i class="fa-solid fa-users" style="color: var(--gold);"></i> Studenti Iscritti</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <input type="text" id="search-student-teacher" class="form-control" placeholder="Cerca studente..." style="padding: 6px 12px; font-size: 0.85rem; width: 180px;">
+                  <select id="filter-class-teacher" class="form-control" style="padding: 6px 12px; font-size: 0.85rem; width: 150px;">
+                    <option value="all">Tutte le Classi</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="game-table" id="teacher-students-table">
+                  <thead>
+                    <tr>
+                      <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'name')"><div style="display: flex; align-items: center; white-space: nowrap;">Studente <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
+                      <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'class')"><div style="display: flex; align-items: center; white-space: nowrap;">Classe <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
+                      <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'level')"><div style="display: flex; align-items: center; white-space: nowrap;">Livello <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
+                      <th style="cursor:pointer;" onclick="EroiApp.sortList('teacherStudents', 'date')"><div style="display: flex; align-items: center; white-space: nowrap;">Data Iscrizione <i class="fa-solid fa-sort" style="margin-left:5px; font-size:0.8em; color:var(--text-muted);"></i></div></th>
+                      <th>XP / Dracme</th>
+                      <th><i class="fa-solid fa-envelope"></i></th>
+                      <th>Azioni e Assegnazioni</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
 
           <!-- TAB REGISTRO ATTIVITÀ -->

@@ -900,7 +900,7 @@ window.finalizzaStudente = async function() {
           </div>
 
           <div class="dropdown-legal-btns" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px;">
-            <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openEditProfileModal()" style="width: 100%;">
+            <button class="btn btn-secondary dropdown-sm-btn" onclick="window.open('https://prof-memmo.github.io/games/profilo.html', '_blank')" style="width: 100%;">
               <i class="fa-solid fa-user-gear"></i> Modifica Profilo
             </button>
             <button class="btn btn-secondary dropdown-sm-btn" onclick="window.openSharedModal('invita')" style="width: 100%;">
@@ -3277,8 +3277,8 @@ window.finalizzaStudente = async function() {
       if (tabEl) tabEl.classList.add('active');
 
       if (tab === 'panoramica') {
-        this.renderTeacherStats();
-        this.selectStatsCategory('students');
+        this.renderTeacherClasses();
+        this.renderTeacherStudents();
       } else if (tab === 'registro') {
         this.renderTeacherLogs();
       } else if (tab === 'tornei') {
@@ -3457,13 +3457,12 @@ window.finalizzaStudente = async function() {
       if (window.EroiDB.syncCloudClasses) {
         await window.EroiDB.syncCloudClasses();
       }
-      this.renderTeacherStats();
       this.populateClassSelects();
+      this.renderTeacherClasses();
+      this.renderTeacherStudents();
       this.renderTeacherLogs();
       this.renderTeacherTournaments();
       this.renderTeacherDiaries();
-      // Attiva pannello studenti per default (come Palestra di Riflessione)
-      this.selectStatsCategory('students');
     },
 
     renderTeacherStats: function() {
@@ -3507,9 +3506,13 @@ window.finalizzaStudente = async function() {
       const settingsClassSelect = document.getElementById('teacher-settings-class-select');
 
       const user = Auth.getUser();
+      const userEmail = (user && user.email) ? user.email.toLowerCase() : '';
+      const userUid = user ? user.uid : '';
       const filtered = Object.values(classes).filter(c => {
-        if (user.role === 'admin') return true;
-        return c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
+        if (user && user.role === 'admin') return true;
+        return (c.teacherId && c.teacherId === userUid) ||
+               (c.teacher && c.teacher.toLowerCase() === userEmail) || 
+               (c.collaborators && c.collaborators.map(e => String(e).toLowerCase()).includes(userEmail));
       });
 
       const optionsHtml = filtered.map(c => `
@@ -3531,34 +3534,49 @@ window.finalizzaStudente = async function() {
       tbody.innerHTML = '';
       
       const searchInput = document.getElementById('search-class-teacher');
-      const search = searchInput ? searchInput.value.toLowerCase() : '';
+      const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
       const user = Auth.getUser();
+      const userEmail = (user && user.email) ? user.email.toLowerCase() : '';
+      const userUid = user ? user.uid : '';
       const filtered = Object.values(classes).filter(c => {
-        const hasAccess = user.role === 'admin' || c.teacher === user.email || (c.collaborators && c.collaborators.includes(user.email));
+        const hasAccess = (user && user.role === 'admin') || 
+                          (c.teacherId && c.teacherId === userUid) ||
+                          (c.teacher && c.teacher.toLowerCase() === userEmail) || 
+                          (c.collaborators && c.collaborators.map(e => String(e).toLowerCase()).includes(userEmail));
         if (!hasAccess) return false;
         
         if (search) {
             return (c.name && c.name.toLowerCase().includes(search)) || 
                    (c.id && c.id.toLowerCase().includes(search)) || 
-                   (c.code && c.code.toLowerCase().includes(search));
+                   (c.code && c.code.toLowerCase().includes(search)) ||
+                   (c.school && c.school.toLowerCase().includes(search)) ||
+                   (c.city && c.city.toLowerCase().includes(search));
         }
         return true;
       });
 
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--text-muted); font-style: italic;">Nessuna classe trovata. Le classi create nel tuo Profilo dell'Hub appariranno automaticamente qui.</td></tr>`;
+        return;
+      }
+
       filtered.forEach(c => {
-        const isOwner = c.teacher === user.email || user.role === 'admin';
         const teacherNames = [c.teacher ? c.teacher.split('@')[0] : 'Docente'];
-        if (c.collaborators) {
+        if (c.collaborators && Array.isArray(c.collaborators)) {
           c.collaborators.forEach(email => {
-            teacherNames.push(email.split('@')[0]);
+            const short = email.split('@')[0];
+            if (!teacherNames.includes(short)) teacherNames.push(short);
           });
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${c.id}</strong></td>
-          <td>${c.name}</td>
+          <td>
+            <strong>${c.name}</strong>
+            ${(c.school || c.city) ? `<div style="font-size:0.75rem; color:var(--text-muted);">${c.school}${c.city ? ' (' + c.city + ')' : ''}</div>` : ''}
+          </td>
           <td>
             <span class="badge" style="font-family: monospace; font-size: 0.85rem; padding: 4px 8px; border: 1.5px solid var(--gold); border-radius: 6px; color: var(--gold); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; background: rgba(212,175,55,0.05);" onclick="navigator.clipboard.writeText('${c.code}'); alert('Codice classe copiato: ${c.code}')" title="Clicca per copiare">
               ${c.code} <i class="fa-solid fa-copy" style="font-size: 0.75rem;"></i>
@@ -3566,15 +3584,25 @@ window.finalizzaStudente = async function() {
           </td>
           <td><span style="font-size: 0.8rem; color: var(--text-muted);">${teacherNames.join(', ')}</span></td>
           <td>
-            ${isOwner ? `
-              <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.75rem;" onclick="EroiApp.deleteClass('${c.id}')">
-                <i class="fa-solid fa-trash"></i> Elimina
-              </button>
-            ` : '<span style="font-size:0.75rem; color:var(--text-muted);">Collaboratore</span>'}
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size:0.75rem; border-radius: 6px; cursor: pointer;" onclick="EroiApp.filterByClass('${c.id}')" title="Filtra gli studenti di questa classe">
+              <i class="fa-solid fa-users"></i> Studenti
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
       });
+    },
+
+    filterByClass: function(classId) {
+      const filterSelect = document.getElementById('filter-class-teacher');
+      if (filterSelect) {
+        filterSelect.value = classId;
+        this.renderTeacherStudents();
+      }
+      const stSection = document.getElementById('teacher-students-section');
+      if (stSection) {
+        stSection.scrollIntoView({ behavior: 'smooth' });
+      }
     },
 
     deleteClass: async function(classId) {
