@@ -3612,11 +3612,6 @@ window.finalizzaStudente = async function() {
           <td>${studentClassName}</td>
           <td><span style="color:var(--gold); font-weight:bold;">${s.level || 'Viaggiatore'}</span></td>
           <td>${s.xp || 0} XP / ${s.dracme || 0} Dracme</td>
-          <td>
-            <button class="btn" style="padding:4px 10px; font-size:0.78rem; border: 1px solid var(--gold); color: var(--gold); background: transparent;" onclick="EroiApp.openStudentPreviewAll('${s.email}')" title="Anteprima Studente">
-              <i class="fa-solid fa-eye"></i> Osserva
-            </button>
-          </td>
         `;
         tbody.appendChild(tr);
       });
