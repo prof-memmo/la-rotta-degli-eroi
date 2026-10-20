@@ -5342,3 +5342,18 @@ table.game-table tr:hover td {
     50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
     100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
 }
+
+/* Notifiche Badge Pill */
+.badge-notif-pill {
+    background: #e63946;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 12px;
+    margin-left: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+

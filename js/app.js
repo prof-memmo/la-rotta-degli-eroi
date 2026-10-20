@@ -899,23 +899,16 @@ window.finalizzaStudente = async function() {
               </div>
           </div>
 
-          <div class="dropdown-legal-btns" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px;">
+          <div class="dropdown-actions-menu" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px;">
             <button class="btn btn-secondary dropdown-sm-btn" onclick="window.open('https://prof-memmo.github.io/games/profilo.html', '_blank')" style="width: 100%;">
               <i class="fa-solid fa-user-gear"></i> Modifica Profilo
             </button>
             <button class="btn btn-secondary dropdown-sm-btn" onclick="window.openSharedModal('invita')" style="width: 100%;">
               <i class="fa-solid fa-paper-plane"></i> Invita un Collega
             </button>
-            <div style="display: flex; gap: 5px; width: 100%;">
-              <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('privacy')" style="flex: 1;">
-                <i class="fa-solid fa-shield"></i> Privacy
-              </button>
-              <button class="btn btn-secondary dropdown-sm-btn" onclick="EroiApp.openLegalModal('terms')" style="flex: 1;">
-                <i class="fa-solid fa-scroll"></i> Termini
-              </button>
-            </div>
-            <button class="btn btn-secondary dropdown-sm-btn" onclick="window.showContattiModal()" style="width: 100%;">
-              <i class="fa-solid fa-envelope"></i> Contatti
+            <button id="btn-notifiche-dropdown" class="btn btn-secondary dropdown-sm-btn" onclick="if(window.openSharedModal) window.openSharedModal('notifiche');" style="width: 100%; display: flex; align-items: center; justify-content: space-between;">
+              <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-bell"></i> Notifiche</span>
+              <span id="dropdown-notif-badge" class="badge-notif-pill" style="display:none;">0</span>
             </button>
           </div>
           
