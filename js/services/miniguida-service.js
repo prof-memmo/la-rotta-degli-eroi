@@ -11,28 +11,48 @@
     const SUPER_ADMIN_EMAIL = 'prof.memmo@gmail.com';
 
     const DEFAULT_MINIGUIDA = {
-        title: "Come si gioca?",
+        title: "Miniguida",
         themeColor: "#3b82f6",
         steps: [
             {
+                icon: "fa-bullseye",
+                title: "Scopo del Gioco",
+                text: "Lo scopo del gioco è guidare il tuo eroe lungo il Mediterraneo antico, superare le sfide mitologiche e accumulare virtù ed esperienza fino alla meta finale."
+            },
+            {
+                icon: "fa-chalkboard-user",
+                title: "Accesso e Classi",
+                text: "<strong>Per il Docente:</strong> crea le tue classi dal Profilo su <em>prof-memmo.github.io/games</em> per ottenere il <strong>Codice Classe</strong> da condividere con gli alunni.<br><br><strong>Per gli Studenti:</strong> nessun bisogno di email! Basta inserire il <strong>Codice Classe</strong> e selezionare il proprio nome per iniziare subito la sfida."
+            },
+            {
                 icon: "fa-compass",
-                title: "Salpa sulla Mappa dell'Epica",
-                text: "🧭 <strong>Salpa sulla Mappa dell'Epica:</strong><br>Esplora le rotte dei grandi poemi (<em>Odissea, Iliade, Eneide</em>), affronta le tappe e rispondi alle sfide mitologiche."
+                title: "Come si Gioca",
+                text: "Si gioca avanzando di tappa in tappa sulla mappa, rispondendo ai quesiti epici, guadagnando dracme ed equipaggiamento e arricchendo il diario di bordo."
             },
             {
-                icon: "fa-bolt-lightning",
-                title: "Quiz, Mostri e Divinità",
-                text: "⚡ <strong>Quiz, Mostri e Divinità:</strong><br>Risolvi i quesiti su dei, eroi e creature del mito per accumulare punti esperienza (<strong>XP</strong>) e <strong>Dracme d'argento</strong>."
+                icon: "fa-map-location-dot",
+                title: "Mappa",
+                text: "Sulla <strong>Mappa</strong> puoi navigare lungo le tappe del viaggio epico e affrontare le prove."
             },
             {
-                icon: "fa-shield-halved",
-                title: "Mercato & Artefatti",
-                text: "🛡️ <strong>Mercato &amp; Artefatti:</strong><br>Visita l'Emporio per equipaggiare artefatti leggendari e sbloccare gli <strong>Eroi Aiutanti</strong> con poteri speciali."
+                icon: "fa-feather-pointed",
+                title: "Diario",
+                text: "Apri il <strong>Diario</strong> per rileggere o scrivere le riflessioni di bordo del tuo eroe."
             },
             {
-                icon: "fa-trophy",
-                title: "Taglia il Traguardo",
-                text: "🏆 <strong>Taglia il Traguardo:</strong><br>Scala la gerarchia della classe, completa tutte le tappe della mappa e diventa una vera <strong>Leggenda del Mito</strong>!"
+                icon: "fa-coins",
+                title: "Mercato",
+                text: "Vai al <strong>Mercato</strong> per acquistare equipaggiamento e consumabili con le dracme che hai guadagnato."
+            },
+            {
+                icon: "fa-box-open",
+                title: "Inventario",
+                text: "Controlla l'<strong>Inventario</strong> per vedere gli oggetti, gli artefatti leggendari e gli aiutanti che hai sbloccato."
+            },
+            {
+                icon: "fa-book-open",
+                title: "Tempio",
+                text: "Entra nel <strong>Tempio</strong> per consultare le guide mitologiche e i testi storici di approfondimento.<br><br><em>Consulta il regolamento per saperne di più.</em>"
             }
         ]
     };
@@ -51,8 +71,22 @@
             return JSON.parse(JSON.stringify(DEFAULT_MINIGUIDA));
         },
 
+        ensureAccessStep(data) {
+            if (!data || !Array.isArray(data.steps)) return data;
+            const hasAccess = data.steps.some(s => 
+                (s.title && s.title.toLowerCase().includes('accesso')) ||
+                (s.text && s.text.toLowerCase().includes('accesso'))
+            );
+            if (!hasAccess && data.steps.length > 0) {
+                const accessStep = JSON.parse(JSON.stringify(DEFAULT_MINIGUIDA.steps[1]));
+                data.steps.splice(1, 0, accessStep);
+            }
+            return data;
+        },
+
         getData() {
-            return this._data || this.getDefaultData();
+            const raw = this._data || this.getDefaultData();
+            return this.ensureAccessStep(raw);
         },
 
         subscribe(callback) {
@@ -180,21 +214,58 @@
         renderModal() {
             const data = this.getData();
             const titleEl = document.getElementById('miniguida-title');
-            if (titleEl) titleEl.innerText = data.title || "Come si gioca?";
+            if (titleEl) titleEl.innerText = data.title || "Miniguida";
+
+            const stepsWrapper = document.querySelector('#modal-miniguida .modal-content > div:nth-child(2)');
+            if (!stepsWrapper) return;
+
+            // Rimuovi vecchi step
+            const oldSteps = stepsWrapper.querySelectorAll('.miniguida-step');
+            oldSteps.forEach(el => el.remove());
+
+            // Rigenera dots
+            const dotsContainer = document.getElementById('miniguida-dots');
+            if (dotsContainer) dotsContainer.innerHTML = '';
+
+            const footerRow = dotsContainer ? dotsContainer.parentElement : null;
 
             data.steps.forEach((step, idx) => {
-                let stepEl = document.getElementById('miniguida-step-' + idx);
-                if (stepEl) {
-                    const iconEl = stepEl.querySelector('i');
-                    const textEl = stepEl.querySelector('p');
-                    if (iconEl && step.icon) {
-                        iconEl.className = step.icon.startsWith('fa-') ? `fa-solid ${step.icon}` : 'fa-solid fa-compass';
-                    }
-                    if (textEl && step.text) {
-                        textEl.innerHTML = step.text;
-                    }
+                const stepDiv = document.createElement('div');
+                stepDiv.id = 'miniguida-step-' + idx;
+                stepDiv.className = 'miniguida-step';
+                stepDiv.style.flex = '1';
+                stepDiv.style.display = (idx === this._currentStep) ? 'flex' : 'none';
+                stepDiv.style.flexDirection = 'column';
+                stepDiv.style.alignItems = 'center';
+                stepDiv.style.justifyContent = 'center';
+                stepDiv.style.textAlign = 'center';
+                stepDiv.style.animation = 'fadeIn 0.3s ease-out';
+                stepDiv.style.padding = '10px 0';
+
+                const iconClass = step.icon ? (step.icon.startsWith('fa-') ? `fa-solid ${step.icon}` : `fa-solid fa-${step.icon}`) : 'fa-solid fa-compass';
+                stepDiv.innerHTML = `
+                    <i class="${iconClass}" style="font-size: 4.5rem; color: #3b82f6; margin-bottom: 20px;"></i>
+                    <p style="font-size: 1.25rem; color: #475569; line-height: 1.6; font-weight: 500; max-width: 540px; margin: 0 auto;">${step.text || ''}</p>
+                `;
+
+                if (footerRow) {
+                    stepsWrapper.insertBefore(stepDiv, footerRow);
+                } else {
+                    stepsWrapper.appendChild(stepDiv);
+                }
+
+                if (dotsContainer) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot' + (idx === this._currentStep ? ' active' : '');
+                    dot.style.width = '12px';
+                    dot.style.height = '12px';
+                    dot.style.borderRadius = '50%';
+                    dot.style.background = (idx === this._currentStep) ? '#3b82f6' : '#e2e8f0';
+                    dot.style.transition = '0.3s';
+                    dotsContainer.appendChild(dot);
                 }
             });
+
             this.updateView();
         },
 
@@ -259,7 +330,7 @@
                             <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">Anteprima Live:</label>
                             <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 15px; color: #1e293b; display: flex; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.06); min-height: 380px;">
                                 <div style="width: 35%; background: #f8fafc; display: flex; align-items: flex-end; justify-content: center; border-right: 1px solid #f1f5f9; padding-top: 10px;">
-                                    <img src="assets/prof_memmo_full.jpg" onerror="this.src='https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/prof-memmo/prof-memmo-full.jpg';" alt="Prof Memmo" style="width: 120%; object-fit: contain; mix-blend-mode: multiply;">
+                                    <img src="assets/prof_memmo_full.png" onerror="this.src='https://prof-memmo.github.io/prof-memmo-gestione-siti/shared/assets/branding/prof-memmo/prof-memmo-full.png';" alt="Prof Memmo" style="width: 120%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
                                 </div>
                                 <div style="flex: 1; padding: 10px 15px; display: flex; flex-direction: column; justify-content: space-between;">
                                     <div>
