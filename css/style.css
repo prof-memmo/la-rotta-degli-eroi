@@ -4651,6 +4651,29 @@ table.game-table tr:hover td {
         font-size: 0.7rem;
         padding: 3px 6px;
     }
+    /* Footer compatto su mobile */
+    .view-footer-copyright {
+        margin-top: 14px !important;
+        padding: 10px 0 12px 0 !important;
+        gap: 6px !important;
+    }
+    .view-footer-copyright .footer-legal-links {
+        gap: 10px !important;
+        font-size: 0.68rem !important;
+        flex-wrap: wrap !important;
+        margin-bottom: 2px !important;
+    }
+    .view-footer-copyright .footer-badge-text-row {
+        gap: 8px !important;
+        align-items: center !important;
+    }
+    .patamu-footer-badge {
+        height: 28px !important;
+    }
+    .view-footer-copyright .footer-copy {
+        font-size: 0.65rem !important;
+        line-height: 1.35 !important;
+    }
 }
 
 /* ==========================================
