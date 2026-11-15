@@ -4642,9 +4642,10 @@ table.game-table tr:hover td {
         width: 32px !important;
         height: 32px !important;
     }
-    .header-user-name { font-size: 0.68rem; }
-    .header-user-level { font-size: 0.58rem; }
-    .header-avatar-img { width: 28px !important; height: 28px !important; }
+    .header-user-name, .header-user-level { display: none !important; }
+    .header-avatar-img { width: 32px !important; height: 32px !important; }
+    .view h1, .view-title { font-size: clamp(1.2rem, 3.8vw, 1.7rem) !important; }
+    .view p, .view-subtitle { font-size: 0.82rem !important; line-height: 1.45 !important; }
     /* Timer e altri elementi header compatti */
     #student-timer-display {
         font-size: 0.7rem;
