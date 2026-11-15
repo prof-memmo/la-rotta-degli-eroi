@@ -4623,7 +4623,36 @@ table.game-table tr:hover td {
         margin-top: 0;
         height: 100dvh;
         max-height: 100dvh;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
         flex: none;
+    }
+    body:not(.logged-in) #view-welcome {
+        min-height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 16px 16px 24px 16px !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+    body:not(.logged-in) #view-welcome > div:not(.glass):not(.view-footer-copyright) {
+        margin-top: 30px !important;
+        margin-bottom: 15px !important;
+        text-align: center;
+    }
+    body:not(.logged-in) #view-welcome #login-section {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        width: 100%;
+    }
+    body:not(.logged-in) #view-welcome .view-footer-copyright {
+        margin-top: max(40px, calc(100dvh - 460px)) !important;
+        padding-bottom: 24px !important;
+        width: 100%;
+    }
+    body.logged-in .view .view-footer-copyright {
+        margin-top: auto !important;
+        padding-bottom: 24px !important;
     }
     .header-logo-text {
         display: none;
@@ -4746,10 +4775,6 @@ table.game-table tr:hover td {
     .cards-grid {
         grid-template-columns: 1fr;
         gap: 12px;
-    }
-    /* View welcome: scrolla su mobile */
-    #view-welcome {
-        overflow-y: auto;
     }
 }
 
@@ -5018,8 +5043,8 @@ table.game-table tr:hover td {
         padding: 10px !important;
     }
 
-    /* Assicura che main-content parta esattamente da sotto l'header e arrivi al bottom nav */
-    .main-content, body.logged-in .main-content {
+    /* Assicura che main-content parta esattamente da sotto l'header e arrivi al bottom nav SOLO quando loggato */
+    body.logged-in .main-content {
         margin-top: 60px !important;
         height: calc(100dvh - 60px - 64px) !important;
         padding: 0 !important;
