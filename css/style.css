@@ -1579,7 +1579,21 @@ h3.panel-title {
   gap: 10px;
   border-bottom: 2px solid rgba(212, 175, 55, 0.2);
   margin-bottom: 20px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+}
+
+.tabs-header::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs-header .tab-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .tab-btn {
@@ -4609,21 +4623,85 @@ table.game-table tr:hover td {
         margin-top: 0;
         height: 100dvh;
         max-height: 100dvh;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
         flex: none;
+    }
+    body:not(.logged-in) #view-welcome {
+        min-height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 16px 16px 24px 16px !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+    body:not(.logged-in) #view-welcome > div:not(.glass):not(.view-footer-copyright) {
+        margin-top: 30px !important;
+        margin-bottom: 15px !important;
+        text-align: center;
+    }
+    body:not(.logged-in) #view-welcome #login-section {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        width: 100%;
+    }
+    body:not(.logged-in) #view-welcome .view-footer-copyright {
+        margin-top: max(40px, calc(100dvh - 460px)) !important;
+        padding-bottom: 24px !important;
+        width: 100%;
+    }
+    body.logged-in .view .view-footer-copyright {
+        margin-top: auto !important;
+        padding-bottom: 24px !important;
     }
     .header-logo-text {
         display: none;
     }
     .header-logo-container img {
-        height: 34px !important;
+        height: 32px !important;
+        max-width: 110px !important;
+        object-fit: contain !important;
     }
-    .header-user-name { font-size: 0.68rem; }
-    .header-user-level { font-size: 0.58rem; }
-    .header-avatar-img { width: 28px !important; height: 28px !important; }
+    .header-prof-logo {
+        height: 32px !important;
+        width: 32px !important;
+        object-fit: contain !important;
+    }
+    .header-prof-logo-wrapper {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .header-user-name, .header-user-level { display: none !important; }
+    .header-avatar-img { width: 32px !important; height: 32px !important; }
+    .view h1, .view-title { font-size: clamp(1.2rem, 3.8vw, 1.7rem) !important; }
+    .view p, .view-subtitle { font-size: 0.82rem !important; line-height: 1.45 !important; }
     /* Timer e altri elementi header compatti */
     #student-timer-display {
         font-size: 0.7rem;
         padding: 3px 6px;
+    }
+    /* Footer compatto su mobile */
+    .view-footer-copyright {
+        margin-top: 14px !important;
+        padding: 10px 0 12px 0 !important;
+        gap: 6px !important;
+    }
+    .view-footer-copyright .footer-legal-links {
+        gap: 10px !important;
+        font-size: 0.68rem !important;
+        flex-wrap: wrap !important;
+        margin-bottom: 2px !important;
+    }
+    .view-footer-copyright .footer-badge-text-row {
+        gap: 8px !important;
+        align-items: center !important;
+    }
+    .patamu-footer-badge {
+        height: 28px !important;
+    }
+    .view-footer-copyright .footer-copy {
+        font-size: 0.65rem !important;
+        line-height: 1.35 !important;
     }
 }
 
@@ -4697,10 +4775,6 @@ table.game-table tr:hover td {
     .cards-grid {
         grid-template-columns: 1fr;
         gap: 12px;
-    }
-    /* View welcome: scrolla su mobile */
-    #view-welcome {
-        overflow-y: auto;
     }
 }
 
@@ -4969,8 +5043,8 @@ table.game-table tr:hover td {
         padding: 10px !important;
     }
 
-    /* Assicura che main-content parta esattamente da sotto l'header e arrivi al bottom nav */
-    .main-content, body.logged-in .main-content {
+    /* Assicura che main-content parta esattamente da sotto l'header e arrivi al bottom nav SOLO quando loggato */
+    body.logged-in .main-content {
         margin-top: 60px !important;
         height: calc(100dvh - 60px - 64px) !important;
         padding: 0 !important;
@@ -5355,5 +5429,30 @@ table.game-table tr:hover td {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Landscape compatto su smartphone: massimizza l'area visibile di gioco */
+@media (max-height: 480px) and (orientation: landscape) {
+    .mobile-bottom-nav {
+        height: 48px !important;
+        padding-bottom: 2px !important;
+    }
+    .mobile-nav-item {
+        padding: 2px 4px !important;
+    }
+    .mobile-nav-item i {
+        font-size: 1rem !important;
+    }
+    .mobile-nav-item span {
+        font-size: 0.55rem !important;
+        margin-top: 2px !important;
+    }
+    body.logged-in .main-content {
+        height: calc(100dvh - 50px - 48px) !important;
+        margin-top: 50px !important;
+    }
+    .app-header {
+        height: 50px !important;
+    }
 }
 
