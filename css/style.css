@@ -5456,3 +5456,123 @@ table.game-table tr:hover td {
     }
 }
 
+/* ==========================================================================
+   OTTIMIZZAZIONE MOBILE & TABLET (DELIBERATA):
+   - Titolo e descrizione nel flusso di scroll naturale (non bloccati)
+   - Footer Patamù integro posizionato in fondo allo scroll naturale
+   - Pulsanti con wrapping fluido a prova di bordo
+   - Bottom padding di sicurezza per non coprire contenuti sotto la navbar fissa
+   - Esclusione esplicita di #view-map e #app-header (inalterati come richiesto)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    /* 1. LAYOUT PRINCIPALE & SCROLL NATURALE */
+    body.logged-in .main-content {
+        height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
+        max-height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
+        overflow: hidden !important;
+    }
+
+    /* La vista attiva scrolla interamente (esclusa la mappa) */
+    .view:not(#view-map).active {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        box-sizing: border-box !important;
+        padding: 0 !important;
+    }
+
+    /* Il pannello interno si estende a tutta l'altezza minima, consentendo a titolo e descrizione di scorrere via */
+    .view:not(#view-map) > .glass-panel {
+        min-height: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        padding: 12px 14px 20px 14px !important;
+    }
+
+    /* Rimuove i blocchi di scroll interno forzati su Diario, Tempio e Missioni */
+    #view-diario:not(#view-map),
+    #view-guides:not(#view-map) {
+        overflow: visible !important;
+    }
+
+    #view-diario .grid-container,
+    #view-guides .guides-container,
+    #missions-categories-container,
+    #diario-nodes-list-wrapper,
+    #diario-nodes-list,
+    #diario-reflection-panel,
+    #view-guides .guides-sidebar,
+    #view-guides .guides-reader {
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
+        flex: none !important;
+    }
+
+    /* 2. FOOTER PATAMÙ: INTEGRO, AL FONDO DELLO SCROLL NATURALE */
+    .view:not(#view-map) .view-footer-copyright {
+        margin-top: auto !important;
+        margin-bottom: 0 !important;
+        padding-top: 30px !important;
+        padding-bottom: 25px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        position: relative !important;
+    }
+
+    /* 3. PULSANTI CHE SBORDANO: wrapping fluido, max-width e padding sicuro */
+    .btn,
+    .btn-secondary,
+    .btn-danger,
+    button.btn {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+
+    /* Righe con pulsanti e testo affiancati: impilano o wrappano se necessario */
+    .view .glass-panel div[style*="display: flex"][style*="justify-content: space-between"] {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    /* Contenitori bottoni con larghezza minima forzata nelle missioni */
+    .view .glass-panel div[style*="min-width: 130px"] {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .view .glass-panel div[style*="min-width: 130px"] > button.btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* Griglia esercizi interattivi a pills compatte */
+    .mission-minigames-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)) !important;
+        gap: 6px !important;
+    }
+
+    .minigame-pill-btn {
+        padding: 6px 8px !important;
+        font-size: 0.72rem !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+
