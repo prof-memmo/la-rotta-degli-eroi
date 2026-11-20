@@ -5466,23 +5466,24 @@ table.game-table tr:hover td {
    ========================================================================== */
 
 @media (max-width: 1024px) {
-    /* 1. LAYOUT PRINCIPALE: altezza corretta che rispetta la navbar fissa */
+    /* 1. LAYOUT PRINCIPALE: lo scroll fluido naturale risiede su main-content */
     body.logged-in .main-content {
         height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
         max-height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
-        overflow: hidden !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
         padding: 0 !important;
     }
 
-    /* La vista attiva scrolla in modo naturale senza spaginare */
+    /* Le viste sono nel flusso di scroll naturale del main-content (esclusa la mappa) */
     .view:not(#view-map).active {
         display: flex !important;
         flex-direction: column !important;
-        height: 100% !important;
-        max-height: 100% !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        -webkit-overflow-scrolling: touch;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
         box-sizing: border-box !important;
         padding: 10px 12px 20px 12px !important;
     }
@@ -5491,7 +5492,7 @@ table.game-table tr:hover td {
         padding: 16px !important;
     }
 
-    /* Le card e i container mantengono la propria altezza naturale (senza stretch forzati) */
+    /* Le card e i container mantengono la propria altezza naturale senza bloccare lo scorrimento */
     .view:not(#view-map) .glass-panel,
     .view:not(#view-map) > .glass-panel {
         height: auto !important;
@@ -5502,10 +5503,11 @@ table.game-table tr:hover td {
         margin-bottom: 15px !important;
     }
 
-    /* Rimuove i blocchi di scroll interno forzati su Diario, Tempio e Missioni */
+    /* Rimuove completamente i blocchi di scroll interno forzati su Diario, Tempio e Missioni */
     #view-diario:not(#view-map),
     #view-guides:not(#view-map) {
         overflow: visible !important;
+        height: auto !important;
     }
 
     #view-diario .grid-container,
@@ -5525,7 +5527,7 @@ table.game-table tr:hover td {
 
     /* 2. FOOTER PATAMÙ: INTEGRO, A FONDO SCROLL */
     .view:not(#view-map) .view-footer-copyright {
-        margin-top: 30px !important;
+        margin-top: 35px !important;
         margin-bottom: 0 !important;
         padding-top: 20px !important;
         padding-bottom: calc(85px + env(safe-area-inset-bottom, 20px)) !important;
