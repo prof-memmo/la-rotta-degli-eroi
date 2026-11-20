@@ -5466,14 +5466,15 @@ table.game-table tr:hover td {
    ========================================================================== */
 
 @media (max-width: 1024px) {
-    /* 1. LAYOUT PRINCIPALE & SCROLL NATURALE */
+    /* 1. LAYOUT PRINCIPALE: altezza corretta che rispetta la navbar fissa */
     body.logged-in .main-content {
         height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
         max-height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
         overflow: hidden !important;
+        padding: 0 !important;
     }
 
-    /* La vista attiva scrolla interamente (esclusa la mappa) */
+    /* La vista attiva scrolla in modo naturale senza spaginare */
     .view:not(#view-map).active {
         display: flex !important;
         flex-direction: column !important;
@@ -5483,19 +5484,22 @@ table.game-table tr:hover td {
         overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch;
         box-sizing: border-box !important;
-        padding: 0 !important;
+        padding: 10px 12px 20px 12px !important;
     }
 
-    /* Il pannello interno si estende a tutta l'altezza minima, consentendo a titolo e descrizione di scorrere via */
+    #view-welcome.active {
+        padding: 16px !important;
+    }
+
+    /* Le card e i container mantengono la propria altezza naturale (senza stretch forzati) */
+    .view:not(#view-map) .glass-panel,
     .view:not(#view-map) > .glass-panel {
-        min-height: 100% !important;
         height: auto !important;
+        min-height: 0 !important;
         max-height: none !important;
         overflow: visible !important;
-        display: flex !important;
-        flex-direction: column !important;
         box-sizing: border-box !important;
-        padding: 12px 14px 20px 14px !important;
+        margin-bottom: 15px !important;
     }
 
     /* Rimuove i blocchi di scroll interno forzati su Diario, Tempio e Missioni */
@@ -5519,12 +5523,12 @@ table.game-table tr:hover td {
         flex: none !important;
     }
 
-    /* 2. FOOTER PATAMÙ: INTEGRO, AL FONDO DELLO SCROLL NATURALE */
+    /* 2. FOOTER PATAMÙ: INTEGRO, A FONDO SCROLL */
     .view:not(#view-map) .view-footer-copyright {
-        margin-top: auto !important;
+        margin-top: 30px !important;
         margin-bottom: 0 !important;
-        padding-top: 30px !important;
-        padding-bottom: 25px !important;
+        padding-top: 20px !important;
+        padding-bottom: calc(85px + env(safe-area-inset-bottom, 20px)) !important;
         width: 100% !important;
         box-sizing: border-box !important;
         display: flex !important;
