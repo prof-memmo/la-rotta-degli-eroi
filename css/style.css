@@ -5562,6 +5562,49 @@ table.game-table tr:hover td {
         display: block !important;
     }
 
+    /* Immagini del Tempio centrate sopra ai testi su schermo ridotto/mobile/tablet */
+    .guide-game-portrait-layout,
+    .guide-game-portrait-layout.horizontal-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        gap: 16px !important;
+    }
+    .guide-portrait-container,
+    .guide-game-portrait-layout.horizontal-layout .guide-portrait-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+        overflow: visible !important;
+    }
+    .guide-portrait-img,
+    .guide-game-portrait-layout:not(.horizontal-layout) .guide-portrait-img,
+    .guide-game-portrait-layout.horizontal-layout .guide-portrait-img {
+        display: block !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 280px !important;
+        object-fit: contain !important;
+        object-position: center center !important;
+    }
+    .guide-game-portrait-layout .sheet-body {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+        padding: 0 4px !important;
+    }
+
     /* 2. FOOTER PATAMÙ: INTEGRO, A FONDO SCROLL */
     .view:not(#view-map) .view-footer-copyright {
         margin-top: 35px !important;
