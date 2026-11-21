@@ -7,6 +7,7 @@ Object.assign(window.Auth = window.Auth || {}, {
         window.Auth._user = null;
         localStorage.removeItem('eroi_user');
         sessionStorage.removeItem('introVideoPlayed');
+        sessionStorage.removeItem('eroi_last_active_view');
         window.dispatchEvent(new CustomEvent('authChange'));
         window.location.hash = 'home';
         setTimeout(() => {
