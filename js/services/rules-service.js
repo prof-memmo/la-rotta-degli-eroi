@@ -333,23 +333,23 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
             const isAuthAdmin = userEmail.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase();
 
             container.innerHTML = `
-                <div style="margin-bottom: 25px; padding: 20px; border: 1.5px solid var(--gold); border-radius: 16px; background: rgba(0,0,0,0.3);">
+                <div style="margin-bottom: 25px; padding: 22px; border: 2px solid var(--gold); border-radius: 16px; background: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 5;">
                     <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
                         <div>
                             <h3 style="margin: 0 0 6px 0; font-size: 1.15rem; color: var(--gold); display: flex; align-items: center; gap: 8px;">
                                 <i class="fa-solid fa-gavel"></i> Regolamento Ufficiale di Campagna • Live Editor
                             </h3>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                            <p style="margin: 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.4;">
                                 Modifica il regolamento di bordo per Studenti e Docenti. Le modifiche si sincronizzano in tempo reale.
                             </p>
                         </div>
                         <div>
                             ${isAuthAdmin ? `
-                                <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                                <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
                                     <i class="fa-solid fa-circle-check"></i> Super-Admin Autenticato (${userEmail})
                                 </span>
                             ` : `
-                                <span style="font-size: 0.75rem; background: rgba(212, 175, 55, 0.15); color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                                <span style="font-size: 0.75rem; background: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.4); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
                                     <i class="fa-solid fa-cloud-arrow-up"></i> Cloud Sync (${SUPER_ADMIN_EMAIL})
                                 </span>
                             `}
@@ -357,7 +357,7 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
                     </div>
 
                     <div style="margin-bottom: 16px;">
-                        <textarea id="eroi-rules-textarea" rows="18" style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.4); border-radius: 8px; color: #fff; padding: 14px; font-size: 0.9rem; line-height: 1.6; font-family: inherit; resize: vertical; outline: none;">${text}</textarea>
+                        <textarea id="eroi-rules-textarea" rows="18" style="width: 100%; box-sizing: border-box; background: #020617; border: 1.5px solid rgba(212,175,55,0.6); border-radius: 8px; color: #f8fafc; padding: 14px; font-size: 0.95rem; line-height: 1.6; font-family: monospace, inherit; resize: vertical; outline: none; position: relative; z-index: 10; display: block;">${text}</textarea>
                     </div>
 
                     <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
@@ -365,7 +365,7 @@ I partecipanti si impegnano al rispetto reciproco, alla correttezza nelle sfide 
                             <i class="fa-solid fa-floppy-disk"></i> SALVA REGOLAMENTO
                         </button>
                         
-                        <button type="button" onclick="window.EroiRulesService.handleResetButton()" style="background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.2); padding: 10px 18px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <button type="button" onclick="window.EroiRulesService.handleResetButton()" style="background: transparent; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.3); padding: 10px 18px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                             <i class="fa-solid fa-rotate-left"></i> Ripristina Predefinito
                         </button>
                     </div>
