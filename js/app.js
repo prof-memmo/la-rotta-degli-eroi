@@ -5622,11 +5622,11 @@ window.finalizzaStudente = async function() {
 
         if (existing) {
           if (existing.grade !== undefined && existing.grade !== null) {
-            statusBadge = `<span class="badge badge-success" style="background: rgba(16,185,129,0.2); border: 1px solid rgb(16,185,129); color: #10b981; font-size: 0.75rem; padding: 3px 8px;"><i class="fa-solid fa-circle-check"></i> Valutato: ${existing.grade}/10</span>`;
+            statusBadge = `<span class="badge badge-success" style="background: rgba(16,185,129,0.2); border: 1px solid rgb(16,185,129); color: #10b981; font-size: 0.75rem; padding: 3px 8px;"><i class="fa-solid fa-stamp"></i> Sigillato: ${existing.grade}/10</span>`;
             readOnly = true;
             gradeHTML = `
               <div style="margin-top: 15px; padding: 12px; background: rgba(16,185,129,0.05); border-left: 3px solid rgb(16,185,129); border-radius: 4px;">
-                <div style="font-weight: bold; color: var(--gold); font-size: 0.9rem;">Valutazione Docente:</div>
+                <div style="font-weight: bold; color: var(--gold); font-size: 0.9rem;"><i class="fa-solid fa-stamp"></i> Sigillo del Mentore:</div>
                 <div style="font-size: 1.1rem; font-weight: bold; color: #10b981; margin: 4px 0;">Voto: ${existing.grade}/10</div>
                 <div style="font-style: italic; color: var(--text-muted); font-size: 0.85rem;">Feedback: "${existing.feedback || 'Nessun commento fornito.'}"</div>
               </div>
@@ -5695,7 +5695,7 @@ window.finalizzaStudente = async function() {
 
       selfValCard.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(37,99,235,0.2); padding-bottom: 6px;">
-          <h4 style="margin: 0; color: var(--gold); font-size: 0.95rem; font-family: var(--font-heading);"><i class="fa-solid fa-face-smile"></i> Autovalutazione della Sezione</h4>
+          <h4 style="margin: 0; color: var(--gold); font-size: 0.95rem; font-family: var(--font-heading);"><i class="fa-solid fa-pen-fancy"></i> Riflessione personale della Sezione</h4>
           <span class="badge" style="background: ${selfVal ? 'rgba(16,185,129,0.2)' : 'rgba(37,99,235,0.15)'}; border: 1px solid ${selfVal ? 'rgb(16,185,129)' : 'rgb(37,99,235)'}; color: ${selfVal ? '#10b981' : '#3b82f6'}; font-size: 0.75rem; padding: 3px 8px;">
             ${selfVal ? '<i class="fa-solid fa-circle-check"></i> Salvato' : '<i class="fa-regular fa-pen-to-square"></i> Da completare'}
           </span>
@@ -5736,7 +5736,7 @@ window.finalizzaStudente = async function() {
           ${!isReadOnly ? `
             <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
               <button class="btn btn-primary" style="padding: 6px 15px; font-size: 0.8rem; border-radius: 4px; background: #2563eb; border-color: #2563eb;" onclick="EroiApp.submitSelfEvaluation('${selfValId}', '${area}')">
-                <i class="fa-solid fa-floppy-disk"></i> Salva Autovalutazione
+                <i class="fa-solid fa-floppy-disk"></i> Salva Riflessione personale
               </button>
             </div>
           ` : ''}
@@ -5873,7 +5873,7 @@ window.finalizzaStudente = async function() {
       };
       
       window.EroiDB.saveDiaryEntry(entry);
-      this.showToast("Autovalutazione salvata con successo!", "success");
+      this.showToast("Riflessione personale salvata con successo!", "success");
       this.renderDiario(studentEmail);
     },
 
@@ -6065,15 +6065,15 @@ window.finalizzaStudente = async function() {
         if (entry.grade !== null && entry.grade !== undefined) {
           gradeSection = `
             <div style="margin-top: 15px; padding: 12px; background: rgba(16,185,129,0.04); border: 1px solid rgba(16,185,129,0.2); border-radius: 6px;">
-              <span style="font-weight: bold; color: #10b981; font-size: 1.05rem;"><i class="fa-solid fa-clipboard-check"></i> Valutato: Voto ${entry.grade}/10</span>
+              <span style="font-weight: bold; color: #10b981; font-size: 1.05rem;"><i class="fa-solid fa-stamp"></i> Sigillo: Voto ${entry.grade}/10</span>
               <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 0 0; font-style: italic;">Commento: "${entry.feedback || ''}"</p>
-              <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Valutato da ${entry.gradedBy} il ${new Date(entry.gradedAt).toLocaleString('it-IT')}</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Sigillato da ${entry.gradedBy} il ${new Date(entry.gradedAt).toLocaleString('it-IT')}</div>
             </div>
           `;
         } else {
           gradeSection = `
             <div style="margin-top: 15px; padding: 15px; background: rgba(212,175,55,0.03); border: 1px dashed rgba(212,175,55,0.25); border-radius: 6px; display: flex; flex-direction: column; gap: 10px;">
-              <div style="font-weight: bold; color: var(--gold); font-size: 0.85rem; text-transform: uppercase;">Valutazione elaborato</div>
+              <div style="font-weight: bold; color: var(--gold); font-size: 0.85rem; text-transform: uppercase;"><i class="fa-solid fa-stamp"></i> Sigillo del Mentore</div>
               <div style="display: flex; gap: 10px; align-items: center;">
                 <div style="width: 100px;">
                   <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Voto (1-10)</label>
@@ -6086,7 +6086,7 @@ window.finalizzaStudente = async function() {
               </div>
               <div style="display: flex; justify-content: flex-end;">
                 <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.8rem; border-radius: 4px;" onclick="EroiApp.submitTeacherEvaluation('${entry.id}')">
-                  <i class="fa-solid fa-check"></i> Conferma Valutazione
+                  <i class="fa-solid fa-stamp"></i> Apponi Sigillo
                 </button>
               </div>
             </div>
@@ -6100,7 +6100,7 @@ window.finalizzaStudente = async function() {
         if (selfVal) {
           selfValHTML = `
             <div style="margin-top: 15px; padding: 12px; background: rgba(37,99,235,0.05); border-left: 3px solid rgb(37,99,235); border-radius: 6px; border: 1px solid rgba(37,99,235,0.15);">
-              <div style="font-weight: bold; color: var(--gold); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 6px;"><i class="fa-solid fa-face-smile"></i> Autovalutazione della Sezione</div>
+              <div style="font-weight: bold; color: var(--gold); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 6px;"><i class="fa-solid fa-pen-fancy"></i> Riflessione personale della Sezione</div>
               <div style="font-size: 0.85rem; margin-bottom: 4px; color: var(--text-color);">❤️ <strong>Personaggio preferito</strong>: <span style="color: var(--gold); font-weight: bold;">${selfVal.favoriteCharacter || 'Non selezionato'}</span></div>
               <div style="font-size: 0.85rem; color: var(--text-color); line-height: 1.4;">📝 <strong>Metodo di studio</strong>: "${selfVal.studyMethod || 'Nessuna descrizione'}"</div>
             </div>
@@ -6171,7 +6171,7 @@ window.finalizzaStudente = async function() {
         }
 
         window.EroiDB.logActivity("teacher", `${teacherUser.email} ha valutato il compito del Diario per ${existing.studentEmail} (${existing.area}) con voto ${grade}.`);
-        this.showToast("Valutazione salvata con successo!", "success");
+        this.showToast("Sigillo apposto con successo!", "success");
         this.renderTeacherDiaries();
       }
     },
