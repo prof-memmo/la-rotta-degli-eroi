@@ -1030,7 +1030,7 @@ window.finalizzaStudente = async function() {
             return `
             <a href="#" class="mobile-nav-item" style="opacity: 0.5; cursor: not-allowed;" data-tooltip="${l.label}">
               <i class="fa-solid ${l.icon}" style="font-size: 1.2rem; margin: 0 auto;"></i>
-              <span style="font-size: 0.65rem; display: block; margin-top: 4px;">${l.label}</span>
+              <span style="font-size: 0.6rem; display: block; margin-top: 3px; white-space: nowrap; letter-spacing: -0.15px;">${l.label}</span>
             </a>
             `;
         }
@@ -1038,14 +1038,14 @@ window.finalizzaStudente = async function() {
             return `
             <a href="#" class="mobile-nav-item" onclick="${l.action}; return false;" data-tooltip="${l.label}">
               <i class="fa-solid ${l.icon}" style="font-size: 1.2rem; margin: 0 auto;"></i>
-              <span style="font-size: 0.65rem; display: block; margin-top: 4px;">${l.label}</span>
+              <span style="font-size: 0.6rem; display: block; margin-top: 3px; white-space: nowrap; letter-spacing: -0.15px;">${l.label}</span>
             </a>
             `;
         }
         return `
         <a href="#${l.view}" class="mobile-nav-item" data-view="${l.view}" data-tooltip="${l.label}">
           <i class="fa-solid ${l.icon}" style="font-size: 1.2rem; margin: 0 auto;"></i>
-          <span style="font-size: 0.65rem; display: block; margin-top: 4px;">${l.label}</span>
+          <span style="font-size: 0.6rem; display: block; margin-top: 3px; white-space: nowrap; letter-spacing: -0.15px;">${l.label}</span>
         </a>
         `;
       }).join('');

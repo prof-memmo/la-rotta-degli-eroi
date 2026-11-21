@@ -1800,25 +1800,38 @@ table.game-table tr:hover td {
 
 .mobile-nav-item {
   flex: 1;
-  min-width: 50px;
+  min-width: max-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.58rem;
-  text-transform: lowercase;
-  white-space: normal;
+  font-size: 0.6rem;
+  text-transform: none;
+  white-space: nowrap !important;
   text-align: center;
   line-height: 1.1;
-  word-break: break-word;
-  gap: 4px;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  gap: 3px;
   transition: var(--transition-smooth);
   border-radius: 20px;
-  margin: 4px 0;
-  padding: 0 2px;
+  margin: 2px 0;
+  padding: 0 4px;
   text-align: center;
+}
+
+.mobile-nav-item span {
+  font-size: 0.6rem !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  text-overflow: clip !important;
+  overflow: visible !important;
+  letter-spacing: -0.2px;
+  display: block;
+  text-transform: none !important;
 }
 
 .mobile-nav-item i {
