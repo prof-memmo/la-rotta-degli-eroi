@@ -5467,12 +5467,14 @@ table.game-table tr:hover td {
 
 @media (max-width: 1024px) {
     /* 1. LAYOUT PRINCIPALE: lo scroll fluido naturale risiede su main-content */
+    .main-content,
     body.logged-in .main-content {
         height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
         max-height: calc(100dvh - 60px - 70px - env(safe-area-inset-bottom, 0px)) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
         padding: 0 !important;
     }
 
@@ -5505,24 +5507,59 @@ table.game-table tr:hover td {
 
     /* Rimuove completamente i blocchi di scroll interno forzati su Diario, Tempio e Missioni */
     #view-diario:not(#view-map),
-    #view-guides:not(#view-map) {
+    #view-guides:not(#view-map),
+    #view-diario.active,
+    #view-guides.active {
         overflow: visible !important;
         height: auto !important;
+        max-height: none !important;
     }
 
     #view-diario .grid-container,
-    #view-guides .guides-container,
     #missions-categories-container,
     #diario-nodes-list-wrapper,
     #diario-nodes-list,
-    #diario-reflection-panel,
-    #view-guides .guides-sidebar,
-    #view-guides .guides-reader {
+    #diario-reflection-panel {
         overflow: visible !important;
         height: auto !important;
         max-height: none !important;
         min-height: 0 !important;
         flex: none !important;
+    }
+
+    /* Tempio dello Studio: scroll fluido continuo a piena larghezza */
+    #view-guides .guides-container {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        gap: 16px !important;
+    }
+    #view-guides .guides-sidebar {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    #view-guides .guides-reader {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    #view-guides:not(.detail-active) .guides-reader {
+        display: none !important;
+    }
+    #view-guides.detail-active .guides-sidebar {
+        display: none !important;
+    }
+    #view-guides.detail-active .guides-reader {
+        display: block !important;
     }
 
     /* 2. FOOTER PATAMÙ: INTEGRO, A FONDO SCROLL */
@@ -5538,7 +5575,140 @@ table.game-table tr:hover td {
         position: relative !important;
     }
 
-    /* 3. PULSANTI CHE SBORDANO: wrapping fluido, max-width e padding sicuro */
+    /* 3. TABS RESPONSIVE: Mercato, Inventario e Dashboard con bottoni che non sbordano */
+    .tabs-header {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        overflow-x: visible !important;
+        padding-bottom: 8px !important;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+    }
+    .tabs-header .tab-btn {
+        flex: 1 1 auto !important;
+        padding: 7px 12px !important;
+        font-size: 0.78rem !important;
+        text-align: center !important;
+        min-width: 0 !important;
+        white-space: normal !important;
+        border-radius: 8px !important;
+    }
+
+    /* 4. MERCATO E INVENTARIO: card a colonna senza uscite dallo schermo */
+    #view-shop .cards-grid,
+    #view-inventory .cards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    #view-shop .card,
+    #view-inventory .card {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 14px !important;
+        margin: 0 0 10px 0 !important;
+        text-align: left !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: stretch !important;
+    }
+    #view-shop .card > div,
+    #view-inventory .card > div {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    #view-shop .card .card-title,
+    #view-inventory .card .card-title {
+        white-space: normal !important;
+        word-break: break-word !important;
+        font-size: 0.95rem !important;
+        margin-top: 4px !important;
+    }
+    #view-shop .card .card-desc,
+    #view-inventory .card .card-desc {
+        display: block !important;
+        font-size: 0.8rem !important;
+        line-height: 1.4 !important;
+        color: var(--text-muted) !important;
+        margin: 6px 0 !important;
+    }
+    #view-shop .card button,
+    #view-inventory .card button {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 10px 16px !important;
+        font-size: 0.85rem !important;
+        margin-top: 10px !important;
+        align-self: stretch !important;
+        justify-content: center !important;
+    }
+
+    /* 5. DASHBOARD AMMINISTRATORE E DOCENTE: bottoni compatti e wrapping */
+    #view-admin-dashboard,
+    #view-teacher-dashboard {
+        padding: 12px !important;
+        border-radius: 16px !important;
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    #view-admin-dashboard .btn,
+    #view-teacher-dashboard .btn,
+    #view-admin-dashboard button.btn,
+    #view-teacher-dashboard button.btn,
+    #view-admin-dashboard .btn-secondary,
+    #view-teacher-dashboard .btn-secondary {
+        font-size: 0.8rem !important;
+        padding: 7px 12px !important;
+        letter-spacing: 0.3px !important;
+    }
+    #view-admin-dashboard div[style*="display:flex"],
+    #view-admin-dashboard div[style*="display: flex"],
+    #view-teacher-dashboard div[style*="display:flex"],
+    #view-teacher-dashboard div[style*="display: flex"] {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    #view-admin-dashboard div[style*="display:flex"] > button,
+    #view-admin-dashboard div[style*="display: flex"] > button,
+    #view-teacher-dashboard div[style*="display:flex"] > button,
+    #view-teacher-dashboard div[style*="display: flex"] > button {
+        flex: 1 1 160px !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        justify-content: center !important;
+    }
+
+    /* 6. REGOLAMENTO RESPONSIVE: tipografia leggibile su mobile */
+    #view-regolamento,
+    #admin-rules-editor-container {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    #rules-student-box > div,
+    #rules-teacher-box > div {
+        padding: 10px 12px !important;
+        margin-bottom: 10px !important;
+        box-sizing: border-box !important;
+    }
+    #rules-student-box p,
+    #rules-teacher-box p {
+        font-size: 0.88rem !important;
+        line-height: 1.5 !important;
+        word-break: break-word !important;
+    }
+    #eroi-rules-textarea {
+        font-size: 0.85rem !important;
+        padding: 10px !important;
+        line-height: 1.5 !important;
+        min-height: 250px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 7. PULSANTI CHE SBORDANO: wrapping fluido, max-width e padding sicuro */
     .btn,
     .btn-secondary,
     .btn-danger,
