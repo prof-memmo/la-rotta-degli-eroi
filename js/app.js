@@ -750,6 +750,13 @@ window.finalizzaStudente = async function() {
       this.switchActiveView(viewId);
       this.updateNavigationUI(viewId);
 
+      // Salva l'ultima vista attiva per ripristinarla al ricaricamento della pagina
+      if (!['view-welcome', 'view-login', 'view-onboarding', 'view-selezione-profilo', 'view-pausa-obbligatoria'].includes(viewId)) {
+        try {
+          sessionStorage.setItem('eroi_last_active_view', viewId);
+        } catch (e) {}
+      }
+
       // Innesca il rendering specifico della vista caricata
       this.renderViewData(viewId, user);
       
@@ -1653,8 +1660,9 @@ window.finalizzaStudente = async function() {
             }
         }
         
-        // Reindirizza alla dashboard corretta se eravamo fermi alla login o all'onboarding
-        const currentView = this.getCurrentViewId();
+        // Reindirizza alla dashboard o ripristina la vista attiva se l'utente ha ricaricato la pagina
+        const savedView = sessionStorage.getItem('eroi_last_active_view');
+        const currentView = savedView || this.getCurrentViewId();
         const authViews = ['view-login', 'view-welcome', 'view-onboarding', 'view-selezione-profilo'];
         if (authViews.includes(currentView)) {
           if ((user.role === 'studente' || user.role === 'student') || user.role === 'forestiero') this.navigateTo('view-student-dashboard');
