@@ -100,7 +100,17 @@ body {
   box-shadow: none !important;
 }
 
-/* View Map Container */
+/* Blocco difensivo: mai mostrare pulsante Hub o frecce nell'header */
+#iframe-btn-hub,
+.btn-floating-hub,
+.header-center-logo button,
+.header-prof-logo-wrapper button {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+}
+
 #view-map .glass-panel {
     display: flex;
     flex-direction: column;
@@ -1084,7 +1094,7 @@ h3.panel-title {
 }
 
 #view-map .glass-panel {
-  padding: 0 40px 30px 40px !important; /* Gap in basso per non toccare la linea */
+  padding: 20px 40px 30px 40px !important; /* Spazio in alto per non attaccarsi all'header */
   margin-bottom: 20px !important;
   max-width: none !important;
   width: 100% !important;
@@ -1100,7 +1110,7 @@ h3.panel-title {
 }
 
 #view-map .section-title {
-  margin-top: 0;
+  margin-top: 10px;
   margin-bottom: 8px;
   border-bottom: 2px solid var(--gold);
   padding-bottom: 10px;
@@ -1321,15 +1331,30 @@ h3.panel-title {
 }
 
 .guides-sidebar {
-  background: rgba(13, 19, 38, 0.6);
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  background: rgba(13, 19, 38, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 12px;
-  padding: 16px;
+  padding: 16px 16px 90px 16px !important; /* Spazio inferiore di sicurezza per non finire sotto la barra dock */
   display: flex;
   flex-direction: column;
   gap: 15px;
   max-height: 100%;
-  overflow-y: auto;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) rgba(13, 19, 38, 0.5);
+}
+
+.guides-sidebar::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+.guides-sidebar::-webkit-scrollbar-track {
+  background: rgba(13, 19, 38, 0.5);
+}
+.guides-sidebar::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 3px;
 }
 
 .guide-category-title {
@@ -1800,25 +1825,38 @@ table.game-table tr:hover td {
 
 .mobile-nav-item {
   flex: 1;
-  min-width: 50px;
+  min-width: max-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.58rem;
-  text-transform: lowercase;
-  white-space: normal;
+  font-size: 0.6rem;
+  text-transform: none;
+  white-space: nowrap !important;
   text-align: center;
   line-height: 1.1;
-  word-break: break-word;
-  gap: 4px;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  gap: 3px;
   transition: var(--transition-smooth);
   border-radius: 20px;
-  margin: 4px 0;
-  padding: 0 2px;
+  margin: 2px 0;
+  padding: 0 4px;
   text-align: center;
+}
+
+.mobile-nav-item span {
+  font-size: 0.6rem !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  text-overflow: clip !important;
+  overflow: visible !important;
+  letter-spacing: -0.2px;
+  display: block;
+  text-transform: none !important;
 }
 
 .mobile-nav-item i {
@@ -4971,8 +5009,12 @@ table.game-table tr:hover td {
         margin-bottom: 15px !important;
     }
     #view-map .glass-panel {
-        padding: 0 !important;
+        padding: 18px 8px 10px 8px !important;
         margin-bottom: 20px !important;
+    }
+    #view-map .section-title {
+        margin-top: 8px !important;
+        margin-bottom: 10px !important;
     }
     .guides-reader .guide-game-portrait-layout .sheet-body {
         max-height: none;
