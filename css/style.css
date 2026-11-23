@@ -4414,26 +4414,47 @@ table.game-table tr:hover td {
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    padding-bottom: 25px !important;
+}
+
+/* Nasconde il footer informativo durante lo svolgimento del quiz su PC e mobile per prevenire tagli o sovrapposizioni dei comandi */
+#view-missions.quiz-active .view-footer-copyright,
+#view-missions:has(#active-quiz-container[style*="display: block"]) .view-footer-copyright,
+#view-missions:has(#active-quiz-container[style*="display: flex"]) .view-footer-copyright {
+    display: none !important;
+}
+
+#quiz-questions-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    padding-right: 6px;
 }
 
 .quiz-actions-row {
     display: flex;
     gap: 15px;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 15px;
     padding-top: 15px;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 15px;
+    border-top: 1px solid rgba(255,255,255,0.08);
     flex-wrap: wrap; /* Fix horizontal overflow */
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 }
 
 @media (max-width: 768px) {
     #active-quiz-container {
-        padding: 15px 10px !important;
+        padding: 15px 10px 30px 10px !important;
         margin-top: 10px !important;
     }
     .quiz-actions-row {
         flex-direction: column;
         align-items: stretch;
+        padding-bottom: 25px;
     }
     .quiz-actions-row .btn {
         width: 100%;
