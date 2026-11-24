@@ -2047,7 +2047,7 @@ window.finalizzaStudente = async function() {
                     EroiApp.showToast("Nota: Quest'area appartiene al 2° Quadrimestre che non è ancora attivo per le tue classi. Puoi attivarlo dalle Impostazioni Classe.", "info");
                 }
             }
-            EroiApp.navigateToMissionsAndFilter(area);
+            EroiApp.openTempleForArea(area);
           };
         } else {
           node.classList.add('locked');
@@ -2097,6 +2097,73 @@ window.finalizzaStudente = async function() {
           pathEl.classList.remove('unlocked');
         }
       });
+    },
+
+    openTempleForArea: function(areaName) {
+      const areaToGuideMap = {
+        'Accademia': 'ref_mitologia_epica',
+        'Miti di Fondazione': 'place_troia',
+        'Biblioteca': 'auth_omero',
+        'Archivio': 'opere_iliade',
+        'Olimpo': 'god_zeus',
+        'Creta': 'char_teseo',
+        'Troia': 'char_achille',
+        'Itaca': 'char_ulisse',
+        'Lazio': 'char_enea',
+        'Aquisgrana': 'char_carlo',
+        'Roncisvalle': 'char_orlando',
+        'Camelot': 'char_artu',
+        'Foresta di Brocelandia': 'char_merlino',
+        'Castello del Graal': 'char_galahad',
+        'Worms': 'char_sigfrido',
+        'Reno': 'char_crimilde'
+      };
+
+      const guideId = areaToGuideMap[areaName] || 'ref_mitologia_epica';
+      this.navigateTo('view-guides');
+
+      setTimeout(() => {
+        const itemEl = document.querySelector(`.guide-list-item[onclick*="'${guideId}'"]`);
+        this.readGuide(guideId, itemEl);
+        if (itemEl) {
+          itemEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 50);
+    },
+
+    getAreaForGuide: function(g) {
+      if (!g) return null;
+      const specificMap = {
+        'char_orlando': 'Roncisvalle',
+        'char_oliviero': 'Roncisvalle',
+        'char_turpino': 'Roncisvalle',
+        'char_gano': 'Roncisvalle',
+        'char_merlino': 'Foresta di Brocelandia',
+        'char_lancillotto': 'Foresta di Brocelandia',
+        'char_galahad': 'Castello del Graal',
+        'char_parsifal': 'Castello del Graal',
+        'char_mordred': 'Castello del Graal',
+        'char_crimilde': 'Reno',
+        'char_brunilde': 'Reno',
+        'char_hagen': 'Reno'
+      };
+      if (specificMap[g.id]) return specificMap[g.id];
+
+      const catMap = {
+        "L'inizio del viaggio": "Accademia",
+        "Luoghi e Miti di Fondazione": "Miti di Fondazione",
+        "Schede Autore": "Biblioteca",
+        "Le Opere": "Archivio",
+        "Divinità": "Olimpo",
+        "Schede Personaggio (Mitologia)": "Creta",
+        "Schede Personaggio (Iliade)": "Troia",
+        "Schede Personaggio (Odissea)": "Itaca",
+        "Schede Personaggio (Eneide)": "Lazio",
+        "Schede Personaggio (Ciclo Carolingio)": "Aquisgrana",
+        "Schede Personaggio (Ciclo Bretone)": "Camelot",
+        "Schede Personaggio (Ciclo dei Nibelunghi)": "Worms"
+      };
+      return catMap[g.category] || null;
     },
 
     navigateToMissionsAndFilter: function(areaName) {
@@ -2203,9 +2270,14 @@ window.finalizzaStudente = async function() {
             <span style="font-size: 0.95rem; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
               <i class="fa-solid fa-map-location-dot"></i> Missioni dell'area: <strong style="color:var(--text-light); text-transform:uppercase;">${displayAreaName}</strong>
             </span>
-            <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem; width: auto !important; min-width: 0; flex-shrink: 0;" onclick="EroiApp.clearMissionsFilter()">
-              <i class="fa-solid fa-globe"></i> Mostra Tutte
-            </button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+              <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem; width: auto !important; min-width: 0; flex-shrink: 0;" onclick="EroiApp.openTempleForArea('${currentMissionsFilterArea}')">
+                <i class="fa-solid fa-book-open"></i> Ripassa nel Tempio
+              </button>
+              <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem; width: auto !important; min-width: 0; flex-shrink: 0;" onclick="EroiApp.clearMissionsFilter()">
+                <i class="fa-solid fa-globe"></i> Mostra Tutte
+              </button>
+            </div>
           </div>
         `;
       }
@@ -3280,6 +3352,25 @@ window.finalizzaStudente = async function() {
         document.getElementById('guide-display-body').innerHTML = content;
       } else {
         document.getElementById('guide-display-body').innerHTML = content.replace(/\n/g, '<br>');
+      }
+
+      const linkedArea = this.getAreaForGuide(g);
+      if (linkedArea) {
+        const displayAreaName = linkedArea === 'Accademia' ? "L'inizio del Viaggio" :
+                                linkedArea === 'Biblioteca' ? "Gli Autori" :
+                                linkedArea === 'Archivio' ? "Le Opere" : linkedArea;
+
+        const actionBoxHtml = `
+          <div class="guide-to-missions-box" style="margin-top: 35px; padding: 18px; background: rgba(212, 175, 55, 0.08); border: 1.5px solid var(--gold); border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.25);">
+            <p style="margin: 0 0 12px 0; font-family: var(--font-heading); color: #78350f; font-weight: bold; font-size: 1.05rem;">
+              <i class="fa-solid fa-scroll"></i> Hai completato lo studio di questa pergamena?
+            </p>
+            <button class="btn btn-primary" onclick="EroiApp.navigateToMissionsAndFilter('${linkedArea}')" style="padding: 10px 24px; font-size: 0.95rem; font-weight: 700; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-gamepad"></i> Mettiti alla prova: Sfide e Minigiochi di ${displayAreaName} ➔
+            </button>
+          </div>
+        `;
+        document.getElementById('guide-display-body').insertAdjacentHTML('beforeend', actionBoxHtml);
       }
 
       const viewGuides = document.getElementById('view-guides');
