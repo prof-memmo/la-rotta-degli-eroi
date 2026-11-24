@@ -838,7 +838,7 @@ window.finalizzaStudente = async function() {
           if (profile) {
             const u = window.EroiDB.getUser(user.email);
             const classId = u ? u.classId : "";
-            avatarImg = user.avatar || user.photoURL || this.getAvatarImage(profile.avatarClass);
+            avatarImg = user.avatar || user.photoURL || (profile && profile.avatar) || this.getAvatarImage(profile.avatarClass);
             levelText = `LIV. ${profile.level || 1}`;
             const nextInfo = window.EroiGame.getNextLevelInfo(profile.xp);
             
@@ -1168,8 +1168,10 @@ window.finalizzaStudente = async function() {
           if (confirm("Vuoi abbandonare la missione? Tutti i progressi del quiz andranno persi.")) {
             const activeQuiz = document.getElementById('active-quiz-container');
             const missCat = document.getElementById('missions-categories-container');
+            const viewMissions = document.getElementById('view-missions');
             if (activeQuiz) activeQuiz.style.display = 'none';
             if (missCat) missCat.style.display = 'block';
+            if (viewMissions) viewMissions.classList.remove('quiz-active');
           }
         });
       }
@@ -1751,15 +1753,41 @@ window.finalizzaStudente = async function() {
     renderStudentDashboard: function(email) {
       const _u_profile = window.EroiDB.getUser(email);
       const _isT_profile = _u_profile && (_u_profile.role === "docente" || _u_profile.role === "admin");
-      const profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
-      if (!profile) return;
+      let profile = _isT_profile ? window.EroiDB.getTeacherPlayerProfile(email) : window.EroiDB.getStudentProfile(email);
+      const authUser = (typeof Auth !== 'undefined' && typeof Auth.getUser === 'function') ? Auth.getUser() : null;
+
+      if (!profile) {
+        const fallbackName = (authUser && (authUser.name || authUser.nickname || authUser.displayName)) || (_u_profile && (_u_profile.name || _u_profile.nickname)) || "Eroe";
+        const fallbackAvatar = (authUser && (authUser.avatar || authUser.photoURL)) || (_u_profile && _u_profile.avatar) || "assets/avatars/6.png";
+        profile = {
+          email: email,
+          name: fallbackName,
+          avatar: fallbackAvatar,
+          avatarClass: "Esploratore",
+          level: 1,
+          xp: (authUser && authUser.points) || 0,
+          dracme: 100,
+          stats: { coraggio: 10, astuzia: 10, sapienza: 10, onore: 10, missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+          inventory: [],
+          visitedRegions: [],
+          discoveredNodes: [],
+          completedMissions: [],
+          activeMissions: [],
+          diario: [],
+          unlockedAreas: ["Accademia"]
+        };
+        if (!_isT_profile && window.EroiDB && typeof window.EroiDB.saveStudentProfile === 'function') {
+          window.EroiDB.saveStudentProfile(email, profile);
+        }
+      }
 
       const avatarBox = document.getElementById('stud-dashboard-avatar');
       if (avatarBox) {
+        let avatarSrc = (authUser && (authUser.avatar || authUser.photoURL)) || (profile && profile.avatar) || (_u_profile && _u_profile.avatar) || this.getAvatarImage(profile.avatarClass);
         avatarBox.innerHTML = `
           <div class="dashboard-avatar-container" id="dashboard-avatar-container-3d">
             <div class="portrait-particles-container" id="dashboard-avatar-particles"></div>
-            <img src="${this.getAvatarImage(profile.avatarClass)}" class="dashboard-avatar-img animated-3d-avatar" alt="${profile.avatarClass}">
+            <img src="${avatarSrc}" class="dashboard-avatar-img animated-3d-avatar" alt="${profile.avatarClass || 'Avatar'}" onerror="this.onerror=null; this.src='assets/images/pergamena_crest.png';">
           </div>
         `;
         // Inizializza particelle ed effetto 3D
@@ -1768,10 +1796,15 @@ window.finalizzaStudente = async function() {
       }
       const u = window.EroiDB.getUser(email);
       const classId = u ? u.classId : "";
-      document.getElementById('stud-dashboard-name').textContent = profile.name;
-      document.getElementById('stud-dashboard-class').textContent = classId || "Nessuna";
-      document.getElementById('stud-dashboard-level').textContent = profile.level;
-      document.getElementById('stud-dashboard-dracme').innerHTML = `${profile.dracme} <i class="fa-solid fa-coins"></i>`;
+      const displayName = (profile && profile.name) || (authUser && (authUser.name || authUser.nickname || authUser.displayName)) || (_u_profile && (_u_profile.name || _u_profile.nickname)) || "Eroe";
+      const studNameEl = document.getElementById('stud-dashboard-name');
+      if (studNameEl) studNameEl.textContent = displayName;
+      const studClassEl = document.getElementById('stud-dashboard-class');
+      if (studClassEl) studClassEl.textContent = classId || "Nessuna";
+      const studLevelEl = document.getElementById('stud-dashboard-level');
+      if (studLevelEl) studLevelEl.textContent = profile.level;
+      const studDracmeEl = document.getElementById('stud-dashboard-dracme');
+      if (studDracmeEl) studDracmeEl.innerHTML = `${profile.dracme} <i class="fa-solid fa-coins"></i>`;
 
       // Renderizza pannello classe studente
       const studentClassContent = document.getElementById('student-class-content');
@@ -1824,10 +1857,14 @@ window.finalizzaStudente = async function() {
       }
 
       // Stats
-      document.getElementById('stud-stat-coraggio').textContent = profile.stats.coraggio;
-      document.getElementById('stud-stat-astuzia').textContent = profile.stats.astuzia;
-      document.getElementById('stud-stat-sapienza').textContent = profile.stats.sapienza;
-      document.getElementById('stud-stat-onore').textContent = profile.stats.onore;
+      const statCoraggio = document.getElementById('stud-stat-coraggio');
+      if (statCoraggio) statCoraggio.textContent = (profile.stats && profile.stats.coraggio !== undefined) ? profile.stats.coraggio : 10;
+      const statAstuzia = document.getElementById('stud-stat-astuzia');
+      if (statAstuzia) statAstuzia.textContent = (profile.stats && profile.stats.astuzia !== undefined) ? profile.stats.astuzia : 10;
+      const statSapienza = document.getElementById('stud-stat-sapienza');
+      if (statSapienza) statSapienza.textContent = (profile.stats && profile.stats.sapienza !== undefined) ? profile.stats.sapienza : 10;
+      const statOnore = document.getElementById('stud-stat-onore');
+      if (statOnore) statOnore.textContent = (profile.stats && profile.stats.onore !== undefined) ? profile.stats.onore : 10;
 
       // Renderizza aiutante attivo sul profilo
       const helpers = window.EroiDB.getHelpers();
@@ -2106,6 +2143,8 @@ window.finalizzaStudente = async function() {
       
       container.style.display = 'block';
       document.getElementById('active-quiz-container').style.display = 'none';
+      const viewMissionsEl = document.getElementById('view-missions');
+      if (viewMissionsEl) viewMissionsEl.classList.remove('quiz-active');
 
       // Filtra in base all'area geografica selezionata
       const missions = currentMissionsFilterArea 
@@ -2262,6 +2301,9 @@ window.finalizzaStudente = async function() {
       const m = missions.find(x => x.id === missionId);
       if (!m) return;
 
+      const viewMissions = document.getElementById('view-missions');
+      if (viewMissions) viewMissions.classList.add('quiz-active');
+
       document.getElementById('missions-categories-container').style.display = 'none';
       const mgContainer = document.getElementById('minigame-container');
       if (mgContainer) mgContainer.style.display = 'none';
@@ -2310,14 +2352,22 @@ window.finalizzaStudente = async function() {
             sfida: '<span style="font-size:0.72rem; font-weight:700; background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.4); padding:2px 7px; border-radius:4px; margin-left:8px; vertical-align:middle;">🟣 Sfida</span>'
           };
           const lvlBadge = levelBadges[levelKey] || levelBadges.facile;
+
+          // Shuffle casuale delle opzioni di risposta per evitare posizioni fisse
+          const shuffledOptions = qData.a.map((opt, optIndex) => ({
+            text: opt,
+            origIdx: optIndex,
+            isCorrect: optIndex === qData.correct
+          })).sort(() => Math.random() - 0.5);
+
           return `
             <div class="quiz-question-box" data-correct="${qData.correct}">
               <p class="quiz-question-text">${qIndex + 1}. ${qData.q} ${lvlBadge} ${editBtn}</p>
               <div class="quiz-options">
-                ${qData.a.map((opt, optIndex) => `
-                  <div class="quiz-option" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${optIndex})">
+                ${shuffledOptions.map((item) => `
+                  <div class="quiz-option" data-orig-idx="${item.origIdx}" data-is-correct="${item.isCorrect ? '1' : '0'}" onclick="EroiApp.selectQuizOption(this, ${qIndex}, ${item.origIdx})">
                     <span class="quiz-radio"></span>
-                    <span>${opt}</span>
+                    <span>${item.text}</span>
                   </div>
                 `).join('')}
               </div>
@@ -2641,7 +2691,8 @@ window.finalizzaStudente = async function() {
         opt.classList.remove('selected');
       });
       element.classList.add('selected');
-      element.setAttribute('data-selected-idx', optIndex);
+      const origIdx = element.getAttribute('data-orig-idx');
+      element.setAttribute('data-selected-idx', origIdx !== null ? origIdx : optIndex);
     },
 
     useHintInQuiz: function(email, mission) {
@@ -2663,10 +2714,12 @@ window.finalizzaStudente = async function() {
           const options = box.querySelectorAll('.quiz-option');
           
           for (let o = 0; o < options.length; o++) {
-            if (o !== correct && !options[o].style.opacity) {
-              options[o].style.opacity = '0.4';
-              options[o].style.textDecoration = 'line-through';
-              options[o].style.pointerEvents = 'none';
+            const optEl = options[o];
+            const isCorr = optEl.getAttribute('data-is-correct') === '1' || Number(optEl.getAttribute('data-orig-idx')) === correct;
+            if (!isCorr && !optEl.style.opacity) {
+              optEl.style.opacity = '0.4';
+              optEl.style.textDecoration = 'line-through';
+              optEl.style.pointerEvents = 'none';
               hintGiven = true;
               break;
             }
@@ -2696,7 +2749,9 @@ window.finalizzaStudente = async function() {
               EroiAudio.playSuccess();
             }
             this.showToast(`Missione Superata! +${result.xpGained} XP e +${result.dracmeGained} Dracme.`, "success");
-            this.navigateTo('view-missions');
+            const viewMissionsEl = document.getElementById('view-missions');
+          if (viewMissionsEl) viewMissionsEl.classList.remove('quiz-active');
+          this.navigateTo('view-missions');
           }
         } catch (err) {
           alert("Errore: " + err.message);
@@ -2753,6 +2808,8 @@ window.finalizzaStudente = async function() {
             }, 3200);
           }
 
+          const viewMissionsEl = document.getElementById('view-missions');
+          if (viewMissionsEl) viewMissionsEl.classList.remove('quiz-active');
           this.navigateTo('view-missions');
         } else {
           EroiAudio.playFailure();
@@ -2774,6 +2831,8 @@ window.finalizzaStudente = async function() {
             }
           }
           
+          const viewMissionsEl = document.getElementById('view-missions');
+          if (viewMissionsEl) viewMissionsEl.classList.remove('quiz-active');
           this.navigateTo('view-missions');
         }
       } catch (err) {

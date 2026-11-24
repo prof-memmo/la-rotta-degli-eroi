@@ -145,6 +145,47 @@ Object.assign(window.Auth = window.Auth || {}, {
             if (window.EroiDB && typeof window.EroiDB.saveUser === 'function') {
                 window.EroiDB.saveUser(window.Auth._user.email, window.Auth._user);
             }
+
+            // Sincronizzazione automatica del profilo studente in locale
+            if (window.EroiDB && typeof window.EroiDB.getStudentProfile === 'function') {
+                const userEmail = (window.Auth._user.email || '').toLowerCase();
+                let existingStud = window.EroiDB.getStudentProfile(userEmail);
+                const sName = window.Auth._user.name || window.Auth._user.nickname || fbUser.displayName || 'Studente';
+                const sAvatar = window.Auth._user.avatar || fbUser.photoURL || 'assets/avatars/6.png';
+                if (!existingStud) {
+                    existingStud = {
+                        email: userEmail,
+                        name: sName,
+                        avatar: sAvatar,
+                        avatarClass: 'Esploratore',
+                        level: 1,
+                        xp: window.Auth._user.points || 0,
+                        dracme: 100,
+                        stats: { coraggio: 10, astuzia: 10, sapienza: 10, onore: 10, missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+                        inventory: [],
+                        visitedRegions: [],
+                        discoveredNodes: [],
+                        completedMissions: [],
+                        activeMissions: [],
+                        diario: [],
+                        unlockedAreas: ['Accademia']
+                    };
+                    window.EroiDB.saveStudentProfile(userEmail, existingStud);
+                } else {
+                    let changed = false;
+                    if (sName && (!existingStud.name || existingStud.name === 'Studente')) {
+                        existingStud.name = sName;
+                        changed = true;
+                    }
+                    if (sAvatar && (!existingStud.avatar || existingStud.avatar !== sAvatar)) {
+                        existingStud.avatar = sAvatar;
+                        changed = true;
+                    }
+                    if (changed) {
+                        window.EroiDB.saveStudentProfile(userEmail, existingStud);
+                    }
+                }
+            }
             
             window.Auth._resolveReady();
             
@@ -177,6 +218,47 @@ Object.assign(window.Auth = window.Auth || {}, {
             localStorage.setItem('eroi_user', JSON.stringify(window.Auth._user));
             if (window.EroiDB && typeof window.EroiDB.saveUser === 'function') {
                 window.EroiDB.saveUser(window.Auth._user.email, window.Auth._user);
+            }
+
+            // Sincronizzazione automatica del profilo studente in locale
+            if (window.EroiDB && typeof window.EroiDB.getStudentProfile === 'function') {
+                const userEmail = (window.Auth._user.email || '').toLowerCase();
+                let existingStud = window.EroiDB.getStudentProfile(userEmail);
+                const sName = window.Auth._user.name || window.Auth._user.nickname || fbUser.displayName || 'Studente';
+                const sAvatar = window.Auth._user.avatar || fbUser.photoURL || 'assets/avatars/6.png';
+                if (!existingStud) {
+                    existingStud = {
+                        email: userEmail,
+                        name: sName,
+                        avatar: sAvatar,
+                        avatarClass: 'Esploratore',
+                        level: 1,
+                        xp: window.Auth._user.points || 0,
+                        dracme: 100,
+                        stats: { coraggio: 10, astuzia: 10, sapienza: 10, onore: 10, missionsCompleted: 0, questionsAnswered: 0, perfectScores: 0 },
+                        inventory: [],
+                        visitedRegions: [],
+                        discoveredNodes: [],
+                        completedMissions: [],
+                        activeMissions: [],
+                        diario: [],
+                        unlockedAreas: ['Accademia']
+                    };
+                    window.EroiDB.saveStudentProfile(userEmail, existingStud);
+                } else {
+                    let changed = false;
+                    if (sName && (!existingStud.name || existingStud.name === 'Studente')) {
+                        existingStud.name = sName;
+                        changed = true;
+                    }
+                    if (sAvatar && (!existingStud.avatar || existingStud.avatar !== sAvatar)) {
+                        existingStud.avatar = sAvatar;
+                        changed = true;
+                    }
+                    if (changed) {
+                        window.EroiDB.saveStudentProfile(userEmail, existingStud);
+                    }
+                }
             }
             window.Auth._resolveReady();
             if (typeof hideLoginOverlay === 'function') hideLoginOverlay();
