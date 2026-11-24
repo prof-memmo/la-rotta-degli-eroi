@@ -128,6 +128,15 @@ body {
   padding: 1rem 2rem 2rem 2rem !important;
   margin: 0 !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.06) !important;
+  min-height: 100% !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+}
+
+#view-teacher-dashboard > div, #view-admin-dashboard > div {
+  width: 100% !important;
+  min-height: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* Blocchi visibili solo all'admin: nascosti di default via CSS.
@@ -4601,7 +4610,11 @@ table.game-table tr:hover td {
     #view-student-dashboard,
     #view-teacher-dashboard,
     #view-admin-dashboard {
-        overflow-y: auto;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        min-height: 100% !important;
+        height: auto !important;
+        background: #f8fafc !important;
     }
 }
 
@@ -5764,11 +5777,16 @@ table.game-table tr:hover td {
     /* 5. DASHBOARD AMMINISTRATORE E DOCENTE: bottoni compatti e wrapping */
     #view-admin-dashboard,
     #view-teacher-dashboard {
-        padding: 12px !important;
+        padding: 12px 12px 110px 12px !important;
         border-radius: 16px !important;
         box-sizing: border-box !important;
         max-width: 100% !important;
         overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        min-height: 100% !important;
+        height: auto !important;
+        background: #f8fafc !important;
     }
     #view-admin-dashboard .btn,
     #view-teacher-dashboard .btn,
